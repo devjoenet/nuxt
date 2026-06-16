@@ -1,33 +1,27 @@
 {
-    "agents": [
-        "codex"
-    ],
-    "cloud": false,
-    "guidelines": true,
-    "mcp": true,
-    "nightwatch": false,
-    "packages": [
-        "spatie/laravel-activitylog",
-        "spatie/boost-spatie-guidelines",
-        "spatie/laravel-permission"
-    ],
-    "sail": false,
-    "skills": [
-        "fortify-development",
-        "laravel-best-practices",
-        "configuring-horizon",
-        "wayfinder-development",
-        "pest-testing",
-        "inertia-vue-development",
-        "laravel-permission-development",
-        "spatie-laravel-php-standards",
-        "brand-kit",
-        "canonicalize-tailwind",
-        "componentize",
-        "design",
-        "ideas",
-        "laravel-native-attributes",
-        "markup-from-image",
-        "nuxt-ui"
-    ]
+  "agents": ["codex"],
+  "cloud": false,
+  "guidelines": true,
+  "mcp": true,
+  "nightwatch": false,
+  "packages": ["spatie/laravel-activitylog", "spatie/boost-spatie-guidelines", "spatie/laravel-permission"],
+  "sail": false,
+  "skills": [
+    "fortify-development",
+    "laravel-best-practices",
+    "configuring-horizon",
+    "wayfinder-development",
+    "pest-testing",
+    "inertia-vue-development",
+    "laravel-permission-development",
+    "spatie-laravel-php-standards",
+    "brand-kit",
+    "canonicalize-tailwind",
+    "componentize",
+    "design",
+    "ideas",
+    "laravel-native-attributes",
+    "markup-from-image",
+    "nuxt-ui"
+  ]
 }
