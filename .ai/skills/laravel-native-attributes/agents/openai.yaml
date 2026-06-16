@@ -1,0 +1,4 @@
+interface:
+  display_name: "Laravel Native Attributes"
+  short_description: "Modernize Laravel code with native attributes"
+  default_prompt: "Use $laravel-native-attributes to audit this Laravel project for safe native attribute migrations."

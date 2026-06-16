@@ -1,0 +1,21 @@
+{
+  "printWidth": 180,
+  "bracketSameLine": false,
+  "singleAttributePerLine": false,
+  "vueIndentScriptAndStyle": true,
+  "tabWidth": 2,
+  "plugins": ["@shufo/prettier-plugin-blade"],
+  "overrides": [
+    {
+      "files": ["*.blade.php"],
+      "options": {
+        "extraLiners": "",
+        "indentInnerHtml": true,
+        "parser": "blade",
+        "sortTailwindcssClasses": true,
+        "wrapAttributes": "preserve",
+        "wrapAttributesMinAttrs": 5
+      }
+    }
+  ]
+}

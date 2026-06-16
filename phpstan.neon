@@ -1,0 +1,20 @@
+includes:
+  - vendor/larastan/larastan/extension.neon
+  - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+  level: 5
+  ignoreErrors:
+        -
+            message: "#^Called 'env' outside of the config directory which returns null when the config is cached, use 'config'.$#"
+            path: *config/*.php
+
+  paths:
+    - app
+    - config
+    - bootstrap
+    - database/factories
+    - routes
+
+  excludePaths:
+    - vendor/
