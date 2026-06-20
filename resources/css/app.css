@@ -1,6 +1,11 @@
 @import "tailwindcss" theme(static);
 @import "@nuxt/ui";
 
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../js/vendor/horizon-ui/**/*.vue';
+@source '../js/**/*.vue';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme static {
