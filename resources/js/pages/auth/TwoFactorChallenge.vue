@@ -55,7 +55,7 @@
             <span>or you can </span>
             <button
               type="button"
-              class="text-primary underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
+              class="text-primary underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
               @click="() => toggleRecoveryMode(clearErrors)"
             >
               {{ authConfigContent.toggleText }}
@@ -76,7 +76,7 @@
             <span>or you can </span>
             <button
               type="button"
-              class="text-primary underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
+              class="text-primary underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
               @click="() => toggleRecoveryMode(clearErrors)"
             >
               {{ authConfigContent.toggleText }}

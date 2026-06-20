@@ -47,7 +47,7 @@
     toast.add({
       title: "Success",
       description: "Your settings have been updated.",
-      icon: "i-lucide-check",
+      icon: "i-ph-check",
       color: "success",
     });
   }
@@ -96,7 +96,7 @@
                 <TextLink :href="send()" as="button" class="text-sm font-medium text-primary"> Click here to resend the verification email. </TextLink>
               </p>
 
-              <div v-if="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600">A new verification link has been sent to your email address.</div>
+              <div v-if="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-success">A new verification link has been sent to your email address.</div>
             </div>
           </template>
           <UInput v-model="profile.email" type="email" autocomplete="off" />

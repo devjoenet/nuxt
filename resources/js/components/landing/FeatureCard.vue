@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { computed, type Component } from "vue";
+  import { computed } from "vue";
 
   interface LandingCard {
     title: string;
     description: string;
     detail: string;
-    icon: Component;
+    icon: string;
     tone: "primary" | "accent" | "secondary" | "warning";
   }
 
@@ -19,10 +19,21 @@
 
   const toneClasses = computed(() => {
     const tones = {
-      primary: "text-brand-primary-300 border-brand-primary-400/25 bg-brand-primary-500/5",
-      accent: "text-brand-accent-300 border-brand-accent-400/25 bg-brand-accent-500/5",
-      secondary: "text-brand-secondary-300 border-brand-secondary-400/25 bg-brand-secondary-500/5",
-      warning: "text-brand-warning-300 border-brand-warning-400/25 bg-brand-warning-500/5",
+      primary: "text-primary-400 border-primary-500/30 bg-primary-500/10",
+      accent: "text-accent-400 border-accent-500/30 bg-accent-500/10",
+      secondary: "text-secondary-400 border-secondary-500/30 bg-secondary-500/10",
+      warning: "text-warning-400 border-warning-500/30 bg-warning-500/10",
+    };
+
+    return tones[props.item.tone];
+  });
+
+  const articleClasses = computed(() => {
+    const tones = {
+      primary: "border-primary-500/15 hover:border-primary-500/35",
+      accent: "border-accent-500/15 hover:border-accent-500/35",
+      secondary: "border-secondary-500/15 hover:border-secondary-500/35",
+      warning: "border-warning-500/15 hover:border-warning-500/35",
     };
 
     return tones[props.item.tone];
@@ -31,18 +42,18 @@
 
 <template>
   <article
-    class="group h-full rounded-lg border border-brand-primary-400/15 bg-muted-900/70 p-6 shadow-xl shadow-muted-950/20 ring-1 ring-neutral-100/5 transition hover:-translate-y-1 hover:border-brand-primary-300/35 hover:bg-muted-900"
-    :class="{ 'text-center': centered }"
+    :class="[articleClasses, { 'text-center': centered }]"
+    class="group h-full rounded-lg border bg-muted-50/90 p-6 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 transition hover:-translate-y-1 hover:bg-muted-100 dark:bg-muted-900/70 dark:shadow-muted-950/20 dark:ring-neutral-100/5 dark:hover:bg-muted-900"
   >
     <div class="flex" :class="centered ? 'justify-center' : 'justify-start'">
       <div class="flex size-12 items-center justify-center rounded-md border" :class="toneClasses">
-        <component :is="item.icon" class="size-6" aria-hidden="true" />
+        <UIcon :name="item.icon" aria-hidden="true" class="size-6" />
       </div>
     </div>
 
-    <h3 class="mt-5 text-lg font-semibold text-neutral-50">{{ item.title }}</h3>
-    <p class="mt-3 text-sm leading-6 text-neutral-300">{{ item.description }}</p>
-    <p class="mt-1 text-sm leading-6 text-neutral-400">{{ item.detail }}</p>
-    <p v-if="proof" class="mt-5 border-t border-neutral-100/10 pt-4 text-xs leading-5 text-neutral-400">{{ proof }}</p>
+    <h3 class="mt-5 text-lg font-semibold text-muted-950 dark:text-neutral-50">{{ item.title }}</h3>
+    <p class="mt-3 text-sm leading-6 text-muted-700 dark:text-neutral-300">{{ item.description }}</p>
+    <p class="mt-1 text-sm leading-6 text-muted-600 dark:text-neutral-400">{{ item.detail }}</p>
+    <p v-if="proof" class="mt-5 border-t border-muted-200 pt-4 text-xs leading-5 text-muted-600 dark:border-neutral-100/10 dark:text-neutral-400">{{ proof }}</p>
   </article>
 </template>

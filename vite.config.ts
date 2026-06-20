@@ -1,10 +1,10 @@
 import { wayfinder } from "@laravel/vite-plugin-wayfinder";
-import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import laravel from "laravel-vite-plugin";
 import { defineConfig } from "vite";
 import ui from "@nuxt/ui/vite";
 import path from "path";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 export default defineConfig({
   plugins: [
@@ -13,7 +13,6 @@ export default defineConfig({
       ssr: "resources/js/ssr.ts",
       refresh: true,
     }),
-    tailwindcss(),
     wayfinder({
       formVariants: true,
     }),
@@ -26,14 +25,66 @@ export default defineConfig({
       },
     }),
     ui({
-      inertia: true,
+      router: "inertia",
       components: {
         dirs: ["resources/js/components"],
       },
+      theme: {
+        colors: ["primary", "secondary", "success", "info", "warning", "error"],
+      },
       ui: {
+        icons: {
+          arrowDown: "i-ph-arrow-down",
+          arrowLeft: "i-ph-arrow-left",
+          arrowRight: "i-ph-arrow-right",
+          arrowUp: "i-ph-arrow-up",
+          caution: "i-ph-warning-circle",
+          check: "i-ph-check",
+          chevronDoubleLeft: "i-ph-caret-double-left",
+          chevronDoubleRight: "i-ph-caret-double-right",
+          chevronDown: "i-ph-caret-down",
+          chevronLeft: "i-ph-caret-left",
+          chevronRight: "i-ph-caret-right",
+          chevronUp: "i-ph-caret-up",
+          close: "i-ph-x",
+          copy: "i-ph-copy",
+          copyCheck: "i-ph-checks",
+          dark: "i-ph-moon",
+          drag: "i-ph-dots-six-vertical",
+          ellipsis: "i-ph-dots-three",
+          error: "i-ph-x-circle",
+          external: "i-ph-arrow-up-right",
+          eye: "i-ph-eye",
+          eyeOff: "i-ph-eye-slash",
+          file: "i-ph-file",
+          folder: "i-ph-folder",
+          folderOpen: "i-ph-folder-open",
+          hash: "i-ph-hash",
+          info: "i-ph-info",
+          light: "i-ph-sun",
+          loading: "i-ph-spinner-gap",
+          menu: "i-ph-list",
+          minus: "i-ph-minus",
+          panelClose: "i-ph-sidebar-simple",
+          panelOpen: "i-ph-sidebar-simple",
+          plus: "i-ph-plus",
+          reload: "i-ph-arrow-clockwise",
+          search: "i-ph-magnifying-glass",
+          stop: "i-ph-stop",
+          success: "i-ph-check-circle",
+          system: "i-ph-monitor",
+          tip: "i-ph-lightbulb",
+          upload: "i-ph-upload-simple",
+          warning: "i-ph-warning",
+        },
         colors: {
-          primary: "green",
-          neutral: "zinc",
+          primary: "teal",
+          secondary: "violet",
+          success: "green",
+          info: "cyan",
+          warning: "orange",
+          error: "red",
+          neutral: "grey",
         },
       },
       autoImport: {
@@ -48,6 +99,7 @@ export default defineConfig({
         ],
       },
     }),
+    vueDevTools(),
   ],
   resolve: {
     alias: {

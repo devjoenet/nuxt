@@ -33,10 +33,10 @@
   <UPageCard
     title="2FA Recovery Codes"
     description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager."
-    icon="i-lucide-lock-keyhole"
+    icon="i-ph-lock-key"
   >
     <div class="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
-      <UButton :icon="isRecoveryCodesVisible ? 'i-lucide-eye-off' : 'i-lucide-eye'" @click="toggleRecoveryCodesVisibility">
+      <UButton :icon="isRecoveryCodesVisible ? 'i-ph-eye-slash' : 'i-ph-eye'" @click="toggleRecoveryCodesVisibility">
         {{ isRecoveryCodesVisible ? "Hide" : "View" }} Recovery Codes
       </UButton>
 
@@ -48,7 +48,7 @@
         @success="fetchRecoveryCodes"
         #default="{ processing }"
       >
-        <UButton color="secondary" type="submit" :disabled="processing" icon="i-lucide-refresh-cw"> Regenerate Codes </UButton>
+        <UButton :disabled="processing" color="secondary" icon="i-ph-arrow-clockwise" type="submit"> Regenerate Codes </UButton>
       </Form>
     </div>
     <div :class="['relative overflow-hidden transition-all duration-300', isRecoveryCodesVisible ? 'h-auto opacity-100' : 'h-0 opacity-0']">

@@ -42,11 +42,11 @@
       [
         {
           label: "Create team",
-          icon: "i-lucide-circle-plus",
+          icon: "i-ph-plus-circle",
         },
         {
           label: "Manage teams",
-          icon: "i-lucide-cog",
+          icon: "i-ph-gear-six",
         },
       ],
     ];
@@ -59,7 +59,7 @@
       v-bind="{
         ...selectedTeam,
         label: collapsed ? undefined : selectedTeam?.label,
-        trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
+        trailingIcon: collapsed ? undefined : 'i-ph-caret-up-down',
       }"
       color="neutral"
       variant="ghost"

@@ -73,7 +73,7 @@
 
   <InboxMail v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
   <div v-else class="hidden flex-1 items-center justify-center lg:flex">
-    <UIcon name="i-lucide-inbox" class="size-32 text-dimmed" />
+    <UIcon class="size-32 text-dimmed" name="i-ph-tray" />
   </div>
 
   <USlideover v-if="isMobile" v-model:open="isMailPanelOpen">

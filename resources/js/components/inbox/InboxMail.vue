@@ -13,21 +13,21 @@
     [
       {
         label: "Mark as unread",
-        icon: "i-lucide-check-circle",
+        icon: "i-ph-check-circle",
       },
       {
         label: "Mark as important",
-        icon: "i-lucide-triangle-alert",
+        icon: "i-ph-warning",
       },
     ],
     [
       {
         label: "Star thread",
-        icon: "i-lucide-star",
+        icon: "i-ph-star",
       },
       {
         label: "Mute thread",
-        icon: "i-lucide-circle-pause",
+        icon: "i-ph-pause-circle",
       },
     ],
   ];
@@ -46,7 +46,7 @@
       toast.add({
         title: "Email sent",
         description: "Your email has been sent successfully",
-        icon: "i-lucide-check-circle",
+        icon: "i-ph-check-circle",
         color: "success",
       });
 
@@ -59,20 +59,20 @@
   <UDashboardPanel id="inbox-2">
     <UDashboardNavbar :title="mail.subject" :toggle="false">
       <template #leading>
-        <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emits('close')" />
+        <UButton class="-ms-1.5" color="neutral" icon="i-ph-x" variant="ghost" @click="emits('close')" />
       </template>
 
       <template #right>
         <UTooltip text="Archive">
-          <UButton icon="i-lucide-inbox" color="neutral" variant="ghost" />
+          <UButton color="neutral" icon="i-ph-tray" variant="ghost" />
         </UTooltip>
 
         <UTooltip text="Reply">
-          <UButton icon="i-lucide-reply" color="neutral" variant="ghost" />
+          <UButton color="neutral" icon="i-ph-arrow-bend-up-left" variant="ghost" />
         </UTooltip>
 
         <UDropdownMenu :items="dropdownItems">
-          <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
+          <UButton color="neutral" icon="i-ph-dots-three-vertical" variant="ghost" />
         </UDropdownMenu>
       </template>
     </UDashboardNavbar>
@@ -105,7 +105,7 @@
     <div class="shrink-0 px-4 pb-4 sm:px-6">
       <UCard variant="subtle" class="mt-auto" :ui="{ header: 'flex items-center gap-1.5 text-dimmed' }">
         <template #header>
-          <UIcon name="i-lucide-reply" class="size-5" />
+          <UIcon class="size-5" name="i-ph-arrow-bend-up-left" />
 
           <span class="truncate text-sm"> Reply to {{ mail.from.name }} ({{ mail.from.email }}) </span>
         </template>
@@ -126,12 +126,12 @@
 
           <div class="flex items-center justify-between">
             <UTooltip text="Attach file">
-              <UButton color="neutral" variant="ghost" icon="i-lucide-paperclip" />
+              <UButton color="neutral" icon="i-ph-paperclip" variant="ghost" />
             </UTooltip>
 
             <div class="flex items-center justify-end gap-2">
               <UButton color="neutral" variant="ghost" label="Save draft" />
-              <UButton type="submit" color="neutral" :loading="loading" label="Send" icon="i-lucide-send" />
+              <UButton :loading="loading" color="neutral" icon="i-ph-paper-plane-tilt" label="Send" type="submit" />
             </div>
           </div>
         </form>

@@ -5,36 +5,36 @@
     [
       {
         label: "Profile",
-        icon: "i-lucide-user",
+        icon: "i-ph-user",
         to: "/settings/profile",
         exact: true,
       },
       {
         label: "Members",
-        icon: "i-lucide-users",
+        icon: "i-ph-users",
         to: "/settings/members",
       },
       {
         label: "Notifications",
-        icon: "i-lucide-bell",
+        icon: "i-ph-bell",
         to: "/settings/notifications",
       },
       {
         label: "Security",
-        icon: "i-lucide-shield",
+        icon: "i-ph-shield",
         to: "/settings/security",
       },
     ],
     [
       {
         label: "Documentation",
-        icon: "i-lucide-book-open",
+        icon: "i-ph-book-open",
         to: "https://ui.nuxt.com/getting-started/installation/pro/nuxt",
         target: "_blank",
       },
       {
         label: "Buy now",
-        icon: "i-lucide-shopping-cart",
+        icon: "i-ph-shopping-cart",
         to: "https://ui.nuxt.com/pro/purchase",
         target: "_blank",
       },

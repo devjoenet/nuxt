@@ -37,7 +37,7 @@
       },
       {
         label: "Copy customer ID",
-        icon: "i-lucide-copy",
+        icon: "i-ph-copy",
         onSelect() {
           navigator.clipboard.writeText(row.original.id.toString());
           toast.add({
@@ -51,18 +51,18 @@
       },
       {
         label: "View customer details",
-        icon: "i-lucide-list",
+        icon: "i-ph-list",
       },
       {
         label: "View customer payments",
-        icon: "i-lucide-wallet",
+        icon: "i-ph-wallet",
       },
       {
         type: "separator",
       },
       {
         label: "Delete customer",
-        icon: "i-lucide-trash",
+        icon: "i-ph-trash",
         color: "error",
         onSelect() {
           toast.add({
@@ -116,7 +116,7 @@
           color: "neutral",
           variant: "ghost",
           label: "Email",
-          icon: isSorted ? (isSorted === "asc" ? "i-lucide-arrow-up-narrow-wide" : "i-lucide-arrow-down-wide-narrow") : "i-lucide-arrow-up-down",
+          icon: isSorted ? (isSorted === "asc" ? "i-ph-sort-ascending" : "i-ph-sort-descending") : "i-ph-arrows-down-up",
           class: "-mx-2.5",
           onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
         });
@@ -157,7 +157,7 @@
             },
             () =>
               h(UButton, {
-                icon: "i-lucide-ellipsis-vertical",
+                icon: "i-ph-dots-three-vertical",
                 color: "neutral",
                 variant: "ghost",
                 class: "ml-auto",
@@ -211,14 +211,14 @@
         <UInput
           :model-value="table?.tableApi?.getColumn('email')?.getFilterValue() as string"
           class="max-w-sm"
-          icon="i-lucide-search"
+          icon="i-ph-magnifying-glass"
           placeholder="Filter emails..."
           @update:model-value="table?.tableApi?.getColumn('email')?.setFilterValue($event)"
         />
 
         <div class="flex flex-wrap items-center gap-1.5">
           <CustomersDeleteModal :count="table?.tableApi?.getFilteredSelectedRowModel().rows.length">
-            <UButton v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length" label="Delete" color="error" variant="subtle" icon="i-lucide-trash">
+            <UButton v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length" color="error" icon="i-ph-trash" label="Delete" variant="subtle">
               <template #trailing>
                 <UKbd>
                   {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length }}
@@ -258,7 +258,7 @@
             "
             :content="{ align: 'end' }"
           >
-            <UButton label="Display" color="neutral" variant="outline" trailing-icon="i-lucide-settings-2" />
+            <UButton color="neutral" label="Display" trailing-icon="i-ph-faders-horizontal" variant="outline" />
           </UDropdownMenu>
         </div>
       </div>

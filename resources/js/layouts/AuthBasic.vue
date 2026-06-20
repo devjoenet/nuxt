@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen items-center justify-center px-4">
     <!-- <UButton
-      icon="i-lucide-chevron-left"
+      icon="i-ph-caret-left"
       to="/"
       size="xl"
       color="neutral"

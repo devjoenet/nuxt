@@ -14,7 +14,7 @@
   <AuthLayout title="Forgot password" description="Enter your email to receive a password reset link">
     <Head title="Forgot password" />
 
-    <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
+    <div v-if="status" class="mb-4 text-center text-sm font-medium text-success">
       {{ status }}
     </div>
 
@@ -29,7 +29,7 @@
         </div>
       </Form>
 
-      <div class="text-muted-foreground space-x-1 text-center text-sm">
+      <div class="space-x-1 text-center text-sm text-muted">
         <span class="text-muted">Or, return to</span>
         <TextLink :href="login()" class="text-sm font-medium text-primary">log in</TextLink>
       </div>

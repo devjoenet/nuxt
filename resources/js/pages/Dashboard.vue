@@ -13,12 +13,12 @@
     [
       {
         label: "New mail",
-        icon: "i-lucide-send",
+        icon: "i-ph-paper-plane-tilt",
         to: "/inbox",
       },
       {
         label: "New customer",
-        icon: "i-lucide-user-plus",
+        icon: "i-ph-user-plus",
         to: "/customers",
       },
     ],
@@ -43,13 +43,13 @@
           <UTooltip text="Notifications" :shortcuts="['N']">
             <UButton color="neutral" variant="ghost" square @click="isNotificationsSlideoverOpen = true">
               <UChip color="error" inset>
-                <UIcon name="i-lucide-bell" class="size-5 shrink-0" />
+                <UIcon class="size-5 shrink-0" name="i-ph-bell" />
               </UChip>
             </UButton>
           </UTooltip>
 
           <UDropdownMenu :items="items">
-            <UButton icon="i-lucide-plus" size="md" class="rounded-full" />
+            <UButton class="rounded-full" icon="i-ph-plus" size="md" />
           </UDropdownMenu>
         </template>
       </UDashboardNavbar>

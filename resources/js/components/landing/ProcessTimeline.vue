@@ -2,6 +2,7 @@
   interface ProcessStep {
     title: string;
     description: string;
+    icon: string;
     tone: "primary" | "secondary" | "accent" | "warning";
   }
 
@@ -9,30 +10,74 @@
     steps: ProcessStep[];
   }>();
 
-  const toneClasses = {
-    primary: "border-brand-primary-400 text-brand-primary-300 shadow-brand-primary-500/25",
-    secondary: "border-brand-secondary-400 text-brand-secondary-300 shadow-brand-secondary-500/25",
-    accent: "border-brand-accent-400 text-brand-accent-300 shadow-brand-accent-500/25",
-    warning: "border-brand-warning-400 text-brand-warning-300 shadow-brand-warning-500/25",
+  const circleClasses = {
+    primary: "border-primary-400 text-primary-300 shadow-primary-500/30 group-hover:shadow-primary-400/45",
+    secondary: "border-secondary-400 text-secondary-300 shadow-secondary-500/30 group-hover:shadow-secondary-400/45",
+    accent: "border-accent-400 text-accent-300 shadow-accent-500/30 group-hover:shadow-accent-400/45",
+    warning: "border-warning-400 text-warning-300 shadow-warning-500/30 group-hover:shadow-warning-400/45",
+  };
+
+  const cardClasses = {
+    primary: "group-hover:border-primary-400/45 group-hover:shadow-primary-950/30",
+    secondary: "group-hover:border-secondary-400/45 group-hover:shadow-secondary-950/30",
+    accent: "group-hover:border-accent-400/45 group-hover:shadow-accent-950/30",
+    warning: "group-hover:border-warning-400/45 group-hover:shadow-warning-950/30",
+  };
+
+  const labelClasses = {
+    primary: "text-primary-300",
+    secondary: "text-secondary-300",
+    accent: "text-accent-300",
+    warning: "text-warning-300",
+  };
+
+  const railClasses = {
+    primary: "from-primary-400/90 via-secondary-400/70 to-accent-400/70",
+    secondary: "from-secondary-400/90 via-accent-400/70 to-warning-400/70",
+    accent: "from-accent-400/90 via-warning-400/70 to-primary-400/70",
+    warning: "from-warning-400/90 via-primary-400/70 to-secondary-400/70",
   };
 </script>
 
 <template>
-  <ol class="mt-10 grid gap-6 md:grid-cols-4">
-    <li v-for="(step, index) in steps" :key="step.title" class="relative">
-      <div
-        v-if="index < steps.length - 1"
-        class="absolute top-6 left-14 hidden h-px w-[calc(100%-2.5rem)] border-t border-dashed border-brand-primary-400/60 md:block"
-        aria-hidden="true"
-      ></div>
+  <ol class="mt-12 grid gap-5 md:grid-cols-4">
+    <li v-for="(step, index) in steps" :key="step.title" class="group relative">
+      <div class="relative h-20">
+        <div
+          v-if="index < steps.length - 1"
+          :class="railClasses[step.tone]"
+          aria-hidden="true"
+          class="absolute top-1/2 left-10 hidden h-px w-[calc(100%+1.25rem)] -translate-y-1/2 bg-linear-to-r md:block"
+        ></div>
+        <div
+          v-if="index < steps.length - 1"
+          aria-hidden="true"
+          class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-neutral-100/45 shadow-[0_0_18px_rgba(255,255,255,0.32)] md:block"
+        ></div>
 
-      <article class="relative rounded-lg border border-transparent bg-muted-950/30 p-5">
-        <div class="flex size-12 items-center justify-center rounded-full border bg-muted-950 text-lg font-semibold shadow-lg" :class="toneClasses[step.tone]">
-          {{ index + 1 }}
+        <div
+          :class="circleClasses[step.tone]"
+          class="relative z-10 flex size-20 items-center justify-center rounded-full border bg-muted-50/95 text-xl font-semibold shadow-2xl ring-1 ring-muted-200/80 transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 dark:bg-muted-950/95 dark:ring-neutral-100/10"
+        >
+          <span
+            aria-hidden="true"
+            class="absolute inset-2 rounded-full border border-muted-200 bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.7),transparent_45%)] dark:border-neutral-100/10 dark:bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.18),transparent_45%)]"
+          ></span>
+          <span class="relative flex flex-col items-center gap-0.5">
+            <UIcon :name="step.icon" aria-hidden="true" class="size-5" />
+            <span class="text-xs tracking-[0.2em]">{{ index + 1 }}</span>
+          </span>
         </div>
+      </div>
 
-        <h3 class="mt-5 text-base font-semibold text-neutral-50">{{ step.title }}</h3>
-        <p class="mt-2 text-sm leading-6 text-neutral-400">{{ step.description }}</p>
+      <article
+        :class="cardClasses[step.tone]"
+        class="relative min-h-44 overflow-hidden rounded-lg border border-muted-200 bg-muted-50/80 p-5 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 backdrop-blur-sm transition duration-300 group-hover:-translate-y-1 group-hover:bg-muted-100/90 dark:border-neutral-100/10 dark:bg-muted-900/45 dark:shadow-muted-950/20 dark:ring-neutral-100/5 dark:group-hover:bg-muted-900/70"
+      >
+        <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-muted-300 to-transparent dark:via-neutral-100/30"></div>
+        <p :class="labelClasses[step.tone]" class="text-[0.68rem] font-bold tracking-[0.24em] uppercase">Step {{ index + 1 }}</p>
+        <h3 class="mt-3 text-lg font-semibold text-muted-950 dark:text-neutral-50">{{ step.title }}</h3>
+        <p class="mt-3 text-sm leading-6 text-muted-600 dark:text-neutral-400">{{ step.description }}</p>
       </article>
     </li>
   </ol>

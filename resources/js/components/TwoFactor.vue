@@ -2,16 +2,15 @@
   import { disable } from "@/routes/two-factor";
   import { Form } from "@inertiajs/vue3";
 
-  withDefaults(
-    defineProps<{
-      requiresConfirmation?: boolean;
-      twoFactorEnabled?: boolean;
-    }>(),
-    {
-      requiresConfirmation: false,
-      twoFactorEnabled: false,
-    },
-  );
+  interface Props {
+    requiresConfirmation: boolean;
+    twoFactorEnabled: boolean;
+  }
+
+  withDefaults(defineProps<Props>(), {
+    requiresConfirmation: false,
+    twoFactorEnabled: false,
+  });
 
   const { clearTwoFactorAuthData } = useTwoFactorAuth();
 
@@ -35,7 +34,7 @@
     <div v-else class="flex flex-col items-start justify-start space-y-4">
       <UBadge>Enabled</UBadge>
 
-      <p class="text-muted-foreground">
+      <p class="text-muted">
         With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your
         phone.
       </p>
@@ -44,7 +43,7 @@
 
       <div class="relative inline">
         <Form v-bind="disable.form()" #default="{ processing }">
-          <UButton color="error" icon="i-lucide-shield-ban" type="submit" :disabled="processing"> Disable 2FA </UButton>
+          <UButton :disabled="processing" color="error" icon="i-ph-shield-slash" type="submit"> Disable 2FA </UButton>
         </Form>
       </div>
     </div>

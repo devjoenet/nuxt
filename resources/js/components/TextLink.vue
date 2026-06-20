@@ -16,7 +16,7 @@
     :tabindex="tabindex"
     :method="method"
     :as="as"
-    class="underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
+    class="underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
   >
     <slot />
   </Link>

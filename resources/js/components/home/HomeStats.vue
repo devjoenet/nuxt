@@ -19,7 +19,7 @@
   const baseStats = [
     {
       title: "Customers",
-      icon: "i-lucide-users",
+      icon: "i-ph-users",
       minValue: 400,
       maxValue: 1000,
       minVariation: -15,
@@ -27,7 +27,7 @@
     },
     {
       title: "Conversions",
-      icon: "i-lucide-chart-pie",
+      icon: "i-ph-chart-pie",
       minValue: 1000,
       maxValue: 2000,
       minVariation: -10,
@@ -35,7 +35,7 @@
     },
     {
       title: "Revenue",
-      icon: "i-lucide-circle-dollar-sign",
+      icon: "i-ph-currency-circle-dollar",
       minValue: 200000,
       maxValue: 500000,
       minVariation: -20,
@@ -44,7 +44,7 @@
     },
     {
       title: "Orders",
-      icon: "i-lucide-shopping-cart",
+      icon: "i-ph-shopping-cart",
       minValue: 100,
       maxValue: 300,
       minVariation: -5,

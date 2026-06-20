@@ -39,7 +39,7 @@
         <USelect :model-value="member.role" :items="['member', 'owner']" color="neutral" :ui="{ value: 'capitalize', item: 'capitalize' }" />
 
         <UDropdownMenu :items="items" :content="{ align: 'end' }">
-          <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
+          <UButton color="neutral" icon="i-ph-dots-three-vertical" variant="ghost" />
         </UDropdownMenu>
       </div>
     </li>

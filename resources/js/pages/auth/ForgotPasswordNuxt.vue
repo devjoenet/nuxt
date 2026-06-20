@@ -54,7 +54,7 @@
     <template #description> Enter your email to receive a password reset link. </template>
 
     <template #validation>
-      <div v-if="status" class="text-center text-sm font-medium text-green-600">
+      <div v-if="status" class="text-center text-sm font-medium text-success">
         {{ status }}
       </div>
     </template>

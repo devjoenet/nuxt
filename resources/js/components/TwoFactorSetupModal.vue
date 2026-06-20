@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { confirm, enable } from "@/routes/two-factor";
   import { Form } from "@inertiajs/vue3";
-  import { Loader2 } from "lucide-vue-next";
 
   const props = defineProps<{
     requiresConfirmation: boolean;
@@ -73,15 +72,15 @@
 
 <template>
   <UModal v-model:open="open" @after:leave="resetModalState" @update:open="handleUpdateOpen" :ui="{ content: 'sm:max-w-md divide-none', title: 'font-normal', header: 'block!' }">
-    <UButton v-if="hasSetupData" icon="i-lucide-shield-check"> Continue Setup </UButton>
+    <UButton v-if="hasSetupData" icon="i-ph-shield-check"> Continue Setup </UButton>
 
     <Form v-else v-bind="enable.form()" #default="{ processing }">
-      <UButton type="submit" :disabled="processing" icon="i-lucide-shield-check"> Enable 2FA </UButton>
+      <UButton :disabled="processing" icon="i-ph-shield-check" type="submit"> Enable 2FA </UButton>
     </Form>
 
     <template #title>
       <div class="mt-4 flex flex-col items-center justify-center gap-2 text-center sm:text-left">
-        <UAvatar icon="i-lucide-scan-line" size="2xl" />
+        <UAvatar icon="i-ph-scan" size="2xl" />
         <h2 class="font-semibold text-highlighted">{{ modalConfig.title }}</h2>
         <p class="mt-1 text-center text-sm text-muted">{{ modalConfig.description }}</p>
       </div>
@@ -95,7 +94,7 @@
             <div class="relative mx-auto flex max-w-md items-center overflow-hidden">
               <div class="relative mx-auto aspect-square w-64 overflow-hidden rounded-lg border border-muted">
                 <div v-if="!qrCodeSvg" class="absolute inset-0 z-10 flex aspect-square h-auto w-full animate-pulse items-center justify-center bg-default">
-                  <Loader2 class="size-6 animate-spin" />
+                  <UIcon class="size-6 animate-spin" name="i-ph-spinner-gap" />
                 </div>
                 <div v-else class="relative z-10 overflow-hidden border border-muted p-5">
                   <div v-html="qrCodeSvg" class="flex aspect-square size-full items-center justify-center" />
@@ -110,14 +109,14 @@
             </div>
 
             <div class="relative flex w-full items-center justify-center">
-              <div class="absolute inset-0 top-1/2 h-px w-full bg-border" />
-              <span class="bg-card relative px-2 py-1">or, enter the code manually</span>
+              <div class="absolute inset-0 top-1/2 h-px w-full bg-muted" />
+              <span class="relative bg-elevated px-2 py-1">or, enter the code manually</span>
             </div>
 
             <div class="flex w-full items-center justify-center space-x-2">
               <div class="flex w-full items-stretch">
                 <div v-if="!manualSetupKey" class="flex h-full w-full items-center justify-center bg-default p-3">
-                  <Loader2 class="size-4 animate-spin" />
+                  <UIcon class="size-4 animate-spin" name="i-ph-spinner-gap" />
                 </div>
                 <template v-else>
                   <UInput v-model="manualSetupKey" :ui="{ trailing: 'pr-0.5' }" size="xl" class="w-full">
@@ -127,7 +126,7 @@
                           :color="copied ? 'success' : 'neutral'"
                           variant="link"
                           size="sm"
-                          :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+                          :icon="copied ? 'i-ph-checks' : 'i-ph-copy'"
                           aria-label="Copy to clipboard"
                           @click="copy(manualSetupKey)"
                         />
@@ -144,7 +143,7 @@
           <Form v-bind="confirm.form()" reset-on-error @finish="code = []" @success="open = false" v-slot="{ errors, processing }">
             <input type="hidden" name="code" :value="codeValue" />
             <div class="relative w-full space-y-8">
-              <UFormField name="code" :error="errors?.confirmTwoFactorAuthentication?.code" :ui="{ root: 'text-center' }">
+              <UFormField :error="errors.code" :ui="{ root: 'text-center' }" name="code">
                 <UPinInput v-model="code" type="number" placeholder="○" size="xl" length="6" otp autofocus />
               </UFormField>
 

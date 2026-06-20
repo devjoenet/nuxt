@@ -76,7 +76,7 @@
 
 <template>
   <UPopover :content="{ align: 'start' }" :modal="true">
-    <UButton color="neutral" variant="ghost" icon="i-lucide-calendar" class="group data-[state=open]:bg-elevated">
+    <UButton class="group data-[state=open]:bg-elevated" color="neutral" icon="i-ph-calendar" variant="ghost">
       <span class="truncate">
         <template v-if="selected.start">
           <template v-if="selected.end"> {{ df.format(selected.start) }} - {{ df.format(selected.end) }} </template>
@@ -88,7 +88,7 @@
       </span>
 
       <template #trailing>
-        <UIcon name="i-lucide-chevron-down" class="size-5 shrink-0 text-dimmed transition-transform duration-200 group-data-[state=open]:rotate-180" />
+        <UIcon class="size-5 shrink-0 text-dimmed transition-transform duration-200 group-data-[state=open]:rotate-180" name="i-ph-caret-down" />
       </template>
     </UButton>
 

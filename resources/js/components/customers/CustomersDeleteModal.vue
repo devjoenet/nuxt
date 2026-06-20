@@ -19,7 +19,7 @@
 </script>
 
 <template>
-  <UModal v-model:open="open" :title="`Delete ${count} customer${count > 1 ? 's' : ''}`" :description="`Are you sure, this action cannot be undone.`">
+  <UModal v-model:open="open" :description="`Are you sure? This action cannot be undone.`" :title="`Delete ${count} customer${(count ?? 0 > 1) ? 's' : ''}`">
     <slot />
 
     <template #body>

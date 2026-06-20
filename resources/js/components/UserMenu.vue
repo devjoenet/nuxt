@@ -30,42 +30,53 @@
     [
       {
         label: "Profile",
-        icon: "i-lucide-user",
+        icon: "i-ph-user",
       },
       {
         label: "Billing",
-        icon: "i-lucide-credit-card",
+        icon: "i-ph-credit-card",
       },
       {
         label: "Settings",
-        icon: "i-lucide-settings",
+        icon: "i-ph-gear-six",
         to: "/settings/profile",
       },
     ],
     [
       {
         label: "Appearance",
-        icon: "i-lucide-sun-moon",
+        icon: "i-ph-circle-half-tilt",
         children: [
           {
-            label: "Light",
-            icon: "i-lucide-sun",
+            label: "System",
+            icon: "i-ph-monitor",
             type: "checkbox",
-            checked: colorMode.value === "light",
+            checked: colorMode.store.value === "auto",
             onSelect(e: Event) {
               e.preventDefault();
 
-              colorMode.value = "light";
+              colorMode.store.value = "auto";
+            },
+          },
+          {
+            label: "Light",
+            icon: "i-ph-sun",
+            type: "checkbox",
+            checked: colorMode.store.value === "light",
+            onSelect(e: Event) {
+              e.preventDefault();
+
+              colorMode.store.value = "light";
             },
           },
           {
             label: "Dark",
-            icon: "i-lucide-moon",
+            icon: "i-ph-moon",
             type: "checkbox",
-            checked: colorMode.value === "dark",
+            checked: colorMode.store.value === "dark",
             onUpdateChecked(checked: boolean) {
               if (checked) {
-                colorMode.value = "dark";
+                colorMode.store.value = "dark";
               }
             },
             onSelect(e: Event) {
@@ -78,7 +89,7 @@
     [
       {
         label: "Log out",
-        icon: "i-lucide-log-out",
+        icon: "i-ph-sign-out",
         to: logout(),
         onSelect: () => handleLogout(),
       },
@@ -96,7 +107,7 @@
       v-bind="{
         ...user,
         label: collapsed ? undefined : auth.user.name,
-        trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
+        trailingIcon: collapsed ? undefined : 'i-ph-caret-up-down',
       }"
       color="neutral"
       variant="ghost"

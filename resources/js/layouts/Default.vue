@@ -10,7 +10,7 @@
     [
       {
         label: "Home",
-        icon: "i-lucide-house",
+        icon: "i-ph-house",
         to: "/dashboard",
         onSelect: () => {
           open.value = false;
@@ -18,7 +18,7 @@
       },
       {
         label: "Inbox",
-        icon: "i-lucide-inbox",
+        icon: "i-ph-tray",
         to: "/inbox",
         badge: "4",
         onSelect: () => {
@@ -27,7 +27,7 @@
       },
       {
         label: "Customers",
-        icon: "i-lucide-users",
+        icon: "i-ph-users",
         to: "/customers",
         onSelect: () => {
           open.value = false;
@@ -36,7 +36,7 @@
       {
         label: "Settings",
         to: "/settings",
-        icon: "i-lucide-settings",
+        icon: "i-ph-gear-six",
         defaultOpen: true,
         type: "trigger",
         children: [
@@ -75,13 +75,13 @@
     [
       {
         label: "Feedback",
-        icon: "i-lucide-message-circle",
+        icon: "i-ph-chat-circle",
         to: "https://github.com/nuxt-ui-pro/dashboard-vue",
         target: "_blank",
       },
       {
         label: "Help & Support",
-        icon: "i-lucide-info",
+        icon: "i-ph-info",
         to: "https://github.com/nuxt/ui-pro",
         target: "_blank",
       },
@@ -136,32 +136,30 @@
 
 <template>
   <Suspense>
-    <UApp>
-      <UDashboardGroup unit="rem" storage="local">
-        <UDashboardSidebar id="default" v-model:open="open" collapsible resizable class="bg-elevated/25" :ui="{ footer: 'lg:border-t lg:border-default' }">
-          <template #header="{ collapsed }">
-            <TeamsMenu :collapsed="collapsed" />
-          </template>
+    <UDashboardGroup storage="local" unit="rem">
+      <UDashboardSidebar id="default" v-model:open="open" :ui="{ footer: 'lg:border-t lg:border-default' }" class="bg-elevated/25" collapsible resizable>
+        <template #header="{ collapsed }">
+          <TeamsMenu :collapsed="collapsed" />
+        </template>
 
-          <template #default="{ collapsed }">
-            <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
+        <template #default="{ collapsed }">
+          <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
 
-            <UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" tooltip popover />
+          <UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" popover tooltip />
 
-            <UNavigationMenu :collapsed="collapsed" :items="links[1]" orientation="vertical" tooltip class="mt-auto" />
-          </template>
+          <UNavigationMenu :collapsed="collapsed" :items="links[1]" class="mt-auto" orientation="vertical" tooltip />
+        </template>
 
-          <template #footer="{ collapsed }">
-            <UserMenu :collapsed="collapsed" />
-          </template>
-        </UDashboardSidebar>
+        <template #footer="{ collapsed }">
+          <UserMenu :collapsed="collapsed" />
+        </template>
+      </UDashboardSidebar>
 
-        <UDashboardSearch :groups="groups" />
+      <UDashboardSearch :groups="groups" />
 
-        <slot />
+      <slot />
 
-        <NotificationsSlideover />
-      </UDashboardGroup>
-    </UApp>
+      <NotificationsSlideover />
+    </UDashboardGroup>
   </Suspense>
 </template>

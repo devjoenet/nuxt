@@ -6,16 +6,15 @@
 
   defineOptions({ layout: Layout });
 
-  withDefaults(
-    defineProps<{
-      requiresConfirmation?: boolean;
-      twoFactorEnabled?: boolean;
-    }>(),
-    {
-      requiresConfirmation: false,
-      twoFactorEnabled: false,
-    },
-  );
+  interface Props {
+    requiresConfirmation: boolean;
+    twoFactorEnabled: boolean;
+  }
+
+  withDefaults(defineProps<Props>(), {
+    requiresConfirmation: false,
+    twoFactorEnabled: false,
+  });
 
   const toast = useToast();
 
@@ -23,7 +22,7 @@
     toast.add({
       title: "Success",
       description: "Your password has been updated.",
-      icon: "i-lucide-check",
+      icon: "i-ph-check",
       color: "success",
     });
   }

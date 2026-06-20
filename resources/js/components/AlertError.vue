@@ -15,7 +15,7 @@
 </script>
 
 <template>
-  <UAlert :title="props.title" color="error" icon="i-lucide-alert-circle">
+  <UAlert :title="props.title" color="error" icon="i-ph-warning-circle">
     <template #description>
       <ul class="list-inside list-disc text-sm">
         <li v-for="(error, index) in uniqueErrors" :key="index">

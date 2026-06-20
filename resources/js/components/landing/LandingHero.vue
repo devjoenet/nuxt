@@ -7,36 +7,39 @@
 </script>
 
 <template>
-  <section id="hero" class="relative min-h-screen overflow-hidden px-5 pt-32 pb-16 sm:px-8 lg:pt-36">
-    <img :src="heroImageSrc" alt="" class="absolute inset-0 size-full object-cover" />
-    <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,11,16,0.98)_0%,rgba(1,11,16,0.78)_34%,rgba(1,11,16,0.52)_62%,rgba(1,11,16,0.84)_100%)]" aria-hidden="true"></div>
+  <section id="hero" class="relative min-h-screen scroll-mt-28 overflow-hidden px-5 pt-32 pb-16 sm:px-8 lg:pt-36">
+    <img :src="heroImageSrc" alt="" class="absolute inset-0 size-full object-cover object-center" />
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_78%_34%,rgba(54,243,225,0.18),transparent_26rem),linear-gradient(180deg,rgba(1,11,16,0.2),rgba(1,11,16,1))]"
+      aria-hidden="true"
+      class="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,11,16,0.86)_0%,rgba(1,11,16,0.54)_38%,rgba(1,11,16,0.14)_72%,rgba(1,11,16,0.3)_100%)] dark:bg-[linear-gradient(90deg,rgba(1,11,16,0.94)_0%,rgba(1,11,16,0.66)_38%,rgba(1,11,16,0.22)_72%,rgba(1,11,16,0.42)_100%)]"
+    ></div>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(110,104,182,0.26),transparent_22rem),radial-gradient(circle_at_22%_70%,rgba(208,57,120,0.18),transparent_24rem),linear-gradient(180deg,rgba(1,11,16,0.08),rgba(1,11,16,0.88))]"
       aria-hidden="true"
     ></div>
 
     <div class="relative mx-auto grid max-w-7xl gap-10 lg:min-h-[calc(100vh-9rem)] lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
       <div class="max-w-2xl">
-        <p class="mb-5 text-sm font-bold tracking-[0.26em] text-brand-primary-300 uppercase">Operations-first custom software</p>
-        <h1 class="max-w-xl text-5xl leading-[0.95] font-black tracking-tight text-neutral-50 uppercase sm:text-6xl lg:text-7xl">
-          Custom software for work that refuses to fit
-          <span class="block text-brand-primary-300">a spreadsheet.</span>
+        <p class="mb-5 text-sm font-bold tracking-[0.24em] text-secondary-400 uppercase">Custom operations software</p>
+        <h1 class="max-w-3xl text-4xl leading-[1.02] font-black text-neutral-50 uppercase sm:text-6xl lg:text-7xl">
+          Software that fits
+          <span class="block text-primary-400">how work moves.</span>
         </h1>
-        <p class="mt-6 max-w-lg text-base leading-7 text-neutral-200">
-          We turn fragmented operations into secure web applications built around how your teams move data, approvals, and decisions.
+        <p class="mt-6 max-w-lg text-base leading-7 text-neutral-100 dark:text-neutral-200">
+          We turn fragmented operations into secure web applications for the teams moving data, approvals, inventory, and decisions every day.
         </p>
 
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <a
             href="#contact"
-            class="inline-flex items-center justify-center rounded-md bg-brand-primary-500 px-6 py-3 text-sm font-bold text-muted-950 shadow-lg shadow-brand-primary-500/20 transition hover:bg-brand-primary-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary-200"
+            class="inline-flex items-center justify-center rounded-md bg-primary-500 px-6 py-3 text-sm font-bold text-primary-950 shadow-lg shadow-primary-500/25 transition hover:bg-primary-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-100"
           >
             Start a workflow audit
-            <span aria-hidden="true" class="ml-2">-></span>
+            <UIcon aria-hidden="true" class="ml-2 size-4" name="i-ph-arrow-circle-right" />
           </a>
           <a
             href="#services"
-            class="inline-flex items-center justify-center rounded-md border border-brand-primary-400/80 px-6 py-3 text-sm font-semibold text-brand-primary-100 transition hover:border-brand-primary-300 hover:bg-brand-primary-400/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary-300"
+            class="inline-flex items-center justify-center rounded-md border border-secondary-400/80 px-6 py-3 text-sm font-semibold text-secondary-50 transition hover:border-secondary-300 hover:bg-secondary-500/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-400 dark:border-secondary-500/80 dark:text-secondary-100 dark:hover:border-secondary-400"
           >
             See what we build
           </a>
