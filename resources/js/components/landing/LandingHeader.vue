@@ -40,7 +40,7 @@
     <div
       :class="
         hasGlassBackground
-          ? 'px-5 py-4 shadow-[0_8px_10px_rgba(2,6,23,0.18),0_0_28px_rgba(2,6,23,0.12)] ring-1 ring-neutral-50/30 sm:px-6 sm:py-4 lg:px-7 dark:shadow-[0_8px_18px_rgba(0,0,0,0.28),0_0_30px_rgba(255,255,255,0.08)] dark:ring-neutral-100/10'
+          ? 'px-5 py-4 shadow-[0_6px_9px_rgba(2,6,23,0.1),0_0_18px_rgba(2,6,23,0.06)] ring-[0.5px] ring-muted-100/12 sm:px-6 sm:py-4 lg:px-7 dark:shadow-[0_6px_14px_rgba(0,0,0,0.18),0_0_18px_rgba(155,167,175,0.03)] dark:ring-muted-700/12'
           : 'px-5 py-2 shadow-none ring-0 sm:px-6 lg:px-7'
       "
       class="relative isolate mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 overflow-hidden rounded-[1.45rem] border border-transparent transition-all duration-500 ease-out sm:gap-6"
@@ -53,7 +53,7 @@
       <span
         :class="
           hasGlassBackground
-            ? 'border border-neutral-50/25 bg-neutral-50/45 opacity-100 dark:border-neutral-100/10 dark:bg-neutral-950/42'
+            ? 'border-[0.5px] border-muted-200/28 bg-muted-50/72 opacity-100 dark:border-muted-700/24 dark:bg-muted-950/78'
             : 'border border-transparent bg-transparent opacity-0'
         "
         aria-hidden="true"
@@ -154,15 +154,15 @@
 
   .nav-liquid-glass-shine {
     box-shadow:
-      inset 2px 2px 1px rgb(255 255 255 / 52%),
-      inset -1px -1px 1px 1px rgb(255 255 255 / 36%),
-      inset 0 0 18px rgb(255 255 255 / 10%);
+      inset 0 0 0 1px color-mix(in oklab, var(--color-muted-100) 14%, transparent),
+      inset 0 1px 0 color-mix(in oklab, var(--color-muted-50) 18%, transparent),
+      inset 0 0 18px color-mix(in oklab, var(--color-muted-100) 8%, transparent);
   }
 
   :global(.dark) .nav-liquid-glass-shine {
     box-shadow:
-      inset 2px 2px 1px rgb(255 255 255 / 18%),
-      inset -1px -1px 1px 1px rgb(255 255 255 / 10%),
-      inset 0 0 24px rgb(255 255 255 / 8%);
+      inset 0 0 0 1px color-mix(in oklab, var(--color-muted-700) 22%, transparent),
+      inset 0 1px 0 color-mix(in oklab, var(--color-muted-300) 8%, transparent),
+      inset 0 0 18px color-mix(in oklab, var(--color-muted-700) 16%, transparent);
   }
 </style>

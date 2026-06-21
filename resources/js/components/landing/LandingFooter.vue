@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import AppLogo from "@/components/AppLogo.vue";
+  import { PhLinkedinLogo, PhGithubLogo, PhEnvelopeSimple } from "@phosphor-icons/vue";
 
   interface FooterLink {
     label: string;
@@ -53,9 +54,24 @@
             <p><a class="transition hover:text-accent-400" href="tel:+19125550144">(912) 555-0144</a></p>
           </address>
           <div class="mt-5 flex gap-4 text-muted-600 dark:text-neutral-400">
-            <a aria-label="GitHub" class="transition hover:text-primary-400" href="#"><UIcon class="size-5" name="i-ph-github-logo" /></a>
-            <a aria-label="LinkedIn" class="transition hover:text-secondary-400" href="#"><UIcon class="size-5" name="i-ph-linkedin-logo" /></a>
-            <a aria-label="Email" class="transition hover:text-accent-400" href="mailto:hello@southeastcode.com"><UIcon class="size-5" name="i-ph-envelope" /></a>
+            <a
+              aria-label="GitHub"
+              class="inline-flex items-center justify-center rounded-md border px-1 py-1 transition duration-300 hover:border-indigo-600 hover:text-indigo-600 hover:bg-indigo-200/10"
+              href="#"
+              ><PhGithubLogo class="size-5" weight="fill"
+            /></a>
+            <a
+              aria-label="LinkedIn"
+              class="inline-flex items-center justify-center rounded-md border px-1 py-1 transition duration-300 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-200/10"
+              href="#"
+              ><PhLinkedinLogo class="size-5" weight="fill"
+            /></a>
+            <a
+              aria-label="Email"
+              class="inline-flex items-center justify-center rounded-md border px-1 py-1 transition duration-300 hover:border-teal-600 hover:text-teal-600 hover:bg-teal-200/10"
+              href="mailto:hello@southeastcode.com"
+              ><PhEnvelopeSimple class="size-5" weight="fill"
+            /></a>
           </div>
         </div>
       </div>

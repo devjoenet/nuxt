@@ -15,9 +15,9 @@
 
   const toneClasses = computed(() => {
     const tones = {
-      primary: "text-primary-400 border-primary-500/30 bg-primary-500/10",
-      accent: "text-accent-400 border-accent-500/30 bg-accent-500/10",
-      secondary: "text-secondary-400 border-secondary-500/30 bg-secondary-500/10",
+      primary: "text-primary-400 border-primary-500/30 bg-primary-500/10 group-hover:border-primary-400/80 group-hover:bg-primary-400 group-hover:text-primary-950",
+      accent: "text-accent-400 border-accent-500/30 bg-accent-500/10 group-hover:border-accent-400/80 group-hover:bg-accent-400 group-hover:text-accent-950",
+      secondary: "text-secondary-400 border-secondary-500/30 bg-secondary-500/10 group-hover:border-secondary-400/80 group-hover:bg-secondary-400 group-hover:text-secondary-950",
     };
 
     return tones[props.metric.tone];
@@ -25,9 +25,19 @@
 
   const articleClasses = computed(() => {
     const tones = {
-      primary: "border-primary-500/15",
-      accent: "border-accent-500/15",
-      secondary: "border-secondary-500/15",
+      primary: "border-primary-500/15 hover:border-primary-500/35",
+      accent: "border-accent-500/15 hover:border-accent-500/35",
+      secondary: "border-secondary-500/15 hover:border-secondary-500/35",
+    };
+
+    return tones[props.metric.tone];
+  });
+
+  const blobClasses = computed(() => {
+    const tones = {
+      primary: "bg-primary-500",
+      accent: "bg-accent-500",
+      secondary: "bg-secondary-500",
     };
 
     return tones[props.metric.tone];
@@ -35,9 +45,19 @@
 
   const valueClasses = computed(() => {
     const tones = {
-      primary: "text-primary-400",
-      accent: "text-accent-400",
-      secondary: "text-secondary-400",
+      primary: "text-primary-400 group-hover:text-primary-950",
+      accent: "text-accent-400 group-hover:text-accent-50",
+      secondary: "text-secondary-400 group-hover:text-secondary-50",
+    };
+
+    return tones[props.metric.tone];
+  });
+
+  const copyClasses = computed(() => {
+    const tones = {
+      primary: "group-hover:text-primary-950/80",
+      accent: "group-hover:text-accent-50/85",
+      secondary: "group-hover:text-secondary-50/85",
     };
 
     return tones[props.metric.tone];
@@ -47,16 +67,24 @@
 <template>
   <article
     :class="articleClasses"
-    class="h-full rounded-lg border bg-muted-50/90 p-6 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 dark:bg-muted-900/70 dark:shadow-muted-950/20 dark:ring-neutral-100/5"
+    class="group relative h-full overflow-hidden rounded-lg border bg-muted-50/90 p-6 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 transition motion-safe:hover:-translate-y-1 dark:bg-muted-900/70 dark:shadow-muted-950/20 dark:ring-neutral-100/5"
   >
-    <div class="flex size-12 items-center justify-center rounded-md border" :class="toneClasses">
-      <UIcon :name="metric.icon" aria-hidden="true" class="size-6" />
-    </div>
+    <span
+      :class="blobClasses"
+      aria-hidden="true"
+      class="absolute -top-8 -left-8 z-0 size-24 rounded-full opacity-0 transition duration-1000 ease-out motion-safe:group-hover:scale-[9] group-hover:opacity-100"
+    ></span>
 
-    <p :class="valueClasses" class="mt-5 text-4xl font-semibold">{{ metric.value }}</p>
-    <p :class="valueClasses" class="mt-1 text-lg font-bold tracking-wide uppercase">
-      {{ metric.label }}
-    </p>
-    <p class="mt-3 text-sm leading-6 text-muted-600 dark:text-neutral-400">{{ metric.description }}</p>
+    <div class="relative z-10">
+      <div class="flex size-12 items-center justify-center rounded-md border transition duration-1000" :class="toneClasses">
+        <UIcon :name="metric.icon" aria-hidden="true" class="size-6" />
+      </div>
+
+      <p :class="valueClasses" class="mt-5 text-4xl font-semibold transition duration-1000">{{ metric.value }}</p>
+      <p :class="valueClasses" class="mt-1 text-lg font-bold tracking-wide uppercase transition duration-1000">
+        {{ metric.label }}
+      </p>
+      <p :class="copyClasses" class="mt-3 text-sm leading-6 text-muted-600 transition duration-1000 dark:text-neutral-400">{{ metric.description }}</p>
+    </div>
   </article>
 </template>

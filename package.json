@@ -34,6 +34,7 @@
   "dependencies": {
     "@inertiajs/vue3": "^3.4.0",
     "@nuxt/ui": "^4.8.2",
+    "@phosphor-icons/vue": "^2.2.1",
     "@unovis/vue": "^1.6.0",
     "@vueuse/core": "^14.3.0",
     "class-variance-authority": "^0.7.1",
