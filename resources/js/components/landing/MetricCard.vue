@@ -33,11 +33,11 @@
     return tones[props.metric.tone];
   });
 
-  const blobClasses = computed(() => {
+  const overlayClasses = computed(() => {
     const tones = {
-      primary: "bg-primary-500",
-      accent: "bg-accent-500",
-      secondary: "bg-secondary-500",
+      primary: "bg-primary-500/35 group-hover:bg-primary-500/95",
+      accent: "bg-accent-500/35 group-hover:bg-accent-500/95",
+      secondary: "bg-secondary-500/35 group-hover:bg-secondary-500/95",
     };
 
     return tones[props.metric.tone];
@@ -69,11 +69,7 @@
     :class="articleClasses"
     class="group relative h-full overflow-hidden rounded-lg border bg-muted-50/90 p-6 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 transition motion-safe:hover:-translate-y-1 dark:bg-muted-900/70 dark:shadow-muted-950/20 dark:ring-neutral-100/5"
   >
-    <span
-      :class="blobClasses"
-      aria-hidden="true"
-      class="absolute -top-8 -left-8 z-0 size-24 rounded-full opacity-0 transition duration-1000 ease-out motion-safe:group-hover:scale-[9] group-hover:opacity-100"
-    ></span>
+    <span :class="overlayClasses" aria-hidden="true" class="metric-liquid-fill absolute inset-0 z-0"></span>
 
     <div class="relative z-10">
       <div class="flex size-12 items-center justify-center rounded-md border transition duration-1000" :class="toneClasses">
@@ -88,3 +84,27 @@
     </div>
   </article>
 </template>
+
+<style scoped>
+  .metric-liquid-fill {
+    border-radius: 50% 20% 100% 100%;
+    box-shadow: inset 20px -9px 5px 0 rgb(10 10 10 / 12%);
+    transform: translateY(-112%) rotate(-130deg) scale(1);
+    transition-duration: 700ms, 1100ms, 1100ms, 700ms;
+    transition-property: background-color, transform, border-radius, box-shadow;
+    transition-timing-function: ease-out;
+  }
+
+  .group:hover .metric-liquid-fill {
+    border-radius: 0;
+    box-shadow: inset 20px -9px 8px 0 rgb(10 10 10 / 22%);
+    transform: translateY(0) rotate(0deg) scale(1.55);
+    transition-duration: 250ms, 900ms, 900ms, 250ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .metric-liquid-fill {
+      transition-duration: 0ms;
+    }
+  }
+</style>

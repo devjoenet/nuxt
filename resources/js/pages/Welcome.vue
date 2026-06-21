@@ -10,8 +10,8 @@
   import ProcessTimeline from "@/components/landing/ProcessTimeline.vue";
   import SectionHeading from "@/components/landing/SectionHeading.vue";
   import { Head } from "@inertiajs/vue3";
-  import { useColorMode } from "@vueuse/core";
-  import { computed } from "vue";
+  import { useColorMode, useElementBounding, useMounted, useWindowSize } from "@vueuse/core";
+  import { computed, ref } from "vue";
 
   interface LandingCard {
     title: string;
@@ -52,6 +52,12 @@
 
   const colorMode = useColorMode();
   const heroImage = computed(() => (colorMode.state.value === "dark" ? heroImageDark : heroImageLight));
+  const realitySection = ref<HTMLElement | null>(null);
+  const isMounted = useMounted();
+  const { top: realityTop } = useElementBounding(realitySection);
+  const { height: windowHeight } = useWindowSize();
+
+  const isRealityLiquidActive = computed(() => isMounted.value && realityTop.value <= windowHeight.value * 0.65);
 
   const realityCards: LandingCard[] = [
     {
@@ -59,14 +65,14 @@
       description: "Too many versions.",
       detail: "Too many dead ends.",
       icon: "i-ph-stack",
-      tone: "accent",
+      tone: "secondary",
     },
     {
       title: "Disconnected tools",
       description: "Data trapped in silos.",
       detail: "No single source of truth.",
       icon: "i-ph-flow-arrow",
-      tone: "accent",
+      tone: "primary",
     },
     {
       title: "Legacy bottlenecks",
@@ -76,6 +82,13 @@
       tone: "accent",
     },
   ];
+
+  const realityCardDelay = (index: number): number => {
+    const delayStep = 420;
+    const cascadeIndex = isRealityLiquidActive.value ? index : realityCards.length - 1 - index;
+
+    return cascadeIndex * delayStep;
+  };
 
   const transformationCards: LandingCard[] = [
     {
@@ -260,13 +273,13 @@
     <LandingHeader />
     <main>
       <LandingHero :hero-image-src="heroImage" />
-      <section id="reality" class="scroll-mt-28 border-y border-accent-500/15 bg-muted-100/90 px-5 py-16 sm:px-8 lg:py-20 dark:bg-muted-950/95">
+      <section id="reality" ref="realitySection" class="scroll-mt-28 border-y border-accent-500/15 bg-muted-100/90 px-5 py-16 sm:px-8 lg:py-20 dark:bg-muted-950/95">
         <div class="mx-auto max-w-7xl">
           <SectionHeading kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
 
           <ul class="mt-8 grid gap-5 md:grid-cols-3">
-            <li v-for="card in realityCards" :key="card.title">
-              <FeatureCard :item="card" centered />
+            <li v-for="(card, index) in realityCards" :key="card.title">
+              <FeatureCard :item="card" :liquid-active="isRealityLiquidActive" :liquid-delay="realityCardDelay(index)" centered liquid />
             </li>
           </ul>
         </div>

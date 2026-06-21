@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HorizonDashboard from "@/vendor/horizon-ui/pages/HorizonDashboard.vue";
+  import HorizonDashboard from "@/vendor/horizon-ui/pages/HorizonDashboard.vue";
 </script>
 
 <template>
