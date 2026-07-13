@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(CrmDemoSeeder::class);
+
         $manageJobs = Permission::findOrCreate('jobs.manage');
 
         $user = User::factory()->create([

@@ -30,6 +30,10 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'leads' => [
+        'recipient' => env('LEAD_NOTIFICATION_EMAIL', env('MAIL_FROM_ADDRESS')),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
