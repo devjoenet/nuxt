@@ -115,7 +115,7 @@
       "@php artisan config:clear --ansi",
       "pest --parallel --coverage --exactly=100.0"
     ],
-    "test:types": "phpstan",
+    "test:types": "phpstan --memory-limit=512M",
     "test": [
       "@test:type-coverage",
       "@test:unit",

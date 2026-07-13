@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import AppLogo from "@/components/AppLogo.vue";
+  import { privacy } from "@/routes";
+  import { Link } from "@inertiajs/vue3";
   import { PhEnvelopeSimple } from "@phosphor-icons/vue";
 
   interface FooterLink {
@@ -69,8 +71,7 @@
     >
       <p>&copy; 2026 Southeast Code, LLC. All rights reserved.</p>
       <div class="flex gap-5">
-        <a class="transition hover:text-muted-800 dark:hover:text-neutral-300" href="#">Privacy</a>
-        <a class="transition hover:text-muted-800 dark:hover:text-neutral-300" href="#">Terms</a>
+        <Link :href="privacy()" class="transition hover:text-muted-800 dark:hover:text-neutral-300">Privacy</Link>
       </div>
     </div>
   </footer>

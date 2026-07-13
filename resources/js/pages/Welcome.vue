@@ -1,16 +1,21 @@
 <script setup lang="ts">
   import heroImageDark from "../../img/savannah-river-dark-mode.png";
   import heroImageLight from "../../img/savannah-river-light-mode.png";
+  import socialImageAsset from "@/assets/landing/savannah-riverfront-hero.png";
   import FeatureCard from "@/components/landing/FeatureCard.vue";
   import LandingFooter from "@/components/landing/LandingFooter.vue";
   import LandingHeader from "@/components/landing/LandingHeader.vue";
   import LandingHero from "@/components/landing/LandingHero.vue";
+  import LandingContactForm from "@/components/landing/LandingContactForm.vue";
   import OperationsShowcase from "@/components/landing/OperationsShowcase.vue";
   import ProcessTimeline from "@/components/landing/ProcessTimeline.vue";
   import SectionHeading from "@/components/landing/SectionHeading.vue";
   import { Head } from "@inertiajs/vue3";
   import { useColorMode, useElementBounding, useMounted, useWindowSize } from "@vueuse/core";
   import { computed, ref } from "vue";
+
+  const props = defineProps<{ canonicalUrl: string }>();
+  const socialImage = computed(() => new URL(socialImageAsset, props.canonicalUrl).href);
 
   interface LandingCard {
     title: string;
@@ -227,6 +232,20 @@
       name="description"
       content="Southeast Code builds custom web applications for operations-heavy organizations that have outgrown spreadsheets, disconnected tools, and legacy systems."
     />
+    <link :href="canonicalUrl" head-key="canonical" rel="canonical" />
+    <meta content="website" head-key="og:type" property="og:type" />
+    <meta content="Southeast Code | Custom operations software" head-key="og:title" property="og:title" />
+    <meta
+      content="Custom web applications for operations-heavy organizations that have outgrown spreadsheets and disconnected systems."
+      head-key="og:description"
+      property="og:description"
+    />
+    <meta :content="canonicalUrl" head-key="og:url" property="og:url" />
+    <meta :content="socialImage" head-key="og:image" property="og:image" />
+    <meta content="summary_large_image" head-key="twitter:card" name="twitter:card" />
+    <meta content="Southeast Code | Custom operations software" head-key="twitter:title" name="twitter:title" />
+    <meta content="Practical software built around how your operation actually works." head-key="twitter:description" name="twitter:description" />
+    <meta :content="socialImage" head-key="twitter:image" name="twitter:image" />
   </Head>
 
   <div class="min-h-screen overflow-hidden bg-muted-50 text-muted-800 selection:bg-primary-500 selection:text-primary-950 dark:bg-muted-950 dark:text-neutral-100">
@@ -305,23 +324,26 @@
 
       <section
         id="contact"
-        class="scroll-mt-28 border-y border-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-10 sm:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]"
+        class="scroll-mt-28 border-y border-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]"
       >
         <div
-          class="mx-auto flex max-w-5xl flex-col gap-6 rounded-lg border border-accent-500/25 bg-muted-50/85 p-6 shadow-2xl shadow-accent-950/10 ring-1 ring-muted-200/70 sm:p-8 lg:flex-row lg:items-center lg:justify-between dark:bg-muted-900/80 dark:shadow-accent-950/30 dark:ring-transparent"
+          class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-accent-500/25 bg-muted-50/90 p-6 shadow-2xl shadow-accent-950/10 ring-1 ring-muted-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-muted-900/85 dark:shadow-accent-950/30 dark:ring-transparent"
         >
           <div>
-            <p class="text-sm font-semibold text-secondary-400">Ready to replace the workaround?</p>
-            <h2 class="mt-2 text-2xl font-semibold text-muted-950 dark:text-neutral-50">Let's map your workflows and build software that fits.</h2>
+            <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-300">Ready to replace the workaround?</p>
+            <h2 class="mt-3 text-3xl leading-tight font-semibold text-muted-950 dark:text-neutral-50">Let’s map the workflow before anyone writes code.</h2>
+            <p class="mt-4 leading-7 text-muted-700 dark:text-neutral-300">
+              Tell us where the process breaks down, what your team is doing manually, and what a useful result looks like. Specifics beat polished sales language every time.
+            </p>
+            <ul class="mt-6 space-y-3 text-sm text-muted-700 dark:text-neutral-300">
+              <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />No generic package pitch</li>
+              <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Practical technical review</li>
+              <li class="flex gap-3">
+                <UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Clear next step, even if it is “not yet”
+              </li>
+            </ul>
           </div>
-
-          <a
-            href="mailto:hello@southeastcode.com?subject=Workflow%20review"
-            class="inline-flex items-center justify-center rounded-md bg-accent-500 px-6 py-3 text-sm font-bold text-accent-50 shadow-lg shadow-accent-500/25 transition hover:bg-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-100"
-          >
-            Schedule a workflow review
-            <UIcon aria-hidden="true" class="ml-2 size-4" name="i-ph-arrow-circle-right" />
-          </a>
+          <LandingContactForm />
         </div>
       </section>
     </main>
