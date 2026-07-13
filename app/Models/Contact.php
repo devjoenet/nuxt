@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
 
 #[Fillable(['organization_id', 'name', 'email', 'phone'])]
@@ -19,6 +20,12 @@ class Contact extends Model
     use HasFactory;
 
     use HasUuids;
+    use SoftDeletes;
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 
     /** @return array<int, string> */
     #[Override]

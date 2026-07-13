@@ -18,7 +18,7 @@
 
   const baseStats = [
     {
-      title: "Customers",
+      title: "Leads",
       icon: "i-ph-users",
       minValue: 400,
       maxValue: 1000,
@@ -80,7 +80,7 @@
       :key="index"
       :icon="stat.icon"
       :title="stat.title"
-      to="/customers"
+      to="/crm/leads"
       variant="subtle"
       :ui="{
         container: 'gap-y-1.5',

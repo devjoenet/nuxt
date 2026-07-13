@@ -4,18 +4,37 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\LeadSource;
+use App\Enums\LeadStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Override;
 
+/**
+ * @property string $uuid
+ * @property LeadStatus $status
+ * @property LeadSource $source
+ * @property ?Carbon $archived_at
+ * @property ?Carbon $converted_at
+ * @property Carbon $created_at
+ * @property Contact $contact
+ * @property ?Organization $organization
+ * @property ?User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Note> $notes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CrmActivity> $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, FollowUpTask> $followUpTasks
+ */
 #[Fillable([
     'contact_id', 'organization_id', 'owner_id', 'status', 'source', 'service_interest', 'budget_range',
     'timeline', 'project_details', 'referral_source', 'landing_page', 'referrer', 'utm_source', 'utm_medium',
-    'utm_campaign', 'utm_term', 'utm_content', 'ip_address', 'user_agent', 'consented_at',
+    'utm_campaign', 'utm_term', 'utm_content', 'ip_address', 'user_agent', 'consented_at', 'archived_at', 'converted_at',
 ])]
 class Lead extends Model
 {
@@ -23,6 +42,12 @@ class Lead extends Model
     use HasFactory;
 
     use HasUuids;
+    use SoftDeletes;
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 
     /** @return array<int, string> */
     #[Override]
@@ -61,10 +86,22 @@ class Lead extends Model
         return $this->hasMany(FollowUpTask::class);
     }
 
+    /** @return MorphMany<Note, $this> */
+    public function notes(): MorphMany
+    {
+        return $this->morphMany(Note::class, 'subject');
+    }
+
     /** @return array<string, string> */
     #[Override]
     protected function casts(): array
     {
-        return ['consented_at' => 'datetime'];
+        return [
+            'status' => LeadStatus::class,
+            'source' => LeadSource::class,
+            'consented_at' => 'datetime',
+            'archived_at' => 'datetime',
+            'converted_at' => 'datetime',
+        ];
     }
 }

@@ -17,12 +17,14 @@ class DatabaseSeeder extends Seeder
         $this->call(CrmDemoSeeder::class);
 
         $manageJobs = Permission::findOrCreate('jobs.manage');
+        $viewCrm = Permission::findOrCreate('crm.view');
+        $manageCrm = Permission::findOrCreate('crm.manage');
 
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
-        $user->givePermissionTo($manageJobs);
+        $user->givePermissionTo([$manageJobs, $viewCrm, $manageCrm]);
     }
 }

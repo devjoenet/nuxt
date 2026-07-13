@@ -24,9 +24,9 @@
         },
       },
       {
-        label: "Customers",
+        label: "CRM",
         icon: "i-ph-users",
-        to: "/customers",
+        to: "/crm/leads",
         onSelect: () => {
           open.value = false;
         },
