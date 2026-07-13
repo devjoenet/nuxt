@@ -8,13 +8,17 @@ use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
+use App\Models\Note;
 use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class CrmDemoSeeder extends Seeder
 {
     public function run(): void
     {
+        $author = User::factory()->create();
+
         Organization::factory()
             ->count(8)
             ->has(Contact::factory()->count(2))
@@ -28,6 +32,11 @@ class CrmDemoSeeder extends Seeder
 
                     CrmActivity::factory()->count(2)->recycle($lead)->create();
                     FollowUpTask::factory()->recycle($lead)->create();
+                    Note::factory()->recycle([$lead, $author])->create([
+                        'subject_type' => Lead::class,
+                        'subject_id' => $lead->id,
+                        'user_id' => $author->id,
+                    ]);
                 });
             });
     }

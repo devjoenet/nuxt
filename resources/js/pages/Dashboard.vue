@@ -17,9 +17,9 @@
         to: "/inbox",
       },
       {
-        label: "New customer",
+        label: "New lead",
         icon: "i-ph-user-plus",
-        to: "/customers",
+        to: "/crm/leads",
       },
     ],
   ] satisfies DropdownMenuItem[][];

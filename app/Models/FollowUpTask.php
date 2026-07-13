@@ -4,20 +4,38 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\FollowUpTaskStatus;
+use App\Enums\TaskPriority;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Override;
 
-#[Fillable(['lead_id', 'assigned_to', 'title', 'description', 'status', 'due_at', 'completed_at'])]
+/**
+ * @property string $uuid
+ * @property string $title
+ * @property FollowUpTaskStatus $status
+ * @property TaskPriority $priority
+ * @property Carbon $due_at
+ */
+#[Fillable(['lead_id', 'assigned_to', 'title', 'description', 'status', 'priority', 'due_at', 'completed_at'])]
 class FollowUpTask extends Model
 {
     /** @use HasFactory<\Database\Factories\FollowUpTaskFactory> */
     use HasFactory;
 
     use HasUuids;
+    use SoftDeletes;
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 
     /** @return array<int, string> */
     #[Override]
@@ -42,6 +60,21 @@ class FollowUpTask extends Model
     #[Override]
     protected function casts(): array
     {
-        return ['due_at' => 'datetime', 'completed_at' => 'datetime'];
+        return [
+            'status' => FollowUpTaskStatus::class,
+            'priority' => TaskPriority::class,
+            'due_at' => 'datetime',
+            'completed_at' => 'datetime',
+        ];
+    }
+
+    public function scopeOverdue(Builder $query): void
+    {
+        $query->where('status', FollowUpTaskStatus::Open)->where('due_at', '<', now());
+    }
+
+    public function scopeDueSoon(Builder $query): void
+    {
+        $query->where('status', FollowUpTaskStatus::Open)->whereBetween('due_at', [now(), now()->addDays(3)]);
     }
 }

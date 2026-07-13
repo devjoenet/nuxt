@@ -9,15 +9,24 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Override;
 
-#[Fillable(['name', 'website'])]
+/** @property ?Carbon $client_since_at */
+#[Fillable(['name', 'website', 'client_since_at', 'archived_at'])]
 class Organization extends Model
 {
     /** @use HasFactory<\Database\Factories\OrganizationFactory> */
     use HasFactory;
 
     use HasUuids;
+    use SoftDeletes;
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 
     /** @return array<int, string> */
     #[Override]
@@ -36,5 +45,11 @@ class Organization extends Model
     public function leads(): HasMany
     {
         return $this->hasMany(Lead::class);
+    }
+
+    #[Override]
+    protected function casts(): array
+    {
+        return ['client_since_at' => 'datetime', 'archived_at' => 'datetime'];
     }
 }
