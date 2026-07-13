@@ -13,12 +13,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Override;
+use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+#[Hidden(['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
+    use HasRoles;
     use HasUuids;
     use Notifiable;
     use TwoFactorAuthenticatable;

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { formatTimeAgo, useFetch } from "@vueuse/core";
+  import { formatTimeAgo } from "@vueuse/core";
+  import { ref } from "vue";
   import { useDashboard } from "../composables/useDashboard";
   import type { Notification } from "../types";
 
   const { isNotificationsSlideoverOpen } = useDashboard();
 
-  const { data: notifications } = useFetch("https://dashboard-template.nuxt.dev/api/notifications", { initialData: [] }).json<Notification[]>();
+  const notifications = ref<Notification[]>([]);
 </script>
 
 <template>

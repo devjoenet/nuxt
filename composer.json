@@ -24,7 +24,6 @@
     "laravel/tinker": "^3.0",
     "laravel/wayfinder": "^0.1.20",
     "league/flysystem-aws-s3-v3": "^3.34",
-    "negoziator/horizon-ui": "^1.0",
     "spatie/laravel-activitylog": "^5.0",
     "spatie/laravel-data": "^4.23",
     "spatie/laravel-permission": "^8.0"
@@ -126,7 +125,9 @@
   },
   "extra": {
     "laravel": {
-      "dont-discover": []
+      "dont-discover": [
+        "negoziator/horizon-ui"
+      ]
     }
   },
   "config": {

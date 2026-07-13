@@ -2,13 +2,12 @@
   import Layout from "@/layouts/Default.vue";
   import SettingsLayout from "@/layouts/SettingsLayout.vue";
   import { Head } from "@inertiajs/vue3";
-  import { useFetch } from "@vueuse/core";
   import { computed, ref } from "vue";
   import type { Member } from "../../types";
 
   defineOptions({ layout: Layout });
 
-  const { data: members } = useFetch<Member[]>("https://dashboard-template.nuxt.dev/api/members", { initialData: [] }).json<Member[]>();
+  const members = ref<Member[]>([]);
 
   const q = ref("");
 

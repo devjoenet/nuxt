@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 
 use function fake;
 use function now;
@@ -26,9 +27,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'two_factor_secret' => Str::random(10),
-            'two_factor_recovery_codes' => Str::random(10),
-            'two_factor_confirmed_at' => now(),
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
         ];
     }
 
@@ -39,12 +40,20 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function withoutTwoFactor(): static
+    public function withTwoFactorAuthentication(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'two_factor_confirmed_at' => null,
+            'two_factor_secret' => encrypt(app(TwoFactorAuthenticationProvider::class)->generateSecretKey()),
+            'two_factor_recovery_codes' => encrypt(json_encode([
+                Str::random(10).'-'.Str::random(10),
+                Str::random(10).'-'.Str::random(10),
+            ], JSON_THROW_ON_ERROR)),
+            'two_factor_confirmed_at' => now(),
         ]);
+    }
+
+    public function withoutTwoFactor(): static
+    {
+        return $this->state(fn (array $attributes): array => []);
     }
 }

@@ -17,16 +17,7 @@ createServer(
       page,
       render: renderToString,
       title: (title) => (title ? `${title} - ${appName}` : appName),
-      resolve: async (name) => {
-        const vendorPages = import.meta.glob<DefineComponent>("./vendor/horizon-ui/pages/**/*.vue");
-        const vendorPath = `./vendor/horizon-ui/pages/${name}.vue`;
-
-        if (vendorPath in vendorPages) {
-          return await resolvePageComponent(vendorPath, vendorPages);
-        } else {
-          return await resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>("./pages/**/*.vue"));
-        }
-      },
+      resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>("./pages/**/*.vue")),
       setup: ({ App, props, plugin }) =>
         createSSRApp({ render: () => h(UApp, null, { default: () => h(App, props) }) })
           .use(plugin)

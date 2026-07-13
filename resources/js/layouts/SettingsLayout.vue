@@ -25,20 +25,6 @@
         to: "/settings/security",
       },
     ],
-    [
-      {
-        label: "Documentation",
-        icon: "i-ph-book-open",
-        to: "https://ui.nuxt.com/getting-started/installation/pro/nuxt",
-        target: "_blank",
-      },
-      {
-        label: "Buy now",
-        icon: "i-ph-shopping-cart",
-        to: "https://ui.nuxt.com/pro/purchase",
-        target: "_blank",
-      },
-    ],
   ] satisfies NavigationMenuItem[][];
 </script>
 

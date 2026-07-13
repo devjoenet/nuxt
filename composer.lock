@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6a326ae29a9ac21eac487b15c921785",
+  "content-hash": "7991a123602bef8eb2e6cb9c935da127",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2960,59 +2960,6 @@
                 "source": "https://github.com/jmespath/jmespath.php/tree/2.9.1"
             },
             "time": "2026-06-11T10:43:56+00:00"
-        },
-        {
-            "name": "negoziator/horizon-ui",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/negoziator/horizon-ui.git",
-                "reference": "4ced4db0d510e6d31234859349b71de6e0376009"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/negoziator/horizon-ui/zipball/4ced4db0d510e6d31234859349b71de6e0376009",
-                "reference": "4ced4db0d510e6d31234859349b71de6e0376009",
-                "shasum": ""
-            },
-            "require": {
-                "inertiajs/inertia-laravel": "^1.0|^2.0|^3.0",
-                "laravel/framework": "^11.0|^12.0|^13.0",
-                "laravel/horizon": "^5.0",
-                "php": ">=8.4",
-                "spatie/laravel-package-tools": "^1.16"
-            },
-            "require-dev": {
-                "larastan/larastan": "^3.9",
-                "laravel/pint": "^1.29",
-                "orchestra/testbench": "^9.0|^10.0|^11.0",
-                "pestphp/pest": "^3.0|^4.0",
-                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
-                "rector/rector": "^2.4"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Negoziator\\HorizonUi\\HorizonUiServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Negoziator\\HorizonUi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A rich, Inertia-powered Horizon dashboard UI as a Laravel package",
-            "support": {
-                "issues": "https://github.com/negoziator/horizon-ui/issues",
-                "source": "https://github.com/negoziator/horizon-ui/tree/v1.0.2"
-            },
-            "time": "2026-04-25T20:50:25+00:00"
         },
         {
             "name": "nesbot/carbon",
