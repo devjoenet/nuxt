@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Spatie\Permission\Models\Permission;
 
 test('guest cannot view horizon', function (): void {
-    $canView = Gate::check('viewHorizon');
+    expect(Gate::check('viewHorizon'))->toBeFalse();
 
-    expect($canView)->toBeFalse();
+    $this->get('/horizon')->assertForbidden();
 });
 
-test('authenticated user cannot view horizon without allowed email', function (): void {
+test('authenticated user cannot view horizon without permission', function (): void {
     $user = User::factory()->create([
         'email' => 'user@example.com',
     ]);
@@ -19,18 +20,17 @@ test('authenticated user cannot view horizon without allowed email', function ()
     $canView = Gate::forUser($user)->check('viewHorizon');
 
     expect($canView)->toBeFalse();
+
+    $this->actingAs($user)->get('/horizon')->assertForbidden();
 });
 
-test('authenticated user with allowed email can view horizon', function (): void {
-    // This test documents the expected behavior when emails are added to the allowed list
-    // Currently the allowed emails list is empty, so this will fail
-    // Once emails are added to the list, this test would pass for those users
-    $user = User::factory()->create([
-        'email' => 'admin@example.com',
-    ]);
+test('authenticated user with jobs manage permission can view horizon', function (): void {
+    $user = User::factory()->create();
+    $user->givePermissionTo(Permission::findOrCreate('jobs.manage'));
 
     $canView = Gate::forUser($user)->check('viewHorizon');
 
-    // Since the allowed list is empty, no one can access
-    expect($canView)->toBeFalse();
+    expect($canView)->toBeTrue();
+
+    $this->actingAs($user)->get('/horizon')->assertSuccessful();
 });

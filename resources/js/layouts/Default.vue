@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type { NavigationMenuItem } from "@nuxt/ui";
 
-  const { url } = usePage();
   const toast = useToast();
 
   const open = ref(false);
@@ -20,7 +19,6 @@
         label: "Inbox",
         icon: "i-ph-tray",
         to: "/inbox",
-        badge: "4",
         onSelect: () => {
           open.value = false;
         },
@@ -72,20 +70,6 @@
         ],
       },
     ],
-    [
-      {
-        label: "Feedback",
-        icon: "i-ph-chat-circle",
-        to: "https://github.com/nuxt-ui-pro/dashboard-vue",
-        target: "_blank",
-      },
-      {
-        label: "Help & Support",
-        icon: "i-ph-info",
-        to: "https://github.com/nuxt/ui-pro",
-        target: "_blank",
-      },
-    ],
   ] satisfies NavigationMenuItem[][];
 
   const groups = computed(() => [
@@ -93,19 +77,6 @@
       id: "links",
       label: "Go to",
       items: links.flat(),
-    },
-    {
-      id: "code",
-      label: "Code",
-      items: [
-        {
-          id: "source",
-          label: "View page source",
-          icon: "simple-icons:github",
-          to: `https://github.com/nuxt-ui-pro/dashboard-vue/blob/main/src/pages${url === "/" ? "/index" : url}.vue`,
-          target: "_blank",
-        },
-      ],
     },
   ]);
 

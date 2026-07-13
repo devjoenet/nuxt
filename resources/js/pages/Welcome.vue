@@ -5,7 +5,6 @@
   import LandingFooter from "@/components/landing/LandingFooter.vue";
   import LandingHeader from "@/components/landing/LandingHeader.vue";
   import LandingHero from "@/components/landing/LandingHero.vue";
-  import MetricCard from "@/components/landing/MetricCard.vue";
   import OperationsShowcase from "@/components/landing/OperationsShowcase.vue";
   import ProcessTimeline from "@/components/landing/ProcessTimeline.vue";
   import SectionHeading from "@/components/landing/SectionHeading.vue";
@@ -30,14 +29,6 @@
     description: string;
     icon: string;
     tone: "primary" | "secondary" | "accent" | "warning";
-  }
-
-  interface MetricItem {
-    value: string;
-    label: string;
-    description: string;
-    icon: string;
-    tone: "primary" | "accent" | "secondary";
   }
 
   interface FooterLink {
@@ -192,37 +183,6 @@
     },
   ];
 
-  const metrics: MetricItem[] = [
-    {
-      value: "24-60",
-      label: "hours",
-      description: "Recovered per week across operations teams",
-      icon: "i-ph-clock",
-      tone: "primary",
-    },
-    {
-      value: "40%",
-      label: "faster",
-      description: "Approvals with automated routing and visibility",
-      icon: "i-ph-lightning",
-      tone: "secondary",
-    },
-    {
-      value: "98%",
-      label: "cleaner",
-      description: "Handoffs with standard workflows and tracking",
-      icon: "i-ph-arrows-left-right",
-      tone: "accent",
-    },
-    {
-      value: "100%",
-      label: "visibility",
-      description: "Into exceptions, delays, and performance",
-      icon: "i-ph-eye",
-      tone: "primary",
-    },
-  ];
-
   const footerColumns: FooterColumn[] = [
     {
       title: "Solutions",
@@ -340,24 +300,6 @@
           </div>
 
           <OperationsShowcase :hero-image-src="heroImage" />
-        </div>
-      </section>
-
-      <section id="impact" class="scroll-mt-28 px-5 py-16 sm:px-8 lg:py-20">
-        <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
-          <div>
-            <p class="text-xs font-bold tracking-[0.22em] text-accent-400 uppercase">The impact</p>
-            <h2 class="mt-4 text-3xl leading-tight font-semibold text-muted-950 sm:text-4xl dark:text-neutral-50">
-              Measurable impact.
-              <span class="block">Real operational wins.</span>
-            </h2>
-          </div>
-
-          <ul class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <li v-for="metric in metrics" :key="metric.label">
-              <MetricCard :metric="metric" />
-            </li>
-          </ul>
         </div>
       </section>
 

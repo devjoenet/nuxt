@@ -2,7 +2,6 @@
   import Layout from "@/layouts/Default.vue";
   import type { TableColumn } from "@nuxt/ui";
   import { getPaginationRowModel, type Row } from "@tanstack/table-core";
-  import { useFetch } from "@vueuse/core";
   import { upperFirst } from "scule";
   import { h, ref, resolveComponent, useTemplateRef, watch } from "vue";
   import type { User } from "../types";
@@ -27,7 +26,8 @@
   const columnVisibility = ref();
   const rowSelection = ref({ 1: true });
 
-  const { data, isFetching } = useFetch("https://dashboard-template.nuxt.dev/api/customers", { initialData: [] }).json<User[]>();
+  const data = ref<User[]>([]);
+  const isFetching = ref(false);
 
   function getRowItems(row: Row<User>) {
     return [
