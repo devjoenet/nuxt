@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { NavigationMenuItem } from "@nuxt/ui";
+  import { index as jobsIndex } from "@/routes/admin/jobs";
 
   const toast = useToast();
   const auth = useAuth();
@@ -46,6 +47,7 @@
                 ...(auth.value.user?.can?.["admin.roles.manage"] ? [{ label: "Roles", to: "/admin/roles" }] : []),
                 ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit" }] : []),
                 ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings" }] : []),
+                ...(auth.value.user?.can?.["jobs.view"] ? [{ label: "Jobs & queues", to: jobsIndex.url() }] : []),
               ],
               onSelect: () => {
                 open.value = false;

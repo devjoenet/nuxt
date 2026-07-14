@@ -41,4 +41,8 @@ return [
         ],
     ],
 
+    'horizon' => [
+        'notification_email' => env('HORIZON_NOTIFICATION_EMAIL', env('LEAD_NOTIFICATION_EMAIL')),
+    ],
+
 ];
