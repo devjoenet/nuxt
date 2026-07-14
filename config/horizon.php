@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\EnsureHorizonAccess;
 use Illuminate\Support\Str;
 
 return [
@@ -72,7 +73,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => ['web', EnsureHorizonAccess::class],
 
     /*
     |--------------------------------------------------------------------------
@@ -87,6 +88,10 @@ return [
 
     'waits' => [
         'redis:default' => 60,
+        'redis:mail' => 90,
+        'redis:notifications' => 90,
+        'redis:reminders' => 120,
+        'redis:crm' => 90,
     ],
 
     /*
@@ -186,33 +191,71 @@ return [
     */
 
     'defaults' => [
-        'supervisor-1' => [
+        'supervisor-default' => [
             'connection' => 'redis',
-            'queue' => ['default'],
+            'queue' => ['default', 'crm', 'imports', 'exports', 'reports', 'maintenance'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
-            'maxProcesses' => 1,
+            'minProcesses' => 1,
+            'maxProcesses' => 5,
+            'balanceMaxShift' => 1,
+            'balanceCooldown' => 5,
             'maxTime' => 0,
             'maxJobs' => 0,
             'memory' => 128,
-            'tries' => 1,
-            'timeout' => 60,
+            'tries' => 3,
+            'backoff' => [5, 30, 120],
+            'timeout' => 120,
+            'nice' => 0,
+        ],
+        'supervisor-notifications' => [
+            'connection' => 'redis',
+            'queue' => ['mail', 'notifications', 'reminders'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'minProcesses' => 1,
+            'maxProcesses' => 4,
+            'balanceMaxShift' => 1,
+            'balanceCooldown' => 5,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 3,
+            'backoff' => [5, 30, 120],
+            'timeout' => 120,
             'nice' => 0,
         ],
     ],
 
     'environments' => [
         'production' => [
-            'supervisor-1' => [
+            'supervisor-default' => [
                 'maxProcesses' => 10,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
+            'supervisor-notifications' => [
+                'maxProcesses' => 8,
+                'balanceMaxShift' => 2,
+                'balanceCooldown' => 3,
+            ],
+        ],
+
+        'staging' => [
+            'supervisor-default' => [
+                'maxProcesses' => 3,
+            ],
+            'supervisor-notifications' => [
+                'maxProcesses' => 3,
+            ],
         ],
 
         'local' => [
-            'supervisor-1' => [
-                'maxProcesses' => 3,
+            'supervisor-default' => [
+                'maxProcesses' => 1,
+            ],
+            'supervisor-notifications' => [
+                'maxProcesses' => 1,
             ],
         ],
     ],

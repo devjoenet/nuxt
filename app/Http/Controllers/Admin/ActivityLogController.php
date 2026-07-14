@@ -26,11 +26,11 @@ class ActivityLogController extends Controller
         $activities = Activity::query()
             ->with(['causer', 'subject'])
             ->when($filters['search'] ?? null, fn (Builder $query, string $search): Builder => $query->where(function (Builder $query) use ($search): void {
-                $query->where('description', 'like', "%{$search}%")
-                    ->orWhere('log_name', 'like', "%{$search}%");
+                $query->where('description', 'like', sprintf('%%%s%%', $search))
+                    ->orWhere('log_name', 'like', sprintf('%%%s%%', $search));
             }))
             ->when($filters['event'] ?? null, fn (Builder $query, string $event): Builder => $query->where('event', $event))
-            ->when($filters['causer'] ?? null, fn (Builder $query, string $causer): Builder => $query->whereHasMorph('causer', [User::class], fn (Builder $query): Builder => $query->where('name', 'like', "%{$causer}%")))
+            ->when($filters['causer'] ?? null, fn (Builder $query, string $causer): Builder => $query->whereHasMorph('causer', [User::class], fn (Builder $query): Builder => $query->where('name', 'like', sprintf('%%%s%%', $causer))))
             ->latest()
             ->paginate(25)
             ->withQueryString();

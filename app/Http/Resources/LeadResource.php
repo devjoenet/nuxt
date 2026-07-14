@@ -7,6 +7,7 @@ namespace App\Http\Resources;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
@@ -42,7 +43,7 @@ class LeadResource extends JsonResource
                 'client_since_at' => $this->organization->client_since_at?->toISOString(),
             ] : null,
             'owner' => $this->owner ? ['id' => $this->owner->id, 'name' => $this->owner->name] : null,
-            'notes' => $this->whenLoaded('notes', fn (): array => $this->notes->map(fn ($note): array => [
+            'notes' => $this->whenLoaded('notes', fn (): array => $this->notes->map(fn (Note $note): array => [
                 'id' => $note->uuid,
                 'body' => $note->body,
                 'author' => $note->user->name,

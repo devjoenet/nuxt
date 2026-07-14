@@ -16,6 +16,7 @@ use App\Models\Lead;
 use App\Models\User;
 use App\Queries\LeadQuery;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -69,7 +70,14 @@ class LeadController extends Controller
     public function show(Request $request, Lead $lead): Response
     {
         $this->authorize('view', $lead);
-        $lead->load(['contact', 'organization', 'owner', 'notes.user', 'activities' => fn ($query) => $query->latest(), 'followUpTasks' => fn ($query) => $query->orderBy('due_at')]);
+        $lead->load([
+            'contact',
+            'organization',
+            'owner',
+            'notes.user',
+            'activities' => fn (Builder $query): Builder => $query->latest(),
+            'followUpTasks' => fn (Builder $query): Builder => $query->orderBy('due_at'),
+        ]);
 
         return Inertia::render('Crm/Leads/Show', [
             'lead' => LeadResource::make($lead),

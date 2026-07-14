@@ -77,8 +77,9 @@
             :key="link.label"
             :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']"
             :href="link.url ?? index()"
-            v-html="link.label"
-          />
+          >
+            <span v-html="link.label" />
+          </Link>
         </nav>
       </UPageCard>
     </template>
