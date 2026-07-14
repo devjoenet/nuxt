@@ -54,5 +54,12 @@
     "@rollup/rollup-linux-x64-gnu": "4.9.5",
     "@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
     "lightningcss-linux-x64-gnu": "^1.29.1"
+  },
+  "allowScripts": {
+    "vue-demi@0.14.10": true,
+    "core-js-pure@3.49.0": true,
+    "esbuild@0.27.7": true,
+    "fsevents@2.3.3": true,
+    "maplibre-gl@2.4.0": true
   }
 }

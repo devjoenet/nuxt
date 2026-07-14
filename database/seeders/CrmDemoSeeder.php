@@ -23,8 +23,8 @@ class CrmDemoSeeder extends Seeder
             ->count(8)
             ->has(Contact::factory()->count(2))
             ->create()
-            ->each(function (Organization $organization): void {
-                $organization->contacts->each(function (Contact $contact) use ($organization): void {
+            ->each(function (Organization $organization) use ($author): void {
+                $organization->contacts->each(function (Contact $contact) use ($author, $organization): void {
                     $lead = Lead::factory()->recycle([$organization, $contact])->create([
                         'organization_id' => $organization->id,
                         'contact_id' => $contact->id,

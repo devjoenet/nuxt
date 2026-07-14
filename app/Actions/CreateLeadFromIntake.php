@@ -69,7 +69,7 @@ class CreateLeadFromIntake
         });
 
         Notification::route('mail', (string) config('services.leads.recipient'))
-            ->notify((new NewLeadReceived($lead))->afterCommit());
+            ->notify(new NewLeadReceived($lead)->afterCommit());
 
         return $lead;
     }

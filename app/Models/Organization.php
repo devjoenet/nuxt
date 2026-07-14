@@ -23,6 +23,7 @@ class Organization extends Model
     use HasUuids;
     use SoftDeletes;
 
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'uuid';

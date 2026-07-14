@@ -32,6 +32,7 @@ class FollowUpTask extends Model
     use HasUuids;
     use SoftDeletes;
 
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'uuid';

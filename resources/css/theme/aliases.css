@@ -1,0 +1,38 @@
+/* Utility aliases: grey is neutral, slate is muted, and pink is accent. */
+@theme inline {
+  --color-neutral-50: var(--color-grey-50);
+  --color-neutral-100: var(--color-grey-100);
+  --color-neutral-200: var(--color-grey-200);
+  --color-neutral-300: var(--color-grey-300);
+  --color-neutral-400: var(--color-grey-400);
+  --color-neutral-500: var(--color-grey-500);
+  --color-neutral-600: var(--color-grey-600);
+  --color-neutral-700: var(--color-grey-700);
+  --color-neutral-800: var(--color-grey-800);
+  --color-neutral-900: var(--color-grey-900);
+  --color-neutral-950: var(--color-grey-950);
+
+  --color-muted-50: var(--color-slate-50);
+  --color-muted-100: var(--color-slate-100);
+  --color-muted-200: var(--color-slate-200);
+  --color-muted-300: var(--color-slate-300);
+  --color-muted-400: var(--color-slate-400);
+  --color-muted-500: var(--color-slate-500);
+  --color-muted-600: var(--color-slate-600);
+  --color-muted-700: var(--color-slate-700);
+  --color-muted-800: var(--color-slate-800);
+  --color-muted-900: var(--color-slate-900);
+  --color-muted-950: var(--color-slate-950);
+
+  --color-accent-50: var(--color-pink-50);
+  --color-accent-100: var(--color-pink-100);
+  --color-accent-200: var(--color-pink-200);
+  --color-accent-300: var(--color-pink-300);
+  --color-accent-400: var(--color-pink-400);
+  --color-accent-500: var(--color-pink-500);
+  --color-accent-600: var(--color-pink-600);
+  --color-accent-700: var(--color-pink-700);
+  --color-accent-800: var(--color-pink-800);
+  --color-accent-900: var(--color-pink-900);
+  --color-accent-950: var(--color-pink-950);
+}

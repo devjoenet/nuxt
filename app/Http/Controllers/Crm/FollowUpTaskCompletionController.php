@@ -21,7 +21,7 @@ class FollowUpTaskCompletionController extends Controller
         $lead->activities()->create([
             'user_id' => auth()->id(),
             'type' => CrmActivityType::TaskCompleted,
-            'description' => "Follow-up completed: {$task->title}",
+            'description' => 'Follow-up completed: '.$task->title,
         ]);
 
         return back()->with('success', 'Follow-up completed.');

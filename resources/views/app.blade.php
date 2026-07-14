@@ -17,8 +17,8 @@
     @inertiaHead
   </head>
   <body>
-  <div class="isolate">
-    @inertia
-  </div>
+    <div class="isolate">
+      @inertia
+    </div>
   </body>
 </html>
