@@ -2,7 +2,6 @@
   import AuthenticatedSessionController from "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController";
   import TextLink from "@/components/TextLink.vue";
   import AuthBase from "@/layouts/AuthLayout.vue";
-  import { register } from "@/routes";
   import { request } from "@/routes/password";
   import { Form, Head } from "@inertiajs/vue3";
 
@@ -38,11 +37,6 @@
         </UFormField>
 
         <UButton :loading="processing" type="submit" block class="mt-4">Log in</UButton>
-      </div>
-
-      <div class="text-center text-sm text-muted">
-        Don't have an account?
-        <TextLink :href="register()" :tabindex="5" class="text-primary">Sign up</TextLink>
       </div>
     </Form>
   </AuthBase>

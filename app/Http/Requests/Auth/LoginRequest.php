@@ -48,6 +48,12 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (! $user->is_active) {
+            throw ValidationException::withMessages([
+                'email' => 'Your account is inactive.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
 
         return $user;
