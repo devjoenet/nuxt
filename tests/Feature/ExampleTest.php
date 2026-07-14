@@ -22,7 +22,7 @@ test('welcome page contains Southeast Code landing content', function (): void {
 
     expect($source)
         ->toContain('Southeast Code')
-        ->toContain('Custom software for work that refuses to fit')
+        ->toContain('Custom apps that replace spreadsheets and repetitive daily operational work.')
         ->toContain('Software shaped around the operation.')
         ->toContain('Ready to replace the workaround?');
 });

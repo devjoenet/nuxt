@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
+use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
 use App\Http\Controllers\Crm\FollowUpTaskController;
@@ -58,6 +59,10 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
 
         Route::get('settings', [BusinessSettingController::class, 'edit'])->name('settings.edit');
         Route::patch('settings', [BusinessSettingController::class, 'update'])->name('settings.update');
+
+        Route::get('jobs', [JobOperationsController::class, 'index'])
+            ->middleware('can:jobs.view')
+            ->name('jobs.index');
     });
 });
 

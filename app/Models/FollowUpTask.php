@@ -24,8 +24,9 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property FollowUpTaskStatus $status
  * @property TaskPriority $priority
  * @property Carbon $due_at
+ * @property ?Carbon $reminder_sent_at
  */
-#[Fillable(['lead_id', 'assigned_to', 'title', 'description', 'status', 'priority', 'due_at', 'completed_at'])]
+#[Fillable(['lead_id', 'assigned_to', 'title', 'description', 'status', 'priority', 'due_at', 'completed_at', 'reminder_sent_at'])]
 class FollowUpTask extends Model
 {
     /** @use HasFactory<\Database\Factories\FollowUpTaskFactory> */
@@ -78,6 +79,7 @@ class FollowUpTask extends Model
             'priority' => TaskPriority::class,
             'due_at' => 'datetime',
             'completed_at' => 'datetime',
+            'reminder_sent_at' => 'datetime',
         ];
     }
 

@@ -68,6 +68,10 @@
       await fetchSetupData();
     }
   }
+
+  function closeVerificationStep(): void {
+    showVerificationStep.value = false;
+  }
 </script>
 
 <template>
@@ -148,7 +152,7 @@
               </UFormField>
 
               <div class="flex w-full items-center space-x-5">
-                <UButton label="Back" color="neutral" variant="subtle" class="w-auto flex-1" @click="showVerificationStep = false" :disabled="processing" block />
+                <UButton :disabled="processing" block class="w-auto flex-1" color="neutral" label="Back" variant="subtle" @click="closeVerificationStep" />
                 <UButton
                   label="Confirm"
                   color="primary"

@@ -242,12 +242,36 @@ php artisan serve
 # Vite dev server (hot reload)
 npm run dev
 
-# Queue worker
+# Local queue worker
 php artisan queue:listen
 
 # Log viewer
 php artisan pail
+
+# Scheduler (local)
+php artisan schedule:work
+
+# Queue and Horizon operations
+php artisan queue:failed
+php artisan horizon:status
 ```
+
+Local development uses the database queue so Redis is not required for the normal app workflow. Staging and production
+use Redis with Laravel Horizon. The queue retry window is 180 seconds and the Horizon worker timeout is 120 seconds;
+keep that ordering when changing job or supervisor timeouts.
+
+The authenticated Admin > Jobs & queues page links to Horizon's dashboard, pending jobs, failed jobs, batches, monitored
+job search, and metrics. Users need `jobs.view` to inspect operations and `jobs.manage` for Horizon mutations such as
+retrying failed jobs. Set `HORIZON_NOTIFICATION_EMAIL` for long-wait and failed-job alerts.
+
+Run the scheduler and a worker in every staging/production deployment:
+
+```bash
+php artisan schedule:work
+php artisan horizon
+```
+
+See [docs/queues-and-horizon.md](docs/queues-and-horizon.md) for queue topology, deployment, and troubleshooting.
 
 ### Server-Side Rendering (SSR)
 

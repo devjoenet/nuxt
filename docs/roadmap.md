@@ -119,15 +119,15 @@ defaults above remain the executable path until those decisions are made.
 
 ### Jobs, Queues, And Operations
 
-- [ ] Configure Redis plus Horizon for staging/production and keep local/simple defaults aligned with database queues.
-- [ ] Protect Horizon and Horizon UI using roles or permissions instead of the current empty email allow-list.
-- [ ] Add queue/job admin links for failed jobs, pending jobs, batches, job search, and Horizon views.
-- [ ] Add queued jobs for lead notifications and follow-up reminders. Add intake confirmations or activity digests only
+- [x] Configure Redis plus Horizon for staging/production and keep local/simple defaults aligned with database queues.
+- [x] Protect Horizon and Horizon UI using roles or permissions instead of the current empty email allow-list.
+- [x] Add queue/job admin links for failed jobs, pending jobs, batches, job search, and Horizon views.
+- [x] Add queued jobs for lead notifications and follow-up reminders. Add intake confirmations or activity digests only
   if DP-08 enables them.
-- [ ] Schedule Horizon snapshots.
-- [ ] Define queue wait and failed-job notification behavior.
-- [ ] Add job tags for CRM, notifications, imports, exports, and operational reminders.
-- [ ] Add operational runbook notes only after queue and Horizon behavior exists.
+- [x] Schedule Horizon snapshots.
+- [x] Define queue wait and failed-job notification behavior.
+- [x] Add job tags for CRM, notifications, imports, exports, and operational reminders.
+- [x] Add operational runbook notes only after queue and Horizon behavior exists.
 
 ### Permissions And Audit
 

@@ -34,3 +34,13 @@ test('authenticated user with jobs manage permission can view horizon', function
 
     $this->actingAs($user)->get('/horizon')->assertSuccessful();
 });
+
+test('authenticated user with jobs view permission can inspect horizon but cannot mutate it', function (): void {
+    $user = User::factory()->create();
+    $user->givePermissionTo(Permission::findOrCreate('jobs.view'));
+
+    expect(Gate::forUser($user)->check('viewHorizon'))->toBeTrue();
+
+    $this->actingAs($user)->get('/horizon')->assertSuccessful();
+    $this->actingAs($user)->post('/horizon/api/jobs/retry/failed-job-id')->assertForbidden();
+});

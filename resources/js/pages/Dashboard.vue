@@ -29,6 +29,10 @@
     end: new Date(),
   });
   const period = ref<Period>("daily");
+
+  function openNotifications(): void {
+    isNotificationsSlideoverOpen.value = true;
+  }
 </script>
 
 <template>
@@ -41,7 +45,7 @@
 
         <template #right>
           <UTooltip text="Notifications" :shortcuts="['N']">
-            <UButton color="neutral" variant="ghost" square @click="isNotificationsSlideoverOpen = true">
+            <UButton color="neutral" square variant="ghost" @click="openNotifications">
               <UChip color="error" inset>
                 <UIcon class="size-5 shrink-0" name="i-ph-bell" />
               </UChip>
