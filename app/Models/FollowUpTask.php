@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property string $uuid
@@ -30,7 +32,17 @@ class FollowUpTask extends Model
     use HasFactory;
 
     use HasUuids;
+    use LogsActivity;
     use SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('crm')
+            ->logOnly(['lead_id', 'assigned_to', 'title', 'status', 'priority', 'due_at', 'completed_at'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     #[Override]
     public function getRouteKeyName(): string

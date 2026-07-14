@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /** @property ?Carbon $client_since_at */
 #[Fillable(['name', 'website', 'client_since_at', 'archived_at'])]
@@ -21,7 +23,17 @@ class Organization extends Model
     use HasFactory;
 
     use HasUuids;
+    use LogsActivity;
     use SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('crm')
+            ->logOnly(['name', 'website', 'client_since_at', 'archived_at'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     #[Override]
     public function getRouteKeyName(): string

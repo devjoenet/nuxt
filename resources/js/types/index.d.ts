@@ -21,12 +21,38 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  is_active: boolean;
+  roles: string[];
+  can: Record<string, boolean>;
   email_verified_at: string | null;
   avatar?: AvatarProps;
   status: UserStatus;
   location: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  is_active: boolean;
+  email_verified_at: string | null;
+  roles: string[];
+  created_at: string;
+}
+
+export interface AdminRole {
+  id: number;
+  name: string;
+  protected: boolean;
+  permission_ids: number[];
+}
+
+export interface AdminPermission {
+  id: number;
+  name: string;
+  label: string;
 }
 
 export interface Mail {

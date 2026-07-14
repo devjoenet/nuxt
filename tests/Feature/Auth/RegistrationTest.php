@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-test('registration screen can be rendered', function (): void {
+test('public registration is disabled after invite-based access management is available', function (): void {
     $response = $this->get('/register');
 
-    $response->assertStatus(200);
-});
-
-test('new users can register', function (): void {
-    $response = $this->post('/register', [
+    $response->assertNotFound();
+    $this->post('/register', [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
-    ]);
-
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    ])->assertNotFound();
 });

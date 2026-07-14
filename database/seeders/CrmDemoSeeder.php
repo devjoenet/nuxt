@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\RoleName;
 use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
@@ -18,6 +19,7 @@ class CrmDemoSeeder extends Seeder
     public function run(): void
     {
         $author = User::factory()->create();
+        $author->assignRole(RoleName::SalesOps->value);
 
         Organization::factory()
             ->count(8)

@@ -2,10 +2,11 @@
   import type { NavigationMenuItem } from "@nuxt/ui";
 
   const toast = useToast();
+  const auth = useAuth();
 
   const open = ref(false);
 
-  const links = [
+  const links = computed<NavigationMenuItem[][]>(() => [
     [
       {
         label: "Home",
@@ -31,6 +32,27 @@
           open.value = false;
         },
       },
+      ...(auth.value.user?.can?.["admin.dashboard.view"]
+        ? [
+            {
+              label: "Admin",
+              icon: "i-ph-shield-check",
+              to: "/admin",
+              type: "trigger",
+              defaultOpen: true,
+              children: [
+                { label: "Overview", to: "/admin" },
+                ...(auth.value.user?.can?.["admin.users.manage"] ? [{ label: "Users", to: "/admin/users" }] : []),
+                ...(auth.value.user?.can?.["admin.roles.manage"] ? [{ label: "Roles", to: "/admin/roles" }] : []),
+                ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit" }] : []),
+                ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings" }] : []),
+              ],
+              onSelect: () => {
+                open.value = false;
+              },
+            },
+          ]
+        : []),
       {
         label: "Settings",
         to: "/settings",
@@ -70,13 +92,13 @@
         ],
       },
     ],
-  ] satisfies NavigationMenuItem[][];
+  ]);
 
   const groups = computed(() => [
     {
       id: "links",
       label: "Go to",
-      items: links.flat(),
+      items: links.value.flat(),
     },
   ]);
 

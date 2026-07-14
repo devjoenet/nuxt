@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable(['organization_id', 'name', 'email', 'phone'])]
 class Contact extends Model
@@ -20,7 +22,17 @@ class Contact extends Model
     use HasFactory;
 
     use HasUuids;
+    use LogsActivity;
     use SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('crm')
+            ->logOnly(['organization_id', 'name'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     #[Override]
     public function getRouteKeyName(): string

@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property string $uuid
@@ -42,7 +44,17 @@ class Lead extends Model
     use HasFactory;
 
     use HasUuids;
+    use LogsActivity;
     use SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('crm')
+            ->logOnly(['organization_id', 'owner_id', 'status', 'source', 'service_interest', 'budget_range', 'timeline', 'archived_at', 'converted_at'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     #[Override]
     public function getRouteKeyName(): string

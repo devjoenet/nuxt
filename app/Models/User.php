@@ -13,17 +13,29 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'is_active', 'deactivated_at'])]
 #[Hidden(['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use HasRoles;
     use HasUuids;
+    use LogsActivity;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('users')
+            ->logOnly(['name', 'email', 'is_active', 'deactivated_at', 'email_verified_at'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     /** @return array<string, string> */
     #[Override]
@@ -31,6 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
+            'deactivated_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
