@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import PasswordResetLinkController from "@/actions/App/Http/Controllers/Auth/PasswordResetLinkController";
+  import FormInput from "@/components/FormInput.vue";
   import TextLink from "@/components/TextLink.vue";
   import AuthLayout from "@/layouts/AuthLayout.vue";
   import { login } from "@/routes";
@@ -20,9 +21,7 @@
 
     <div class="space-y-6">
       <Form v-bind="PasswordResetLinkController.store.form()" v-slot="{ errors, processing }">
-        <UFormField name="email" :error="errors.email" label="Email address">
-          <UInput type="email" class="w-full" autocomplete="off" placeholder="email@example.com" autofocus required />
-        </UFormField>
+        <FormInput :error="errors.email" autocomplete="off" autofocus label="Email address" name="email" required type="email" />
 
         <div class="my-6 flex items-center justify-start">
           <UButton :loading="processing" type="submit" block>Confirm Password</UButton>

@@ -1,5 +1,8 @@
 <script lang="ts" setup>
   import { Form, Link, router, usePage } from "@inertiajs/vue3";
+  import FormInput from "@/components/FormInput.vue";
+  import FormSelect from "@/components/FormSelect.vue";
+  import FormTextarea from "@/components/FormTextarea.vue";
   import Layout from "@/layouts/Default.vue";
   import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
   import { archive, convert, edit, index, restore } from "@/routes/crm/leads";
@@ -101,20 +104,19 @@
           <section class="grid gap-4 border-b border-default pb-8">
             <h2 class="text-xl font-semibold text-highlighted">Follow-ups</h2>
             <Form v-if="canManage" #default="{ errors, processing }" :action="storeTask(lead.id)" :options="{ preserveScroll: true }" class="grid gap-3" reset-on-success>
-              <UFormField :error="errors.title" name="title"><UInput class="w-full" name="title" placeholder="Follow-up title" /></UFormField>
+              <FormInput :error="errors.title" label="Follow-up title" name="title" />
               <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
-                <UFormField :error="errors.due_at" name="due_at"><UInput class="w-full" name="due_at" type="datetime-local" /></UFormField
-                ><UFormField :error="errors.priority" name="priority"
-                  ><USelect
-                    :items="[
-                      { label: 'Low', value: 'low' },
-                      { label: 'Normal', value: 'normal' },
-                      { label: 'High', value: 'high' },
-                    ]"
-                    class="w-full"
-                    default-value="normal"
-                    name="priority"
-                /></UFormField>
+                <FormInput :error="errors.due_at" label="Due date" name="due_at" type="datetime-local" /><FormSelect
+                  :error="errors.priority"
+                  :items="[
+                    { label: 'Low', value: 'low' },
+                    { label: 'Normal', value: 'normal' },
+                    { label: 'High', value: 'high' },
+                  ]"
+                  default-value="normal"
+                  label="Priority"
+                  name="priority"
+                />
               </div>
               <UButton :loading="processing" class="justify-self-end" color="neutral" label="Add follow-up" type="submit" variant="soft" />
             </Form>
@@ -139,7 +141,7 @@
           <section class="grid gap-4">
             <h2 class="text-xl font-semibold text-highlighted">Notes</h2>
             <Form v-if="canManage" #default="{ errors, processing }" :action="storeNote(lead.id)" :options="{ preserveScroll: true }" class="grid gap-3" reset-on-success>
-              <UFormField :error="errors.body" name="body"><UTextarea class="w-full" name="body" placeholder="Add context for the next person…" /></UFormField>
+              <FormTextarea :error="errors.body" label="Add context for the next person" name="body" />
               <UButton :loading="processing" class="justify-self-end" color="neutral" label="Add note" type="submit" variant="soft" />
             </Form>
             <ul class="grid gap-4" role="list">

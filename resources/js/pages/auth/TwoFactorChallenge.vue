@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import AuthLayout from "@/layouts/AuthLayout.vue";
+  import FormInput from "@/components/FormInput.vue";
   import { store } from "@/routes/two-factor/login";
   import { Form, Head } from "@inertiajs/vue3";
   import { computed, ref } from "vue";
@@ -66,9 +67,7 @@
 
       <template v-else>
         <Form v-bind="store.form()" class="space-y-4" reset-on-error #default="{ errors, processing, clearErrors }">
-          <UFormField name="recovery_code" :error="errors.recovery_code">
-            <UInput type="text" placeholder="Enter recovery code" :autofocus="showRecoveryInput" class="w-full" required />
-          </UFormField>
+          <FormInput :autofocus="showRecoveryInput" :error="errors.recovery_code" label="Recovery code" name="recovery_code" required />
 
           <UButton type="submit" :disabled="processing" block>Continue</UButton>
 
