@@ -8,7 +8,7 @@
   import type { Lead, Option, Owner } from "@/types/crm";
 
   defineOptions({ layout: Layout });
-  const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; owners: Owner[] }>();
+  const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.lead ? update(props.lead.id) : store()));
   const ownerOptions = computed(() => [{ label: "Unassigned", value: "" }, ...props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) }))]);
 </script>
@@ -35,7 +35,7 @@
           </template>
           <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
           <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
-          <FormSelect :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" />
+          <FormSelect v-if="canAssign" :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" />
           <FormInput :default-value="lead?.service_interest ?? undefined" :error="errors.service_interest" label="Service interest" name="service_interest" />
           <FormInput :default-value="lead?.budget_range ?? undefined" :error="errors.budget_range" label="Budget range" name="budget_range" />
           <FormInput :default-value="lead?.timeline ?? undefined" :error="errors.timeline" label="Timeline" name="timeline" />

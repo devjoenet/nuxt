@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\BusinessSetting;
+use App\Models\Contact;
+use App\Models\Lead;
+use App\Models\Organization;
 use App\Models\User;
 use App\Policies\ActivityPolicy;
 use App\Policies\BusinessSettingPolicy;
+use App\Policies\ContactPolicy;
+use App\Policies\LeadPolicy;
+use App\Policies\OrganizationPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -37,5 +43,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Activity::class, ActivityPolicy::class);
         Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);
+        Gate::policy(Contact::class, ContactPolicy::class);
+        Gate::policy(Lead::class, LeadPolicy::class);
+        Gate::policy(Organization::class, OrganizationPolicy::class);
     }
 }

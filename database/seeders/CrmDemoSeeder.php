@@ -24,12 +24,14 @@ class CrmDemoSeeder extends Seeder
         Organization::factory()
             ->count(8)
             ->has(Contact::factory()->count(2))
-            ->create()
+            ->create(['owner_id' => $author->id])
             ->each(function (Organization $organization) use ($author): void {
                 $organization->contacts->each(function (Contact $contact) use ($author, $organization): void {
+                    $contact->update(['owner_id' => $author->id]);
                     $lead = Lead::factory()->recycle([$organization, $contact])->create([
                         'organization_id' => $organization->id,
                         'contact_id' => $contact->id,
+                        'owner_id' => $author->id,
                     ]);
 
                     CrmActivity::factory()->count(2)->recycle($lead)->create();

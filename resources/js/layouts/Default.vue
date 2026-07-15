@@ -23,6 +23,13 @@
         label: "CRM",
         icon: "i-ph-users",
         to: "/crm/leads",
+        type: "trigger" as const,
+        defaultOpen: true,
+        children: [
+          { label: "Leads", to: "/crm/leads" },
+          { label: "Organizations", to: "/crm/organizations" },
+          { label: "Contacts", to: "/crm/contacts" },
+        ],
         onSelect: closeNavigation,
       },
       ...(auth.value.user?.can?.["admin.dashboard.view"]

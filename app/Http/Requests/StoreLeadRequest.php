@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +25,12 @@ class StoreLeadRequest extends FormRequest
             'contact_phone' => ['nullable', 'string', 'max:255'],
             'organization_name' => ['nullable', 'string', 'max:255'],
             'organization_website' => ['nullable', 'url', 'max:255'],
-            'owner_id' => ['nullable', 'integer', 'exists:users,id'],
+            'owner_id' => [
+                Rule::prohibitedIf(fn (): bool => ! $this->user()?->isCrmAdministrator()),
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true)),
+            ],
             'status' => ['required', Rule::enum(LeadStatus::class)],
             'source' => ['required', Rule::enum(LeadSource::class)],
             'service_interest' => ['nullable', 'string', 'max:255'],

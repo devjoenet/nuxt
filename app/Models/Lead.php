@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Models\Concerns\HasCrmOwnership;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,6 +41,8 @@ use Spatie\Activitylog\Support\LogOptions;
 ])]
 class Lead extends Model
 {
+    use HasCrmOwnership;
+
     /** @use HasFactory<\Database\Factories\LeadFactory> */
     use HasFactory;
 
@@ -79,12 +82,6 @@ class Lead extends Model
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
-    }
-
-    /** @return BelongsTo<User, $this> */
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'owner_id');
     }
 
     /** @return HasMany<CrmActivity, $this> */

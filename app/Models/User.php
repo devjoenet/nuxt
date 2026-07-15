@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\RoleName;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -27,6 +28,11 @@ class User extends Authenticatable implements MustVerifyEmail
     use LogsActivity;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    public function isCrmAdministrator(): bool
+    {
+        return $this->hasAnyRole([RoleName::Admin->value, RoleName::SuperAdmin->value]);
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

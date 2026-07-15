@@ -16,7 +16,7 @@ class OrganizationPolicy
 
     public function view(User $user, Organization $organization): bool
     {
-        return $user->can('crm.view');
+        return $user->can('crm.view') && $organization->isVisibleTo($user);
     }
 
     public function create(User $user): bool
@@ -26,11 +26,26 @@ class OrganizationPolicy
 
     public function update(User $user, Organization $organization): bool
     {
-        return $user->can('crm.manage');
+        return $user->can('crm.manage') && $organization->isVisibleTo($user);
     }
 
     public function delete(User $user, Organization $organization): bool
     {
-        return $user->can('crm.manage');
+        return $user->can('crm.manage') && $organization->isVisibleTo($user);
+    }
+
+    public function archive(User $user, Organization $organization): bool
+    {
+        return $user->can('crm.manage') && $organization->isVisibleTo($user);
+    }
+
+    public function restore(User $user, Organization $organization): bool
+    {
+        return $user->can('crm.manage') && $organization->isVisibleTo($user);
+    }
+
+    public function assign(User $user, Organization $organization): bool
+    {
+        return $user->can('crm.manage') && $user->isCrmAdministrator() && $organization->isVisibleTo($user);
     }
 }

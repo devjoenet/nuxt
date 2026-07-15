@@ -19,7 +19,13 @@ class UpdateLead
                 'email' => $attributes['contact_email'],
                 'phone' => $attributes['contact_phone'] ?? null,
             ]);
-            $lead->update(Arr::only($attributes, ['owner_id', 'status', 'source', 'service_interest', 'budget_range', 'timeline', 'project_details']));
+            $updates = Arr::only($attributes, ['status', 'source', 'service_interest', 'budget_range', 'timeline', 'project_details']);
+
+            if (auth()->user()?->isCrmAdministrator() === true && array_key_exists('owner_id', $attributes)) {
+                $updates['owner_id'] = $attributes['owner_id'];
+            }
+
+            $lead->update($updates);
             $lead->activities()->create([
                 'user_id' => auth()->id(),
                 'type' => CrmActivityType::LeadUpdated,

@@ -55,8 +55,8 @@ decision is later made differently, update this roadmap and the affected phase d
 `docs/00-decision-points.md` tracks the unresolved choices that can still change implementation details. The roadmap
 defaults above remain the executable path until those decisions are made.
 
-- [ ] DP-01: choose the v1 success metric and launch gate. The launch checklist exists, but the primary business
-  outcome and measurable threshold are still not explicit.
+- [x] DP-01: choose the v1 success metric and launch gate. Task 8 ratifies operational CRM readiness: inbound
+  opportunities become first-party records that authorized staff can locate, assign, manage, and advance.
 - [x] DP-02: confirm the final registration/account lifecycle after invite-based admin management exists. Staff access
   is invite-first and public registration routes are removed.
 - [x] DP-03: decide whether clients ever log in during v1 or whether client access is explicitly deferred. Client login
@@ -66,8 +66,9 @@ defaults above remain the executable path until those decisions are made.
   project.
 - [x] DP-05: confirm whether pipeline/status values stay code-owned for v1 or become admin-configurable. V1 uses PHP
   enums and read-only pipeline values.
-- [ ] DP-06: define CRM ownership visibility for sales/ops users. The roadmap default says owned/assigned visibility,
-  but current CRM policies still grant all `crm.view` users access to every lead.
+- [x] DP-06: define CRM ownership visibility for sales/ops users. CRM records use one nullable `owner_id`; Sales/Ops
+  users see owned or unassigned records, Admin/Super Admin bypass ownership filters, only admins transfer ownership,
+  and out-of-scope direct URLs return `404`.
 - [x] DP-07: lock the public intake field set, consent copy, and spam controls. The implemented form, validation,
   consent checkbox, IP capture, and rate limit match the documented default.
 - [ ] DP-08: choose notification recipients, channels, and scheduling-link behavior. Internal lead email and queued
@@ -114,14 +115,14 @@ defaults above remain the executable path until those decisions are made.
 - [x] Add migrations, models, factories, seeders, policies, requests, resources/data objects, and controllers for the
   CRM core.
 - [x] Replace `Customers.vue` demo API data with real Inertia props/actions and server-side pagination/filtering.
-- [ ] Build list, detail, create, edit, archive, and delete flows for leads, contacts, and organizations. Lead flows are
-  shipped; first-party contact and organization management screens and routes remain.
+- [x] Build list, detail, create, edit, archive, and delete flows for leads, contacts, and organizations. Task 8 adds
+  first-party contact and organization workflows plus ownership-scoped visibility.
 - [x] Add a lead status pipeline and conversion flow from lead to client. Create project records only if DP-04 is
   resolved in favor of project creation during conversion.
 - [x] Add follow-up tasks, due dates, ownership, and activity history.
 - [x] Add realistic local seed data for leads, clients, contacts, activities, and follow-ups.
-- [x] Add focused Pest feature tests for the shipped CRM lead CRUD, validation, authorization, filtering, and conversion
-  workflows. Contact/organization coverage belongs to the remaining CRM workspace task.
+- [x] Add focused Pest feature tests for CRM CRUD, validation, authorization, ownership scoping, filtering,
+  pagination, and conversion workflows.
 
 ### Admin Section
 
@@ -184,11 +185,11 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 ### Task 8 — Complete CRM Entities And Ownership
 
-- [ ] Ratify DP-01's v1 success metric and DP-06's ownership/visibility contract before changing CRM queries.
-- [ ] Add first-party contact and organization list/detail/create/edit/archive/delete workflows under the `Crm/*`
+- [x] Ratify DP-01's v1 success metric and DP-06's ownership/visibility contract before changing CRM queries.
+- [x] Add first-party contact and organization list/detail/create/edit/archive/delete workflows under the `Crm/*`
   namespace.
-- [ ] Enforce owned/assigned visibility for Sales/Ops users, with the documented admin and Super Admin bypasses.
-- [ ] Add policy, filtering, pagination, validation, and direct-URL authorization tests for the new scopes.
+- [x] Enforce owned/assigned visibility for Sales/Ops users, with the documented admin and Super Admin bypasses.
+- [x] Add policy, filtering, pagination, validation, and direct-URL authorization tests for the new scopes.
 
 ### Task 9 — Finish Audit Coverage And Notification Policy
 

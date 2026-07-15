@@ -12,7 +12,10 @@ class StoreFollowUpTaskRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can('update', $this->route('lead')) === true;
+        $lead = $this->route('lead');
+        abort_unless($lead instanceof \App\Models\Lead && $lead->isVisibleTo($this->user()), 404);
+
+        return $this->user()?->can('update', $lead) === true;
     }
 
     public function rules(): array
