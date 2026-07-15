@@ -41,12 +41,12 @@ decision is later made differently, update this roadmap and the affected phase d
 - [x] Spatie Permission and Activitylog migrations/config are present.
 - [x] Pest baseline tests exist for auth, dashboard access, settings, architecture, and Horizon authorization
   expectations.
-- [ ] CRM screens still use external Nuxt demo APIs instead of first-party data.
-- [ ] No first-party CRM tables, models, controllers, policies, factories, or seeders exist yet.
-- [ ] `User` is not wired to Spatie roles/permissions.
-- [ ] Horizon/Horizon UI access is not protected by business roles or permissions yet.
-- [ ] Queue intent is split: local `.env.example` defaults to database queues while Horizon is configured for Redis.
-- [ ] README and CI still contain stale version/app-positioning claims that do not match the current stack.
+- [x] CRM screens no longer use external Nuxt demo APIs; they use first-party Inertia data.
+- [x] First-party CRM tables, models, controllers, policies, factories, and seeders exist for the shipped workspace.
+- [x] `User` is wired to Spatie roles/permissions.
+- [x] Horizon access is protected by business roles and permissions; the unused third-party Horizon UI remains undiscovered.
+- [x] Queue intent is explicit: local `.env.example` defaults to database queues while staging/production Horizon uses Redis.
+- [x] README and CI match the current Laravel 13, PHP 8.5, and Southeast Code application direction.
 
 ## Open Decisions To Ratify
 
@@ -142,13 +142,13 @@ defaults above remain the executable path until those decisions are made.
 
 ### Starter-Kit Quality
 
-- [ ] Replace empty/demo states with useful Southeast Code product empty states.
-- [ ] Add tests for marketing contact submission, CRM CRUD, permissions, Horizon/admin access, and queue dispatching.
+- [x] Replace empty/demo states with useful Southeast Code product empty states.
+- [x] Add tests for marketing contact submission, CRM CRUD, permissions, Horizon/admin access, and queue dispatching.
 - [ ] Add browser smoke coverage later for critical auth, marketing, CRM, and admin screens.
-- [ ] Keep app-facing copy consistent with Southeast Code positioning from `docs/CompanyBrief.md`.
-- [ ] Keep app-facing colors aligned with `docs/ColorPalette.md`, while meeting contrast requirements in forms, tables,
+- [x] Keep app-facing copy consistent with Southeast Code positioning from `docs/CompanyBrief.md`.
+- [x] Keep app-facing colors aligned with `docs/ColorPalette.md`, while meeting contrast requirements in forms, tables,
   navigation, and status badges.
-- [ ] Keep the UI practical and operational: dense, scannable, restrained, and built for repeated daily use.
+- [x] Keep the UI practical and operational: dense, scannable, restrained, and built for repeated daily use.
 - [ ] After implementation, run the relevant verification commands:
   - `composer test`
   - `composer test:types`

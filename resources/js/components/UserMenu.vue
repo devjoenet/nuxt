@@ -31,10 +31,7 @@
       {
         label: "Profile",
         icon: "i-ph-user",
-      },
-      {
-        label: "Billing",
-        icon: "i-ph-credit-card",
+        to: "/settings/profile",
       },
       {
         label: "Settings",

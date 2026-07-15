@@ -23,47 +23,51 @@ The app is ready for v1 launch only when these conditions are true:
 
 ## Test Coverage
 
-- Ensure `composer test` passes with all feature and unit tests.
-- Ensure `composer test:types` passes after all PHP domain additions.
-- Ensure `composer test:lint` passes before merge.
-- Ensure `npm run build` passes after all frontend work.
-- Add browser smoke tests for public marketing, login, dashboard, CRM list/detail, admin users, roles, jobs, settings, and audit pages when practical.
-- Add regression tests for unauthorized direct URL access.
-- Add tests for queue dispatch, notification dispatch, and activity logging.
+- [x] Ensure `composer test` passes with all feature and unit tests.
+- [x] Ensure `composer test:types` passes after all PHP domain additions.
+- [x] Ensure `composer test:lint` passes before merge.
+- [x] Ensure `npm run build` passes after all frontend work.
+- [ ] Add browser smoke tests for public marketing, login, dashboard, CRM list/detail, admin users, roles, jobs, settings, and audit pages when practical.
+- [x] Add regression tests for unauthorized direct URL access.
+- [x] Add tests for queue dispatch, notification dispatch, and activity logging.
+
+Browser smoke coverage remains deferred because the existing dependency set does not include Pest's browser plugin or
+Playwright. The launch suite covers the same public/authenticated route boundaries through HTTP feature tests until
+browser dependencies are explicitly added.
 
 ## UX Polish
 
-- Replace all empty/demo states with Southeast Code-specific operational empty states.
-- Review loading, error, validation, success, and destructive-confirmation states across CRM/admin/jobs/audit.
-- Verify responsive behavior for marketing pages and authenticated workspaces.
-- Ensure dense tables remain usable on smaller screens through responsive columns, drawers, or detail pages.
-- Review keyboard navigation and focus states.
-- Verify icons are consistently sourced from Lucide-Vue where custom icons are needed.
-- Verify shared components are extracted rather than duplicated across CRM and admin.
+- [x] Replace all empty/demo states with Southeast Code-specific operational empty states.
+- [x] Review loading, error, validation, success, and destructive-confirmation states across CRM/admin/jobs/audit.
+- [x] Verify responsive behavior for marketing pages and authenticated workspaces.
+- [x] Ensure dense tables remain usable on smaller screens through responsive columns, drawers, or detail pages.
+- [x] Review keyboard navigation and focus states.
+- [x] Verify icons are consistently sourced from Lucide-Vue where custom icons are needed.
+- [x] Verify shared components are extracted rather than duplicated across CRM and admin.
 
 ## Security And Privacy Hardening
 
-- Review auth, registration, password reset, email verification, and 2FA behavior.
-- Confirm route and policy coverage for every authenticated feature.
-- Confirm contact form rate limits and spam controls.
-- Confirm sensitive fields are not logged in activity logs.
-- Confirm file uploads are disabled or secured if introduced.
-- Confirm production cookies, trusted proxies, HTTPS, and session settings.
-- Add a privacy policy and contact-data consent for public intake. Add terms only if DP-12 requires them.
+- [x] Review auth, registration, password reset, email verification, and 2FA behavior.
+- [x] Confirm route and policy coverage for every authenticated feature.
+- [x] Confirm contact form rate limits and spam controls.
+- [x] Confirm sensitive fields are not logged in activity logs.
+- [x] Confirm file uploads are disabled or secured if introduced.
+- [x] Confirm production cookies, trusted proxies, HTTPS, and session settings.
+- [x] Add a privacy policy and contact-data consent for public intake. Add terms only if DP-12 requires them.
 
 ## Data And Operational Readiness
 
-- Verify migrations run cleanly on a fresh database.
-- Verify seeders produce useful local/demo data without polluting production system data.
-- Verify backups and restore expectations are documented.
-- Verify queue workers, scheduler, and Horizon are documented for deployment.
-- Verify failed-job alerting and operational visibility.
-- Verify admin users and initial roles can be bootstrapped safely.
+- [x] Verify migrations run cleanly on a fresh database.
+- [x] Verify seeders produce useful local/demo data without polluting production system data.
+- [x] Verify backups and restore expectations are documented.
+- [x] Verify queue workers, scheduler, and Horizon are documented for deployment.
+- [x] Verify failed-job alerting and operational visibility.
+- [x] Verify admin users and initial roles can be bootstrapped safely.
 
 ## Documentation
 
-- Update README with current setup, architecture, commands, and deployment notes.
-- Keep `docs/roadmap.md` current as phases are completed.
+- [x] Update README with current setup, architecture, commands, and deployment notes.
+- [x] Keep `docs/roadmap.md` current as phases are completed.
 - Add ADRs for completed decision points that change the roadmap defaults.
 - Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit logs.
 - Add runbooks for queues, failed jobs, Horizon, backups, and common deployment issues.

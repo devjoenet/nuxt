@@ -46,7 +46,15 @@ return [
      * These attributes will be excluded from logging for all models.
      * Model-specific exclusions via logExcept() are merged with these.
      */
-    'default_except_attributes' => [],
+    'default_except_attributes' => [
+        'password',
+        'password_confirmation',
+        'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'token',
+        'secret',
+    ],
 
     /*
      * When enabled, activities are buffered in memory and inserted in a
