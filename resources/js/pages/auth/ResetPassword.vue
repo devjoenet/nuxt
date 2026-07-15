@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import NewPasswordController from "@/actions/App/Http/Controllers/Auth/NewPasswordController";
+  import FormInput from "@/components/FormInput.vue";
   import AuthLayout from "@/layouts/AuthLayout.vue";
   import { Form, Head } from "@inertiajs/vue3";
   import { ref } from "vue";
@@ -23,17 +24,11 @@
       v-slot="{ errors, processing }"
     >
       <div class="grid gap-6">
-        <UFormField name="email" :error="errors.email" label="Email">
-          <UInput type="email" class="w-full" autocomplete="email" readonly v-model="inputEmail" />
-        </UFormField>
+        <FormInput v-model="inputEmail" :error="errors.email" autocomplete="email" label="Email" name="email" readonly type="email" />
 
-        <UFormField name="password" :error="errors.password" label="Password">
-          <UInput type="password" class="w-full" autocomplete="new-password" placeholder="Password" required />
-        </UFormField>
+        <FormInput :error="errors.password" autocomplete="new-password" label="Password" name="password" required type="password" />
 
-        <UFormField name="password_confirmation" :error="errors.password_confirmation" label="Confirm Password">
-          <UInput type="password" class="w-full" autocomplete="new-password" placeholder="Confirm password" required />
-        </UFormField>
+        <FormInput :error="errors.password_confirmation" autocomplete="new-password" label="Confirm Password" name="password_confirmation" required type="password" />
 
         <UButton :loading="processing" type="submit" block class="mt-4">Confirm Password</UButton>
       </div>

@@ -3,6 +3,7 @@
 @import "./theme/palette.css";
 @import "./theme/aliases.css";
 @import "./theme/nuxt-ui.css";
+@import "./theme/forms.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

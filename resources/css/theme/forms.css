@@ -1,0 +1,138 @@
+@layer components {
+  .form-field__shell {
+    position: relative;
+    border: 1px solid var(--ui-border-accented);
+    border-radius: var(--radius-xl);
+    background-color: var(--ui-bg);
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      outline-color 160ms ease;
+  }
+
+  .form-field__shell[data-variant="filled"] {
+    border-color: transparent;
+    border-bottom-color: var(--ui-border-accented);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    background-color: color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent);
+  }
+
+  .form-field__shell:focus-within {
+    border-color: var(--ui-primary);
+    outline: 2px solid color-mix(in oklab, var(--ui-primary) 28%, transparent);
+    outline-offset: 0;
+  }
+
+  .form-field__shell[data-variant="filled"]:focus-within {
+    border-color: transparent;
+    border-bottom-color: var(--ui-primary);
+  }
+
+  .form-field__shell[data-invalid="true"],
+  .form-field__shell[data-invalid="true"]:focus-within {
+    border-color: var(--ui-error);
+    outline-color: color-mix(in oklab, var(--ui-error) 28%, transparent);
+  }
+
+  .form-field__shell[data-variant="filled"][data-invalid="true"],
+  .form-field__shell[data-variant="filled"][data-invalid="true"]:focus-within {
+    border-color: transparent;
+    border-bottom-color: var(--ui-error);
+  }
+
+  .form-field__shell[data-valid="true"] {
+    border-color: var(--ui-success);
+  }
+
+  .form-field__shell[data-variant="filled"][data-valid="true"] {
+    border-color: transparent;
+    border-bottom-color: var(--ui-success);
+  }
+
+  .form-field__label {
+    position: absolute;
+    inset-inline-start: 1rem;
+    top: 50%;
+    z-index: 1;
+    max-width: calc(100% - 3rem);
+    transform: translateY(-50%);
+    transform-origin: left top;
+    overflow: hidden;
+    color: var(--ui-text-muted);
+    font-size: 1rem;
+    line-height: 1.25rem;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition:
+      inset-inline-start 160ms ease,
+      top 160ms ease,
+      transform 160ms ease,
+      color 160ms ease,
+      background-color 160ms ease,
+      padding 160ms ease;
+  }
+
+  .form-field__shell[data-multiline="true"] .form-field__label {
+    top: 1rem;
+    transform: none;
+  }
+
+  .form-field__shell[data-static-label="true"] .form-field__label,
+  .form-field__shell:focus-within .form-field__label,
+  .form-field__shell:has(input:not(:placeholder-shown)) .form-field__label,
+  .form-field__shell:has(textarea:not(:placeholder-shown)) .form-field__label {
+    inset-inline-start: 0.75rem;
+    top: 0.25rem;
+    transform: scale(0.75);
+    padding-inline: 0.25rem;
+    background-color: var(--ui-bg);
+    color: var(--ui-primary);
+  }
+
+  .form-field__shell[data-variant="filled"] .form-field__label,
+  .form-field__shell[data-variant="filled"]:focus-within .form-field__label,
+  .form-field__shell[data-variant="filled"]:has(input:not(:placeholder-shown)) .form-field__label,
+  .form-field__shell[data-variant="filled"]:has(textarea:not(:placeholder-shown)) .form-field__label {
+    background-color: color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent);
+  }
+
+  .form-field__shell[data-multiline="true"]:focus-within .form-field__label,
+  .form-field__shell[data-multiline="true"]:has(textarea:not(:placeholder-shown)) .form-field__label {
+    top: 0.25rem;
+  }
+
+  .form-field__shell[data-invalid="true"] .form-field__label {
+    color: var(--ui-error);
+  }
+
+  .form-field__shell[data-valid="true"] .form-field__label {
+    color: var(--ui-success);
+  }
+
+  .form-field__message {
+    padding-inline: 0.25rem;
+    color: var(--ui-text-muted);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .form-field__message[data-tone="error"] {
+    color: var(--ui-error);
+  }
+
+  .form-field__message[data-tone="success"] {
+    color: var(--ui-success);
+  }
+
+  @media (max-width: 639px) {
+    .form-field__label {
+      font-size: 1rem;
+    }
+
+    .form-field__message {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  }
+}

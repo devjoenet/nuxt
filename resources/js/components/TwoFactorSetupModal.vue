@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import FormInput from "@/components/FormInput.vue";
   import { confirm, enable } from "@/routes/two-factor";
   import { Form } from "@inertiajs/vue3";
 
@@ -123,7 +124,7 @@
                   <UIcon class="size-4 animate-spin" name="i-ph-spinner-gap" />
                 </div>
                 <template v-else>
-                  <UInput v-model="manualSetupKey" :ui="{ trailing: 'pr-0.5' }" size="xl" class="w-full">
+                  <FormInput v-model="manualSetupKey" :ui="{ trailing: 'pr-0.5' }" class="w-full" label="Manual setup key" size="lg">
                     <template v-if="manualSetupKey?.length" #trailing>
                       <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
                         <UButton
@@ -136,7 +137,7 @@
                         />
                       </UTooltip>
                     </template>
-                  </UInput>
+                  </FormInput>
                 </template>
               </div>
             </div>

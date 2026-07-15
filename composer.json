@@ -103,6 +103,7 @@
       "npm run lint"
     ],
     "test:type-coverage": "pest --type-coverage --min=100",
+    "coverage": "herd coverage ./vendor/bin/pest",
     "test:lint": [
       "pint --parallel --test",
       "rector --dry-run",

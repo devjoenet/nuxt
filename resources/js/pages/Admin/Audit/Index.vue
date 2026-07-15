@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { Form, Head, Link } from "@inertiajs/vue3";
+  import FormInput from "@/components/FormInput.vue";
   import Layout from "@/layouts/Default.vue";
   import { index } from "@/routes/admin/audit";
 
@@ -32,9 +33,9 @@
       </UDashboardNavbar>
       <UDashboardToolbar>
         <Form class="flex w-full flex-wrap gap-2" v-bind="index.form()">
-          <UInput :default-value="filters.search" icon="i-ph-magnifying-glass" name="search" placeholder="Search activity" />
-          <UInput :default-value="filters.event" name="event" placeholder="Event" />
-          <UInput :default-value="filters.causer" name="causer" placeholder="Causer" />
+          <FormInput :default-value="filters.search" icon="i-ph-magnifying-glass" label="Search activity" name="search" size="sm" />
+          <FormInput :default-value="filters.event" label="Event" name="event" size="sm" />
+          <FormInput :default-value="filters.causer" label="Causer" name="causer" size="sm" />
           <UButton label="Filter" type="submit" variant="soft" />
         </Form>
       </UDashboardToolbar>

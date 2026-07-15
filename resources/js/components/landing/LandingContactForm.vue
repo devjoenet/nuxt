@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+  import FormInput from "@/components/FormInput.vue";
+  import FormSelect from "@/components/FormSelect.vue";
+  import FormTextarea from "@/components/FormTextarea.vue";
   import { privacy } from "@/routes";
   import { store } from "@/routes/contact";
   import { Form, Link } from "@inertiajs/vue3";
@@ -35,80 +38,68 @@
     </div>
 
     <div class="grid gap-5 sm:grid-cols-2">
-      <div class="field">
-        <input id="intake-name" autocomplete="name" name="name" placeholder=" " required type="text" />
-        <label for="intake-name">Name</label>
-        <p v-if="errors.name" class="field-error">{{ errors.name }}</p>
-      </div>
-      <div class="field">
-        <input id="intake-email" autocomplete="email" name="email" placeholder=" " required type="email" />
-        <label for="intake-email">Email</label>
-        <p v-if="errors.email" class="field-error">{{ errors.email }}</p>
-      </div>
-      <div class="field">
-        <input id="intake-company" autocomplete="organization" name="company" placeholder=" " type="text" />
-        <label for="intake-company">Organization (optional)</label>
-        <p v-if="errors.company" class="field-error">{{ errors.company }}</p>
-      </div>
-      <div class="field">
-        <input id="intake-phone" autocomplete="tel" name="phone" placeholder=" " type="tel" />
-        <label for="intake-phone">Phone (optional)</label>
-        <p v-if="errors.phone" class="field-error">{{ errors.phone }}</p>
-      </div>
-      <div class="field">
-        <input id="intake-website" autocomplete="url" name="website" placeholder=" " type="url" />
-        <label for="intake-website">Website (optional)</label>
-        <p v-if="errors.website" class="field-error">{{ errors.website }}</p>
-      </div>
-      <div class="field select-field">
-        <select id="intake-service" name="service_interest">
-          <option value="">Choose a service</option>
-          <option value="operations-app">Operations application</option>
-          <option value="dashboard-portal">Dashboard or portal</option>
-          <option value="integration">System integration</option>
-          <option value="reporting">Reporting and visibility</option>
-          <option value="modernization">Legacy modernization</option>
-          <option value="other">Other</option>
-        </select>
-        <label for="intake-service">Service interest (optional)</label>
-        <p v-if="errors.service_interest" class="field-error">{{ errors.service_interest }}</p>
-      </div>
-      <div class="field select-field">
-        <select id="intake-budget" name="budget_range">
-          <option value="">Choose a budget range</option>
-          <option value="under-10k">Under $10k</option>
-          <option value="10k-25k">$10k–$25k</option>
-          <option value="25k-50k">$25k–$50k</option>
-          <option value="50k-plus">$50k+</option>
-          <option value="not-sure">Not sure yet</option>
-        </select>
-        <label for="intake-budget">Budget (optional)</label>
-        <p v-if="errors.budget_range" class="field-error">{{ errors.budget_range }}</p>
-      </div>
-      <div class="field select-field">
-        <select id="intake-timeline" name="timeline">
-          <option value="">Choose a timeline</option>
-          <option value="urgent">Urgent</option>
-          <option value="1-3-months">1–3 months</option>
-          <option value="3-6-months">3–6 months</option>
-          <option value="exploring">Exploring options</option>
-        </select>
-        <label for="intake-timeline">Timeline (optional)</label>
-        <p v-if="errors.timeline" class="field-error">{{ errors.timeline }}</p>
-      </div>
+      <FormInput id="intake-name" :error="errors.name" autocomplete="name" label="Name" name="name" required variant="filled" />
+      <FormInput id="intake-email" :error="errors.email" autocomplete="email" label="Email" name="email" required type="email" variant="filled" />
+      <FormInput id="intake-company" :error="errors.company" autocomplete="organization" label="Organization (optional)" name="company" variant="filled" />
+      <FormInput id="intake-phone" :error="errors.phone" autocomplete="tel" label="Phone (optional)" name="phone" type="tel" variant="filled" />
+      <FormInput id="intake-website" :error="errors.website" autocomplete="url" label="Website (optional)" name="website" type="url" variant="filled" />
+      <FormSelect
+        id="intake-service"
+        :error="errors.service_interest"
+        :items="[
+          { label: 'Operations application', value: 'operations-app' },
+          { label: 'Dashboard or portal', value: 'dashboard-portal' },
+          { label: 'System integration', value: 'integration' },
+          { label: 'Reporting and visibility', value: 'reporting' },
+          { label: 'Legacy modernization', value: 'modernization' },
+          { label: 'Other', value: 'other' },
+        ]"
+        label="Service interest (optional)"
+        name="service_interest"
+        variant="filled"
+      />
+      <FormSelect
+        id="intake-budget"
+        :error="errors.budget_range"
+        :items="[
+          { label: 'Under $10k', value: 'under-10k' },
+          { label: '$10k–$25k', value: '10k-25k' },
+          { label: '$25k–$50k', value: '25k-50k' },
+          { label: '$50k+', value: '50k-plus' },
+          { label: 'Not sure yet', value: 'not-sure' },
+        ]"
+        label="Budget (optional)"
+        name="budget_range"
+        variant="filled"
+      />
+      <FormSelect
+        id="intake-timeline"
+        :error="errors.timeline"
+        :items="[
+          { label: 'Urgent', value: 'urgent' },
+          { label: '1–3 months', value: '1-3-months' },
+          { label: '3–6 months', value: '3-6-months' },
+          { label: 'Exploring options', value: 'exploring' },
+        ]"
+        label="Timeline (optional)"
+        name="timeline"
+        variant="filled"
+      />
     </div>
 
-    <div class="field">
-      <textarea id="intake-details" maxlength="5000" minlength="20" name="project_details" placeholder=" " required rows="6"></textarea>
-      <label for="intake-details">What workflow or system needs attention?</label>
-      <p v-if="errors.project_details" class="field-error">{{ errors.project_details }}</p>
-    </div>
+    <FormTextarea
+      id="intake-details"
+      :error="errors.project_details"
+      :rows="6"
+      label="What workflow or system needs attention?"
+      maxlength="5000"
+      minlength="20"
+      name="project_details"
+      required
+      variant="filled"
+    />
 
-    <div class="field">
-      <input id="intake-referral" name="referral_source" placeholder=" " type="text" />
-      <label for="intake-referral">How did you hear about us? (optional)</label>
-      <p v-if="errors.referral_source" class="field-error">{{ errors.referral_source }}</p>
-    </div>
+    <FormInput id="intake-referral" :error="errors.referral_source" label="How did you hear about us? (optional)" name="referral_source" variant="filled" />
 
     <div aria-hidden="true" class="sr-only">
       <label for="website-confirmation">Leave this field empty</label>
@@ -130,7 +121,7 @@
         <Link :href="privacy()" class="font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300">privacy notice</Link>.
       </p>
     </div>
-    <p v-if="errors.consent" class="field-error">{{ errors.consent }}</p>
+    <p v-if="errors.consent" class="px-1 text-base text-error sm:text-sm" role="status">{{ errors.consent }}</p>
 
     <button
       :disabled="processing"
@@ -142,79 +133,3 @@
     </button>
   </Form>
 </template>
-
-<style scoped>
-  .field {
-    position: relative;
-  }
-  .field input,
-  .field textarea,
-  .field select {
-    width: 100%;
-    border: 1px solid color-mix(in oklab, var(--color-muted-500) 55%, transparent);
-    border-radius: 0.5rem;
-    background: color-mix(in oklab, var(--color-muted-50) 92%, transparent);
-    padding: 1.25rem 0.9rem 0.65rem;
-    color: var(--color-muted-950);
-    outline: none;
-    transition:
-      border-color 180ms,
-      box-shadow 180ms,
-      background-color 180ms;
-  }
-  .field textarea {
-    resize: vertical;
-    min-height: 9rem;
-  }
-  .field select {
-    min-height: 3.65rem;
-  }
-  .field label {
-    position: absolute;
-    top: 1rem;
-    left: 0.9rem;
-    color: var(--color-muted-600);
-    pointer-events: none;
-    transform-origin: left top;
-    transition:
-      transform 160ms,
-      color 160ms;
-  }
-  .field input:focus,
-  .field textarea:focus,
-  .field select:focus {
-    border-color: var(--color-primary-600);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary-500) 22%, transparent);
-  }
-  .field input:focus + label,
-  .field input:not(:placeholder-shown) + label,
-  .field textarea:focus + label,
-  .field textarea:not(:placeholder-shown) + label,
-  .select-field label {
-    transform: translateY(-0.62rem) scale(0.75);
-    color: var(--color-primary-700);
-  }
-  .field-error {
-    margin-top: 0.4rem;
-    color: var(--color-error-700);
-    font-size: 0.8rem;
-  }
-  :global(.dark) .field input,
-  :global(.dark) .field textarea,
-  :global(.dark) .field select {
-    background: color-mix(in oklab, var(--color-muted-900) 88%, transparent);
-    color: var(--color-neutral-100);
-    border-color: color-mix(in oklab, var(--color-muted-300) 35%, transparent);
-  }
-  :global(.dark) .field label {
-    color: var(--color-neutral-400);
-  }
-  :global(.dark) .field input:focus + label,
-  :global(.dark) .field textarea:focus + label,
-  :global(.dark) .select-field label {
-    color: var(--color-primary-300);
-  }
-  :global(.dark) .field-error {
-    color: var(--color-error-300);
-  }
-</style>

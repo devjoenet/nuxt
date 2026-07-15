@@ -1,5 +1,7 @@
 <script lang="ts" setup>
   import { Form, Head, Link } from "@inertiajs/vue3";
+  import FormInput from "@/components/FormInput.vue";
+  import FormSelect from "@/components/FormSelect.vue";
   import Layout from "@/layouts/Default.vue";
   import { index, resendVerification, resetTwoFactor, store, update } from "@/routes/admin/users";
   import type { AdminUser } from "@/types";
@@ -43,15 +45,17 @@
                   </td>
                   <td class="px-3 py-3">
                     <Form #default="{ processing }" class="flex items-center gap-2" v-bind="update.form(user.id)">
-                      <USelect :default-value="user.roles[0] ?? roles[0]?.value" :items="roles" class="min-w-36" name="role" />
-                      <USelect
+                      <FormSelect :default-value="user.roles[0] ?? roles[0]?.value" :items="roles" class="min-w-36" label="Role" name="role" size="sm" />
+                      <FormSelect
                         :default-value="user.is_active ? '1' : '0'"
                         :items="[
                           { label: 'Active', value: '1' },
                           { label: 'Inactive', value: '0' },
                         ]"
                         class="min-w-28"
+                        label="Status"
                         name="is_active"
+                        size="sm"
                       />
                       <UButton :loading="processing" label="Save" size="sm" type="submit" variant="soft" />
                     </Form>
@@ -86,9 +90,9 @@
 
         <UPageCard description="They will receive a secure password setup link." title="Invite a user" variant="subtle">
           <Form #default="{ errors, processing }" class="grid gap-4" reset-on-success v-bind="store.form()">
-            <UFormField :error="errors.name" label="Name" name="name"><UInput class="w-full" name="name" /></UFormField>
-            <UFormField :error="errors.email" label="Email" name="email"><UInput class="w-full" name="email" type="email" /></UFormField>
-            <UFormField :error="errors.role" label="Role" name="role"><USelect :default-value="roles[0]?.value" :items="roles" class="w-full" name="role" /></UFormField>
+            <FormInput :error="errors.name" label="Name" name="name" />
+            <FormInput :error="errors.email" label="Email" name="email" type="email" />
+            <FormSelect :default-value="roles[0]?.value" :error="errors.role" :items="roles" label="Role" name="role" />
             <UButton :loading="processing" class="w-fit" label="Send invitation" type="submit" />
           </Form>
         </UPageCard>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import AuthenticatedSessionController from "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController";
+  import FormInput from "@/components/FormInput.vue";
   import TextLink from "@/components/TextLink.vue";
   import AuthBase from "@/layouts/AuthLayout.vue";
   import { request } from "@/routes/password";
@@ -21,16 +22,13 @@
 
     <Form v-bind="AuthenticatedSessionController.store.form()" :reset-on-success="['password']" v-slot="{ errors, processing }" class="flex flex-col gap-6">
       <div class="grid gap-6">
-        <UFormField name="email" :error="errors.email" label="Email address">
-          <UInput type="email" class="w-full" autocomplete="email" placeholder="email@example.com" autofocus required />
-        </UFormField>
+        <FormInput :error="errors.email" autocomplete="email" autofocus label="Email address" name="email" required type="email" />
 
-        <UFormField name="password" :error="errors.password" label="Password">
-          <UInput type="password" class="w-full" autocomplete="current-password" placeholder="Password" required />
+        <FormInput :error="errors.password" autocomplete="current-password" label="Password" name="password" required type="password">
           <template #hint>
             <TextLink v-if="canResetPassword" :href="request()" class="text-sm text-primary" :tabindex="5"> Forgot password? </TextLink>
           </template>
-        </UFormField>
+        </FormInput>
 
         <UFormField name="remember" :error="errors.password">
           <UCheckbox label="Remember me" />

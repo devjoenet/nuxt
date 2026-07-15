@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
+  import FormInput from "@/components/FormInput.vue";
   import { Form } from "@inertiajs/vue3";
 
   const open = ref(false);
@@ -18,16 +19,14 @@
       <Form
         v-bind="ProfileController.destroy.form()"
         reset-on-success
-        @error="() => passwordInput?.inputRef?.focus()"
+        @error="() => passwordInput?.focus()"
         :options="{
           preserveScroll: true,
         }"
         class="space-y-6"
         v-slot="{ errors, processing, reset, clearErrors }"
       >
-        <UFormField name="password" :error="errors.password">
-          <UInput ref="passwordInput" type="password" placeholder="Password" class="w-full" />
-        </UFormField>
+        <FormInput ref="passwordInput" :error="errors.password" label="Password" name="password" type="password" />
         <div class="flex justify-end gap-2">
           <UButton
             label="Cancel"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
+  import FormInput from "@/components/FormInput.vue";
   import Layout from "@/layouts/Default.vue";
   import SettingsLayout from "@/layouts/SettingsLayout.vue";
   import { send } from "@/routes/verification";
@@ -23,6 +24,7 @@
   });
 
   type ProfileSchema = z.output<typeof profileSchema>;
+  type ProfileFormError = { name?: string; message: string };
   const auth = useAuth();
 
   const profile = reactive<Partial<ProfileSchema>>({
@@ -36,6 +38,10 @@
     email: "",
     avatar: undefined,
   });
+
+  function fieldError(errors: ProfileFormError[], field: string): string | undefined {
+    return errors.find((error) => error.name === field)?.message;
+  }
 
   const toast = useToast();
   async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
@@ -71,36 +77,37 @@
   <SettingsLayout>
     <Head title="Profile settings" />
 
-    <UForm id="settings" :schema="profileSchema" :state="profile" @submit="onSubmit">
+    <UForm id="settings" #default="{ errors }" :schema="profileSchema" :state="profile" @submit="onSubmit">
       <UPageCard title="Profile" description="These informations will be displayed publicly." variant="naked" orientation="horizontal" class="mb-4">
         <UButton form="settings" label="Save changes" color="neutral" type="submit" class="w-fit lg:ms-auto" />
       </UPageCard>
 
       <UPageCard variant="subtle">
-        <UFormField
-          name="name"
-          label="Name"
+        <FormInput
+          v-model="profile.name"
+          :error="fieldError(errors, 'name')"
+          autocomplete="off"
           description="Will appear on receipts, invoices, and other communication."
+          label="Name"
+          name="name"
           required
-          class="flex items-start justify-between gap-4 max-sm:flex-col"
-        >
-          <UInput v-model="profile.name" autocomplete="off" />
-        </UFormField>
+        />
         <USeparator />
-        <UFormField name="email" label="Email" required class="flex items-start justify-between gap-4 max-sm:flex-col">
-          <template #description>
-            <p class="text-muted">Used to sign in, for email receipts and product updates.</p>
-            <div v-if="mustVerifyEmail && !auth.user.email_verified_at">
-              <p class="text-muted">
-                Your email address is unverified.
-                <TextLink :href="send()" as="button" class="text-sm font-medium text-primary"> Click here to resend the verification email. </TextLink>
-              </p>
-
-              <div v-if="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-success">A new verification link has been sent to your email address.</div>
-            </div>
-          </template>
-          <UInput v-model="profile.email" type="email" autocomplete="off" />
-        </UFormField>
+        <FormInput
+          v-model="profile.email"
+          :error="fieldError(errors, 'email')"
+          autocomplete="off"
+          description="Used to sign in, for email receipts and product updates."
+          label="Email"
+          name="email"
+          required
+          type="email"
+        />
+        <div v-if="mustVerifyEmail && !auth.user.email_verified_at" class="text-base text-muted sm:text-sm">
+          Your email address is unverified.
+          <TextLink :href="send()" as="button" class="font-medium text-primary">Click here to resend the verification email.</TextLink>
+          <div v-if="status === 'verification-link-sent'" class="mt-2 font-medium text-success">A new verification link has been sent to your email address.</div>
+        </div>
         <USeparator />
         <UFormField name="avatar" label="Avatar" description="JPG, GIF or PNG. 1MB Max." class="flex justify-between gap-4 max-sm:flex-col sm:items-center">
           <div class="flex flex-wrap items-center gap-3">

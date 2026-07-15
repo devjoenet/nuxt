@@ -1,5 +1,7 @@
 <script lang="ts" setup>
   import { Link, router } from "@inertiajs/vue3";
+  import FormInput from "@/components/FormInput.vue";
+  import FormSelect from "@/components/FormSelect.vue";
   import type { TableColumn } from "@nuxt/ui";
   import { h, resolveComponent, watch } from "vue";
   import Layout from "@/layouts/Default.vue";
@@ -50,9 +52,9 @@
     </template>
     <template #body>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <UInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" placeholder="Search contacts or organizations" />
-        <USelect v-model="status" :items="[{ label: 'All statuses', value: '' }, ...statuses]" class="w-full sm:w-44" />
-        <USelect v-model="source" :items="[{ label: 'All sources', value: '' }, ...sources]" class="w-full sm:w-44" />
+        <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts or organizations" />
+        <FormSelect v-model="status" :items="[{ label: 'All statuses', value: '' }, ...statuses]" class="w-full sm:w-44" label="Status" />
+        <FormSelect v-model="source" :items="[{ label: 'All sources', value: '' }, ...sources]" class="w-full sm:w-44" label="Source" />
       </div>
       <div v-if="leads.data.length" class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8">

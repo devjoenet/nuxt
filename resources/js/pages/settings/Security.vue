@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
+  import FormInput from "@/components/FormInput.vue";
   import Layout from "@/layouts/Default.vue";
   import SettingsLayout from "@/layouts/SettingsLayout.vue";
   import { Form, Head } from "@inertiajs/vue3";
@@ -44,17 +45,11 @@
         v-slot="{ errors, processing }"
         @success="handleSuccess"
       >
-        <UFormField name="current_password" :error="errors.current_password">
-          <UInput type="password" placeholder="Current password" class="w-full" />
-        </UFormField>
+        <FormInput :error="errors.current_password" label="Current password" name="current_password" type="password" />
 
-        <UFormField name="password" :error="errors.password">
-          <UInput type="password" placeholder="New password" class="w-full" />
-        </UFormField>
+        <FormInput :error="errors.password" label="New password" name="password" type="password" />
 
-        <UFormField name="password_confirmation" :error="errors.password_confirmation">
-          <UInput type="password" placeholder="Confirm password" class="w-full" />
-        </UFormField>
+        <FormInput :error="errors.password_confirmation" label="Confirm password" name="password_confirmation" type="password" />
 
         <UButton label="Update" class="w-fit" type="submit" :disabled="processing" />
       </Form>
