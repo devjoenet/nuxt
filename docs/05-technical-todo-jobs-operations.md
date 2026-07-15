@@ -47,6 +47,8 @@ Make background processing intentional, observable, permission-protected, and al
 - Add notification classes for failed-job alerts and long-wait alerts after recipients/channels are resolved.
 - Add tags and structured logging to jobs.
 - Add idempotency safeguards for notification/reminder jobs.
+- Record successful Horizon mutations and failed queue jobs in the operations audit log without storing request payloads
+  or exception messages.
 
 ## Jobs Admin Area
 
@@ -59,6 +61,7 @@ Make background processing intentional, observable, permission-protected, and al
 ## Scheduling And Runbooks
 
 - Register scheduler tasks for Horizon snapshots, reminder scans, digests, and cleanup.
+- Run the activity-log cleanup schedule daily for the ratified 365-day retention period.
 - Document scheduler requirements for deployment.
 - Document worker process requirements.
 - Add a queue troubleshooting runbook after the real behavior is implemented.

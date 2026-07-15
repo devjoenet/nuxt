@@ -7,6 +7,8 @@
 - `DB_QUEUE_RETRY_AFTER` and `REDIS_QUEUE_RETRY_AFTER` must remain greater than the Horizon supervisor timeout.
 - The current supervisor timeout is 120 seconds and the default retry window is 180 seconds.
 - Configure `HORIZON_NOTIFICATION_EMAIL` for long-wait and failed-job alerts.
+- Internal lead alerts and follow-up reminders use the admin-configured business notification email. Visitor
+  confirmations and scheduling links are deferred.
 
 ## Queue topology
 
@@ -30,7 +32,8 @@ php artisan horizon
 ```
 
 The scheduler registers a Horizon metrics snapshot every five minutes and dispatches due follow-up reminders every
-fifteen minutes. Use `php artisan schedule:work` locally when testing those schedules.
+fifteen minutes, then cleans audit records older than 365 days daily. Use the schedule worker locally when testing
+those schedules.
 
 ## Access model
 
@@ -38,6 +41,7 @@ fifteen minutes. Use `php artisan schedule:work` locally when testing those sche
 - `jobs.manage` is required for non-safe Horizon requests, including retry and supervisor actions.
 - Official Horizon is the only active queue UI. The unused third-party Horizon UI package remains undiscovered so it
   cannot register an unprotected route tree.
+- Successful Horizon mutations and failed queue jobs appear in the operations audit log with safe metadata only.
 
 ## Troubleshooting
 

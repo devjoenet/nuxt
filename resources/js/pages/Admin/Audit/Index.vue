@@ -19,7 +19,7 @@
       }[];
       links: { url: string | null; label: string; active: boolean }[];
     };
-    filters: { search?: string; event?: string; causer?: string };
+    filters: { search?: string; event?: string; causer?: string; subject?: string; from?: string; to?: string };
   }>();
 </script>
 
@@ -36,6 +36,9 @@
           <FormInput :default-value="filters.search" icon="i-ph-magnifying-glass" label="Search activity" name="search" size="sm" />
           <FormInput :default-value="filters.event" label="Event" name="event" size="sm" />
           <FormInput :default-value="filters.causer" label="Causer" name="causer" size="sm" />
+          <FormInput :default-value="filters.subject" label="Subject model or ID" name="subject" size="sm" />
+          <FormInput :default-value="filters.from" label="From" name="from" size="sm" type="date" />
+          <FormInput :default-value="filters.to" label="To" name="to" size="sm" type="date" />
           <UButton label="Filter" type="submit" variant="soft" />
         </Form>
       </UDashboardToolbar>

@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\EnsureHorizonAccess;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
+use Symfony\Component\HttpFoundation\Response;
 
 test('guest cannot view horizon', function (): void {
     expect(Gate::check('viewHorizon'))->toBeFalse();
@@ -43,4 +47,23 @@ test('authenticated user with jobs view permission can inspect horizon but canno
 
     $this->actingAs($user)->get('/horizon')->assertSuccessful();
     $this->actingAs($user)->post('/horizon/api/jobs/retry/failed-job-id')->assertForbidden();
+});
+
+test('jobs manage mutations are recorded in the audit log', function (): void {
+    $user = User::factory()->create();
+    $user->givePermissionTo(Permission::findOrCreate('jobs.manage'));
+    $request = Request::create('/horizon/api/jobs/retry/failed-job-id', 'POST');
+    $request->setUserResolver(fn (): User => $user);
+
+    $response = (new EnsureHorizonAccess)->handle($request, fn (Request $request): Response => response('ok'));
+
+    expect($response->isSuccessful())->toBeTrue();
+
+    $activity = Activity::query()->where('description', 'Horizon action executed.')->sole();
+
+    expect($activity->causer?->is($user))->toBeTrue()
+        ->and($activity->properties->toArray())->toMatchArray([
+            'method' => 'POST',
+            'path' => 'horizon/api/jobs/retry/failed-job-id',
+        ]);
 });

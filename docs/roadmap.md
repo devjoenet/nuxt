@@ -26,6 +26,8 @@ decision is later made differently, update this roadmap and the affected phase d
   domain logic is isolated enough to make them useful.
 - Use database queues for local/simple development defaults and Redis plus Horizon for staging/production operations.
   Tests should fake queues/notifications unless a persistence or Horizon authorization behavior is under test.
+- Use the business notification email for internal lead/reminder mail, keep visitor confirmations and scheduling links
+  deferred, and retain audit records for 365 days with scheduled cleanup.
 
 ## Current Stock
 
@@ -46,6 +48,8 @@ decision is later made differently, update this roadmap and the affected phase d
 - [x] `User` is wired to Spatie roles/permissions.
 - [x] Horizon access is protected by business roles and permissions; the unused third-party Horizon UI remains undiscovered.
 - [x] Queue intent is explicit: local `.env.example` defaults to database queues while staging/production Horizon uses Redis.
+- [x] Notification policy and audit retention are explicit: internal mail uses the business setting, deployment alerts use
+  HORIZON_NOTIFICATION_EMAIL, visitor confirmations/scheduling links are deferred, and audit cleanup retains 365 days.
 - [x] README and CI match the current Laravel 13, PHP 8.5, and Southeast Code application direction.
 - [x] Shared expressive form controls cover the shipped auth, settings, marketing, CRM, admin, audit, account, and
   2FA forms with outlined/filled variants, floating labels, validation states, light/dark themes, and custom selects.
@@ -71,11 +75,12 @@ defaults above remain the executable path until those decisions are made.
   and out-of-scope direct URLs return `404`.
 - [x] DP-07: lock the public intake field set, consent copy, and spam controls. The implemented form, validation,
   consent checkbox, IP capture, and rate limit match the documented default.
-- [ ] DP-08: choose notification recipients, channels, and scheduling-link behavior. Internal lead email and queued
-  follow-up notifications exist; visitor confirmation, scheduling links, and deployment-specific alert recipients are
-  still deferred.
-- [ ] DP-09: define audit retention, redaction, and searchable fields. Secret redaction exists, but the configured
-  365-day cleanup conflicts with the documented indefinite-retention default and the searchable field set is limited.
+- [x] DP-08: choose notification recipients, channels, and scheduling-link behavior. Internal lead alerts and follow-up
+  reminders use the business notification email on the mail queue; visitor confirmations and scheduling links are
+  deferred; Horizon failed-job and long-wait alerts use HORIZON_NOTIFICATION_EMAIL.
+- [x] DP-09: define audit retention, redaction, and searchable fields. Audit records are retained for 365 days; note
+  bodies, contact email/phone values, notification recipients, secrets/auth material, and exception messages are
+  redacted; search covers description, log/event, causer, subject, and date range.
 - [ ] DP-10: confirm deployment target and production queue/Horizon operations. The repo documents an assumed model but
   no hosting target or production ownership has been ratified.
 - [x] DP-11: standardize the UI component approach and responsive table behavior. Nuxt UI is the base with local
@@ -156,12 +161,11 @@ defaults above remain the executable path until those decisions are made.
 - [x] Hide navigation items based on permissions.
 - [x] Add policies for CRM entities and admin-only operations. Ownership scoping remains a separate unfinished concern
   under DP-06.
-- [ ] Log create/update/delete events for CRM records, role changes, user changes, queue actions, and sensitive settings
+- [x] Log create/update/delete events for CRM records, role changes, user changes, queue actions, and sensitive settings
   changes.
 - [x] Apply the default audit redaction rules from Phase 4 and update them if DP-09 changes retention/redaction policy.
-- [ ] Add tests proving unauthorized users cannot see or perform admin, CRM, jobs, settings, or audit actions. Existing
-  coverage proves the main admin, CRM, jobs, and guest boundaries; settings, audit, and ownership permutations still
-  need explicit coverage.
+- [x] Add tests proving unauthorized users cannot see or perform admin, CRM, jobs, settings, or audit actions. Audit
+  filtering, settings access, Horizon mutation logging, queue failure logging, and safe redaction are covered.
 
 ### Starter-Kit Quality
 
@@ -193,11 +197,13 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 ### Task 9 — Finish Audit Coverage And Notification Policy
 
-- [ ] Ratify DP-08 and DP-09: visitor confirmation/scheduling behavior, deployment alert recipients, retention period,
+- [x] Ratify DP-08 and DP-09: visitor confirmation/scheduling behavior, deployment alert recipients, retention period,
   redacted fields, and searchable audit fields.
-- [ ] Complete audit coverage for notes, CRM activities, queue actions, and sensitive settings changes.
-- [ ] Add explicit audit filtering and unauthorized-access tests for audit and settings screens.
-- [ ] Reconcile the configured activity cleanup period with the ratified retention policy.
+- [x] Complete audit coverage for notes, CRM activities, Horizon queue mutations/failures, and sensitive settings
+  changes.
+- [x] Add explicit audit filtering and unauthorized-access tests for audit and settings screens.
+- [x] Reconcile the configured activity cleanup period with the ratified 365-day retention policy and schedule daily
+  cleanup.
 
 ### Task 10 — Remove Starter Residue And Add Browser Smoke Coverage
 

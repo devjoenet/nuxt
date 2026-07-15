@@ -27,7 +27,15 @@ class BusinessSettingController extends Controller
         $this->authorize('update', $setting);
         $setting->update($request->validated());
 
-        activity()->performedOn($setting)->log('Business settings updated.');
+        $changedFields = array_keys($setting->getChanges());
+
+        if ($changedFields !== []) {
+            activity()
+                ->useLog('settings')
+                ->performedOn($setting)
+                ->withProperties(['changed_fields' => $changedFields])
+                ->log('Business settings updated.');
+        }
 
         return back()->with('success', 'Business settings updated.');
     }

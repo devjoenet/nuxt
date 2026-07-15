@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
+use App\Models\CrmActivity;
+use App\Models\Lead;
+use App\Models\Note;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\Notification;
@@ -30,6 +33,13 @@ test('users without admin access cannot enter the admin workspace', function ():
 
     $this->actingAs($user)->get(route('admin.dashboard'))->assertForbidden();
     $this->actingAs($user)->get(route('admin.users.index'))->assertForbidden();
+});
+
+test('users without audit or settings permissions cannot open those screens', function (): void {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->get(route('admin.audit.index'))->assertForbidden();
+    $this->actingAs($user)->get(route('admin.settings.edit'))->assertForbidden();
 });
 
 test('inactive users cannot log in or use an existing session', function (): void {
@@ -121,6 +131,66 @@ test('admins can update business settings', function (): void {
 
     expect(BusinessSetting::current()->company_name)->toBe('Southeast Code LLC')
         ->and(BusinessSetting::current()->default_task_due_days)->toBe(5);
+
+    $activity = Activity::query()->where('description', 'Business settings updated.')->latest('id')->sole();
+
+    expect($activity->properties->get('changed_fields'))->toContain('notification_email')
+        ->and($activity->properties->toArray())->not->toHaveKey('notification_email_value');
+});
+
+test('audit filters cover notes and CRM activities without exposing sensitive values', function (): void {
+    $admin = adminUser();
+    $lead = Lead::factory()->create();
+
+    $this->actingAs($admin);
+
+    $note = $lead->notes()->create([
+        'user_id' => $admin->id,
+        'body' => 'Private contact details that must not be copied into audit history.',
+    ]);
+    $crmActivity = $lead->activities()->create([
+        'user_id' => $admin->id,
+        'type' => 'note_added',
+        'description' => 'Sensitive internal activity description.',
+        'properties' => ['private_token' => 'do-not-store'],
+    ]);
+    activity()
+        ->useLog('crm')
+        ->performedOn($note)
+        ->event('note_reviewed')
+        ->log('audit-filter-marker');
+
+    $noteAudit = Activity::query()
+        ->where('subject_type', Note::class)
+        ->where('subject_id', $note->getKey())
+        ->latest('id')
+        ->firstOrFail();
+    $crmActivityAudit = Activity::query()
+        ->where('subject_type', CrmActivity::class)
+        ->where('subject_id', $crmActivity->getKey())
+        ->latest('id')
+        ->firstOrFail();
+
+    expect($noteAudit->attribute_changes?->toArray()['attributes'] ?? [])
+        ->not->toHaveKey('body');
+    expect($crmActivityAudit->attribute_changes?->toArray()['attributes'] ?? [])
+        ->not->toHaveKey('description');
+    expect($crmActivityAudit->attribute_changes?->toArray()['attributes'] ?? [])
+        ->not->toHaveKey('properties');
+
+    $this->get(route('admin.audit.index', [
+        'search' => 'audit-filter-marker',
+        'subject' => 'Note',
+        'from' => '2026-07-14',
+        'to' => '2026-07-15',
+    ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('filters.search', 'audit-filter-marker')
+            ->where('filters.subject', 'Note')
+            ->where('filters.from', '2026-07-14')
+            ->where('filters.to', '2026-07-15')
+            ->where('activities.data.0.description', 'audit-filter-marker'));
 });
 
 test('super admins bypass permission checks while protected role permissions remain immutable', function (): void {

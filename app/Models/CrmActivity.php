@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property string $uuid
@@ -26,6 +28,16 @@ class CrmActivity extends Model
     use HasFactory;
 
     use HasUuids;
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('crm')
+            ->logOnly(['lead_id', 'user_id', 'type'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     /** @return array<int, string> */
     #[Override]
