@@ -20,6 +20,32 @@ export interface Lead {
   tasks?: Array<{ id: string; title: string; status: string; priority: string; due_at: string }>;
 }
 
+export interface Organization {
+  id: string;
+  name: string;
+  website: string | null;
+  archived_at: string | null;
+  client_since_at: string | null;
+  created_at: string;
+  contacts_count?: number;
+  leads_count?: number;
+  owner: Owner | null;
+  contacts?: Array<{ id: string; name: string; email: string; phone: string | null; owner: Owner | null }>;
+}
+
+export interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  organization_id: number | null;
+  organization: { id: string; name: string } | null;
+  owner: Owner | null;
+  archived_at: string | null;
+  created_at: string;
+  leads_count?: number;
+}
+
 export interface Paginated<T> {
   data: T[];
   meta: { current_page: number; last_page: number; per_page: number; total: number };

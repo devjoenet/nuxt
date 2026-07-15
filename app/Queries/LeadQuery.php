@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace App\Queries;
 
 use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class LeadQuery
 {
-    public function build(array $filters): Builder
+    public function build(User $user, array $filters): Builder
     {
         $sort = in_array($filters['sort'] ?? null, ['created_at', 'status'], true) ? $filters['sort'] : 'created_at';
         $direction = ($filters['direction'] ?? null) === 'asc' ? 'asc' : 'desc';
 
         return Lead::query()
+            ->visibleTo($user)
             ->with(['contact', 'organization', 'owner'])
             ->when($filters['archived'] ?? false, fn (Builder $query): Builder => $query->whereNotNull('archived_at'))
             ->when(! ($filters['archived'] ?? false), fn (Builder $query): Builder => $query->whereNull('archived_at'))

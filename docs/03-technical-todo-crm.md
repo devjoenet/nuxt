@@ -43,6 +43,8 @@ admin-editable pipeline configuration.
 - Defer tags/taggables until explicitly pulled into v1.
 - Defer database-managed pipeline stages/statuses until explicitly pulled into v1.
 - Add foreign keys, indexes, soft deletes/archive fields, ownership fields, and UUIDs according to project conventions.
+- Task 8 adds indexed nullable `owner_id` fields to organizations and contacts and applies the same ownership contract
+  to leads.
 - Create Eloquent models with relationships, casts, scopes, and factories.
 - Add PHP enums for statuses, stages, task priority, activity type, and lead source.
 - Add seeders for realistic organizations, contacts, leads, activities, notes, and tasks.
@@ -85,12 +87,14 @@ admin-editable pipeline configuration.
 - Create reusable CRM components for status badges, owner selectors, stage selectors, task rows, note forms, activity
   timeline items, and contact cards.
 - Add permission-aware UI hiding for create, edit, archive, assignment, and conversion controls.
+- Task 8 ships first-party `Crm/Organizations/*` and `Crm/Contacts/*` pages, with ownership-aware filters and admin-only
+  assignment controls.
 
 ## Acceptance Criteria
 
 - No CRM screen reads from the external Nuxt demo APIs.
-- Authenticated users with `crm.view` can see CRM list/detail pages allowed by policy; unauthorized users receive a 403
-  or the agreed unauthorized response.
+- Authenticated users with `crm.view` can see CRM list/detail pages allowed by ownership policy; out-of-scope direct
+  URLs return `404`.
 - Users with management permissions can create, update, archive, restore, assign, and convert leads according to policy.
 - Lead conversion updates the organization/client state, records an activity entry, completes or creates relevant
   follow-up tasks, and avoids duplicate client records.

@@ -16,6 +16,7 @@ class FollowUpTaskCompletionController extends Controller
     public function __invoke(Lead $lead, FollowUpTask $task): RedirectResponse
     {
         abort_unless($task->lead_id === $lead->id, 404);
+        abort_unless($lead->isVisibleTo(request()->user()), 404);
         $this->authorize('update', $lead);
         $task->update(['status' => FollowUpTaskStatus::Completed, 'completed_at' => now()]);
         $lead->activities()->create([

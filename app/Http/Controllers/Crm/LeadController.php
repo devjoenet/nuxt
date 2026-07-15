@@ -30,12 +30,13 @@ class LeadController extends Controller
         $filters = $request->only(['search', 'status', 'source', 'owner', 'sort', 'direction', 'archived']);
 
         return Inertia::render('Crm/Leads/Index', [
-            'leads' => LeadResource::collection($query->build($filters)->paginate(15)->withQueryString()),
+            'leads' => LeadResource::collection($query->build($request->user(), $filters)->paginate(15)->withQueryString()),
             'filters' => $filters,
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),
             'canManage' => $request->user()->can('crm.manage'),
+            'canAssign' => $request->user()->isCrmAdministrator(),
         ]);
     }
 
@@ -57,6 +58,7 @@ class LeadController extends Controller
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),
+            'canAssign' => $request->user()->isCrmAdministrator(),
         ]);
     }
 
@@ -69,7 +71,7 @@ class LeadController extends Controller
 
     public function show(Request $request, Lead $lead): Response
     {
-        $this->authorize('view', $lead);
+        abort_unless($lead->isVisibleTo($request->user()), 404);
         $lead->load([
             'contact',
             'organization',
@@ -82,11 +84,13 @@ class LeadController extends Controller
         return Inertia::render('Crm/Leads/Show', [
             'lead' => LeadResource::make($lead),
             'canManage' => $request->user()->can('crm.manage'),
+            'canAssign' => $request->user()->isCrmAdministrator(),
         ]);
     }
 
-    public function edit(Lead $lead): Response
+    public function edit(Request $request, Lead $lead): Response
     {
+        abort_unless($lead->isVisibleTo($request->user()), 404);
         $this->authorize('update', $lead);
         $lead->load(['contact', 'organization', 'owner']);
 
@@ -95,6 +99,7 @@ class LeadController extends Controller
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),
+            'canAssign' => $request->user()->isCrmAdministrator(),
         ]);
     }
 

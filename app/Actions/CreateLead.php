@@ -16,6 +16,8 @@ class CreateLead
     public function handle(array $attributes): Lead
     {
         return DB::transaction(function () use ($attributes): Lead {
+            $user = auth()->user();
+            $ownerId = $user?->isCrmAdministrator() === true ? ($attributes['owner_id'] ?? $user->id) : $user?->id;
             $organization = filled($attributes['organization_name'] ?? null)
                 ? Organization::query()->firstOrCreate(['name' => $attributes['organization_name']], ['website' => $attributes['organization_website'] ?? null])
                 : null;
@@ -25,8 +27,14 @@ class CreateLead
                 ['name' => $attributes['contact_name'], 'phone' => $attributes['contact_phone'] ?? null, 'organization_id' => $organization?->id],
             );
 
+            if ($ownerId !== null) {
+                $organization?->update(['owner_id' => $organization->owner_id ?? $ownerId]);
+                $contact->update(['owner_id' => $contact->owner_id ?? $ownerId]);
+            }
+
             $lead = Lead::query()->create([
-                ...Arr::only($attributes, ['owner_id', 'status', 'source', 'service_interest', 'budget_range', 'timeline', 'project_details']),
+                ...Arr::only($attributes, ['status', 'source', 'service_interest', 'budget_range', 'timeline', 'project_details']),
+                'owner_id' => $ownerId,
                 'contact_id' => $contact->id,
                 'organization_id' => $organization?->id,
                 'consented_at' => now(),

@@ -16,7 +16,7 @@ class LeadPolicy
 
     public function view(User $user, Lead $lead): bool
     {
-        return $user->can('crm.view');
+        return $user->can('crm.view') && $lead->isVisibleTo($user);
     }
 
     public function create(User $user): bool
@@ -26,16 +26,21 @@ class LeadPolicy
 
     public function update(User $user, Lead $lead): bool
     {
-        return $user->can('crm.manage');
+        return $user->can('crm.manage') && $lead->isVisibleTo($user);
     }
 
     public function archive(User $user, Lead $lead): bool
     {
-        return $user->can('crm.manage');
+        return $user->can('crm.manage') && $lead->isVisibleTo($user);
     }
 
     public function convert(User $user, Lead $lead): bool
     {
-        return $user->can('crm.manage');
+        return $user->can('crm.manage') && $lead->isVisibleTo($user);
+    }
+
+    public function assign(User $user, Lead $lead): bool
+    {
+        return $user->can('crm.manage') && $user->isCrmAdministrator() && $lead->isVisibleTo($user);
     }
 }

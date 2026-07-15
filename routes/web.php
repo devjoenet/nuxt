@@ -8,12 +8,14 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
 use App\Http\Controllers\Crm\FollowUpTaskController;
 use App\Http\Controllers\Crm\LeadArchiveController;
 use App\Http\Controllers\Crm\LeadController;
 use App\Http\Controllers\Crm\LeadConversionController;
 use App\Http\Controllers\Crm\LeadNoteController;
+use App\Http\Controllers\Crm\OrganizationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PublicIntakeController;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -35,6 +37,14 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
 
     Route::prefix('crm')->name('crm.')->middleware('can:crm.view')->group(function (): void {
         Route::resource('leads', LeadController::class)->except('destroy');
+        Route::resource('organizations', OrganizationController::class)->except('destroy');
+        Route::post('organizations/{organization}/archive', [OrganizationController::class, 'archive'])->name('organizations.archive');
+        Route::delete('organizations/{organization}/archive', [OrganizationController::class, 'restore'])->name('organizations.restore');
+        Route::delete('organizations/{organization}', [OrganizationController::class, 'destroy'])->name('organizations.destroy');
+        Route::resource('contacts', ContactController::class)->except('destroy');
+        Route::post('contacts/{contact}/archive', [ContactController::class, 'archive'])->name('contacts.archive');
+        Route::delete('contacts/{contact}/archive', [ContactController::class, 'restore'])->name('contacts.restore');
+        Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
         Route::post('leads/{lead}/archive', [LeadArchiveController::class, 'store'])->name('leads.archive');
         Route::delete('leads/{lead}/archive', [LeadArchiveController::class, 'destroy'])->name('leads.restore');
         Route::post('leads/{lead}/convert', LeadConversionController::class)->name('leads.convert');

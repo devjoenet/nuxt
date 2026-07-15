@@ -120,7 +120,7 @@ test('managers can add notes and complete a task belonging to the lead', functio
 
 test('managers can create a follow-up assigned to the lead owner', function (): void {
     $user = crmUser(manage: true);
-    $owner = User::factory()->create();
+    $owner = $user;
     $lead = Lead::factory()->create(['owner_id' => $owner->id]);
 
     $this->actingAs($user)->post(route('crm.leads.tasks.store', $lead), [
