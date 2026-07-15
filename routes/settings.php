@@ -7,7 +7,6 @@ use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware(['auth', EnsureUserIsActive::class])->group(function (): void {
     Route::redirect('settings', '/settings/profile');
@@ -20,7 +19,4 @@ Route::middleware(['auth', EnsureUserIsActive::class])->group(function (): void 
 
     Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::get('settings/members', fn () => Inertia::render('settings/Members'))->name('members');
-
-    Route::get('settings/notifications', fn () => Inertia::render('settings/Notifications'))->name('notifications');
 });

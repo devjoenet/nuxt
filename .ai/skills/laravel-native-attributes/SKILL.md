@@ -43,8 +43,6 @@ Assume:
 - Existing repository instructions, including `AGENTS.md` files, take
   precedence over this skill.
 
-Do not install or upgrade dependencies.
-
 ## Required References
 
 Load references only as needed, except during a full-project migration audit.
@@ -172,8 +170,6 @@ Leave unsafe candidates unchanged and include them in the final report.
 
 Follow repository instructions regarding tests, formatting, linting, and
 command execution.
-
-Do not install dependencies or run upgrade commands.
 
 When command execution is not permitted, perform static review and report the
 commands the user should run, such as the project's existing:

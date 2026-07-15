@@ -14,6 +14,7 @@ use App\Http\Controllers\Crm\LeadArchiveController;
 use App\Http\Controllers\Crm\LeadController;
 use App\Http\Controllers\Crm\LeadConversionController;
 use App\Http\Controllers\Crm\LeadNoteController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PublicIntakeController;
 use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Support\Facades\Route;
@@ -30,8 +31,7 @@ Route::post('contact', PublicIntakeController::class)
     ->name('contact.store');
 
 Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(function (): void {
-    Route::get('dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
-    Route::get('inbox', fn () => Inertia::render('Inbox'))->name('inbox');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('crm')->name('crm.')->middleware('can:crm.view')->group(function (): void {
         Route::resource('leads', LeadController::class)->except('destroy');

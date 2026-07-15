@@ -20,12 +20,6 @@
         onSelect: closeNavigation,
       },
       {
-        label: "Inbox",
-        icon: "i-ph-tray",
-        to: "/inbox",
-        onSelect: closeNavigation,
-      },
-      {
         label: "CRM",
         icon: "i-ph-users",
         to: "/crm/leads",
@@ -63,20 +57,6 @@
             to: "/settings/profile",
             exact: true,
             onSelect: closeNavigation,
-          },
-          {
-            label: "Members",
-            to: "/settings/members",
-            onSelect: () => {
-              open.value = false;
-            },
-          },
-          {
-            label: "Notifications",
-            to: "/settings/notifications",
-            onSelect: () => {
-              open.value = false;
-            },
           },
           {
             label: "Security",
@@ -147,8 +127,6 @@
       <UDashboardSearch :groups="groups" />
 
       <slot />
-
-      <NotificationsSlideover />
     </UDashboardGroup>
   </Suspense>
 </template>

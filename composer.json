@@ -2,17 +2,14 @@
   "$schema": "https://getcomposer.org/schema.json",
   "name": "devjoeney/nuxt",
   "type": "project",
-  "description": "A production-ready Laravel 12 starter kit with Vue 3, Inertia.js v2, Nuxt UI components, and Tailwind CSS v4. Complete authentication, beautiful UI components, and modern developer tools included.",
+  "description": "Southeast Code's Laravel 13 and Inertia operating workspace for practical CRM and operations workflows.",
   "keywords": [
     "laravel",
-    "starter-kit",
     "vue",
     "inertia",
     "nuxt-ui",
     "tailwind",
-    "typescript",
-    "laravel-starter",
-    "boilerplate"
+    "typescript"
   ],
   "license": "MIT",
   "require": {

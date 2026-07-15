@@ -10,16 +10,6 @@
         exact: true,
       },
       {
-        label: "Members",
-        icon: "i-ph-users",
-        to: "/settings/members",
-      },
-      {
-        label: "Notifications",
-        icon: "i-ph-bell",
-        to: "/settings/notifications",
-      },
-      {
         label: "Security",
         icon: "i-ph-shield",
         to: "/settings/security",
