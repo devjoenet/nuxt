@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable(['subject_type', 'subject_id', 'user_id', 'body'])]
 class Note extends Model
@@ -20,7 +22,17 @@ class Note extends Model
     use HasFactory;
 
     use HasUuids;
+    use LogsActivity;
     use SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('crm')
+            ->logOnly(['subject_type', 'subject_id', 'user_id'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
+    }
 
     #[Override]
     public function uniqueIds(): array

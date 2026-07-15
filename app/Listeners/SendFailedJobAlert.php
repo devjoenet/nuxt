@@ -13,7 +13,21 @@ class SendFailedJobAlert
 {
     public function handle(JobFailed $event): void
     {
-        if ($event->job->resolveName() === SendQueuedNotifications::class) {
+        $jobName = $event->job->resolveName();
+
+        activity()
+            ->useLog('operations')
+            ->causedByAnonymous()
+            ->withProperties([
+                'connection' => (string) $event->connectionName,
+                'queue' => (string) $event->job->getQueue(),
+                'job' => class_basename($jobName),
+                'job_id' => (string) ($event->job->uuid() ?? $event->job->getJobId()),
+                'exception' => $event->exception::class,
+            ])
+            ->log('Queue job failed.');
+
+        if ($jobName === SendQueuedNotifications::class) {
             return;
         }
 

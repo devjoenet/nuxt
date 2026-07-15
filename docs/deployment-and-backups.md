@@ -28,7 +28,7 @@ release; queued jobs should be written to stable, version-tolerant contracts.
 The deployment platform must provide:
 
 - Automated, encrypted MySQL backups at least daily
-- A retention window appropriate for the business and legal requirements
+- A 365-day activity-audit retention window, or an explicitly ratified replacement before launch
 - A separate backup location or provider account
 - Recovery credentials stored outside the application repository
 - A documented restore owner and recovery time objective

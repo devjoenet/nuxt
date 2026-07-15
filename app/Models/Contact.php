@@ -37,7 +37,7 @@ class Contact extends Model
     {
         return LogOptions::defaults()
             ->useLogName('crm')
-            ->logOnly(['organization_id', 'owner_id', 'name', 'email', 'phone', 'archived_at'])
+            ->logOnly(['organization_id', 'owner_id', 'name', 'archived_at'])
             ->logOnlyDirty()
             ->dontLogEmptyChanges();
     }

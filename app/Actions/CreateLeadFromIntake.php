@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\IntakeData;
+use App\Models\BusinessSetting;
 use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\Organization;
@@ -12,7 +13,6 @@ use App\Notifications\NewLeadReceived;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
-use function config;
 use function now;
 
 class CreateLeadFromIntake
@@ -68,7 +68,7 @@ class CreateLeadFromIntake
             return $lead->load('contact', 'organization');
         });
 
-        Notification::route('mail', (string) config('services.leads.recipient'))
+        Notification::route('mail', (string) BusinessSetting::current()->notification_email)
             ->notify(new NewLeadReceived($lead)->afterCommit());
 
         return $lead;

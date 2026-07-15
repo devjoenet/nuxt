@@ -72,9 +72,10 @@ Wire first-class role/permission management, protect operational areas, and prov
 - Configure Spatie Activitylog for selected models.
 - Add model-level logging configuration or observers for CRM, users, roles, permissions, settings, and sensitive
   operations.
-- Redact excluded fields such as passwords, tokens, secrets, raw 2FA material, recovery codes, and sensitive contact
-  details. Update this list if DP-09 changes the redaction policy.
-- Create audit log index page with filters for causer, subject, event, model type, date range, and search.
+- Redact excluded fields such as passwords, tokens, secrets, raw 2FA material, recovery codes, note bodies, contact
+  email/phone values, notification recipients, and exception messages.
+- Create audit log index page with filters for causer, subject/model type, event, date range, and search across safe
+  description, log/event, causer, and subject metadata.
 - Create audit detail view showing safe before/after changes.
 - Add tests for activity records on create/update/delete/role/settings operations.
 

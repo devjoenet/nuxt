@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\CrmActivityType;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Models\BusinessSetting;
 use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
@@ -41,7 +42,8 @@ function validIntake(array $overrides = []): array
 test('a guest can submit a public inquiry and create the complete lead chain', function (): void {
     Date::setTestNow('2026-07-10 10:00:00');
     Notification::fake();
-    config(['services.leads.recipient' => 'leads@southeastcode.com']);
+    config(['services.leads.recipient' => 'fallback@southeastcode.com']);
+    BusinessSetting::current()->update(['notification_email' => 'leads@southeastcode.com']);
 
     $response = $this->post(route('contact.store'), validIntake());
 
