@@ -28,6 +28,9 @@ decision is later made differently, update this roadmap and the affected phase d
   Tests should fake queues/notifications unless a persistence or Horizon authorization behavior is under test.
 - Use the business notification email for internal lead/reminder mail, keep visitor confirmations and scheduling links
   deferred, and retain audit records for 365 days with scheduled cleanup.
+- Deploy staging and production as separate Laravel Forge-managed sites with PHP 8.5, MySQL/Redis, Supervisor-managed
+  Horizon workers, Forge scheduler jobs, daily encrypted backups with isolated restore tests, Forge logs, `/up`
+  monitoring, and named Operations Lead/Technical Maintainer ownership.
 
 ## Current Stock
 
@@ -81,8 +84,10 @@ defaults above remain the executable path until those decisions are made.
 - [x] DP-09: define audit retention, redaction, and searchable fields. Audit records are retained for 365 days; note
   bodies, contact email/phone values, notification recipients, secrets/auth material, and exception messages are
   redacted; search covers description, log/event, causer, subject, and date range.
-- [ ] DP-10: confirm deployment target and production queue/Horizon operations. The repo documents an assumed model but
-  no hosting target or production ownership has been ratified.
+- [x] DP-10: confirm deployment target and production queue/Horizon operations. Laravel Forge is the ratified deployment
+  control plane for separate staging/production sites with PHP 8.5, MySQL/Redis, Supervisor-managed Horizon, Forge
+  scheduler jobs, daily encrypted backups, isolated restore tests, Forge logs, `/up` monitoring, and Operations
+  Lead/Technical Maintainer ownership.
 - [x] DP-11: standardize the UI component approach and responsive table behavior. Nuxt UI is the base with local
   wrappers for repeated form and workspace patterns.
 - [x] DP-12: decide privacy/legal page requirements for public lead capture. A privacy page and contact-data consent are
@@ -217,11 +222,11 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 ### Task 11 — Ratify Deployment And Complete Launch Documentation
 
-- [ ] Resolve DP-10 by selecting the production host, environment model, worker/scheduler supervision, backup/restore,
-  error tracking, and operational ownership.
-- [ ] Add ADRs for decisions that changed the roadmap defaults.
-- [ ] Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit review.
-- [ ] Update the phase documents and this roadmap after each task lands so completed work does not remain falsely
+- [x] Resolve DP-10 by selecting Laravel Forge-managed staging/production sites, the environment model, worker/scheduler
+  supervision, backup/restore, error tracking, and operational ownership.
+- [x] Add ADRs for decisions that changed the roadmap defaults.
+- [x] Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit review.
+- [x] Update the phase documents and this roadmap after each task lands so completed work does not remain falsely
   unchecked.
 
 ### Task 12 — Restore CRM Detail Browser Smoke Coverage

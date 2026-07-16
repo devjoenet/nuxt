@@ -15,9 +15,8 @@ The app is ready for v1 launch only when these conditions are true:
 - All authenticated feature routes have policy or middleware coverage and unauthorized direct URL access is tested.
 - No visible demo data, external demo APIs, placeholder GitHub links, stale starter-kit copy, or generic Nuxt dashboard
   positioning remains in production-facing UI.
-- Queue, scheduler, Horizon, failed-job, notification, and backup expectations are documented for the selected
-  deployment
-  target.
+- Queue, scheduler, Horizon, failed-job, notification, backup, error-tracking, and ownership expectations are documented
+  for the selected Laravel Forge deployment target.
 - Critical data handling choices from `docs/00-decision-points.md` that affect launch are resolved or explicitly
   deferred in the roadmap.
 
@@ -71,9 +70,9 @@ running the quality contract.
 
 - [x] Update README with current setup, architecture, commands, and deployment notes.
 - [x] Keep `docs/roadmap.md` current as phases are completed.
-- Add ADRs for completed decision points that change the roadmap defaults.
-- Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit logs.
-- Add runbooks for queues, failed jobs, Horizon, backups, and common deployment issues.
+- [x] Add ADRs for completed decision points that change the roadmap defaults.
+- [x] Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit logs.
+- [x] Add runbooks for queues, failed jobs, Horizon, backups, and common deployment issues.
 
 ## Later Modules To Revisit
 
@@ -100,7 +99,7 @@ running the quality contract.
 - Responsive behavior is verified for marketing, authenticated navigation, dense CRM/admin tables, and forms.
 - Security hardening is reviewed for registration, email verification, 2FA, session/cookie settings, trusted proxies,
   HTTPS, contact-form rate limits, and activity-log redaction.
-- README, roadmap, deployment notes, queue/Horizon runbook, and any required admin/user docs match the shipped behavior.
+- README, roadmap, deployment notes, queue/Horizon runbook, ADRs, and admin/user docs match the shipped behavior.
 - Later modules remain documented as later work and do not leak half-built navigation or broken routes into v1.
 
 ## Verification
