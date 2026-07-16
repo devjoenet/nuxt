@@ -178,18 +178,20 @@ test('audit filters cover notes and CRM activities without exposing sensitive va
     expect($crmActivityAudit->attribute_changes?->toArray()['attributes'] ?? [])
         ->not->toHaveKey('properties');
 
+    $auditDate = now()->toDateString();
+
     $this->get(route('admin.audit.index', [
         'search' => 'audit-filter-marker',
         'subject' => 'Note',
-        'from' => '2026-07-14',
-        'to' => '2026-07-15',
+        'from' => $auditDate,
+        'to' => $auditDate,
     ]))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
             ->where('filters.search', 'audit-filter-marker')
             ->where('filters.subject', 'Note')
-            ->where('filters.from', '2026-07-14')
-            ->where('filters.to', '2026-07-15')
+            ->where('filters.from', $auditDate)
+            ->where('filters.to', $auditDate)
             ->where('activities.data.0.description', 'audit-filter-marker'));
 });
 

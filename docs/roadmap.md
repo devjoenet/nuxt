@@ -94,9 +94,9 @@ defaults above remain the executable path until those decisions are made.
 
 - [x] Update README/package messaging to Laravel 13, PHP 8.5, Inertia 3, and Southeast Code operating-app direction.
 - [x] Align CI PHP version with Composer's PHP 8.5 requirement.
-- [ ] Remove or replace demo Nuxt dashboard references, placeholder GitHub links, fake teams, and external demo API
-  calls. Production-facing demo APIs and links are gone, but `TeamsMenu.vue` still exposes fake Create/Manage team
-  actions.
+- [x] Remove or replace demo Nuxt dashboard references, placeholder GitHub links, fake teams, and external demo API
+  calls. Production-facing demo APIs and links are gone, and `TeamsMenu.vue` now identifies the single Southeast Code
+  workspace without fake team actions.
 - [x] Define navigation groups for public marketing, authenticated workspace, admin/ops, settings, jobs, and audit.
 - [x] Establish route/page naming conventions for marketing, CRM, admin, settings, jobs, and audit sections.
 - [x] Rename `/customers` and the `Customers.vue` page to the CRM route/page namespace before building real data behind
@@ -171,7 +171,8 @@ defaults above remain the executable path until those decisions are made.
 
 - [x] Replace empty/demo states with useful Southeast Code product empty states.
 - [x] Add tests for marketing contact submission, CRM CRUD, permissions, Horizon/admin access, and queue dispatching.
-- [ ] Add browser smoke coverage later for critical auth, marketing, CRM, and admin screens.
+- [x] Add browser smoke coverage for critical auth, marketing, CRM lists, admin, jobs, settings, audit, and expressive
+  form control behavior.
 - [x] Keep app-facing copy consistent with Southeast Code positioning from `docs/CompanyBrief.md`.
 - [x] Keep app-facing colors aligned with `docs/ColorPalette.md`, while meeting contrast requirements in forms, tables,
   navigation, and status badges.
@@ -207,11 +208,11 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 ### Task 10 — Remove Starter Residue And Add Browser Smoke Coverage
 
-- [ ] Remove the fake Create/Manage team controls from `TeamsMenu.vue` or replace them with a real single-workspace
+- [x] Remove the fake Create/Manage team controls from `TeamsMenu.vue` and replace them with a real single-workspace
   identity control.
-- [ ] Add browser smoke coverage for public marketing/intake, login, dashboard, CRM lead/entity flows, admin users and
-  roles, jobs, settings, and audit.
-- [ ] Include the expressive form controls in smoke coverage for validation, dark mode, keyboard focus, and custom
+- [x] Add browser smoke coverage for public marketing/intake, login, dashboard, CRM lists, admin users and roles, jobs,
+  settings, and audit.
+- [x] Include the expressive form controls in smoke coverage for validation, dark mode, keyboard focus, and custom
   select behavior.
 
 ### Task 11 — Ratify Deployment And Complete Launch Documentation
@@ -222,6 +223,14 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 - [ ] Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit review.
 - [ ] Update the phase documents and this roadmap after each task lands so completed work does not remain falsely
   unchecked.
+
+### Task 12 — Restore CRM Detail Browser Smoke Coverage
+
+- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM lead, organization, and contact detail URLs
+  while list pages and the other browser smoke flows render normally.
+- [ ] Reinstate focused CRM browser coverage that separately verifies View link navigation and the linked detail-route
+  response for leads, organizations, and contacts.
+- [ ] Run the browser suite and full quality contract after the detail-route rendering issue is resolved.
 
 ## Later, Not MVP
 

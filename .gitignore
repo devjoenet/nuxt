@@ -19,6 +19,7 @@
 /public/build
 /public/hot
 /public/storage
+/tests/Browser/Screenshots
 /storage/*.key
 /storage/pail
 /vendor
@@ -36,3 +37,4 @@ _ide_helper_models.php
 AGENTS.md
 GEMINI.md
 resources/js/types/generated.d.ts
+./local-test.sh
