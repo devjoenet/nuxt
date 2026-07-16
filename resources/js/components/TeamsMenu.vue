@@ -1,53 +1,14 @@
 <script setup lang="ts">
-  import type { DropdownMenuItem } from "@nuxt/ui";
-  import { computed, ref } from "vue";
+  import AppLogoIcon from "@/components/AppLogoIcon.vue";
 
   defineProps<{
     collapsed?: boolean;
   }>();
-
-  const teams = ref([{ label: "Southeast Code" }]);
-  const selectedTeam = ref(teams.value[0]);
-
-  const items = computed<DropdownMenuItem[][]>(() => {
-    return [
-      teams.value.map((team) => ({
-        ...team,
-        onSelect() {
-          selectedTeam.value = team;
-        },
-      })),
-      [
-        {
-          label: "Create team",
-          icon: "i-ph-plus-circle",
-        },
-        {
-          label: "Manage teams",
-          icon: "i-ph-gear-six",
-        },
-      ],
-    ];
-  });
 </script>
 
 <template>
-  <UDropdownMenu :items="items" :content="{ align: 'center', collisionPadding: 12 }" :ui="{ content: collapsed ? 'w-40' : 'w-(--reka-dropdown-menu-trigger-width)' }">
-    <UButton
-      v-bind="{
-        ...selectedTeam,
-        label: collapsed ? undefined : selectedTeam?.label,
-        trailingIcon: collapsed ? undefined : 'i-ph-caret-up-down',
-      }"
-      color="neutral"
-      variant="ghost"
-      block
-      :square="collapsed"
-      class="data-[state=open]:bg-elevated"
-      :class="[!collapsed && 'py-2']"
-      :ui="{
-        trailingIcon: 'text-dimmed',
-      }"
-    />
-  </UDropdownMenu>
+  <div aria-label="Southeast Code workspace" class="flex min-w-0 items-center gap-2 rounded-lg px-2 py-2 text-highlighted" data-testid="workspace-identity" role="img">
+    <AppLogoIcon aria-hidden="true" class="size-7 shrink-0 text-primary" />
+    <span v-if="!collapsed" class="truncate text-sm font-semibold">Southeast Code</span>
+  </div>
 </template>

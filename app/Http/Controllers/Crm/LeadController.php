@@ -16,7 +16,7 @@ use App\Models\Lead;
 use App\Models\User;
 use App\Queries\LeadQuery;
 use BackedEnum;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -77,8 +77,8 @@ class LeadController extends Controller
             'organization',
             'owner',
             'notes.user',
-            'activities' => fn (Builder $query): Builder => $query->latest(),
-            'followUpTasks' => fn (Builder $query): Builder => $query->orderBy('due_at'),
+            'activities' => fn (Relation $query): Relation => $query->latest(),
+            'followUpTasks' => fn (Relation $query): Relation => $query->orderBy('due_at'),
         ]);
 
         return Inertia::render('Crm/Leads/Show', [

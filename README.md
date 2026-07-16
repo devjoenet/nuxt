@@ -13,6 +13,7 @@ operations, queues, and audit visibility. It is built for a single Southeast Cod
 - MySQL for staging/production, SQLite for lightweight local work
 - Database queues locally; Redis and Horizon in staging/production
 - Pest, Larastan, Pint, Rector, ESLint, Prettier, and Vite for quality checks
+- Pest browser testing with Playwright Chromium for critical-flow smoke coverage
 - Spatie Permission and Activitylog for authorization and audit history
 
 ## Local setup
@@ -26,6 +27,7 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
 npm install
+npx playwright install chromium
 npm run build
 ```
 
@@ -90,9 +92,9 @@ php artisan test --compact tests/Feature/AdminAuthorizationTest.php
 php artisan test --compact tests/Feature/JobsOperationsTest.php
 ```
 
-`composer test` also runs the repository's type-coverage, feature/unit coverage, formatting, Rector, and static
-analysis checks. Frontend checks are available through `npm run lint:check`, `npm run format:check`, and
-`npm run typecheck`.
+`composer test` also runs the repository's type-coverage, feature/unit coverage, browser smoke suite, formatting,
+Rector, and static analysis checks. Run `composer test:browser` when iterating on browser coverage alone. Frontend
+checks are available through `npm run lint:check`, `npm run format:check`, and `npm run typecheck`.
 
 ## Project conventions
 

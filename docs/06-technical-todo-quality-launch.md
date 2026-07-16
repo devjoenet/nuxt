@@ -27,13 +27,16 @@ The app is ready for v1 launch only when these conditions are true:
 - [x] Ensure `composer test:types` passes after all PHP domain additions.
 - [x] Ensure `composer test:lint` passes before merge.
 - [x] Ensure `npm run build` passes after all frontend work.
-- [ ] Add browser smoke tests for public marketing, login, dashboard, CRM list/detail, admin users, roles, jobs, settings, and audit pages when practical.
+- [x] Add browser smoke tests for public marketing, login, dashboard, CRM lists, admin users, roles, jobs, settings,
+  audit pages, and expressive form controls.
+- [ ] Restore separate CRM detail browser smoke coverage. Pest's temporary HTTP server currently blank-renders CRM
+  lead/entity detail URLs; this is deferred to Roadmap Task 12.
 - [x] Add regression tests for unauthorized direct URL access.
 - [x] Add tests for queue dispatch, notification dispatch, and activity logging.
 
-Browser smoke coverage remains deferred because the existing dependency set does not include Pest's browser plugin or
-Playwright. The launch suite covers the same public/authenticated route boundaries through HTTP feature tests until
-browser dependencies are explicitly added.
+Browser smoke coverage uses Pest's browser plugin with Playwright Chromium. The Browser PHPUnit suite runs through
+`composer test:browser` and is included in `composer test`; the CI workflow installs the Chromium runtime before
+running the quality contract.
 
 ## UX Polish
 
