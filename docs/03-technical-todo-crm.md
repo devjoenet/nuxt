@@ -119,3 +119,9 @@ admin-editable pipeline configuration.
   - `composer test:types`
   - `composer test:lint`
   - `npm run build`
+
+## Launch documentation
+
+- [x] Document the Lead -> Client lifecycle, ownership visibility, archive/restore behavior, and deferred CRM modules
+  in [the admin and user guide](admin-and-user-guide.md).
+- [x] Record the ownership decision in [ADR 0003](adr/0003-crm-ownership-visibility.md).

@@ -107,3 +107,9 @@ Wire first-class role/permission management, protect operational areas, and prov
   - `composer test:types`
   - `composer test:lint`
   - `npm run build`
+
+## Launch documentation
+
+- [x] Document invite-first user administration, role protections, permission capabilities, settings ownership, and
+  audit review in [the admin and user guide](admin-and-user-guide.md).
+- [x] Record notification and audit retention decisions in [ADR 0002](adr/0002-notification-and-audit-policy.md).

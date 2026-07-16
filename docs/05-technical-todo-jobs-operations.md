@@ -79,7 +79,8 @@ Make background processing intentional, observable, permission-protected, and al
 - Horizon snapshots are scheduled.
 - CRM lead notifications, visitor confirmations if enabled, reminders, digests if enabled, and cleanup jobs have queue
   names, tags, retries/backoff, and idempotency safeguards.
-- Failed-job and long-wait notifications have clear recipients/channels once DP-08 and DP-10 are resolved.
+- Failed-job and long-wait notifications use `HORIZON_NOTIFICATION_EMAIL`; internal lead/reminder mail uses the current
+  business notification email.
 - Jobs admin pages or links expose failed jobs, pending jobs, batches, search, Horizon views, and supported retry/forget
   actions without bypassing permissions.
 - Runbook notes are written only after the real commands, routes, permissions, and scheduler behavior exist.
@@ -92,3 +93,9 @@ Make background processing intentional, observable, permission-protected, and al
   - `composer test:lint`
   - `npm run build`
   - targeted queue/Horizon authorization tests
+
+## Launch documentation
+
+- [x] Document the Laravel Forge Supervisor worker and scheduler model, queue triage, backup expectations, and incident ownership
+  in [the deployment runbook](deployment-and-backups.md) and [the admin and user guide](admin-and-user-guide.md).
+- [x] Record the selected deployment model in [ADR 0001](adr/0001-forge-deployment.md).

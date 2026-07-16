@@ -56,8 +56,10 @@ imports.
 ## Queues and deployment
 
 Local and test environments use `QUEUE_CONNECTION=database`. Staging and production should use Redis with Horizon,
-workers for the configured queues, and a scheduler process. Keep the queue retry window longer than the Horizon worker
-timeout: the current defaults are 180 seconds and 120 seconds.
+workers for the configured queues, and a scheduler process. The ratified production model is a Laravel Forge-managed
+server, with separate staging and production sites. [Laravel Herd's Forge integration](https://herd.laravel.com/docs/macos/integrations/laravel-forge)
+can map the local site to its Forge site for deploys and remote access. Keep the queue retry window longer than the
+Horizon worker timeout: the current defaults are 180 seconds and 120 seconds.
 
 Configure `LEAD_NOTIFICATION_EMAIL` and `HORIZON_NOTIFICATION_EMAIL` in deployed environments. Set real mail, MySQL,
 Redis, application URL, HTTPS cookie, and backup settings before production use.
@@ -65,12 +67,14 @@ Redis, application URL, HTTPS cookie, and backup settings before production use.
 Required long-running processes in staging/production:
 
 ```bash
-php artisan schedule:work
 php artisan horizon
+php artisan schedule:run
 ```
 
 See [docs/queues-and-horizon.md](docs/queues-and-horizon.md) and [docs/deployment-and-backups.md](docs/deployment-and-backups.md)
-for worker, failed-job, scheduler, deployment, and backup expectations.
+for worker, failed-job, scheduler, deployment, backup, ownership, and incident expectations. The [admin and user guide](docs/admin-and-user-guide.md)
+covers the CRM lifecycle, access management, roles, jobs, and audit review. Architecture decisions are recorded in
+[docs/adr](docs/adr/).
 
 ## Verification
 

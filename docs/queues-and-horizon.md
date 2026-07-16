@@ -24,7 +24,8 @@ notifications, and reminders separately so alert traffic does not wait behind ge
 
 ## Required processes
 
-Keep the scheduler running every minute and keep Horizon under a process monitor in staging/production:
+On Laravel Forge, configure a site-level scheduled job for `php artisan schedule:run` every minute and configure
+`php artisan horizon` as a Supervisor-managed background process. Forge restarts the process if it exits:
 
 ```bash
 php artisan schedule:run
@@ -52,4 +53,6 @@ those schedules.
 5. If metrics are blank, confirm the scheduler is running and `horizon:snapshot` is registered.
 6. If jobs are processed twice, compare the job timeout, Horizon timeout, and queue `retry_after`; they must be
    ordered from shortest to longest.
-7. After deployment, run `php artisan horizon:terminate` so the process monitor restarts workers with the new code.
+7. After a Forge zero-downtime deployment, include Forge's `$RESTART_QUEUES()` macro after `$ACTIVATE_RELEASE()` so
+   Horizon restarts on the new release. On a manual deployment, run `php artisan horizon:terminate` so Supervisor
+   restarts workers with the new code.
