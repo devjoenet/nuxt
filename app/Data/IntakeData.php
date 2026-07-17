@@ -17,7 +17,8 @@ readonly class IntakeData
         public ?string $website,
         public ?string $budgetRange,
         public ?string $timeline,
-        public ?string $serviceInterest,
+        /** @var array<int, string> */
+        public array $serviceInterests,
         public ?string $referralSource,
         public ?string $landingPage,
         public ?string $referrer,
@@ -41,7 +42,7 @@ readonly class IntakeData
             website: self::nullableString($request, 'website'),
             budgetRange: self::nullableString($request, 'budget_range'),
             timeline: self::nullableString($request, 'timeline'),
-            serviceInterest: self::nullableString($request, 'service_interest'),
+            serviceInterests: array_values($request->input('service_interest', []) ?? []),
             referralSource: self::nullableString($request, 'referral_source'),
             landingPage: self::nullableString($request, 'landing_page'),
             referrer: self::nullableString($request, 'referrer'),

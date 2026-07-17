@@ -32,8 +32,12 @@ class CreateLead
                 $contact->update(['owner_id' => $contact->owner_id ?? $ownerId]);
             }
 
+            $serviceInterests = array_values($attributes['service_interest'] ?? []);
+
             $lead = Lead::query()->create([
-                ...Arr::only($attributes, ['status', 'source', 'service_interest', 'budget_range', 'timeline', 'project_details']),
+                ...Arr::only($attributes, ['status', 'source', 'budget_range', 'timeline', 'project_details']),
+                'service_interest' => $serviceInterests[0] ?? null,
+                'service_interests' => $serviceInterests,
                 'owner_id' => $ownerId,
                 'contact_id' => $contact->id,
                 'organization_id' => $organization?->id,

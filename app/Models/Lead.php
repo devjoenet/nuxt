@@ -35,7 +35,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, FollowUpTask> $followUpTasks
  */
 #[Fillable([
-    'contact_id', 'organization_id', 'owner_id', 'status', 'source', 'service_interest', 'budget_range',
+    'contact_id', 'organization_id', 'owner_id', 'status', 'source', 'service_interest', 'service_interests', 'budget_range',
     'timeline', 'project_details', 'referral_source', 'landing_page', 'referrer', 'utm_source', 'utm_medium',
     'utm_campaign', 'utm_term', 'utm_content', 'ip_address', 'user_agent', 'consented_at', 'archived_at', 'converted_at',
 ])]
@@ -54,7 +54,7 @@ class Lead extends Model
     {
         return LogOptions::defaults()
             ->useLogName('crm')
-            ->logOnly(['organization_id', 'owner_id', 'status', 'source', 'service_interest', 'budget_range', 'timeline', 'archived_at', 'converted_at'])
+            ->logOnly(['organization_id', 'owner_id', 'status', 'source', 'service_interest', 'service_interests', 'budget_range', 'timeline', 'archived_at', 'converted_at'])
             ->logOnlyDirty()
             ->dontLogEmptyChanges();
     }
@@ -109,6 +109,7 @@ class Lead extends Model
         return [
             'status' => LeadStatus::class,
             'source' => LeadSource::class,
+            'service_interests' => 'array',
             'consented_at' => 'datetime',
             'archived_at' => 'datetime',
             'converted_at' => 'datetime',

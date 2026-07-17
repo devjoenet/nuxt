@@ -29,7 +29,7 @@ function validIntake(array $overrides = []): array
         'website' => 'https://rivera-logistics.example',
         'budget_range' => '25k-50k',
         'timeline' => '1-3-months',
-        'service_interest' => 'operations-app',
+        'service_interest' => ['operations-app'],
         'referral_source' => 'Referral',
         'project_details' => 'Our dispatch workflow depends on several spreadsheets and repeated manual entry.',
         'consent' => '1',
@@ -61,6 +61,7 @@ test('a guest can submit a public inquiry and create the complete lead chain', f
 
     expect($lead->contact->email)->toBe('jordan@example.com')
         ->and($lead->organization?->name)->toBe('Rivera Logistics')
+        ->and($lead->service_interests)->toBe(['operations-app'])
         ->and($lead->status)->toBe(LeadStatus::New)
         ->and($lead->source)->toBe(LeadSource::Website)
         ->and($lead->activities->sole()->type)->toBe(CrmActivityType::PublicIntakeCreated)

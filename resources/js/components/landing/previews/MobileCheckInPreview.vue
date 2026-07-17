@@ -1,5 +1,11 @@
+<script lang="ts" setup></script>
+
 <template>
-  <article
+  <motion.article
+    :initial="{ opacity: 0, y: 24, rotate: 2 }"
+    :transition="{ duration: 0.75, ease: 'easeOut' }"
+    :viewport="{ once: true, amount: 0.2 }"
+    :while-in-view="{ opacity: 1, y: 0, rotate: 0 }"
     class="relative mx-auto w-full max-w-[16rem] rounded-[2rem] border border-warning-300/40 bg-muted-100 p-2 shadow-2xl shadow-muted-950/16 dark:bg-muted-950 dark:shadow-muted-950/70"
     aria-label="Field check-in mobile preview"
   >
@@ -53,5 +59,5 @@
         </div>
       </div>
     </div>
-  </article>
+  </motion.article>
 </template>

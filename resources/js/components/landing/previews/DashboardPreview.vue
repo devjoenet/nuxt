@@ -23,7 +23,11 @@
 </script>
 
 <template>
-  <aside
+  <motion.aside
+    :initial="{ opacity: 0, scale: 0.97 }"
+    :transition="{ duration: 0.8, ease: 'easeOut' }"
+    :viewport="{ once: true, amount: 0.2 }"
+    :while-in-view="{ opacity: 1, scale: 1 }"
     class="relative rounded-xl border border-secondary-500/25 bg-muted-50/82 p-3 shadow-2xl shadow-muted-950/16 ring-1 ring-muted-200/80 backdrop-blur-md dark:bg-muted-950/72 dark:shadow-muted-950/60 dark:ring-neutral-100/10"
     aria-label="Operations command dashboard preview"
   >
@@ -119,5 +123,5 @@
         </div>
       </div>
     </div>
-  </aside>
+  </motion.aside>
 </template>

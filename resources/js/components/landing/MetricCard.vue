@@ -65,7 +65,11 @@
 </script>
 
 <template>
-  <article
+  <motion.article
+    :initial="{ opacity: 0, y: 20 }"
+    :transition="{ duration: 0.65, ease: 'easeOut' }"
+    :viewport="{ once: true, amount: 0.3 }"
+    :while-in-view="{ opacity: 1, y: 0 }"
     :class="articleClasses"
     class="group relative h-full overflow-hidden rounded-lg border bg-muted-50/90 p-6 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 transition motion-safe:hover:-translate-y-1 dark:bg-muted-900/70 dark:shadow-muted-950/20 dark:ring-neutral-100/5"
   >
@@ -82,7 +86,7 @@
       </p>
       <p :class="copyClasses" class="mt-3 text-sm leading-6 text-muted-600 transition duration-1000 dark:text-neutral-400">{{ metric.description }}</p>
     </div>
-  </article>
+  </motion.article>
 </template>
 
 <style scoped>

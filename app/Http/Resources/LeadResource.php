@@ -24,6 +24,7 @@ class LeadResource extends JsonResource
             'status' => $this->status->value,
             'source' => $this->source->value,
             'service_interest' => $this->service_interest,
+            'service_interests' => $this->service_interests ?? ($this->service_interest ? [$this->service_interest] : []),
             'budget_range' => $this->budget_range,
             'timeline' => $this->timeline,
             'project_details' => $this->project_details,

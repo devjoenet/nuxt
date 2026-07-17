@@ -33,6 +33,7 @@ class RolePermissionSeeder extends Seeder
             Permission::JobsView->value,
             Permission::JobsManage->value,
             Permission::SettingsManage->value,
+            Permission::DevelopmentUserTestingView->value,
         ])->values());
         Role::findOrCreate(RoleName::SalesOps->value, 'web')->syncPermissions($permissions->only([
             Permission::AdminDashboardView->value,

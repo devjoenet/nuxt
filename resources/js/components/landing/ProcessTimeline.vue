@@ -41,7 +41,15 @@
 
 <template>
   <ol class="mt-12 grid gap-5 md:grid-cols-4">
-    <li v-for="(step, index) in steps" :key="step.title" class="group relative">
+    <motion.li
+      v-for="(step, index) in steps"
+      :key="step.title"
+      :initial="{ opacity: 0, y: 26, scale: 0.97 }"
+      :transition="{ duration: 0.65, delay: index * 0.12, ease: 'easeOut' }"
+      :viewport="{ once: true, amount: 0.35 }"
+      :while-in-view="{ opacity: 1, y: 0, scale: 1 }"
+      class="group relative"
+    >
       <div class="relative h-20">
         <div
           v-if="index < steps.length - 1"
@@ -79,6 +87,6 @@
         <h3 class="mt-3 text-lg font-semibold text-muted-950 dark:text-neutral-50">{{ step.title }}</h3>
         <p class="mt-3 text-sm leading-6 text-muted-600 dark:text-neutral-400">{{ step.description }}</p>
       </article>
-    </li>
+    </motion.li>
   </ol>
 </template>

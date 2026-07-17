@@ -2,7 +2,6 @@
   import AppLogo from "@/components/AppLogo.vue";
   import { privacy } from "@/routes";
   import { Link } from "@inertiajs/vue3";
-  import { PhEnvelopeSimple } from "@phosphor-icons/vue";
 
   interface FooterLink {
     label: string;
@@ -22,7 +21,13 @@
 </script>
 
 <template>
-  <footer class="bg-muted-100 px-5 py-12 sm:px-8 dark:bg-muted-950">
+  <motion.footer
+    :initial="{ opacity: 0, y: 24 }"
+    :transition="{ duration: 0.7, ease: 'easeOut' }"
+    :viewport="{ once: true, amount: 0.12 }"
+    :while-in-view="{ opacity: 1, y: 0 }"
+    class="bg-muted-100 px-5 py-12 sm:px-8 dark:bg-muted-950"
+  >
     <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_2fr]">
       <div>
         <AppLogo
@@ -52,14 +57,14 @@
         <div>
           <h2 class="text-xs font-bold tracking-[0.18em] text-primary-400 uppercase">Let's connect</h2>
           <address class="mt-4 space-y-2 text-sm not-italic text-muted-600 dark:text-neutral-400">
-            <p><a class="transition hover:text-accent-400" href="mailto:hello@southeastcode.com">hello@southeastcode.com</a></p>
+            <p><a class="transition hover:text-accent-400" href="#contact">Use the contact form</a></p>
           </address>
           <div class="mt-5 flex gap-4 text-muted-600 dark:text-neutral-400">
             <a
-              aria-label="Email"
+              aria-label="Contact form"
               class="inline-flex items-center justify-center rounded-md border px-1 py-1 transition duration-300 hover:border-teal-600 hover:text-teal-600 hover:bg-teal-200/10"
-              href="mailto:hello@southeastcode.com"
-              ><PhEnvelopeSimple class="size-5" weight="fill"
+              href="#contact"
+              ><UIcon aria-hidden="true" class="size-5" name="i-ph-chat-circle-text"
             /></a>
           </div>
         </div>
@@ -74,5 +79,5 @@
         <Link :href="privacy()" class="transition hover:text-muted-800 dark:hover:text-neutral-300">Privacy</Link>
       </div>
     </div>
-  </footer>
+  </motion.footer>
 </template>

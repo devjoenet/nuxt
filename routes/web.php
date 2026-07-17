@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserTestingPageController;
 use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
 use App\Http\Controllers\Crm\FollowUpTaskController;
@@ -73,6 +74,12 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
         Route::get('jobs', [JobOperationsController::class, 'index'])
             ->middleware('can:jobs.view')
             ->name('jobs.index');
+
+        Route::middleware('can:development.user_testing.view')->group(function (): void {
+            Route::get('user-testing', [UserTestingPageController::class, 'index'])->name('userTesting.index');
+            Route::get('user-testing/updates', [UserTestingPageController::class, 'updates'])->name('userTesting.updates');
+            Route::patch('user-testing/{userTestingPage}', [UserTestingPageController::class, 'update'])->name('userTesting.update');
+        });
     });
 });
 
