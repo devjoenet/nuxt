@@ -7,6 +7,7 @@
   import { store } from "@/routes/contact";
   import { Form, Link } from "@inertiajs/vue3";
   import { onMounted, reactive } from "vue";
+  import { Motion } from "motion-v";
 
   const attribution = reactive({
     landingPage: "",
@@ -32,7 +33,8 @@
 </script>
 
 <template>
-  <motion.div
+  <Motion
+    as="div"
     :initial="{ opacity: 0, x: 24 }"
     :transition="{ duration: 0.7, delay: 0.16, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.2 }"
@@ -138,5 +140,5 @@
         <UIcon v-if="!processing" aria-hidden="true" class="ml-2 size-4" name="i-ph-arrow-circle-right" />
       </button>
     </Form>
-  </motion.div>
+  </Motion>
 </template>

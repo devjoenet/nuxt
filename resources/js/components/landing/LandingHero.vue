@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import DashboardPreview from "@/components/landing/previews/DashboardPreview.vue";
+  import { Motion } from "motion-v";
 
   defineProps<{
     heroImageSrc: string;
@@ -19,7 +20,7 @@
     ></div>
 
     <div class="relative mx-auto grid max-w-7xl gap-10 lg:min-h-[calc(100vh-9rem)] lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
-      <motion.div :animate="{ opacity: 1, x: 0 }" :initial="{ opacity: 0, x: -34 }" :transition="{ duration: 0.8, ease: 'easeOut' }" class="max-w-2xl">
+      <Motion :animate="{ opacity: 1, x: 0 }" :initial="{ opacity: 0, x: -34 }" :transition="{ duration: 0.8, ease: 'easeOut' }" as="div" class="max-w-2xl">
         <p class="mb-5 text-sm font-bold tracking-[0.24em] text-secondary-400 uppercase">Custom operations software</p>
         <h1 class="max-w-3xl text-4xl leading-[1.02] font-black text-neutral-50 uppercase sm:text-6xl lg:text-7xl">
           Software that fits
@@ -44,11 +45,11 @@
             See what we build
           </a>
         </div>
-      </motion.div>
+      </Motion>
 
-      <motion.div :animate="{ opacity: 1, x: 0, y: 0 }" :initial="{ opacity: 0, x: 34, y: 18 }" :transition="{ duration: 0.9, delay: 0.15, ease: 'easeOut' }">
+      <Motion :animate="{ opacity: 1, x: 0, y: 0 }" :initial="{ opacity: 0, x: 34, y: 18 }" :transition="{ duration: 0.9, delay: 0.15, ease: 'easeOut' }" as="div">
         <DashboardPreview />
-      </motion.div>
+      </Motion>
     </div>
   </section>
 </template>

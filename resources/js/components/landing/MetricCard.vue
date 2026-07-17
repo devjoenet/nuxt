@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { computed } from "vue";
+  import { Motion } from "motion-v";
 
   interface MetricItem {
     value: string;
@@ -65,7 +66,8 @@
 </script>
 
 <template>
-  <motion.article
+  <Motion
+    as="article"
     :initial="{ opacity: 0, y: 20 }"
     :transition="{ duration: 0.65, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.3 }"
@@ -86,7 +88,7 @@
       </p>
       <p :class="copyClasses" class="mt-3 text-sm leading-6 text-muted-600 transition duration-1000 dark:text-neutral-400">{{ metric.description }}</p>
     </div>
-  </motion.article>
+  </Motion>
 </template>
 
 <style scoped>

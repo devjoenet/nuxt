@@ -39,10 +39,11 @@
               label: "Admin",
               icon: "i-ph-shield-check",
               to: "/admin",
+              exact: true,
               type: "trigger" as const,
               defaultOpen: true,
               children: [
-                { label: "Overview", to: "/admin" },
+                { label: "Overview", to: "/admin", exact: true },
                 ...(auth.value.user?.can?.["admin.users.manage"] ? [{ label: "Users", to: "/admin/users" }] : []),
                 ...(auth.value.user?.can?.["admin.roles.manage"] ? [{ label: "Roles", to: "/admin/roles" }] : []),
                 ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit" }] : []),

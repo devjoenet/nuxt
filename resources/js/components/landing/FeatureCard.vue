@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { computed } from "vue";
+  import { Motion } from "motion-v";
 
   interface LandingCard {
     title: string;
@@ -59,7 +60,8 @@
 </script>
 
 <template>
-  <motion.article
+  <Motion
+    as="article"
     :class="[articleClasses, { 'text-center': centered }]"
     :initial="initial[item.tone]"
     :transition="{ duration: 0.7, ease: 'easeOut' }"
@@ -79,5 +81,5 @@
       <p :class="detailClasses" class="mt-1 text-sm leading-6">{{ item.detail }}</p>
       <p v-if="proof" class="mt-5 border-t border-muted-200 pt-4 text-xs leading-5 text-muted-600 dark:border-neutral-100/10 dark:text-neutral-400">{{ proof }}</p>
     </div>
-  </motion.article>
+  </Motion>
 </template>

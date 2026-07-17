@@ -9,7 +9,7 @@
   defineOptions({ layout: Layout });
   const props = defineProps<{ organization: Organization | null; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.organization ? update(props.organization.id) : store()));
-  const ownerOptions = computed<Option[]>(() => [{ label: "Unassigned", value: "" }, ...props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) }))]);
+  const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
 </script>
 
 <template>
@@ -34,6 +34,7 @@
             :items="ownerOptions"
             label="Owner"
             name="owner_id"
+            placeholder="Unassigned"
           />
         </div>
         <div class="flex justify-end gap-3">

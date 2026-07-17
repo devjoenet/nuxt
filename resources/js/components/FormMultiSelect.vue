@@ -39,16 +39,21 @@
   });
   const selected = ref<string[]>(typeof props.defaultValue === "string" ? [props.defaultValue] : [...(props.defaultValue ?? [])]);
 
+  const defaultBaseClass = computed(() => {
+    const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
+
+    return `min-h-14 rounded-xl px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
+  });
+
   type SelectMenuUi = NonNullable<SelectMenuProps["ui"]>;
 
   const controlUi = computed<SelectMenuUi>(() => {
     const customUi = controlAttrs.value.ui as SelectMenuProps["ui"] | undefined;
 
-    return (
-      customUi ?? {
-        base: "min-h-14 rounded-xl px-4 pb-2 pt-6 text-base focus:outline-none sm:text-sm",
-      }
-    );
+    return {
+      ...customUi,
+      base: customUi?.base ?? defaultBaseClass.value,
+    };
   });
 
   const selectedItems = computed(() => props.items.filter((item) => selected.value.includes(item.value)));
@@ -77,7 +82,7 @@
         :aria-invalid="ariaInvalid"
         :class="controlClass"
         :color="error ? 'error' : valid ? 'success' : 'primary'"
-        :highlight="Boolean(error || valid)"
+        :highlight="variant === 'outlined' && Boolean(error || valid)"
         :items="items"
         :placeholder="placeholder"
         :size="size"

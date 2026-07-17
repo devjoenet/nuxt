@@ -1,10 +1,13 @@
 <script setup lang="ts">
+  import { Motion } from "motion-v";
+
   const permissions = ["View dashboard", "Manage orders", "Edit rates", "Approve invoices", "View reports", "Manage users"];
   const roles = ["Admin", "Ops lead", "Analyst", "Driver"];
 </script>
 
 <template>
-  <motion.article
+  <Motion
+    as="article"
     :initial="{ opacity: 0, y: 18, rotate: -1 }"
     :transition="{ duration: 0.75, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.2 }"
@@ -37,5 +40,5 @@
     </div>
 
     <p class="mt-4 text-right text-xs text-muted-500 dark:text-neutral-500">16 of 24 permissions</p>
-  </motion.article>
+  </Motion>
 </template>

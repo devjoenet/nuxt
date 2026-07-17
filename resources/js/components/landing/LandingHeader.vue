@@ -4,6 +4,7 @@
   import { Link } from "@inertiajs/vue3";
   import { useWindowScroll } from "@vueuse/core";
   import { computed } from "vue";
+  import { Motion } from "motion-v";
 
   const navigation = [
     { id: "reality", label: "Why custom", href: "#reality" },
@@ -36,7 +37,8 @@
 </script>
 
 <template>
-  <motion.header
+  <Motion
+    as="header"
     :animate="{ opacity: 1, y: 0 }"
     :initial="{ opacity: 0, y: -18 }"
     :transition="{ duration: 0.6, ease: 'easeOut' }"
@@ -147,7 +149,7 @@
         <feDisplacementMap in="SourceGraphic" in2="softMap" scale="90" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>
-  </motion.header>
+  </Motion>
 </template>
 
 <style scoped>

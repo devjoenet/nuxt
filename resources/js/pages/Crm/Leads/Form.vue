@@ -11,7 +11,7 @@
   defineOptions({ layout: Layout });
   const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.lead ? update(props.lead.id) : store()));
-  const ownerOptions = computed(() => [{ label: "Unassigned", value: "" }, ...props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) }))]);
+  const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
 </script>
 
 <template>
@@ -36,7 +36,15 @@
           </template>
           <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
           <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
-          <FormSelect v-if="canAssign" :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" />
+          <FormSelect
+            v-if="canAssign"
+            :default-value="lead?.owner ? String(lead.owner.id) : ''"
+            :error="errors.owner_id"
+            :items="ownerOptions"
+            label="Owner"
+            name="owner_id"
+            placeholder="Unassigned"
+          />
           <FormMultiSelect
             :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])"
             :error="errors.service_interest"

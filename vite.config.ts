@@ -106,6 +106,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./resources/js"),
     },
   },
+  server: {
+    watch: {
+      ignored: ["**/storage/time-machine/**"],
+    },
+  },
   build: {
     rolldownOptions: {
       onLog(level, log, handler) {

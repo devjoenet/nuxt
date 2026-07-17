@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { computed } from "vue";
   import { Form } from "@inertiajs/vue3";
   import FormTextarea from "@/components/FormTextarea.vue";
   import { update } from "@/routes/admin/userTesting";
@@ -13,15 +14,22 @@
     notes: string | null;
   }
 
-  defineProps<{ page: UserTestingPage }>();
+  const props = defineProps<{ page: UserTestingPage }>();
+
+  const surfaceClasses = ["bg-elevated/90 ring-default", "bg-muted/85 ring-default", "bg-accented/35 ring-default", "bg-elevated/70 ring-primary/20"] as const;
+
+  const surfaceClass = computed(() => surfaceClasses[(props.page.id - 1) % surfaceClasses.length]);
 </script>
 
 <template>
-  <UPageCard class="h-full" variant="subtle">
+  <UPageCard :class="['h-full', surfaceClass]" variant="subtle">
     <Form #default="{ errors, processing }" class="flex h-full flex-col gap-4" v-bind="update.form(page.id)">
       <div class="flex items-start justify-between gap-4">
         <div>
-          <p class="text-sm font-semibold text-highlighted">{{ page.title }}</p>
+          <a :href="page.path" class="text-sm font-semibold text-highlighted hover:text-primary hover:underline" rel="noopener noreferrer" target="_blank">
+            {{ page.title }}
+            <span aria-hidden="true" class="ms-1 text-xs text-muted">↗</span>
+          </a>
           <p class="mt-1 font-mono text-xs text-muted">{{ page.path }}</p>
         </div>
         <UBadge :color="page.tested ? 'success' : 'warning'" :label="page.tested ? 'Approved' : 'Needs eyes'" variant="subtle" />

@@ -9,11 +9,8 @@
   defineOptions({ layout: Layout });
   const props = defineProps<{ contact: Contact | null; organizations: Organization[]; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.contact ? update(props.contact.id) : store()));
-  const organizationOptions = computed<Option[]>(() => [
-    { label: "Independent contact", value: "" },
-    ...props.organizations.map((organization) => ({ label: organization.name, value: String(organization.id) })),
-  ]);
-  const ownerOptions = computed<Option[]>(() => [{ label: "Unassigned", value: "" }, ...props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) }))]);
+  const organizationOptions = computed<Option[]>(() => props.organizations.map((organization) => ({ label: organization.name, value: String(organization.id) })));
+  const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
 </script>
 
 <template>
@@ -42,6 +39,7 @@
             :items="organizationOptions"
             label="Organization"
             name="organization_id"
+            placeholder="Independent contact"
           /><FormSelect
             v-if="canAssign"
             :default-value="contact?.owner ? String(contact.owner.id) : ''"
@@ -49,6 +47,7 @@
             :items="ownerOptions"
             label="Owner"
             name="owner_id"
+            placeholder="Unassigned"
           />
         </div>
         <div class="flex justify-end gap-3">

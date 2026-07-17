@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import FormField from "@/components/FormField.vue";
   import type { InputProps } from "@nuxt/ui";
-  import { computed, ref, useAttrs } from "vue";
+  import { computed, ref, useAttrs, useSlots } from "vue";
 
   defineOptions({ inheritAttrs: false });
 
@@ -25,6 +25,7 @@
   );
 
   const attrs = useAttrs();
+  const slots = useSlots();
   const controlClass = computed(() => attrs.class);
   const controlAttrs = computed(() => {
     const { class: _class, ...rest } = attrs;
@@ -48,15 +49,20 @@
     return typeof attrs.placeholder === "string" ? attrs.placeholder : undefined;
   });
 
+  const defaultBaseClass = computed(() => {
+    const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
+
+    return `min-h-14 rounded-xl px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
+  });
+
   const controlUi = computed<InputUi>(() => {
     const customUi = controlAttrs.value.ui as InputProps["ui"] | undefined;
 
-    return (
-      customUi ?? {
-        root: "w-full",
-        base: "min-h-14 rounded-xl px-4 pb-2 pt-5 text-base focus:outline-none sm:text-sm",
-      }
-    );
+    return {
+      ...customUi,
+      root: customUi?.root ?? "w-full",
+      base: customUi?.base ?? defaultBaseClass.value,
+    };
   });
 
   const input = ref<InputInstance | null>(null);
@@ -88,7 +94,7 @@
         :aria-invalid="ariaInvalid"
         :class="controlClass"
         :color="error ? 'error' : valid ? 'success' : 'primary'"
-        :highlight="Boolean(error || valid)"
+        :highlight="variant === 'outlined' && Boolean(error || valid)"
         :name="name"
         :placeholder="placeholder"
         :required="required"
@@ -97,9 +103,9 @@
         :variant="variant === 'filled' ? 'soft' : 'none'"
         v-bind="controlAttrs"
       >
-        <template #leading="slotProps"><slot name="leading" v-bind="slotProps" /></template>
+        <template v-if="slots.leading" #leading="slotProps"><slot name="leading" v-bind="slotProps" /></template>
         <template #default="slotProps"><slot v-bind="slotProps" /></template>
-        <template #trailing="slotProps"><slot name="trailing" v-bind="slotProps" /></template>
+        <template v-if="slots.trailing" #trailing="slotProps"><slot name="trailing" v-bind="slotProps" /></template>
       </UInput>
     </template>
     <template v-if="$slots.hint" #hint><slot name="hint" /></template>

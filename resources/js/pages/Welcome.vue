@@ -12,7 +12,7 @@
   import SectionHeading from "@/components/landing/SectionHeading.vue";
   import { Head } from "@inertiajs/vue3";
   import { useColorMode } from "@vueuse/core";
-  import { MotionConfig } from "motion-v";
+  import { Motion, MotionConfig } from "motion-v";
   import { computed } from "vue";
 
   const props = defineProps<{ canonicalUrl: string }>();
@@ -293,7 +293,8 @@
           ></div>
 
           <div class="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
-            <motion.div
+            <Motion
+              as="div"
               :initial="{ opacity: 0, y: 24 }"
               :transition="{ duration: 0.7, ease: 'easeOut' }"
               :viewport="{ once: true, amount: 0.3 }"
@@ -309,7 +310,7 @@
                 See more examples
                 <UIcon aria-hidden="true" class="ml-2 size-4" name="i-ph-arrow-circle-right" />
               </a>
-            </motion.div>
+            </Motion>
 
             <OperationsShowcase :hero-image-src="heroImage" />
           </div>
@@ -319,7 +320,8 @@
           id="contact"
           class="scroll-mt-28 border-y border-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]"
         >
-          <motion.div
+          <Motion
+            as="div"
             :initial="{ opacity: 0, y: 30, scale: 0.98 }"
             :transition="{ duration: 0.75, delay: 0.1, ease: 'easeOut' }"
             :viewport="{ once: true, amount: 0.22 }"
@@ -341,7 +343,7 @@
               </ul>
             </div>
             <LandingContactForm />
-          </motion.div>
+          </Motion>
         </section>
       </main>
 

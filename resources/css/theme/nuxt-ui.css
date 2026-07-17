@@ -43,7 +43,7 @@
 
   --ui-bg: var(--color-slate-950);
   --ui-bg-muted: var(--color-slate-900);
-  --ui-bg-elevated: color-mix(in oklab, var(--color-slate-900) 86%, var(--color-teal-950));
+  --ui-bg-elevated: color-mix(in oklab, var(--color-slate-800) 38%, var(--color-teal-950) 62%);
   --ui-bg-accented: var(--color-slate-800);
   --ui-bg-inverted: var(--color-grey-50);
 

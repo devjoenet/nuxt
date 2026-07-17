@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Motion } from "motion-v";
+
   const navItems = ["Overview", "Shipments", "Routes", "Inventory", "Orders", "Approvals", "Field data", "Reports", "Integrations", "Users & roles", "Settings"];
 
   const stats = [
@@ -23,7 +25,8 @@
 </script>
 
 <template>
-  <motion.aside
+  <Motion
+    as="aside"
     :initial="{ opacity: 0, scale: 0.97 }"
     :transition="{ duration: 0.8, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.2 }"
@@ -123,5 +126,5 @@
         </div>
       </div>
     </div>
-  </motion.aside>
+  </Motion>
 </template>

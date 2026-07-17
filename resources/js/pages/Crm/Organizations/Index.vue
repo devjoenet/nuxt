@@ -14,7 +14,7 @@
   const search = ref(props.filters.search ?? "");
   const owner = ref(props.filters.owner ?? "");
   let timer: ReturnType<typeof setTimeout>;
-  const ownerOptions = computed<Option[]>(() => [{ label: "All owners", value: "" }, ...props.owners.map((item) => ({ label: item.name, value: String(item.id) }))]);
+  const ownerOptions = computed<Option[]>(() => props.owners.map((item) => ({ label: item.name, value: String(item.id) })));
 
   const visit = () => router.get(index().url, { search: search.value || undefined, owner: owner.value || undefined }, { preserveState: true, replace: true });
   watch([search, owner], () => {
@@ -47,7 +47,7 @@
     <template #body>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
         <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search organizations" />
-        <FormSelect v-if="canAssign" v-model="owner" :items="ownerOptions" class="w-full sm:w-48" label="Owner" />
+        <FormSelect v-if="canAssign" v-model="owner" :items="ownerOptions" class="w-full sm:w-48" label="Owner" placeholder="All owners" />
       </div>
       <div v-if="organizations.data.length" class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8"><UTable :columns="columns" :data="organizations.data" class="w-full" /></div>

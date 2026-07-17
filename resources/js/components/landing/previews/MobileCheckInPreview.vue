@@ -1,7 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import { Motion } from "motion-v";
+</script>
 
 <template>
-  <motion.article
+  <Motion
+    as="article"
     :initial="{ opacity: 0, y: 24, rotate: 2 }"
     :transition="{ duration: 0.75, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.2 }"
@@ -59,5 +62,5 @@
         </div>
       </div>
     </div>
-  </motion.article>
+  </Motion>
 </template>

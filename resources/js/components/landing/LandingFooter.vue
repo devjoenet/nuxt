@@ -2,6 +2,7 @@
   import AppLogo from "@/components/AppLogo.vue";
   import { privacy } from "@/routes";
   import { Link } from "@inertiajs/vue3";
+  import { Motion } from "motion-v";
 
   interface FooterLink {
     label: string;
@@ -21,7 +22,8 @@
 </script>
 
 <template>
-  <motion.footer
+  <Motion
+    as="footer"
     :initial="{ opacity: 0, y: 24 }"
     :transition="{ duration: 0.7, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.12 }"
@@ -79,5 +81,5 @@
         <Link :href="privacy()" class="transition hover:text-muted-800 dark:hover:text-neutral-300">Privacy</Link>
       </div>
     </div>
-  </motion.footer>
+  </Motion>
 </template>

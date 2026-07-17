@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Motion } from "motion-v";
+
   interface ProcessStep {
     title: string;
     description: string;
@@ -41,7 +43,8 @@
 
 <template>
   <ol class="mt-12 grid gap-5 md:grid-cols-4">
-    <motion.li
+    <Motion
+      as="li"
       v-for="(step, index) in steps"
       :key="step.title"
       :initial="{ opacity: 0, y: 26, scale: 0.97 }"
@@ -87,6 +90,6 @@
         <h3 class="mt-3 text-lg font-semibold text-muted-950 dark:text-neutral-50">{{ step.title }}</h3>
         <p class="mt-3 text-sm leading-6 text-muted-600 dark:text-neutral-400">{{ step.description }}</p>
       </article>
-    </motion.li>
+    </Motion>
   </ol>
 </template>
