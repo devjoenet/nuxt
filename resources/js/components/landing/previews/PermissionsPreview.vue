@@ -4,7 +4,11 @@
 </script>
 
 <template>
-  <article
+  <motion.article
+    :initial="{ opacity: 0, y: 18, rotate: -1 }"
+    :transition="{ duration: 0.75, ease: 'easeOut' }"
+    :viewport="{ once: true, amount: 0.2 }"
+    :while-in-view="{ opacity: 1, y: 0, rotate: 0 }"
     class="rounded-xl border border-accent-500/25 bg-muted-50/82 p-4 shadow-2xl shadow-muted-950/12 ring-1 ring-muted-200/80 backdrop-blur-md dark:bg-muted-950/72 dark:shadow-muted-950/40 dark:ring-neutral-100/10"
     aria-label="User and role permissions preview"
   >
@@ -33,5 +37,5 @@
     </div>
 
     <p class="mt-4 text-right text-xs text-muted-500 dark:text-neutral-500">16 of 24 permissions</p>
-  </article>
+  </motion.article>
 </template>

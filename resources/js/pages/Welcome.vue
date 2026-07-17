@@ -11,8 +11,9 @@
   import ProcessTimeline from "@/components/landing/ProcessTimeline.vue";
   import SectionHeading from "@/components/landing/SectionHeading.vue";
   import { Head } from "@inertiajs/vue3";
-  import { useColorMode, useElementBounding, useMounted, useWindowSize } from "@vueuse/core";
-  import { computed, ref } from "vue";
+  import { useColorMode } from "@vueuse/core";
+  import { MotionConfig } from "motion-v";
+  import { computed } from "vue";
 
   const props = defineProps<{ canonicalUrl: string }>();
   const socialImage = computed(() => new URL(socialImageAsset, props.canonicalUrl).href);
@@ -48,13 +49,6 @@
 
   const colorMode = useColorMode();
   const heroImage = computed(() => (colorMode.state.value === "dark" ? heroImageDark : heroImageLight));
-  const realitySection = ref<HTMLElement | null>(null);
-  const isMounted = useMounted();
-  const { top: realityTop } = useElementBounding(realitySection);
-  const { height: windowHeight } = useWindowSize();
-
-  const isRealityLiquidActive = computed(() => isMounted.value && realityTop.value <= windowHeight.value * 0.65);
-
   const realityCards: LandingCard[] = [
     {
       title: "Spreadsheet chains",
@@ -78,13 +72,6 @@
       tone: "accent",
     },
   ];
-
-  const realityCardDelay = (index: number): number => {
-    const delayStep = 420;
-    const cascadeIndex = isRealityLiquidActive.value ? index : realityCards.length - 1 - index;
-
-    return cascadeIndex * delayStep;
-  };
 
   const transformationCards: LandingCard[] = [
     {
@@ -248,106 +235,117 @@
     <meta :content="socialImage" head-key="twitter:image" name="twitter:image" />
   </Head>
 
-  <div class="min-h-screen overflow-hidden bg-muted-50 text-muted-800 selection:bg-primary-500 selection:text-primary-950 dark:bg-muted-950 dark:text-neutral-100">
-    <LandingHeader />
-    <main>
-      <LandingHero :hero-image-src="heroImage" />
-      <section id="reality" ref="realitySection" class="scroll-mt-28 border-y border-accent-500/15 bg-muted-100/90 px-5 py-16 sm:px-8 lg:py-20 dark:bg-muted-950/95">
-        <div class="mx-auto max-w-7xl">
-          <SectionHeading kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
+  <MotionConfig reduced-motion="user">
+    <div class="min-h-screen overflow-hidden bg-muted-50 text-muted-800 selection:bg-primary-500 selection:text-primary-950 dark:bg-muted-950 dark:text-neutral-100">
+      <LandingHeader />
+      <main>
+        <LandingHero :hero-image-src="heroImage" />
+        <section id="reality" class="scroll-mt-28 border-y border-accent-500/15 bg-muted-100/90 px-5 py-16 sm:px-8 lg:py-20 dark:bg-muted-950/95">
+          <div class="mx-auto max-w-7xl">
+            <SectionHeading kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
 
-          <ul class="mt-8 grid gap-5 md:grid-cols-3">
-            <li v-for="(card, index) in realityCards" :key="card.title">
-              <FeatureCard :item="card" :liquid-active="isRealityLiquidActive" :liquid-delay="realityCardDelay(index)" centered liquid />
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section
-        id="transformation"
-        class="scroll-mt-28 bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.12),transparent_34rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.14),transparent_34rem)]"
-      >
-        <div class="mx-auto max-w-7xl">
-          <SectionHeading kicker="The transformation" title="From scattered data to operational control." tone="secondary" />
-
-          <ol class="mt-8 grid gap-5 lg:grid-cols-3">
-            <li v-for="card in transformationCards" :key="card.title" class="relative">
-              <FeatureCard :item="card" />
-            </li>
-          </ol>
-        </div>
-      </section>
-
-      <section id="services" class="scroll-mt-28 px-5 py-16 sm:px-8 lg:py-20">
-        <div class="mx-auto max-w-7xl">
-          <SectionHeading kicker="Our services" title="Software shaped around the operation." tone="primary" />
-
-          <ul class="mt-8 grid gap-5 lg:grid-cols-3">
-            <li v-for="service in services" :key="service.title">
-              <FeatureCard :item="service" :proof="service.proof" />
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="process" class="scroll-mt-28 px-5 py-16 sm:px-8 lg:py-20">
-        <div class="mx-auto max-w-7xl">
-          <SectionHeading kicker="Our process" title="Map first. Build second." tone="accent" />
-          <ProcessTimeline :steps="processSteps" />
-        </div>
-      </section>
-
-      <section id="operations" class="relative scroll-mt-28 border-y border-secondary-500/15 px-5 py-16 sm:px-8 lg:py-20">
-        <div
-          class="absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(110,104,182,0.18),transparent_26rem),radial-gradient(circle_at_82%_55%,rgba(208,57,120,0.14),transparent_24rem)] dark:bg-[radial-gradient(circle_at_18%_10%,rgba(110,104,182,0.16),transparent_26rem),radial-gradient(circle_at_82%_55%,rgba(208,57,120,0.12),transparent_24rem)]"
-          aria-hidden="true"
-        ></div>
-
-        <div class="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
-          <div>
-            <p class="text-xs font-bold tracking-[0.22em] text-secondary-400 uppercase">Built for operations</p>
-            <h2 class="mt-4 max-w-lg text-3xl leading-tight font-semibold text-muted-950 sm:text-4xl dark:text-neutral-50">Interfaces your team can actually use.</h2>
-            <p class="mt-4 max-w-md text-base leading-7 text-muted-700 dark:text-neutral-300">Clean, practical, and built for the way operations move.</p>
-            <a
-              href="#services"
-              class="mt-8 inline-flex items-center justify-center rounded-md border border-secondary-500/80 px-5 py-3 text-sm font-semibold text-secondary-800 transition hover:border-secondary-500 hover:bg-secondary-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-400 dark:text-secondary-100 dark:hover:border-secondary-400 dark:hover:bg-secondary-500/15"
-            >
-              See more examples
-              <UIcon aria-hidden="true" class="ml-2 size-4" name="i-ph-arrow-circle-right" />
-            </a>
-          </div>
-
-          <OperationsShowcase :hero-image-src="heroImage" />
-        </div>
-      </section>
-
-      <section
-        id="contact"
-        class="scroll-mt-28 border-y border-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]"
-      >
-        <div
-          class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-accent-500/25 bg-muted-50/90 p-6 shadow-2xl shadow-accent-950/10 ring-1 ring-muted-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-muted-900/85 dark:shadow-accent-950/30 dark:ring-transparent"
-        >
-          <div>
-            <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-300">Ready to replace the workaround?</p>
-            <h2 class="mt-3 text-3xl leading-tight font-semibold text-muted-950 dark:text-neutral-50">Let’s map the workflow before anyone writes code.</h2>
-            <p class="mt-4 leading-7 text-muted-700 dark:text-neutral-300">
-              Tell us where the process breaks down, what your team is doing manually, and what a useful result looks like. Specifics beat polished sales language every time.
-            </p>
-            <ul class="mt-6 space-y-3 text-sm text-muted-700 dark:text-neutral-300">
-              <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />No generic package pitch</li>
-              <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Practical technical review</li>
-              <li class="flex gap-3">
-                <UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Clear next step, even if it is “not yet”
+            <ul class="mt-8 grid gap-5 md:grid-cols-3">
+              <li v-for="card in realityCards" :key="card.title">
+                <FeatureCard :item="card" centered />
               </li>
             </ul>
           </div>
-          <LandingContactForm />
-        </div>
-      </section>
-    </main>
+        </section>
 
-    <LandingFooter :columns="footerColumns" />
-  </div>
+        <section
+          id="transformation"
+          class="scroll-mt-28 bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.12),transparent_34rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.14),transparent_34rem)]"
+        >
+          <div class="mx-auto max-w-7xl">
+            <SectionHeading kicker="The transformation" title="From scattered data to operational control." tone="secondary" />
+
+            <ol class="mt-8 grid gap-5 lg:grid-cols-3">
+              <li v-for="card in transformationCards" :key="card.title" class="relative">
+                <FeatureCard :item="card" />
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section id="services" class="scroll-mt-28 px-5 py-16 sm:px-8 lg:py-20">
+          <div class="mx-auto max-w-7xl">
+            <SectionHeading kicker="Our services" title="Software shaped around the operation." tone="primary" />
+
+            <ul class="mt-8 grid gap-5 lg:grid-cols-3">
+              <li v-for="service in services" :key="service.title">
+                <FeatureCard :item="service" :proof="service.proof" />
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="process" class="scroll-mt-28 px-5 py-16 sm:px-8 lg:py-20">
+          <div class="mx-auto max-w-7xl">
+            <SectionHeading kicker="Our process" title="Map first. Build second." tone="accent" />
+            <ProcessTimeline :steps="processSteps" />
+          </div>
+        </section>
+
+        <section id="operations" class="relative scroll-mt-28 border-y border-secondary-500/15 px-5 py-16 sm:px-8 lg:py-20">
+          <div
+            aria-hidden="true"
+            class="absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(110,104,182,0.18),transparent_26rem),radial-gradient(circle_at_82%_55%,rgba(208,57,120,0.14),transparent_24rem)] dark:bg-[radial-gradient(circle_at_18%_10%,rgba(110,104,182,0.16),transparent_26rem),radial-gradient(circle_at_82%_55%,rgba(208,57,120,0.12),transparent_24rem)]"
+          ></div>
+
+          <div class="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
+            <motion.div
+              :initial="{ opacity: 0, y: 24 }"
+              :transition="{ duration: 0.7, ease: 'easeOut' }"
+              :viewport="{ once: true, amount: 0.3 }"
+              :while-in-view="{ opacity: 1, y: 0 }"
+            >
+              <p class="text-xs font-bold tracking-[0.22em] text-secondary-400 uppercase">Built for operations</p>
+              <h2 class="mt-4 max-w-lg text-3xl leading-tight font-semibold text-muted-950 sm:text-4xl dark:text-neutral-50">Interfaces your team can actually use.</h2>
+              <p class="mt-4 max-w-md text-base leading-7 text-muted-700 dark:text-neutral-300">Clean, practical, and built for the way operations move.</p>
+              <a
+                class="mt-8 inline-flex items-center justify-center rounded-md border border-secondary-500/80 px-5 py-3 text-sm font-semibold text-secondary-800 transition hover:border-secondary-500 hover:bg-secondary-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-400 dark:text-secondary-100 dark:hover:border-secondary-400 dark:hover:bg-secondary-500/15"
+                href="#services"
+              >
+                See more examples
+                <UIcon aria-hidden="true" class="ml-2 size-4" name="i-ph-arrow-circle-right" />
+              </a>
+            </motion.div>
+
+            <OperationsShowcase :hero-image-src="heroImage" />
+          </div>
+        </section>
+
+        <section
+          id="contact"
+          class="scroll-mt-28 border-y border-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]"
+        >
+          <motion.div
+            :initial="{ opacity: 0, y: 30, scale: 0.98 }"
+            :transition="{ duration: 0.75, delay: 0.1, ease: 'easeOut' }"
+            :viewport="{ once: true, amount: 0.22 }"
+            :while-in-view="{ opacity: 1, y: 0, scale: 1 }"
+            class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-accent-500/25 bg-muted-50/90 p-6 shadow-2xl shadow-accent-950/10 ring-1 ring-muted-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-muted-900/85 dark:shadow-accent-950/30 dark:ring-transparent"
+          >
+            <div>
+              <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-300">Ready to replace the workaround?</p>
+              <h2 class="mt-3 text-3xl leading-tight font-semibold text-muted-950 dark:text-neutral-50">Let’s map the workflow before anyone writes code.</h2>
+              <p class="mt-4 leading-7 text-muted-700 dark:text-neutral-300">
+                Tell us where the process breaks down, what your team is doing manually, and what a useful result looks like. Specifics beat polished sales language every time.
+              </p>
+              <ul class="mt-6 space-y-3 text-sm text-muted-700 dark:text-neutral-300">
+                <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />No generic package pitch</li>
+                <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Practical technical review</li>
+                <li class="flex gap-3">
+                  <UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Clear next step, even if it is “not yet”
+                </li>
+              </ul>
+            </div>
+            <LandingContactForm />
+          </motion.div>
+        </section>
+      </main>
+
+      <LandingFooter :columns="footerColumns" />
+    </div>
+  </MotionConfig>
 </template>

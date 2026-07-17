@@ -36,7 +36,12 @@
 </script>
 
 <template>
-  <header class="fixed inset-x-0 top-0 z-50 px-5 py-3 transition-all duration-500 sm:px-8">
+  <motion.header
+    :animate="{ opacity: 1, y: 0 }"
+    :initial="{ opacity: 0, y: -18 }"
+    :transition="{ duration: 0.6, ease: 'easeOut' }"
+    class="fixed inset-x-0 top-0 z-50 px-5 py-3 transition-all duration-500 sm:px-8"
+  >
     <div
       :class="
         hasGlassBackground
@@ -142,7 +147,7 @@
         <feDisplacementMap in="SourceGraphic" in2="softMap" scale="90" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>
-  </header>
+  </motion.header>
 </template>
 
 <style scoped>

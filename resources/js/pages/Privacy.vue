@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import LandingFooter from "@/components/landing/LandingFooter.vue";
   import LandingHeader from "@/components/landing/LandingHeader.vue";
-  import { Head } from "@inertiajs/vue3";
+  import { Head, Link } from "@inertiajs/vue3";
+  import { home } from "@/routes";
 
   defineProps<{ canonicalUrl: string }>();
 </script>
@@ -34,8 +35,8 @@
         <section>
           <h2 class="text-xl font-semibold text-muted-950 dark:text-neutral-50">Retention and requests</h2>
           <p class="mt-2">
-            We retain inquiry information while it is useful for the business relationship and legal obligations. To request access, correction, or deletion, email
-            <a class="font-semibold text-secondary-700 underline dark:text-secondary-300" href="mailto:hello@southeastcode.com">hello@southeastcode.com</a>.
+            We retain inquiry information while it is useful for the business relationship and legal obligations. To request access, correction, or deletion, use our
+            <Link :href="`${home()}#contact`" class="font-semibold text-secondary-700 underline dark:text-secondary-300">contact form</Link>.
           </p>
         </section>
       </div>

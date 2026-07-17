@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { Form, Link } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
+  import FormMultiSelect from "@/components/FormMultiSelect.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
   import Layout from "@/layouts/Default.vue";
@@ -36,8 +37,32 @@
           <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
           <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
           <FormSelect v-if="canAssign" :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" />
-          <FormInput :default-value="lead?.service_interest ?? undefined" :error="errors.service_interest" label="Service interest" name="service_interest" />
-          <FormInput :default-value="lead?.budget_range ?? undefined" :error="errors.budget_range" label="Budget range" name="budget_range" />
+          <FormMultiSelect
+            :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])"
+            :error="errors.service_interest"
+            :items="[
+              { label: 'Operations application', value: 'operations-app' },
+              { label: 'Dashboard or portal', value: 'dashboard-portal' },
+              { label: 'System integration', value: 'integration' },
+              { label: 'Reporting and visibility', value: 'reporting' },
+              { label: 'Legacy modernization', value: 'modernization' },
+              { label: 'Other', value: 'other' },
+            ]"
+            label="Service interests"
+            name="service_interest"
+          />
+          <FormInput
+            :default-value="lead?.budget_range ?? undefined"
+            :error="errors.budget_range"
+            inputmode="decimal"
+            label="Estimated budget"
+            min="0"
+            name="budget_range"
+            step="1000"
+            type="number"
+          >
+            <template #leading><span class="text-muted">$</span></template>
+          </FormInput>
           <FormInput :default-value="lead?.timeline ?? undefined" :error="errors.timeline" label="Timeline" name="timeline" />
         </div>
         <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />

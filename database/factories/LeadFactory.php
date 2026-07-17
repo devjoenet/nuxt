@@ -23,6 +23,7 @@ class LeadFactory extends Factory
             'status' => fake()->randomElement(['new', 'contacted', 'qualified']),
             'source' => fake()->randomElement(['website', 'referral']),
             'service_interest' => fake()->randomElement(['operations-app', 'dashboard-portal', 'integration', 'reporting']),
+            'service_interests' => fn (array $attributes): array => [$attributes['service_interest']],
             'budget_range' => fake()->randomElement(['10k-25k', '25k-50k', '50k-plus']),
             'timeline' => fake()->randomElement(['1-3-months', '3-6-months', 'exploring']),
             'project_details' => fake()->paragraphs(2, true),

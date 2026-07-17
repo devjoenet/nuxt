@@ -15,6 +15,7 @@ enum Permission: string
     case JobsView = 'jobs.view';
     case JobsManage = 'jobs.manage';
     case SettingsManage = 'settings.manage';
+    case DevelopmentUserTestingView = 'development.user_testing.view';
 
     /** @return array<int, string> */
     public static function values(): array
