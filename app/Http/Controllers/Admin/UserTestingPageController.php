@@ -27,6 +27,7 @@ class UserTestingPageController extends Controller
 
         return Inertia::render('Admin/UserTesting/Index', [
             'pages' => UserTestingPage::query()
+                ->whereNull('approved_at')
                 ->with('testedBy:id,name')
                 ->orderBy('sort_order')
                 ->get()
@@ -52,6 +53,10 @@ class UserTestingPageController extends Controller
             'tested' => $page->tested_at !== null,
             'tested_at' => $page->tested_at?->toIso8601String(),
             'tested_by' => $page->testedBy?->name,
+            'approved' => $page->approved_at !== null,
+            'approved_at' => $page->approved_at?->toIso8601String(),
+            'roadmap_task' => $page->roadmap_task_at !== null,
+            'roadmap_task_at' => $page->roadmap_task_at?->toIso8601String(),
             'notes' => $page->notes,
             'updated_at' => $page->updated_at?->toIso8601String(),
         ];
@@ -61,10 +66,18 @@ class UserTestingPageController extends Controller
     {
         $attributes = $request->validated();
         $tested = (bool) ($attributes['tested'] ?? false);
+        $approved = (bool) ($attributes['approved'] ?? false);
+        $roadmapTask = (bool) ($attributes['roadmap_task'] ?? false);
+
+        if ($approved) {
+            $tested = true;
+        }
 
         $userTestingPage->update([
             'tested_by' => $tested ? $request->user()?->getKey() : null,
             'tested_at' => $tested ? now() : null,
+            'approved_at' => $approved ? now() : null,
+            'roadmap_task_at' => $roadmapTask ? now() : null,
             'notes' => filled($attributes['notes'] ?? null) ? mb_trim($attributes['notes']) : null,
         ]);
 
@@ -78,6 +91,7 @@ class UserTestingPageController extends Controller
         $records = $this->firstAvailableRecords($request->user());
 
         $pages = UserTestingPage::query()
+            ->whereNull('approved_at')
             ->with('testedBy:id,name')
             ->when($since, function (Builder $query) use ($since): void {
                 $query->where('updated_at', '>', $since);

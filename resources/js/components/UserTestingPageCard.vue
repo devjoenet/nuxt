@@ -12,6 +12,10 @@
     tested: boolean;
     tested_at: string | null;
     tested_by: string | null;
+    approved: boolean;
+    approved_at: string | null;
+    roadmap_task: boolean;
+    roadmap_task_at: string | null;
     notes: string | null;
   }
 
@@ -34,7 +38,7 @@
           <p v-else class="text-sm font-semibold text-muted">{{ page.title }}</p>
           <p class="mt-1 font-mono text-xs text-muted">{{ page.path }}</p>
         </div>
-        <UBadge :color="page.tested ? 'success' : 'warning'" :label="page.tested ? 'Approved' : 'Needs eyes'" variant="subtle" />
+        <UBadge :color="page.tested ? 'success' : 'warning'" :label="page.tested ? 'Reviewed' : 'Needs eyes'" variant="subtle" />
       </div>
 
       <FormTextarea :default-value="page.notes ?? undefined" :error="errors.notes" :rows="4" label="Notes, feedback, or changes" name="notes" />
@@ -42,12 +46,23 @@
       <div class="mt-auto flex flex-wrap items-center justify-between gap-3">
         <label class="flex cursor-pointer items-center gap-2 text-sm text-muted">
           <input :checked="page.tested" class="size-4 rounded border-default text-primary focus:ring-primary" name="tested" type="checkbox" value="1" />
-          <span>I tested and approve this page</span>
+          <span>I tested this page</span>
         </label>
-        <UButton :loading="processing" label="Save review" size="sm" type="submit" />
+        <div class="flex flex-wrap items-center gap-3">
+          <label class="flex cursor-pointer items-center gap-2 text-sm text-muted">
+            <input :checked="page.roadmap_task" class="size-4 rounded border-default text-primary focus:ring-primary" name="roadmap_task" type="checkbox" value="1" />
+            <span>Added feedback to roadmap</span>
+          </label>
+          <label class="flex cursor-pointer items-center gap-2 text-sm text-muted">
+            <input class="size-4 rounded border-default text-primary focus:ring-primary" name="approved" type="checkbox" value="1" />
+            <span>Approve and remove from queue</span>
+          </label>
+          <UButton :loading="processing" label="Save review" size="sm" type="submit" />
+        </div>
       </div>
 
       <p v-if="page.tested_by && page.tested_at" class="text-xs text-muted">Last reviewed by {{ page.tested_by }} · {{ page.tested_at }}</p>
+      <p v-if="page.roadmap_task_at" class="text-xs text-muted">Roadmap task recorded · {{ page.roadmap_task_at }}</p>
     </Form>
   </UPageCard>
 </template>

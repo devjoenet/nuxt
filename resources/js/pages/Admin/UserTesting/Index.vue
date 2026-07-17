@@ -15,6 +15,10 @@
     tested: boolean;
     tested_at: string | null;
     tested_by: string | null;
+    approved: boolean;
+    approved_at: string | null;
+    roadmap_task: boolean;
+    roadmap_task_at: string | null;
     notes: string | null;
   }
 
@@ -54,7 +58,7 @@
               </p>
             </div>
             <div class="rounded-2xl bg-elevated p-5">
-              <p class="text-sm text-muted">Approval progress</p>
+              <p class="text-sm text-muted">Review progress</p>
               <p class="mt-1 text-4xl font-semibold text-highlighted">
                 {{ testedCount }}<span class="text-xl text-muted"> / {{ pages.length }}</span>
               </p>
@@ -63,13 +67,19 @@
           </div>
         </UPageCard>
 
+        <UPageCard v-if="pages.length === 0" class="p-8 text-center" variant="subtle">
+          <UIcon class="mx-auto size-10 text-success" name="i-ph-check-circle" />
+          <h2 class="mt-4 text-xl font-semibold text-highlighted">The review queue is clear.</h2>
+          <p class="mx-auto mt-2 max-w-lg text-sm leading-6 text-muted">Every queued page has been reviewed and approved.</p>
+        </UPageCard>
+
         <section v-for="category in categories" :key="category.name" class="grid gap-4">
           <div class="flex items-end justify-between gap-4">
             <div>
               <p class="text-xs font-bold tracking-[0.18em] text-muted uppercase">{{ category.name }}</p>
               <h2 class="mt-1 text-xl font-semibold text-highlighted">{{ category.pages.length }} {{ category.pages.length === 1 ? "page" : "pages" }}</h2>
             </div>
-            <p class="text-sm text-muted">{{ category.pages.filter((page) => page.tested).length }} approved</p>
+            <p class="text-sm text-muted">{{ category.pages.filter((page) => page.tested).length }} reviewed</p>
           </div>
           <div class="grid gap-4 xl:grid-cols-2">
             <UserTestingPageCard v-for="page in category.pages" :key="page.id" :page="page" />

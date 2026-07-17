@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
+use App\Http\Controllers\Admin\DevelopmentRoadmapController;
 use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserTestingPageController;
@@ -76,6 +77,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
             ->name('jobs.index');
 
         Route::middleware('can:development.user_testing.view')->group(function (): void {
+            Route::get('roadmap', DevelopmentRoadmapController::class)->name('roadmap.index');
             Route::get('user-testing', [UserTestingPageController::class, 'index'])->name('userTesting.index');
             Route::get('user-testing/updates', [UserTestingPageController::class, 'updates'])->name('userTesting.updates');
             Route::patch('user-testing/{userTestingPage}', [UserTestingPageController::class, 'update'])->name('userTesting.update');

@@ -303,6 +303,20 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
 - [ ] Run the focused Pest feature tests, frontend typecheck, and browser smoke pass; visually review the landing page at
   mobile, desktop, light, dark, reduced-motion, and keyboard-only states.
 
+### Task 15 — Resolve Landing Review Follow-ups
+
+The welcome-page testing record contains the following unapproved findings. Keep these tasks separate from the completed
+landing implementation so the original feedback remains traceable:
+
+- [ ] Rework or remove the entrance animations for the Reality, Transformation, and Services sections while preserving
+  the hero, contact form, and Process section treatment.
+- [ ] Make section entrance animations settle after first entry and prevent replay when scrolling in either direction.
+- [ ] Remove the footer's `Use the contact form` text link and keep the contact action as the available link icon.
+- [ ] Fix the slight background-color anomaly around the contact form multi-select inputs; request the user's screen
+  capture before finalizing the visual correction.
+- [ ] Change the estimated budget field to a currency-formatting string input and correct its placeholder behavior;
+  request the user's screen capture before finalizing the visual correction.
+
 ## Later, Not MVP
 
 - [ ] Client portal for project status, shared files, notes, and approvals.

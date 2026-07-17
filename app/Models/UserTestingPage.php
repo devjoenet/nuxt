@@ -19,6 +19,8 @@ use Override;
     'sort_order',
     'tested_by',
     'tested_at',
+    'approved_at',
+    'roadmap_task_at',
     'notes',
 ])]
 class UserTestingPage extends Model
@@ -38,6 +40,8 @@ class UserTestingPage extends Model
         return [
             'sort_order' => 'integer',
             'tested_at' => 'datetime',
+            'approved_at' => 'datetime',
+            'roadmap_task_at' => 'datetime',
         ];
     }
 }

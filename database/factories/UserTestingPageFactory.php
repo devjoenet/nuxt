@@ -22,6 +22,8 @@ class UserTestingPageFactory extends Factory
             'sort_order' => fake()->numberBetween(1, 30),
             'tested_by' => null,
             'tested_at' => null,
+            'approved_at' => null,
+            'roadmap_task_at' => null,
             'notes' => null,
         ];
     }

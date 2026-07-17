@@ -48,7 +48,7 @@ it('resolves database-backed checklist links to the first visible records', func
             ->where('pages.28.url', route('security.show', [], false)));
 });
 
-it('saves a review and exposes it through the updates endpoint', function (): void {
+it('saves a review without removing the page from the queue', function (): void {
     $user = User::factory()->create()->assignRole(RoleName::Admin->value);
     $page = UserTestingPage::factory()->create();
 
@@ -62,13 +62,71 @@ it('saves a review and exposes it through the updates endpoint', function (): vo
     expect($page->refresh())
         ->tested_by->toBe($user->getKey())
         ->notes->toBe('Check the mobile navigation spacing before release.')
-        ->tested_at->not->toBeNull();
+        ->tested_at->not->toBeNull()
+        ->approved_at->toBeNull()
+        ->roadmap_task_at->toBeNull();
 
     $this->actingAs($user)
         ->getJson(route('admin.userTesting.updates', ['since' => now()->subMinute()->toIso8601String()]))
         ->assertOk()
         ->assertJsonPath('pages.0.slug', $page->slug)
-        ->assertJsonPath('pages.0.tested', true);
+        ->assertJsonPath('pages.0.tested', true)
+        ->assertJsonPath('pages.0.approved', false);
+});
+
+it('records when review notes are added to the roadmap without approving the page', function (): void {
+    $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $page = UserTestingPage::factory()->create();
+
+    $this->actingAs($user)
+        ->patch(route('admin.userTesting.update', $page), [
+            'tested' => '1',
+            'roadmap_task' => '1',
+            'notes' => 'Track the responsive navigation issue on the roadmap.',
+        ])
+        ->assertRedirect(route('admin.userTesting.index'));
+
+    expect($page->refresh())
+        ->tested_at->not->toBeNull()
+        ->roadmap_task_at->not->toBeNull()
+        ->approved_at->toBeNull();
+
+    $this->actingAs($user)
+        ->get(route('admin.userTesting.index'))
+        ->assertInertia(fn ($page) => $page
+            ->has('pages', 1)
+            ->where('pages.0.roadmap_task', true));
+});
+
+it('removes an approved page from the user testing queue', function (): void {
+    $this->seed(UserTestingPageSeeder::class);
+    $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $page = UserTestingPage::query()->where('slug', 'public-welcome')->firstOrFail();
+
+    $this->actingAs($user)
+        ->patch(route('admin.userTesting.update', $page), [
+            'tested' => '1',
+            'approved' => '1',
+            'notes' => 'The welcome page is ready for release.',
+        ])
+        ->assertRedirect(route('admin.userTesting.index'));
+
+    expect($page->refresh())
+        ->tested_at->not->toBeNull()
+        ->approved_at->not->toBeNull();
+
+    $this->actingAs($user)
+        ->get(route('admin.userTesting.index'))
+        ->assertInertia(fn ($page) => $page
+            ->has('pages', 29)
+            ->where('pages.0.slug', 'public-privacy'));
+
+    $this->actingAs($user)
+        ->getJson(route('admin.userTesting.updates'))
+        ->assertOk()
+        ->assertJsonCount(29, 'pages')
+        ->assertJsonPath('pages.0.slug', 'public-privacy')
+        ->assertJsonMissing(['slug' => 'public-welcome']);
 });
 
 it('blocks users without the testing permission', function (): void {
@@ -77,4 +135,20 @@ it('blocks users without the testing permission', function (): void {
     $this->actingAs($user)
         ->get(route('admin.userTesting.index'))
         ->assertForbidden();
+
+    $this->actingAs($user)
+        ->get(route('admin.roadmap.index'))
+        ->assertForbidden();
+});
+
+it('shows the development roadmap to authorized users', function (): void {
+    $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+
+    $this->actingAs($user)
+        ->get(route('admin.roadmap.index'))
+        ->assertSuccessful()
+        ->assertInertia(fn ($page) => $page
+            ->component('Admin/Roadmap/Index')
+            ->where('source', 'docs/roadmap.md')
+            ->where('content', fn ($content): bool => str_contains((string) $content, 'Southeast Code Roadmap')));
 });

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { CommandPaletteItem, NavigationMenuItem } from "@nuxt/ui";
   import { index as jobsIndex } from "@/routes/admin/jobs";
+  import { index as roadmapIndex } from "@/routes/admin/roadmap";
   import { index as userTestingIndex } from "@/routes/admin/userTesting";
 
   const toast = useToast();
@@ -50,6 +51,7 @@
                 ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings" }] : []),
                 ...(auth.value.user?.can?.["jobs.view"] ? [{ label: "Jobs & queues", to: jobsIndex.url() }] : []),
                 ...(auth.value.user?.can?.["development.user_testing.view"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
+                ...(auth.value.user?.can?.["development.user_testing.view"] ? [{ label: "Development roadmap", to: roadmapIndex.url() }] : []),
               ],
               onSelect: closeNavigation,
             },

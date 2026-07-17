@@ -20,7 +20,9 @@ class UpdateUserTestingPageRequest extends FormRequest
     {
         return [
             'tested' => ['nullable', 'boolean'],
-            'notes' => ['nullable', 'string', 'max:10000'],
+            'approved' => ['nullable', 'boolean'],
+            'roadmap_task' => ['nullable', 'boolean'],
+            'notes' => ['nullable', 'required_if:roadmap_task,1', 'string', 'max:10000'],
         ];
     }
 }
