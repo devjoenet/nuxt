@@ -135,7 +135,7 @@ class UserTestingPageController extends Controller
             'admin.jobs.index',
             'admin.settings.edit',
             'admin.audit.index',
-            'profile.edit',
+            'profile.edit' => route($page->route_name, [], false),
             'security.show',
             'user-password.edit' => route('security.show', [], false),
             default => null,

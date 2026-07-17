@@ -38,10 +38,14 @@ it('resolves database-backed checklist links to the first visible records', func
     $this->actingAs($user)
         ->get(route('admin.userTesting.index'))
         ->assertInertia(fn ($page) => $page
+            ->where('pages.0.url', route('home', [], false))
+            ->where('pages.1.url', route('privacy', [], false))
             ->where('pages.11.url', route('crm.leads.show', $lead, false))
             ->where('pages.12.url', route('crm.leads.edit', $lead, false))
             ->where('pages.15.url', route('crm.organizations.show', $organization, false))
-            ->where('pages.19.url', route('crm.contacts.show', $contact, false)));
+            ->where('pages.19.url', route('crm.contacts.show', $contact, false))
+            ->where('pages.21.url', route('admin.dashboard', [], false))
+            ->where('pages.28.url', route('security.show', [], false)));
 });
 
 it('saves a review and exposes it through the updates endpoint', function (): void {
