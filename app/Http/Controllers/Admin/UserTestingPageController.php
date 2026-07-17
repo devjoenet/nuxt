@@ -6,8 +6,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserTestingPageRequest;
+use App\Models\Contact;
+use App\Models\Lead;
+use App\Models\Organization;
+use App\Models\User;
 use App\Models\UserTestingPage;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,20 +21,25 @@ use Inertia\Response;
 
 class UserTestingPageController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $records = $this->firstAvailableRecords($request->user());
+
         return Inertia::render('Admin/UserTesting/Index', [
             'pages' => UserTestingPage::query()
                 ->with('testedBy:id,name')
                 ->orderBy('sort_order')
                 ->get()
-                ->map(fn (UserTestingPage $page): array => $this->pagePayload($page))
+                ->map(fn (UserTestingPage $page): array => $this->pagePayload($page, $records))
                 ->values(),
         ]);
     }
 
-    /** @return array<string, mixed> */
-    private function pagePayload(UserTestingPage $page): array
+    /**
+     * @param  array{lead: ?Lead, organization: ?Organization, contact: ?Contact}  $records
+     * @return array<string, mixed>
+     */
+    private function pagePayload(UserTestingPage $page, array $records): array
     {
         return [
             'id' => $page->getKey(),
@@ -38,6 +48,7 @@ class UserTestingPageController extends Controller
             'title' => $page->title,
             'route_name' => $page->route_name,
             'path' => $page->path,
+            'url' => $this->pageUrl($page, $records),
             'tested' => $page->tested_at !== null,
             'tested_at' => $page->tested_at?->toIso8601String(),
             'tested_by' => $page->testedBy?->name,
@@ -64,6 +75,7 @@ class UserTestingPageController extends Controller
     {
         $request->validate(['since' => ['nullable', 'date']]);
         $since = $request->date('since');
+        $records = $this->firstAvailableRecords($request->user());
 
         $pages = UserTestingPage::query()
             ->with('testedBy:id,name')
@@ -72,12 +84,66 @@ class UserTestingPageController extends Controller
             })
             ->orderBy('updated_at')
             ->get()
-            ->map(fn (UserTestingPage $page): array => $this->pagePayload($page))
+            ->map(fn (UserTestingPage $page): array => $this->pagePayload($page, $records))
             ->values();
 
         return response()->json([
             'pages' => $pages,
             'checked_at' => now()->toIso8601String(),
         ]);
+    }
+
+    /**
+     * @return array{lead: ?Lead, organization: ?Organization, contact: ?Contact}
+     */
+    private function firstAvailableRecords(User $user): array
+    {
+        return [
+            'lead' => Lead::query()->visibleTo($user)->oldest('created_at')->first(),
+            'organization' => Organization::query()->visibleTo($user)->oldest('created_at')->first(),
+            'contact' => Contact::query()->visibleTo($user)->oldest('created_at')->first(),
+        ];
+    }
+
+    /**
+     * @param  array{lead: ?Lead, organization: ?Organization, contact: ?Contact}  $records
+     */
+    private function pageUrl(UserTestingPage $page, array $records): ?string
+    {
+        return match ($page->route_name) {
+            'crm.leads.show' => $this->modelRoute('crm.leads.show', 'lead', $records['lead']),
+            'crm.leads.edit' => $this->modelRoute('crm.leads.edit', 'lead', $records['lead']),
+            'crm.organizations.show' => $this->modelRoute('crm.organizations.show', 'organization', $records['organization']),
+            'crm.organizations.edit' => $this->modelRoute('crm.organizations.edit', 'organization', $records['organization']),
+            'crm.contacts.show' => $this->modelRoute('crm.contacts.show', 'contact', $records['contact']),
+            'crm.contacts.edit' => $this->modelRoute('crm.contacts.edit', 'contact', $records['contact']),
+            'home',
+            'privacy',
+            'login',
+            'password.request',
+            'verification.notice',
+            'dashboard',
+            'crm.leads.index',
+            'crm.leads.create',
+            'crm.organizations.index',
+            'crm.organizations.create',
+            'crm.contacts.index',
+            'crm.contacts.create',
+            'admin.dashboard',
+            'admin.users.index',
+            'admin.roles.index',
+            'admin.jobs.index',
+            'admin.settings.edit',
+            'admin.audit.index',
+            'profile.edit',
+            'security.show',
+            'user-password.edit' => route('security.show', [], false),
+            default => null,
+        };
+    }
+
+    private function modelRoute(string $routeName, string $parameter, ?Model $model): ?string
+    {
+        return $model === null ? null : route($routeName, [$parameter => $model], false);
     }
 }

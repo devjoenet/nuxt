@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
+use App\Models\Contact;
+use App\Models\Lead;
+use App\Models\Organization;
 use App\Models\User;
 use App\Models\UserTestingPage;
 use Database\Seeders\RolePermissionSeeder;
@@ -23,6 +26,22 @@ it('shows the seeded review checklist to authorized users', function (): void {
         ->get(route('admin.userTesting.index'))
         ->assertSuccessful()
         ->assertInertia(fn ($page) => $page->component('Admin/UserTesting/Index')->has('pages', 30));
+});
+
+it('resolves database-backed checklist links to the first visible records', function (): void {
+    $this->seed(UserTestingPageSeeder::class);
+    $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $organization = Organization::factory()->create();
+    $contact = Contact::factory()->for($organization)->create();
+    $lead = Lead::factory()->for($contact)->create(['organization_id' => $organization->getKey()]);
+
+    $this->actingAs($user)
+        ->get(route('admin.userTesting.index'))
+        ->assertInertia(fn ($page) => $page
+            ->where('pages.11.url', route('crm.leads.show', $lead, false))
+            ->where('pages.12.url', route('crm.leads.edit', $lead, false))
+            ->where('pages.15.url', route('crm.organizations.show', $organization, false))
+            ->where('pages.19.url', route('crm.contacts.show', $contact, false)));
 });
 
 it('saves a review and exposes it through the updates endpoint', function (): void {

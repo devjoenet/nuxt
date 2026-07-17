@@ -32,7 +32,7 @@ return [
         ['slug' => 'admin-settings', 'category' => 'Administration', 'title' => 'Business settings', 'route_name' => 'admin.settings.edit', 'path' => '/admin/settings', 'sort_order' => 260],
         ['slug' => 'admin-audit', 'category' => 'Administration', 'title' => 'Audit log', 'route_name' => 'admin.audit.index', 'path' => '/admin/audit', 'sort_order' => 270],
         ['slug' => 'settings-profile', 'category' => 'Settings', 'title' => 'Profile settings', 'route_name' => 'profile.edit', 'path' => '/settings/profile', 'sort_order' => 280],
-        ['slug' => 'settings-security', 'category' => 'Settings', 'title' => 'Security settings', 'route_name' => 'user-password.edit', 'path' => '/settings/security', 'sort_order' => 290],
+        ['slug' => 'settings-security', 'category' => 'Settings', 'title' => 'Security settings', 'route_name' => 'security.show', 'path' => '/settings/security', 'sort_order' => 290],
         ['slug' => 'shared-error-pages', 'category' => 'Shared states', 'title' => 'Error pages', 'route_name' => null, 'path' => '403 / 404 / 419 / 429 / 500 / 503', 'sort_order' => 300],
     ],
 ];

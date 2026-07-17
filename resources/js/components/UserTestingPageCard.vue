@@ -8,6 +8,7 @@
     id: number;
     title: string;
     path: string;
+    url: string | null;
     tested: boolean;
     tested_at: string | null;
     tested_by: string | null;
@@ -26,10 +27,11 @@
     <Form #default="{ errors, processing }" class="flex h-full flex-col gap-4" v-bind="update.form(page.id)">
       <div class="flex items-start justify-between gap-4">
         <div>
-          <a :href="page.path" class="text-sm font-semibold text-highlighted hover:text-primary hover:underline" rel="noopener noreferrer" target="_blank">
+          <a v-if="page.url" :href="page.url" class="text-sm font-semibold text-highlighted hover:text-primary hover:underline" rel="noopener noreferrer" target="_blank">
             {{ page.title }}
             <span aria-hidden="true" class="ms-1 text-xs text-muted">↗</span>
           </a>
+          <p v-else class="text-sm font-semibold text-muted">{{ page.title }}</p>
           <p class="mt-1 font-mono text-xs text-muted">{{ page.path }}</p>
         </div>
         <UBadge :color="page.tested ? 'success' : 'warning'" :label="page.tested ? 'Approved' : 'Needs eyes'" variant="subtle" />

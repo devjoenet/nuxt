@@ -11,6 +11,7 @@
     category: string;
     title: string;
     path: string;
+    url: string | null;
     tested: boolean;
     tested_at: string | null;
     tested_by: string | null;
