@@ -317,6 +317,41 @@ landing implementation so the original feedback remains traceable:
 - [ ] Change the estimated budget field to a currency-formatting string input and correct its placeholder behavior;
   request the user's screen capture before finalizing the visual correction.
 
+### Task 16 — Rework Public Privacy Presentation
+
+The privacy-page testing record asks whether the policy should remain a scrollable page or become an on-demand surface.
+Resolve that presentation choice before implementation; this is a UX follow-up, not a change to the ratified legal scope.
+
+- [ ] Decide whether the privacy policy remains a dedicated page or becomes a reusable modal/dialog available from public
+  pages; preserve a directly addressable policy URL either way.
+- [ ] If a modal/dialog is selected, load the policy content lazily and keep keyboard, screen-reader, focus, and deep-link
+  behavior accessible.
+- [ ] If the page remains, reduce or remove unnecessary scrolling while preserving readable legal-document spacing and
+  responsive behavior.
+- [ ] Add focused coverage for the selected presentation and its public navigation entry points.
+
+### Task 17 — Brand And Theme Shared Error Pages
+
+User testing found that the shared 403, 404, 419, 429, 500, and 503 states are not yet fully compatible with dark mode
+and do not carry Southeast Code branding.
+
+- [ ] Apply the shared light/dark theme tokens and verify readable contrast across every supported error state.
+- [ ] Add Southeast Code branding, useful recovery copy, and the appropriate navigation or home action without exposing
+  debug details.
+- [ ] Verify the error-page variants at responsive breakpoints and add focused coverage for status-specific rendering.
+
+### Task 18 — Refine Audit Log Filters
+
+User testing found three audit-screen issues: the search placeholder overlaps the magnifying-glass icon, the Subject
+model-or-ID field is too verbose/truncated, and Event, Causer, and Subject should offer constrained multi-select options.
+
+- [ ] Fix the Search activity field spacing so its placeholder and icon never overlap in supported themes and widths.
+- [ ] Shorten the Subject model-or-ID label/placeholder while keeping the filter's meaning clear.
+- [ ] Replace the Event, Causer, and Subject free-text filters with accessible multi-select inputs populated only from
+  valid available options.
+- [ ] Preserve server-side filtering, authorization, and empty-state behavior; add focused coverage for the new filter
+  combinations.
+
 ## Later, Not MVP
 
 - [ ] Client portal for project status, shared files, notes, and approvals.
