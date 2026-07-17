@@ -85,6 +85,8 @@
   .form-field__shell[data-static-label="true"] .form-field__label,
   .form-field__shell:focus-within .form-field__label,
   .form-field__shell:has(input:not(:placeholder-shown)) .form-field__label,
+  .form-field__shell:has(input:autofill) .form-field__label,
+  .form-field__shell:has(input:-webkit-autofill) .form-field__label,
   .form-field__shell:has(textarea:not(:placeholder-shown)) .form-field__label {
     inset-inline-start: 1rem;
     top: 0;
@@ -100,6 +102,8 @@
   .form-field__shell[data-variant="filled"] .form-field__label,
   .form-field__shell[data-variant="filled"]:focus-within .form-field__label,
   .form-field__shell[data-variant="filled"]:has(input:not(:placeholder-shown)) .form-field__label,
+  .form-field__shell[data-variant="filled"]:has(input:autofill) .form-field__label,
+  .form-field__shell[data-variant="filled"]:has(input:-webkit-autofill) .form-field__label,
   .form-field__shell[data-variant="filled"]:has(textarea:not(:placeholder-shown)) .form-field__label {
     background-color: color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent);
   }
@@ -107,6 +111,8 @@
   .form-field__shell[data-variant="filled"][data-static-label="true"] .form-field__label,
   .form-field__shell[data-variant="filled"]:focus-within .form-field__label,
   .form-field__shell[data-variant="filled"]:has(input:not(:placeholder-shown)) .form-field__label,
+  .form-field__shell[data-variant="filled"]:has(input:autofill) .form-field__label,
+  .form-field__shell[data-variant="filled"]:has(input:-webkit-autofill) .form-field__label,
   .form-field__shell[data-variant="filled"]:has(textarea:not(:placeholder-shown)) .form-field__label {
     top: 0.5rem;
     transform: scale(0.75);

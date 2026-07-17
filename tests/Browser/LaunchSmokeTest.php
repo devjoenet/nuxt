@@ -61,3 +61,12 @@ test('users can sign in through the browser and reach the workspace', function (
         ->assertDontSee('Manage teams')
         ->assertNoJavaScriptErrors();
 });
+
+test('filled login inputs float their labels', function (): void {
+    visit('/login')
+        ->fill('email', 'test@example.com')
+        ->fill('password', 'password')
+        ->wait(0.2)
+        ->assertScript('document.querySelector(\'.form-field__shell:has(input[name="password"]) .form-field__label\')?.getBoundingClientRect().top < document.querySelector(\'.form-field__shell:has(input[name="password"])\')?.getBoundingClientRect().top + 8', true)
+        ->assertNoJavaScriptErrors();
+});
