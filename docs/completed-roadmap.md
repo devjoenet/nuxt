@@ -231,3 +231,19 @@ defaults above remain the executable path until those decisions are made.
 - [x] Add admin/user documentation for CRM lifecycle, user management, roles, permissions, jobs, and audit review.
 - [x] Update the phase documents and this roadmap after each task lands so completed work does not remain falsely
   unchecked.
+
+### Task 13 — Make Landing QA And Feedback A First-Class Workflow
+
+- [x] Add a permission-gated `/admin/user-testing` checklist seeded with every route-backed page plus shared error states;
+  preserve the welcome-page review brief as the initial note.
+- [x] Persist approval state, reviewer, timestamp, and notes in `user_testing_pages`; expose an authenticated updates JSON
+  endpoint that accepts `since` for polling and change retrieval.
+- [x] Replace the public service-interest scalar with a chip-based multi-select and retain a compatibility value while
+  storing the complete selection set in `leads.service_interests`.
+- [x] Replace the fixed budget bands with a numeric currency input and server-side numeric validation.
+- [x] Remove public `mailto:` links in favor of the general contact form and correct floating-label positioning for filled
+  controls.
+- [x] Add `motion-v` entrance animations with user reduced-motion support; use one-way `viewport.once` reveals so sections
+  remain settled after they enter, and remove the Reality card color-fill transition.
+- [x] Move the remaining focused verification and visual-review pass to Task 14; keep the landing page testing record
+  unapproved for final human review.

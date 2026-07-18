@@ -33,7 +33,7 @@ decision is later made differently, update this roadmap and the affected phase d
 - Deploy staging and production as separate Laravel Forge-managed sites with PHP 8.5, MySQL/Redis, Supervisor-managed
   Horizon workers, Forge scheduler jobs, daily encrypted backups with isolated restore tests, Forge logs, `/up`
   monitoring, and named Operations Lead/Technical Maintainer ownership.
-- 
+
 ## Active Development Tasks
 
 The next tasks are ordered around the remaining unchecked work and the decisions that can change implementation scope. 
@@ -41,7 +41,7 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
 ### Task 12 — Resolve Larascan Findings And Harden Security Gates
-``
+
 The first Larascan run reported 54 passed, 22 failed, and 12 skipped checks, with a reported highest severity of
 `CRITICAL`. Treat this as a triage task rather than a blind fix list: several failures are false positives caused by
 Larascan not recognizing Laravel 13 native attributes, Fortify's configured limiters, or controller middleware
@@ -91,22 +91,6 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
   Larascan report is uploaded without hiding new findings. The remaining release check is the live staging HTTPS probe,
   which requires the Forge/GitHub `LARASCAN_PROBE_URL` secret and a deployed staging site.
 
-### Task 13 — Make Landing QA And Feedback A First-Class Workflow
-
-- [x] Add a permission-gated `/admin/user-testing` checklist seeded with every route-backed page plus shared error states;
-  preserve the welcome-page review brief as the initial note.
-- [x] Persist approval state, reviewer, timestamp, and notes in `user_testing_pages`; expose an authenticated updates JSON
-  endpoint that accepts `since` for polling and change retrieval.
-- [x] Replace the public service-interest scalar with a chip-based multi-select and retain a compatibility value while
-  storing the complete selection set in `leads.service_interests`.
-- [x] Replace the fixed budget bands with a numeric currency input and server-side numeric validation.
-- [x] Remove public `mailto:` links in favor of the general contact form and correct floating-label positioning for filled
-  controls.
-- [x] Add `motion-v` entrance animations with user reduced-motion support; use one-way `viewport.once` reveals so sections
-  remain settled after they enter, and remove the Reality card color-fill transition.
-- [ ] Run the focused Pest feature tests, frontend typecheck, and browser smoke pass; visually review the landing page at
-  mobile, desktop, light, dark, reduced-motion, and keyboard-only states.
-
 ### Task 14 — Resolve Landing Review Follow-ups
 
 The welcome-page testing record contains the following unapproved findings. Keep these tasks separate from the completed
@@ -120,6 +104,8 @@ landing implementation so the original feedback remains traceable:
   capture before finalizing the visual correction.
 - [ ] Change the estimated budget field to a currency-formatting string input and correct its placeholder behavior;
   request the user's screen capture before finalizing the visual correction.
+- [ ] Run the focused Pest feature tests, frontend typecheck, and browser smoke pass; visually review the landing page at
+  mobile, desktop, light, dark, reduced-motion, and keyboard-only states.
 
 ### Task 15 — Rework Public Privacy Presentation
 
