@@ -11,6 +11,7 @@
     category: string;
     title: string;
     roadmap_task_number: number | null;
+    status: "Needs eyes" | "In Development" | "Reviewed" | "Needs Approval";
     path: string;
     url: string | null;
     tested: boolean;

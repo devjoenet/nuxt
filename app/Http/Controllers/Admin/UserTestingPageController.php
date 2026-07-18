@@ -48,6 +48,7 @@ class UserTestingPageController extends Controller
             'category' => $page->category,
             'title' => $page->title,
             'roadmap_task_number' => config('user-testing.roadmap_tasks.'.$page->slug),
+            'status' => $this->pageStatus($page),
             'route_name' => $page->route_name,
             'path' => $page->path,
             'url' => $this->pageUrl($page, $records),
@@ -160,5 +161,34 @@ class UserTestingPageController extends Controller
     private function modelRoute(string $routeName, string $parameter, ?Model $model): ?string
     {
         return $model === null ? null : route($routeName, [$parameter => $model], false);
+    }
+
+    private function pageStatus(UserTestingPage $page): string
+    {
+        if ($page->tested_at !== null && $this->needsApproval($page->notes)) {
+            return 'Needs Approval';
+        }
+
+        if ($page->tested_at === null) {
+            return config('user-testing.roadmap_tasks.'.$page->slug) !== null
+                ? 'In Development'
+                : 'Needs eyes';
+        }
+
+        return config('user-testing.roadmap_tasks.'.$page->slug) !== null
+            ? 'In Development'
+            : 'Reviewed';
+    }
+
+    private function needsApproval(?string $notes): bool
+    {
+        if ($notes === null) {
+            return false;
+        }
+
+        $notes = mb_trim($notes);
+
+        return str_starts_with($notes, 'FIXED VIA TASK-')
+            || preg_match('/\bno\s+(?:required\s+)?changes?\b/i', $notes) === 1;
     }
 }

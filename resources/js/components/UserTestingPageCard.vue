@@ -4,10 +4,13 @@
   import FormTextarea from "@/components/FormTextarea.vue";
   import { update } from "@/routes/admin/userTesting";
 
+  type ReviewStatus = "Needs eyes" | "In Development" | "Reviewed" | "Needs Approval";
+
   interface UserTestingPage {
     id: number;
     title: string;
     roadmap_task_number: number | null;
+    status: ReviewStatus;
     path: string;
     url: string | null;
     tested: boolean;
@@ -23,8 +26,15 @@
   const props = defineProps<{ page: UserTestingPage }>();
 
   const surfaceClasses = ["bg-elevated/90 ring-default", "bg-muted/85 ring-default", "bg-accented/35 ring-default", "bg-elevated/70 ring-primary/20"] as const;
+  const statusColors: Record<ReviewStatus, "warning" | "info" | "success" | "primary"> = {
+    "Needs eyes": "warning",
+    "In Development": "info",
+    Reviewed: "success",
+    "Needs Approval": "primary",
+  };
 
   const surfaceClass = computed(() => surfaceClasses[(props.page.id - 1) % surfaceClasses.length]);
+  const statusColor = computed(() => statusColors[props.page.status]);
 </script>
 
 <template>
@@ -43,7 +53,7 @@
           </p>
           <p class="mt-1 font-mono text-xs text-muted">{{ page.path }}</p>
         </div>
-        <UBadge :color="page.tested ? 'success' : 'warning'" :label="page.tested ? 'Reviewed' : 'Needs eyes'" variant="subtle" />
+        <UBadge :color="statusColor" :label="page.status" variant="subtle" />
       </div>
 
       <FormTextarea :default-value="page.notes ?? undefined" :error="errors.notes" :rows="4" label="Notes, feedback, or changes" name="notes" />

@@ -37,6 +37,10 @@ Use this workflow for the internal user-testing checklist, `docs/roadmap.md`,
 8. Verify the roadmap diff and the persisted testing record. Use `php artisan tinker` with a read-only Eloquent query to
    confirm `tested_at`, `roadmap_task_at`, and `approved_at` remain semantically correct. If the notes include screenshots
    or missing context, leave the task explicit and ask for those artifacts before implementation.
+9. After a roadmap task is completed, update every affected reviewed page's notes by prepending
+   `FIXED VIA TASK-XX` as the first line, preserving the existing notes below it. Leave the page unapproved so its
+   status becomes `Needs Approval` for a final human check. For a reviewed page whose notes explicitly say no changes
+   are needed, leave it unapproved so it also receives the `Needs Approval` status.
 
 ## Source-of-truth rules
 
@@ -47,3 +51,5 @@ Use this workflow for the internal user-testing checklist, `docs/roadmap.md`,
 - Do not edit `AGENTS.md`; Laravel Boost regenerates it.
 - Use the existing development-user-testing permission for this workflow unless the application adds a more specific permission intentionally.
 - Do not mark `roadmap_task_at` when no roadmap task was added.
+- Do not mark a page approved merely because feedback was fixed or no changes were requested; `Needs Approval` is the
+  required handoff state.

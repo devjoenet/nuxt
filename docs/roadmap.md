@@ -40,7 +40,7 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 13 — Resolve Larascan Findings And Harden Security Gates
+### Task 12 — Resolve Larascan Findings And Harden Security Gates
 
 The first Larascan run reported 54 passed, 22 failed, and 12 skipped checks, with a reported highest severity of
 `CRITICAL`. Treat this as a triage task rather than a blind fix list: several failures are false positives caused by
@@ -90,7 +90,7 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
   finding has a documented environment or false-positive rationale, the runtime probe passes in staging, diagnostic
   routes are unavailable outside local development, and the Larascan report is uploaded without hiding new findings.
 
-### Task 14 — Make Landing QA And Feedback A First-Class Workflow
+### Task 13 — Make Landing QA And Feedback A First-Class Workflow
 
 - [x] Add a permission-gated `/admin/user-testing` checklist seeded with every route-backed page plus shared error states;
   preserve the welcome-page review brief as the initial note.
@@ -106,7 +106,7 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
 - [ ] Run the focused Pest feature tests, frontend typecheck, and browser smoke pass; visually review the landing page at
   mobile, desktop, light, dark, reduced-motion, and keyboard-only states.
 
-### Task 15 — Resolve Landing Review Follow-ups
+### Task 14 — Resolve Landing Review Follow-ups
 
 The welcome-page testing record contains the following unapproved findings. Keep these tasks separate from the completed
 landing implementation so the original feedback remains traceable:
@@ -120,7 +120,7 @@ landing implementation so the original feedback remains traceable:
 - [ ] Change the estimated budget field to a currency-formatting string input and correct its placeholder behavior;
   request the user's screen capture before finalizing the visual correction.
 
-### Task 16 — Rework Public Privacy Presentation
+### Task 15 — Rework Public Privacy Presentation
 
 The privacy-page testing record asks whether the policy should remain a scrollable page or become an on-demand surface.
 Resolve that presentation choice before implementation; this is a UX follow-up, not a change to the ratified legal scope.
@@ -133,7 +133,7 @@ Resolve that presentation choice before implementation; this is a UX follow-up, 
   responsive behavior.
 - [ ] Add focused coverage for the selected presentation and its public navigation entry points.
 
-### Task 17 — Brand And Theme Shared Error Pages
+### Task 16 — Brand And Theme Shared Error Pages
 
 User testing found that the shared 403, 404, 419, 429, 500, and 503 states are not yet fully compatible with dark mode
 and do not carry Southeast Code branding.
@@ -143,7 +143,7 @@ and do not carry Southeast Code branding.
   debug details.
 - [ ] Verify the error-page variants at responsive breakpoints and add focused coverage for status-specific rendering.
 
-### Task 18 — Refine Audit Log Filters
+### Task 17 — Refine Audit Log Filters
 
 User testing found three audit-screen issues: the search placeholder overlaps the magnifying-glass icon, the Subject
 model-or-ID field is too verbose/truncated, and Event, Causer, and Subject should offer constrained multi-select options.
@@ -155,7 +155,7 @@ model-or-ID field is too verbose/truncated, and Event, Causer, and Subject shoul
 - [ ] Preserve server-side filtering, authorization, and empty-state behavior; add focused coverage for the new filter
   combinations.
 
-### Task 19 — Repair User Invitation And Verification Flows
+### Task 18 — Repair User Invitation And Verification Flows
 
 User testing found that the invitation form sends a password-reset email without explaining the actual onboarding step,
 the resend-confirmation action generates a link that returns 404, and the 2FA reset action shown for a user pending
@@ -170,7 +170,7 @@ email verification has no effect.
 - [ ] Add focused authorization, mail, signed-link, and state-transition tests for invitation, email verification, and
   2FA reset behavior.
 
-### Task 20 — Simplify Role Editing And Super Admin Presentation
+### Task 19 — Simplify Role Editing And Super Admin Presentation
 
 User testing requested a role-first editor with one larger role selector and a dynamically loaded permission list, plus
 an informational treatment for the non-editable Super Admin role.
@@ -182,7 +182,7 @@ an informational treatment for the non-editable Super Admin role.
 - [ ] Preserve guarded role/permission behavior, loading, empty, and error states; add focused coverage for role
   selection, permission updates, and Super Admin non-editability.
 
-### Task 12 — Restore CRM Detail Browser Smoke Coverage
+### Task 21 — Restore CRM Detail Browser Smoke Coverage
 
 - [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM lead, organization, and contact detail URLs
   while list pages and the other browser smoke flows render normally.

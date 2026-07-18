@@ -29,7 +29,7 @@ The app is ready for v1 launch only when these conditions are true:
 - [x] Add browser smoke tests for public marketing, login, dashboard, CRM lists, admin users, roles, jobs, settings,
   audit pages, and expressive form controls.
 - [ ] Restore separate CRM detail browser smoke coverage. Pest's temporary HTTP server currently blank-renders CRM
-  lead/entity detail URLs; this is deferred to Roadmap Task 12.
+  lead/entity detail URLs; this is deferred to Roadmap Task 21.
 - [x] Add regression tests for unauthorized direct URL access.
 - [x] Add tests for queue dispatch, notification dispatch, and activity logging.
 
