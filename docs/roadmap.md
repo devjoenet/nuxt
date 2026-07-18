@@ -352,6 +352,33 @@ model-or-ID field is too verbose/truncated, and Event, Causer, and Subject shoul
 - [ ] Preserve server-side filtering, authorization, and empty-state behavior; add focused coverage for the new filter
   combinations.
 
+### Task 19 — Repair User Invitation And Verification Flows
+
+User testing found that the invitation form sends a password-reset email without explaining the actual onboarding step,
+the resend-confirmation action generates a link that returns 404, and the 2FA reset action shown for a user pending
+email verification has no effect.
+
+- [ ] Create a dedicated invitation/onboarding email that accurately explains the recipient's next step instead of
+  presenting the flow as a generic password reset.
+- [ ] Trace the resend-confirmation route and signed URL generation, then make the link resolve successfully from the
+  delivered email; add regression coverage for the generated URL and endpoint.
+- [ ] Make the pending-verification 2FA action either perform the intended password-confirmed reset or become clearly
+  unavailable with explanatory UI; do not leave a button that silently does nothing.
+- [ ] Add focused authorization, mail, signed-link, and state-transition tests for invitation, email verification, and
+  2FA reset behavior.
+
+### Task 20 — Simplify Role Editing And Super Admin Presentation
+
+User testing requested a role-first editor with one larger role selector and a dynamically loaded permission list, plus
+an informational treatment for the non-editable Super Admin role.
+
+- [ ] Replace the all-roles permission lists with a prominent accessible role selector and load the selected role's
+  permissions into one focused list without weakening server-side authorization.
+- [ ] Render the Super Admin permissions area as a compact info banner stating that all permissions are granted by the
+  server-side Gate bypass and that the role is not editable from the UI, with an info icon on the left.
+- [ ] Preserve guarded role/permission behavior, loading, empty, and error states; add focused coverage for role
+  selection, permission updates, and Super Admin non-editability.
+
 ## Later, Not MVP
 
 - [ ] Client portal for project status, shared files, notes, and approvals.
