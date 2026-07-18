@@ -76,7 +76,8 @@ class SendFollowUpTaskReminder implements ShouldBeUnique, ShouldQueue
 
             Notification::route('mail', $recipient)->notify(new FollowUpTaskReminder($task));
 
-            $task->forceFill(['reminder_sent_at' => now()])->saveQuietly();
+            $task->reminder_sent_at = now();
+            $task->saveQuietly();
         } finally {
             $lock->release();
         }

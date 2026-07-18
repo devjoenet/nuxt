@@ -125,5 +125,11 @@ return [
      * null   = auto-detect larascan-baseline.json in the project root
      * string = custom path to the baseline file
      */
-    'baseline' => null,
+    /*
+     * Keep this baseline narrow and reviewed. It contains only scanner false
+     * positives: harmless GET screens, Laravel 13 controller attributes, and
+     * Laravel 13 Eloquent attributes that Larascan 3.1.1 does not inspect yet.
+     * Runtime mutations and POST flows must remain visible to the scan.
+     */
+    'baseline' => 'larascan-baseline.json',
 ];

@@ -62,7 +62,9 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
         Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
         Route::patch('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
         Route::post('users/{user}/resend-verification', [AdminUserController::class, 'resendVerification'])->name('users.resendVerification');
-        Route::post('users/{user}/reset-two-factor', [AdminUserController::class, 'resetTwoFactor'])->name('users.resetTwoFactor');
+        Route::post('users/{user}/reset-two-factor', [AdminUserController::class, 'resetTwoFactor'])
+            ->middleware('throttle:two-factor-management')
+            ->name('users.resetTwoFactor');
 
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::patch('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
@@ -87,3 +89,9 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+foreach (Route::getRoutes()->getRoutes() as $route) {
+    if (in_array($route->getName(), ['two-factor.enable', 'two-factor.confirm', 'two-factor.disable', 'two-factor.regenerate-recovery-codes'], true)) {
+        $route->middleware('throttle:two-factor-management');
+    }
+}

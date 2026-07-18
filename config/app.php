@@ -43,6 +43,24 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'debug_blacklist' => [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'AWS_SECRET_ACCESS_KEY',
+            'MAIL_PASSWORD',
+        ],
+        '_POST' => [
+            'password',
+            'password_confirmation',
+            'token',
+        ],
+        '_SERVER' => [
+            'HTTP_AUTHORIZATION',
+            'PHP_AUTH_PW',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

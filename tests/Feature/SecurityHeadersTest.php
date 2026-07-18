@@ -21,3 +21,7 @@ test('production HTTPS responses include HSTS', function (): void {
         ->assertOk()
         ->assertHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 });
+
+test('diagnostic routes are unavailable', function (string $path): void {
+    $this->get($path)->assertNotFound();
+})->with(['/routes', '/time-machine']);

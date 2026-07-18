@@ -28,6 +28,10 @@ Staging and production must use `APP_ENV=staging` or `production`, `APP_DEBUG=fa
 `APP_URL`, and environment-injected secrets. Never copy production data into staging without an approved, redacted
 fixture process.
 
+Set `LARASCAN_PROBE_URL` to the staging HTTPS origin in the Forge environment and the GitHub Actions secret store.
+After deployment, run `php artisan larascan:probe --url="$LARASCAN_PROBE_URL" --fail-on=high` from a PHP 8.5
+environment and retain the report with the release evidence.
+
 ## Deployment contract
 
 The Forge server/site provides PHP 8.5, MySQL, Redis, zero-downtime releases, Supervisor process supervision, scheduled

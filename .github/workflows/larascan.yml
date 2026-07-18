@@ -25,9 +25,21 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           tools: composer:v2
           coverage: none
+
+      - name: Prepare application environment
+        run: |
+          cp .env.example .env
+          sed -i \
+            -e 's/^APP_ENV=.*/APP_ENV=production/' \
+            -e 's/^APP_DEBUG=.*/APP_DEBUG=false/' \
+            -e 's/^SESSION_ENCRYPT=.*/SESSION_ENCRYPT=true/' \
+            -e 's/^SESSION_SECURE_COOKIE=.*/SESSION_SECURE_COOKIE=true/' \
+            -e 's/^LOG_LEVEL=.*/LOG_LEVEL=warning/' \
+            .env
+          touch database/database.sqlite
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -44,11 +56,16 @@ jobs:
       - name: Install composer dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      - name: Boot application for scan
+        run: |
+          php -d expose_php=0 -d allow_url_fopen=0 -d display_errors=0 artisan key:generate --force --no-interaction
+          php -d expose_php=0 -d allow_url_fopen=0 -d display_errors=0 artisan migrate --force --no-interaction
+
       - name: Run larascan
         # Very large apps may need more memory than the PHP CLI default; larascan
         # raises a 512M floor itself, but for big monorepos prepend `-d memory_limit=-1`:
         #   run: php -d memory_limit=-1 artisan larascan ...
-        run: php artisan larascan --fail-on=high --only-failed --format=sarif --output=larascan.sarif --no-interaction
+        run: php -d expose_php=0 -d allow_url_fopen=0 -d display_errors=0 artisan larascan --fail-on=high --only-failed --format=sarif --output=larascan.sarif --no-interaction
 
       - name: Upload SARIF to GitHub Code Scanning
         # Requires GitHub Advanced Security on private repos; remove this step if unavailable.

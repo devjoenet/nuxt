@@ -47,6 +47,15 @@ test('email is not verified with invalid hash', function (): void {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
+test('email verification rejects an invalid signature', function (): void {
+    $user = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->get(route('verification.verify', [
+        'id' => $user->id,
+        'hash' => sha1((string) $user->email),
+    ]))->assertForbidden();
+});
+
 test('email is not verified with invalid user id', function (): void {
     $user = User::factory()->create([
         'email_verified_at' => null,

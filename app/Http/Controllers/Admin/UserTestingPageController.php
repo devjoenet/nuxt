@@ -160,7 +160,7 @@ class UserTestingPageController extends Controller
 
     private function modelRoute(string $routeName, string $parameter, ?Model $model): ?string
     {
-        return $model === null ? null : route($routeName, [$parameter => $model], false);
+        return $model instanceof Model ? route($routeName, [$parameter => $model], false) : null;
     }
 
     private function pageStatus(UserTestingPage $page): string

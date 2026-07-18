@@ -21,6 +21,7 @@
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/eslint-config-typescript": "^14.3.0",
     "concurrently": "^10.0.3",
+    "esbuild": "^0.28.1",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-vue": "^10.9.2",
@@ -64,5 +65,8 @@
     "maplibre-gl@2.4.0": true,
     "fsevents@2.3.2": true,
     "fsevents@2.3.3": true
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
   }
 }

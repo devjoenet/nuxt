@@ -8,8 +8,14 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Override;
 
+/**
+ * @property ?Carbon $tested_at
+ * @property ?Carbon $approved_at
+ * @property ?Carbon $roadmap_task_at
+ */
 #[Fillable([
     'slug',
     'category',

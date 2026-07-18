@@ -1,0 +1,69 @@
+{
+    "version": 1,
+    "generated_at": "2026-07-17T00:00:00+00:00",
+    "findings": [
+        {
+            "check": "auth.login-throttle",
+            "file": null,
+            "message": "Login route 'login' (GET login) has no throttle middleware — brute-force attacks unmitigated. Add ->middleware('throttle:5,1').",
+            "severity": "high",
+            "count": 1
+        },
+        {
+            "check": "auth.login-throttle",
+            "file": null,
+            "message": "Login route 'two-factor.login' (GET two-factor-challenge) has no throttle middleware — brute-force attacks unmitigated. Add ->middleware('throttle:5,1').",
+            "severity": "high",
+            "count": 1
+        },
+        {
+            "check": "auth.otp-rate-limiting",
+            "file": null,
+            "message": "OTP/2FA route two-factor-challenge has no throttle middleware — brute-force protection missing. Add ->middleware('throttle:6,1').",
+            "severity": "high",
+            "count": 1
+        },
+        {
+            "check": "auth.otp-rate-limiting",
+            "file": null,
+            "message": "OTP/2FA route user/two-factor-qr-code has no throttle middleware — brute-force protection missing. Add ->middleware('throttle:6,1').",
+            "severity": "high",
+            "count": 1
+        },
+        {
+            "check": "auth.otp-rate-limiting",
+            "file": null,
+            "message": "OTP/2FA route user/two-factor-secret-key has no throttle middleware — brute-force protection missing. Add ->middleware('throttle:6,1').",
+            "severity": "high",
+            "count": 1
+        },
+        {
+            "check": "auth.otp-rate-limiting",
+            "file": null,
+            "message": "OTP/2FA route user/two-factor-recovery-codes has no throttle middleware — brute-force protection missing. Add ->middleware('throttle:6,1').",
+            "severity": "high",
+            "count": 1
+        },
+        {
+            "check": "auth.password-column-plain",
+            "file": "app/Models/User.php",
+            "message": "User model in app/Models/User.php doesn't appear to mark 'password' as hidden or use the 'hashed' cast — verify password storage is hashed and not exposed in API responses.",
+            "severity": "critical",
+            "count": 1
+        },
+        {
+            "check": "auth.signed-routes-verify",
+            "file": null,
+            "message": "Email verification route 'verification.notice' (verify-email) is missing 'signed' middleware — URL parameters can be tampered with.",
+            "severity": "low",
+            "count": 1
+        },
+        {
+            "check": "auth.signed-routes-verify",
+            "file": null,
+            "message": "Email verification route 'verification.verify' (verify-email/{id}/{hash}) is missing 'signed' middleware — URL parameters can be tampered with.",
+            "severity": "low",
+            "count": 1
+        }
+    ]
+}

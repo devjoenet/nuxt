@@ -45,3 +45,21 @@ test('two factor challenge can be rendered', function (): void {
             ->component('auth/TwoFactorChallenge')
         );
 });
+
+test('two factor challenge submissions are rate limited', function (): void {
+    if (! Features::canManageTwoFactorAuthentication()) {
+        $this->markTestSkipped('Two-factor authentication is not enabled.');
+    }
+
+    $user = User::factory()->withTwoFactorAuthentication()->create();
+
+    foreach (range(1, 5) as $attempt) {
+        $this->withSession(['login.id' => $user->getKey()])
+            ->post(route('two-factor.login.store'), ['code' => '000000'])
+            ->assertRedirect();
+    }
+
+    $this->withSession(['login.id' => $user->getKey()])
+        ->post(route('two-factor.login.store'), ['code' => '000000'])
+        ->assertTooManyRequests();
+});
