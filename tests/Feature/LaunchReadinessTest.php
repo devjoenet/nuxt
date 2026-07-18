@@ -56,3 +56,14 @@ test('login attempts are rate limited by email and IP address', function (): voi
         'password' => 'incorrect-password',
     ])->assertSessionHasErrors('email');
 });
+
+test('login and two factor mutation routes expose throttling middleware', function (): void {
+    expect(app('router')->getRoutes()->getByName('login.store')->middleware())
+        ->toContain('throttle:login-route')
+        ->and(app('router')->getRoutes()->getByName('two-factor.login.store')->middleware())
+        ->toContain('throttle:two-factor')
+        ->and(app('router')->getRoutes()->getByName('two-factor.enable')->middleware())
+        ->toContain('throttle:two-factor-management')
+        ->and(app('router')->getRoutes()->getByName('two-factor.disable')->middleware())
+        ->toContain('throttle:two-factor-management');
+});

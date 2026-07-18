@@ -11,7 +11,6 @@ use App\Http\Requests\Admin\UpdateAdminUserRequest;
 use App\Http\Resources\AdminUserResource;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -47,7 +46,7 @@ class AdminUserController extends Controller
         $user = User::query()->create([
             'name' => $attributes['name'],
             'email' => $attributes['email'],
-            'password' => Hash::make(Str::random(64)),
+            'password' => Str::password(64),
         ]);
         $user->assignRole($attributes['role']);
         $user->sendPasswordResetNotification(Password::broker()->createToken($user));
@@ -112,11 +111,10 @@ class AdminUserController extends Controller
     public function resetTwoFactor(User $user): RedirectResponse
     {
         $this->authorize('update', $user);
-        $user->forceFill([
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'two_factor_confirmed_at' => null,
-        ])->save();
+        $user->two_factor_secret = null;
+        $user->two_factor_recovery_codes = null;
+        $user->two_factor_confirmed_at = null;
+        $user->save();
 
         activity()->performedOn($user)->log('Two-factor authentication reset.');
 

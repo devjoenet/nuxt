@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f54981344ba5e44ec98a85629f917637",
+    "content-hash": "31a64424da542f3117f0cb622b744396",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -883,53 +883,6 @@
             "time": "2025-12-03T09:33:47+00:00"
         },
         {
-            "name": "garygreen/pretty-routes",
-            "version": "1.0.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/garygreen/pretty-routes.git",
-                "reference": "f04503d875e9b0e6c2cae0f8618ea6e95bb9e310"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/garygreen/pretty-routes/zipball/f04503d875e9b0e6c2cae0f8618ea6e95bb9e310",
-                "reference": "f04503d875e9b0e6c2cae0f8618ea6e95bb9e310",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "5.*|6.*|7.*|8.*|^9.0|^10.0|^11.0|^12.0|^13.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "PrettyRoutes\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PrettyRoutes\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gary Green",
-                    "email": "holegary@gmail.com"
-                }
-            ],
-            "description": "Pretty routes for Laravel 5+",
-            "support": {
-                "issues": "https://github.com/garygreen/pretty-routes/issues",
-                "source": "https://github.com/garygreen/pretty-routes/tree/1.0.15"
-            },
-            "time": "2026-04-01T16:39:42+00:00"
-        },
-        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.4",
             "source": {
@@ -1479,73 +1432,6 @@
                 "source": "https://github.com/inertiajs/inertia-laravel/tree/v3.1.1"
             },
             "time": "2026-07-02T12:45:54+00:00"
-        },
-        {
-            "name": "jaydeep/laravel-time-machine",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JaydeepGadhiya/laravel-timemachine.git",
-                "reference": "012e1e227d4e27eccfe09f9dca5f81eef3b78ae8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JaydeepGadhiya/laravel-timemachine/zipball/012e1e227d4e27eccfe09f9dca5f81eef3b78ae8",
-                "reference": "012e1e227d4e27eccfe09f9dca5f81eef3b78ae8",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/http": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "php": "^7.4|^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "phpunit/phpunit": "^9.5|^10.5|^11.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "TimeMachine": "Jaydeep\\LaravelTimeMachine\\Facades\\TimeMachine"
-                    },
-                    "providers": [
-                        "Jaydeep\\LaravelTimeMachine\\TimeMachineServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Jaydeep\\LaravelTimeMachine\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jaydeep Gadhiya",
-                    "email": "jaydeepgadhiya5699@gmail.com"
-                }
-            ],
-            "description": "Inspect, profile and visualize every stage of the Laravel request lifecycle — from bootstrapping to response — with detailed execution timelines and performance insights.",
-            "keywords": [
-                "debug",
-                "diagnostics",
-                "laravel",
-                "performance",
-                "profiler",
-                "profiling",
-                "request-lifecycle",
-                "timeline"
-            ],
-            "support": {
-                "issues": "https://github.com/JaydeepGadhiya/laravel-timemachine/issues",
-                "source": "https://github.com/JaydeepGadhiya/laravel-timemachine/tree/v1.0.0"
-            },
-            "time": "2026-07-06T05:55:33+00:00"
         },
         {
             "name": "laravel/fortify",

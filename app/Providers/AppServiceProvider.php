@@ -36,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('public-intake', fn (Request $request): Limit => Limit::perMinute(5)->by($request->ip()));
+        RateLimiter::for('login-route', fn (Request $request): Limit => Limit::perMinute(30)->by($request->ip()));
+        RateLimiter::for('two-factor-management', fn (Request $request): Limit => Limit::perMinute(10)->by(
+            ($request->user()?->getAuthIdentifier() ?? 'guest').'|'.$request->ip(),
+        ));
 
         Gate::before(fn (?User $user): ?bool => $user?->hasRole('Super Admin') ? true : null);
 
