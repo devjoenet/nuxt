@@ -38,15 +38,7 @@ decision is later made differently, update this roadmap and the affected phase d
 
 The next tasks are ordered around the remaining unchecked work and the decisions that can change implementation scope. 
 
-__Note: Tasks that have been completed are moved to `./completed-tasks.md`__
-
-### Task 12 — Restore CRM Detail Browser Smoke Coverage
-
-- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM lead, organization, and contact detail URLs
-  while list pages and the other browser smoke flows render normally.
-- [ ] Reinstate focused CRM browser coverage that separately verifies View link navigation and the linked detail-route
-  response for leads, organizations, and contacts.
-- [ ] Run the browser suite and full quality contract after the detail-route rendering issue is resolved.
+__Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
 ### Task 13 — Resolve Larascan Findings And Harden Security Gates
 
@@ -189,6 +181,14 @@ an informational treatment for the non-editable Super Admin role.
   server-side Gate bypass and that the role is not editable from the UI, with an info icon on the left.
 - [ ] Preserve guarded role/permission behavior, loading, empty, and error states; add focused coverage for role
   selection, permission updates, and Super Admin non-editability.
+
+### Task 12 — Restore CRM Detail Browser Smoke Coverage
+
+- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM lead, organization, and contact detail URLs
+  while list pages and the other browser smoke flows render normally.
+- [ ] Reinstate focused CRM browser coverage that separately verifies View link navigation and the linked detail-route
+  response for leads, organizations, and contacts.
+- [ ] Run the browser suite and full quality contract after the detail-route rendering issue is resolved.
 
 ## Later, Not MVP
 

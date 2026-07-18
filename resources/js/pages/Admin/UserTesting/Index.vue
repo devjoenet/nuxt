@@ -10,6 +10,7 @@
     id: number;
     category: string;
     title: string;
+    roadmap_task_number: number | null;
     path: string;
     url: string | null;
     tested: boolean;

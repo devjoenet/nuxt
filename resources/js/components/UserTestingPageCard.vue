@@ -7,6 +7,7 @@
   interface UserTestingPage {
     id: number;
     title: string;
+    roadmap_task_number: number | null;
     path: string;
     url: string | null;
     tested: boolean;
@@ -33,9 +34,13 @@
         <div>
           <a v-if="page.url" :href="page.url" class="text-sm font-semibold text-highlighted hover:text-primary hover:underline" rel="noopener noreferrer" target="_blank">
             {{ page.title }}
+            <span v-if="page.roadmap_task_number" class="ms-1 text-xs font-normal text-muted">(Task {{ page.roadmap_task_number }})</span>
             <span aria-hidden="true" class="ms-1 text-xs text-muted">↗</span>
           </a>
-          <p v-else class="text-sm font-semibold text-muted">{{ page.title }}</p>
+          <p v-else class="text-sm font-semibold text-muted">
+            {{ page.title }}
+            <span v-if="page.roadmap_task_number" class="ms-1 text-xs font-normal">(Task {{ page.roadmap_task_number }})</span>
+          </p>
           <p class="mt-1 font-mono text-xs text-muted">{{ page.path }}</p>
         </div>
         <UBadge :color="page.tested ? 'success' : 'warning'" :label="page.tested ? 'Reviewed' : 'Needs eyes'" variant="subtle" />

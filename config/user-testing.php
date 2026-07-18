@@ -3,6 +3,17 @@
 declare(strict_types=1);
 
 return [
+    'roadmap_tasks' => [
+        'public-welcome' => 15,
+        'public-privacy' => 16,
+        'crm-leads-show' => 12,
+        'crm-organizations-show' => 12,
+        'crm-contacts-show' => 12,
+        'admin-users' => 19,
+        'admin-roles' => 20,
+        'admin-audit' => 18,
+        'shared-error-pages' => 17,
+    ],
     'pages' => [
         ['slug' => 'public-welcome', 'category' => 'Public', 'title' => 'Welcome / landing page', 'route_name' => 'home', 'path' => '/', 'sort_order' => 10, 'notes' => 'Review every landing-page section, link, animation, responsive state, dark mode state, and the project inquiry form.'],
         ['slug' => 'public-privacy', 'category' => 'Public', 'title' => 'Privacy policy', 'route_name' => 'privacy', 'path' => '/privacy', 'sort_order' => 20],

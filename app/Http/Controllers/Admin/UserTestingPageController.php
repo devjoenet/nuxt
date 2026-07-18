@@ -47,6 +47,7 @@ class UserTestingPageController extends Controller
             'slug' => $page->slug,
             'category' => $page->category,
             'title' => $page->title,
+            'roadmap_task_number' => config('user-testing.roadmap_tasks.'.$page->slug),
             'route_name' => $page->route_name,
             'path' => $page->path,
             'url' => $this->pageUrl($page, $records),

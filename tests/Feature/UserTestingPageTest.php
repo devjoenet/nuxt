@@ -39,13 +39,22 @@ it('resolves database-backed checklist links to the first visible records', func
         ->get(route('admin.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.url', route('home', [], false))
+            ->where('pages.0.roadmap_task_number', 15)
             ->where('pages.1.url', route('privacy', [], false))
+            ->where('pages.1.roadmap_task_number', 16)
             ->where('pages.11.url', route('crm.leads.show', $lead, false))
+            ->where('pages.11.roadmap_task_number', 12)
             ->where('pages.12.url', route('crm.leads.edit', $lead, false))
             ->where('pages.15.url', route('crm.organizations.show', $organization, false))
+            ->where('pages.15.roadmap_task_number', 12)
             ->where('pages.19.url', route('crm.contacts.show', $contact, false))
+            ->where('pages.19.roadmap_task_number', 12)
+            ->where('pages.22.roadmap_task_number', 19)
+            ->where('pages.23.roadmap_task_number', 20)
+            ->where('pages.26.roadmap_task_number', 18)
             ->where('pages.21.url', route('admin.dashboard', [], false))
-            ->where('pages.28.url', route('security.show', [], false)));
+            ->where('pages.28.url', route('security.show', [], false))
+            ->where('pages.29.roadmap_task_number', 17));
 });
 
 it('saves a review without removing the page from the queue', function (): void {
