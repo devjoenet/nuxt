@@ -23,7 +23,7 @@ class UserTestingPageController extends Controller
 {
     public function index(Request $request): Response
     {
-        $records = $this->firstAvailableRecords($request->user());
+        $records = $this->firstAvailableRecords($this->authenticatedUser($request));
 
         return Inertia::render('Admin/UserTesting/Index', [
             'pages' => UserTestingPage::query()
@@ -90,7 +90,7 @@ class UserTestingPageController extends Controller
     {
         $request->validate(['since' => ['nullable', 'date']]);
         $since = $request->date('since');
-        $records = $this->firstAvailableRecords($request->user());
+        $records = $this->firstAvailableRecords($this->authenticatedUser($request));
 
         $pages = UserTestingPage::query()
             ->whereNull('approved_at')
@@ -170,14 +170,21 @@ class UserTestingPageController extends Controller
         }
 
         if ($page->tested_at === null) {
-            return config('user-testing.roadmap_tasks.'.$page->slug) !== null
-                ? 'In Development'
-                : 'Needs eyes';
+            return $this->activeRoadmapStatus($page) ?? 'Needs eyes';
         }
 
-        return config('user-testing.roadmap_tasks.'.$page->slug) !== null
-            ? 'In Development'
-            : 'Reviewed';
+        return $this->activeRoadmapStatus($page) ?? 'Reviewed';
+    }
+
+    private function activeRoadmapStatus(UserTestingPage $page): ?string
+    {
+        $taskNumber = config('user-testing.roadmap_tasks.'.$page->slug);
+
+        if ($taskNumber === null) {
+            return null;
+        }
+
+        return config('user-testing.roadmap_task_statuses.'.$taskNumber, 'In Development');
     }
 
     private function needsApproval(?string $notes): bool

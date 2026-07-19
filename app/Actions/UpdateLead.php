@@ -6,14 +6,16 @@ namespace App\Actions;
 
 use App\Enums\CrmActivityType;
 use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class UpdateLead
 {
-    public function handle(Lead $lead, array $attributes): Lead
+    /** @param array<string, mixed> $attributes */
+    public function handle(Lead $lead, array $attributes, User $user): Lead
     {
-        return DB::transaction(function () use ($lead, $attributes): Lead {
+        return DB::transaction(function () use ($lead, $attributes, $user): Lead {
             $lead->contact->update([
                 'name' => $attributes['contact_name'],
                 'email' => $attributes['contact_email'],
@@ -24,13 +26,13 @@ class UpdateLead
             $updates['service_interest'] = $serviceInterests[0] ?? null;
             $updates['service_interests'] = $serviceInterests;
 
-            if (auth()->user()?->isCrmAdministrator() === true && array_key_exists('owner_id', $attributes)) {
+            if ($user->isCrmAdministrator() && array_key_exists('owner_id', $attributes)) {
                 $updates['owner_id'] = $attributes['owner_id'];
             }
 
             $lead->update($updates);
             $lead->activities()->create([
-                'user_id' => auth()->id(),
+                'user_id' => $user->id,
                 'type' => CrmActivityType::LeadUpdated,
                 'description' => 'Lead details updated.',
             ]);

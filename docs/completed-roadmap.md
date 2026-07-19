@@ -345,3 +345,15 @@ and did not carry Southeast Code branding.
   console cleanliness, and narrow-viewport overflow with focused feature and browser coverage.
 - [x] Run formatting, PHPStan, typecheck, lint, production build, launch-readiness, focused error-page tests, and
   `git diff --check`.
+
+### Task 17 — Refine Audit Log Filters
+
+User testing found three audit-screen issues: the search placeholder overlapped the magnifying-glass icon, the Subject
+model-or-ID field was too verbose/truncated, and Event, Causer, and Subject needed constrained multi-select options.
+
+- [x] Fix the Search activity field spacing with a shared, direction-safe leading-slot label rule across themes and widths.
+- [x] Shorten the Subject field label to `Subject` and its empty state to `All subject types` while preserving subject-type filtering semantics.
+- [x] Replace the Event, Causer, and Subject free-text filters with accessible multi-select inputs populated from valid audit-history options; Subject selects model types, not individual records.
+- [x] Preserve server-side filtering, authorization, pagination, legacy scalar-event compatibility, and empty-state behavior; add focused feature and browser coverage for array combinations, null sentinels, unknown selections, responsive geometry, themes, keyboard dismissal, and overflow.
+
+Completion note: Task 17 treats Subject as a constrained multi-select of distinct `subject_type` classes. Verification passed with the focused feature and browser suites, frontend typecheck/lint/format/build, PHPStan, Pint, and `git diff --check`.

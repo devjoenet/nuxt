@@ -17,8 +17,8 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $user = $request->user();
-        $canViewCrm = $user?->can(Permission::CrmView->value) ?? false;
+        $user = $this->authenticatedUser($request);
+        $canViewCrm = $user->can(Permission::CrmView->value);
 
         return Inertia::render('Dashboard', [
             'canViewCrm' => $canViewCrm,
@@ -46,14 +46,22 @@ class DashboardController extends Controller
                 ->orderBy('due_at')
                 ->limit(5)
                 ->get()
-                ->map(fn (FollowUpTask $task): array => [
-                    'uuid' => $task->uuid,
-                    'title' => $task->title,
-                    'lead_uuid' => $task->lead->uuid,
-                    'lead_name' => $task->lead->contact->name,
-                    'due_at' => $task->due_at->toISOString(),
-                    'is_overdue' => $task->due_at->isPast(),
-                ]) : [],
+                ->map(function (FollowUpTask $task): ?array {
+                    $lead = $task->lead;
+
+                    if ($lead === null) {
+                        return null;
+                    }
+
+                    return [
+                        'uuid' => $task->uuid,
+                        'title' => $task->title,
+                        'lead_uuid' => $lead->uuid,
+                        'lead_name' => $lead->contact->name,
+                        'due_at' => $task->due_at->toISOString(),
+                        'is_overdue' => $task->due_at->isPast(),
+                    ];
+                })->filter()->values() : [],
         ]);
     }
 }

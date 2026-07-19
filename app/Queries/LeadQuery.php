@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class LeadQuery
 {
+    /**
+     * @param  array<string, mixed>  $filters
+     * @return Builder<Lead>
+     */
     public function build(User $user, array $filters): Builder
     {
         $sort = in_array($filters['sort'] ?? null, ['created_at', 'status'], true) ? $filters['sort'] : 'created_at';

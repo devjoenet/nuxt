@@ -38,7 +38,7 @@ class StorePublicIntakeRequest extends FormRequest
         $this->replace(self::normalize($this->all()));
     }
 
-    /** @return array<string, ValidationRule|array|string> */
+    /** @return array<string, ValidationRule|array<mixed>|string> */
     public function rules(): array
     {
         return [

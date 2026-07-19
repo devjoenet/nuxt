@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
+use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\Lead;
 use App\Models\Note;
@@ -182,17 +183,59 @@ test('audit filters cover notes and CRM activities without exposing sensitive va
 
     $this->get(route('admin.audit.index', [
         'search' => 'audit-filter-marker',
-        'subject' => 'Note',
+        'subject' => [Note::class],
         'from' => $auditDate,
         'to' => $auditDate,
     ]))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
             ->where('filters.search', 'audit-filter-marker')
-            ->where('filters.subject', 'Note')
+            ->where('filters.subject', [Note::class])
             ->where('filters.from', $auditDate)
             ->where('filters.to', $auditDate)
             ->where('activities.data.0.description', 'audit-filter-marker'));
+});
+
+test('audit filters expose constrained catalogs and support grouped array selections', function (): void {
+    $admin = adminUser();
+    $secondUser = User::factory()->create(['name' => $admin->name]);
+    $lead = Lead::factory()->create();
+    $contact = Contact::factory()->create();
+
+    activity()->causedBy($admin)->performedOn($lead)->event('created')->log('lead-created');
+    activity()->causedBy($secondUser)->performedOn($contact)->event('updated')->log('contact-updated');
+    activity()->causedBy(null)->event('system-check')->log('system-check');
+    activity()->causedBy(null)->log('system-no-subject');
+
+    $response = $this->actingAs($admin)->get(route('admin.audit.index', [
+        'event' => ['created', 'updated', '__unspecified__'],
+        'causer' => [$admin->getKey(), '__system__'],
+        'subject' => [Lead::class, '__no_subject__'],
+    ]));
+
+    $response->assertOk()->assertInertia(fn (Assert $page): Assert => $page
+        ->where('filters.event', ['created', 'updated', '__unspecified__'])
+        ->where('filters.causer', [(string) $admin->getKey(), '__system__'])
+        ->where('filters.subject', [Lead::class, '__no_subject__'])
+        ->where('eventOptions.0', ['label' => 'Unspecified', 'value' => '__unspecified__'])
+        ->where('causerOptions.0', ['label' => 'System', 'value' => '__system__'])
+        ->where('causerOptions.1.label', "{$admin->name} (#{$admin->getKey()})")
+        ->where('subjectOptions.0', ['label' => 'No subject', 'value' => '__no_subject__']));
+});
+
+test('unknown audit filter selections cannot broaden results and scalar events remain supported', function (): void {
+    $admin = adminUser();
+    activity()->causedBy($admin)->event('created')->log('known-event');
+
+    $this->actingAs($admin)->get(route('admin.audit.index', ['event' => 'created']))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('filters.event', ['created'])
+            ->where('activities.data', fn (mixed $data): bool => collect($data)->pluck('description')->contains('known-event')));
+
+    $this->actingAs($admin)->get(route('admin.audit.index', ['event' => ['not-a-real-event']]))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('filters.event', ['not-a-real-event'])
+            ->where('activities.data', []));
 });
 
 test('super admins bypass permission checks while protected role permissions remain immutable', function (): void {

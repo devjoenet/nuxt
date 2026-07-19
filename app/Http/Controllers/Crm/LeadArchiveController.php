@@ -13,7 +13,8 @@ class LeadArchiveController extends Controller
 {
     public function store(Request $request, Lead $lead): RedirectResponse
     {
-        abort_unless($lead->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($lead->isVisibleTo($user), 404);
         $this->authorize('archive', $lead);
         $lead->update(['archived_at' => now()]);
 
@@ -22,7 +23,8 @@ class LeadArchiveController extends Controller
 
     public function destroy(Request $request, Lead $lead): RedirectResponse
     {
-        abort_unless($lead->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($lead->isVisibleTo($user), 404);
         $this->authorize('archive', $lead);
         $lead->update(['archived_at' => null]);
 

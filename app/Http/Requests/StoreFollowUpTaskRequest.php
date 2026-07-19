@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Enums\TaskPriority;
+use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,12 +14,18 @@ class StoreFollowUpTaskRequest extends FormRequest
 {
     public function authorize(): bool
     {
+        $user = $this->user();
         $lead = $this->route('lead');
-        abort_unless($lead instanceof \App\Models\Lead && $lead->isVisibleTo($this->user()), 404);
+        if (! $user instanceof User) {
+            return false;
+        }
 
-        return $this->user()?->can('update', $lead) === true;
+        abort_unless($lead instanceof Lead && $lead->isVisibleTo($user), 404);
+
+        return $user->can('update', $lead);
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\FollowUpTaskStatus;
 use App\Enums\TaskPriority;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -83,12 +84,16 @@ class FollowUpTask extends Model
         ];
     }
 
-    public function scopeOverdue(Builder $query): void
+    /** @param Builder<static> $query */
+    #[Scope]
+    protected function overdue(Builder $query): void
     {
         $query->where('status', FollowUpTaskStatus::Open)->where('due_at', '<', now());
     }
 
-    public function scopeDueSoon(Builder $query): void
+    /** @param Builder<static> $query */
+    #[Scope]
+    protected function dueSoon(Builder $query): void
     {
         $query->where('status', FollowUpTaskStatus::Open)->whereBetween('due_at', [now(), now()->addDays(3)]);
     }

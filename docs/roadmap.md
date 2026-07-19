@@ -44,18 +44,6 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 17 — Refine Audit Log Filters
-
-User testing found three audit-screen issues: the search placeholder overlaps the magnifying-glass icon, the Subject
-model-or-ID field is too verbose/truncated, and Event, Causer, and Subject should offer constrained multi-select options.
-
-- [ ] Fix the Search activity field spacing so its placeholder and icon never overlap in supported themes and widths.
-- [ ] Shorten the Subject model-or-ID label/placeholder while keeping the filter's meaning clear.
-- [ ] Replace the Event, Causer, and Subject free-text filters with accessible multi-select inputs populated only from
-  valid available options.
-- [ ] Preserve server-side filtering, authorization, and empty-state behavior; add focused coverage for the new filter
-  combinations.
-
 ### Task 18 — Repair User Invitation And Verification Flows
 
 User testing found that the invitation form sends a password-reset email without explaining the actual onboarding step,
@@ -85,11 +73,28 @@ an informational treatment for the non-editable Super Admin role.
 
 ### Task 21 — Restore CRM Detail Browser Smoke Coverage
 
-- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM lead, organization, and contact detail URLs
-  while list pages and the other browser smoke flows render normally.
-- [ ] Reinstate focused CRM browser coverage that separately verifies View link navigation and the linked detail-route
-  response for leads, organizations, and contacts.
+This is verification work for the existing organization and contact detail pages, not new CRM feature development.
+Their user-testing cards should show `Needs verification` while this browser coverage remains deferred. Lead detail
+rendering is tracked separately in Task 22.
+
+- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM organization and contact detail URLs while
+  list pages and the other browser smoke flows render normally.
+- [ ] Reinstate focused browser coverage that separately verifies View link navigation and the linked detail-route
+  response for organizations and contacts.
 - [ ] Run the browser suite and full quality contract after the detail-route rendering issue is resolved.
+
+### Task 22 — Fix CRM Lead Detail Rendering
+
+The lead detail user-testing note identifies a separate rendering defect: valid lead records can blank-render because the
+page reads `lead.contact.name` when the contact payload is missing. This is implementation work, not Task 21's browser
+smoke verification.
+
+- [ ] Reproduce the blank lead detail page and determine why the required contact relation is missing from the Inertia
+  payload or not handled by the page.
+- [ ] Make valid lead detail records render safely while preserving the intended contact relationship semantics.
+- [ ] Add focused feature/browser regression coverage for the lead detail payload, rendered page, and relevant missing
+  relation state.
+- [ ] Run the focused tests and full quality contract after the rendering fix.
 
 ## Later, Not MVP
 

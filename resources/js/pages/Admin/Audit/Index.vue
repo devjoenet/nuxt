@@ -1,10 +1,13 @@
 <script lang="ts" setup>
   import { Form, Head, Link } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
+  import FormMultiSelect from "@/components/FormMultiSelect.vue";
   import Layout from "@/layouts/Default.vue";
   import { index } from "@/routes/admin/audit";
 
   defineOptions({ layout: Layout });
+  type FilterOption = { label: string; value: string };
+
   defineProps<{
     activities: {
       data: {
@@ -19,7 +22,10 @@
       }[];
       links: { url: string | null; label: string; active: boolean }[];
     };
-    filters: { search?: string; event?: string; causer?: string; subject?: string; from?: string; to?: string };
+    filters: { search: string | null; event: string[]; causer: string[]; subject: string[]; from: string | null; to: string | null };
+    eventOptions: FilterOption[];
+    causerOptions: FilterOption[];
+    subjectOptions: FilterOption[];
   }>();
 </script>
 
@@ -31,15 +37,18 @@
       <UDashboardNavbar description="Safe before-and-after visibility for sensitive workspace changes." title="Audit log">
         <template #leading><UDashboardSidebarCollapse /></template>
       </UDashboardNavbar>
-      <UDashboardToolbar>
-        <Form class="flex w-full flex-wrap gap-2" v-bind="index.form()">
-          <FormInput :default-value="filters.search" icon="i-ph-magnifying-glass" label="Search activity" name="search" size="sm" />
-          <FormInput :default-value="filters.event" label="Event" name="event" size="sm" />
-          <FormInput :default-value="filters.causer" label="Causer" name="causer" size="sm" />
-          <FormInput :default-value="filters.subject" label="Subject model or ID" name="subject" size="sm" />
-          <FormInput :default-value="filters.from" label="From" name="from" size="sm" type="date" />
-          <FormInput :default-value="filters.to" label="To" name="to" size="sm" type="date" />
-          <UButton label="Filter" type="submit" variant="soft" />
+      <UDashboardToolbar :ui="{ root: 'overflow-visible' }" class="audit-toolbar">
+        <Form
+          class="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(16rem,1.4fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_9rem_9rem_auto]"
+          v-bind="index.form()"
+        >
+          <FormInput id="audit-search" :default-value="filters.search ?? undefined" icon="i-ph-magnifying-glass" label="Search activity" name="search" size="sm" />
+          <FormMultiSelect id="audit-event" :default-value="filters.event" :items="eventOptions" label="Event" name="event" placeholder="All events" size="sm" />
+          <FormMultiSelect id="audit-causer" :default-value="filters.causer" :items="causerOptions" label="Causer" name="causer" placeholder="All causers" size="sm" />
+          <FormMultiSelect id="audit-subject" :default-value="filters.subject" :items="subjectOptions" label="Subject" name="subject" placeholder="All subject types" size="sm" />
+          <FormInput id="audit-from" :default-value="filters.from ?? undefined" label="From" name="from" size="sm" type="date" />
+          <FormInput id="audit-to" :default-value="filters.to ?? undefined" label="To" name="to" size="sm" type="date" />
+          <UButton class="w-full sm:col-span-2 xl:col-span-1" label="Filter" type="submit" variant="soft" />
         </Form>
       </UDashboardToolbar>
     </template>

@@ -4,7 +4,7 @@
   import FormTextarea from "@/components/FormTextarea.vue";
   import { update } from "@/routes/admin/userTesting";
 
-  type ReviewStatus = "Needs eyes" | "In Development" | "Reviewed" | "Needs Approval";
+  type ReviewStatus = "Needs eyes" | "In Development" | "Needs verification" | "Reviewed" | "Needs Approval";
 
   interface UserTestingPage {
     id: number;
@@ -29,6 +29,7 @@
   const statusColors: Record<ReviewStatus, "warning" | "info" | "success" | "primary"> = {
     "Needs eyes": "warning",
     "In Development": "info",
+    "Needs verification": "info",
     Reviewed: "success",
     "Needs Approval": "primary",
   };
