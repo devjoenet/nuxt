@@ -77,6 +77,11 @@
       padding 160ms ease;
   }
 
+  .form-field__shell:has([data-slot="leading"]) .form-field__label {
+    inset-inline-start: 3rem;
+    max-width: calc(100% - 5rem);
+  }
+
   .form-field__shell[data-multiline="true"] .form-field__label {
     top: 1rem;
     transform: none;

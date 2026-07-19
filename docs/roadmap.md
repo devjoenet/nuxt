@@ -44,18 +44,6 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 17 — Refine Audit Log Filters
-
-User testing found three audit-screen issues: the search placeholder overlaps the magnifying-glass icon, the Subject
-model-or-ID field is too verbose/truncated, and Event, Causer, and Subject should offer constrained multi-select options.
-
-- [ ] Fix the Search activity field spacing so its placeholder and icon never overlap in supported themes and widths.
-- [ ] Shorten the Subject model-or-ID label/placeholder while keeping the filter's meaning clear.
-- [ ] Replace the Event, Causer, and Subject free-text filters with accessible multi-select inputs populated only from
-  valid available options.
-- [ ] Preserve server-side filtering, authorization, and empty-state behavior; add focused coverage for the new filter
-  combinations.
-
 ### Task 18 — Repair User Invitation And Verification Flows
 
 User testing found that the invitation form sends a password-reset email without explaining the actual onboarding step,

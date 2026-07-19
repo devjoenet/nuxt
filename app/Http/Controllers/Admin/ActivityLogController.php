@@ -6,67 +6,30 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Carbon\Exceptions\InvalidFormatException;
-use Illuminate\Database\Eloquent\Builder;
+use App\Queries\ActivityLogQuery;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, ActivityLogQuery $activityLogQuery): Response
     {
         $this->authorize('viewAny', Activity::class);
         $filters = [
             'search' => $request->string('search')->trim()->value() ?: null,
-            'event' => $request->string('event')->trim()->value() ?: null,
-            'causer' => $request->string('causer')->trim()->value() ?: null,
-            'subject' => $request->string('subject')->trim()->value() ?: null,
+            'event' => $this->normalizeArrayFilter($request->input('event')),
+            'causer' => $this->normalizeArrayFilter($request->input('causer')),
+            'subject' => $this->normalizeArrayFilter($request->input('subject')),
             'from' => $request->string('from')->trim()->value() ?: null,
             'to' => $request->string('to')->trim()->value() ?: null,
         ];
-        $from = $this->parseDate($filters['from']);
-        $to = $this->parseDate($filters['to']);
-
-        $activities = Activity::query()
-            ->with(['causer', 'subject'])
-            ->when($filters['search'] ?? null, fn (Builder $query, string $search): Builder => $query->where(function (Builder $query) use ($search): void {
-                $term = sprintf('%%%s%%', $search);
-
-                $query->where('description', 'like', $term)
-                    ->orWhere('log_name', 'like', $term)
-                    ->orWhere('event', 'like', $term)
-                    ->orWhere('subject_type', 'like', $term)
-                    ->orWhere('subject_id', 'like', $term)
-                    ->orWhere('causer_type', 'like', $term)
-                    ->orWhere('causer_id', 'like', $term)
-                    ->orWhereHasMorph('causer', [User::class], fn (Builder $query): Builder => $query
-                        ->where('name', 'like', $term)
-                        ->orWhere('email', 'like', $term));
-            }))
-            ->when($filters['event'] ?? null, fn (Builder $query, string $event): Builder => $query->where('event', $event))
-            ->when($filters['causer'] ?? null, fn (Builder $query, string $causer): Builder => $query->where(function (Builder $query) use ($causer): void {
-                $term = sprintf('%%%s%%', $causer);
-
-                $query->where('causer_type', 'like', $term)
-                    ->orWhere('causer_id', 'like', $term)
-                    ->orWhereHasMorph('causer', [User::class], fn (Builder $query): Builder => $query
-                        ->where('name', 'like', $term)
-                        ->orWhere('email', 'like', $term));
-            }))
-            ->when($filters['subject'] ?? null, fn (Builder $query, string $subject): Builder => $query->where(function (Builder $query) use ($subject): void {
-                $term = sprintf('%%%s%%', $subject);
-
-                $query->where('subject_type', 'like', $term)
-                    ->orWhere('subject_id', 'like', $term);
-            }))
-            ->when($from instanceof Carbon, fn (Builder $query): Builder => $query->where('created_at', '>=', $from->copy()->startOfDay()))
-            ->when($to instanceof Carbon, fn (Builder $query): Builder => $query->where('created_at', '<=', $to->copy()->endOfDay()))
-            ->latest()
+        $activities = $activityLogQuery->build($filters)
             ->paginate(25)
             ->withQueryString();
+        $options = $activityLogQuery->filterOptions();
 
         return Inertia::render('Admin/Audit/Index', [
             'activities' => $activities->through(function (mixed $activity): array {
@@ -85,21 +48,18 @@ class ActivityLogController extends Controller
                 ];
             }),
             'filters' => $filters,
+            'eventOptions' => $options['events'],
+            'causerOptions' => $options['causers'],
+            'subjectOptions' => $options['subjects'],
         ]);
     }
 
-    private function parseDate(?string $date): ?Carbon
+    /** @return array<int, string> */
+    private function normalizeArrayFilter(mixed $value): array
     {
-        if ($date === null) {
-            return null;
-        }
-
-        try {
-            $parsed = Carbon::createFromFormat('!Y-m-d', $date);
-        } catch (InvalidFormatException) {
-            return null;
-        }
-
-        return $parsed instanceof Carbon ? $parsed : null;
+        return array_values(array_unique(array_filter(array_map(
+            static fn (mixed $item): ?string => is_string($item) && ($item = mb_trim($item)) !== '' ? $item : null,
+            Arr::wrap($value),
+        ))));
     }
 }
