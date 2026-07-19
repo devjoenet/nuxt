@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateLeadFromIntake;
-use App\Data\IntakeData;
+use App\Actions\SubmitPublicIntake;
 use App\Http\Requests\StorePublicIntakeRequest;
 use Illuminate\Http\RedirectResponse;
 
@@ -13,9 +12,9 @@ use function to_route;
 
 class PublicIntakeController extends Controller
 {
-    public function __invoke(StorePublicIntakeRequest $request, CreateLeadFromIntake $createLead): RedirectResponse
+    public function __invoke(StorePublicIntakeRequest $request, SubmitPublicIntake $submit): RedirectResponse
     {
-        $createLead->handle(IntakeData::fromRequest($request));
+        $submit->handle($request->validated(), $request->ip(), $request->userAgent());
 
         return to_route('home')->with('intakeSuccess', true);
     }

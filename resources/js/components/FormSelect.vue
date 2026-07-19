@@ -41,7 +41,7 @@
   const defaultBaseClass = computed(() => {
     const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
 
-    return `min-h-14 rounded-xl px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
+    return `min-h-14 w-full rounded-xl !bg-transparent px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
   });
 
   type SelectUi = NonNullable<SelectProps["ui"]>;

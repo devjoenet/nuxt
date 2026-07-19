@@ -33,32 +33,43 @@ readonly class IntakeData
 
     public static function fromRequest(StorePublicIntakeRequest $request): self
     {
+        return self::fromArray($request->validated(), $request->ip(), $request->userAgent());
+    }
+
+    /**
+     * @param  array<string, mixed>  $attributes
+     */
+    public static function fromArray(array $attributes, ?string $ipAddress = null, ?string $userAgent = null): self
+    {
         return new self(
-            name: $request->string('name')->trim()->toString(),
-            email: $request->string('email')->lower()->trim()->toString(),
-            projectDetails: $request->string('project_details')->trim()->toString(),
-            company: self::nullableString($request, 'company'),
-            phone: self::nullableString($request, 'phone'),
-            website: self::nullableString($request, 'website'),
-            budgetRange: self::nullableString($request, 'budget_range'),
-            timeline: self::nullableString($request, 'timeline'),
-            serviceInterests: array_values($request->input('service_interest', []) ?? []),
-            referralSource: self::nullableString($request, 'referral_source'),
-            landingPage: self::nullableString($request, 'landing_page'),
-            referrer: self::nullableString($request, 'referrer'),
-            utmSource: self::nullableString($request, 'utm_source'),
-            utmMedium: self::nullableString($request, 'utm_medium'),
-            utmCampaign: self::nullableString($request, 'utm_campaign'),
-            utmTerm: self::nullableString($request, 'utm_term'),
-            utmContent: self::nullableString($request, 'utm_content'),
-            ipAddress: $request->ip(),
-            userAgent: $request->userAgent(),
+            name: str($attributes['name'] ?? '')->trim()->toString(),
+            email: str($attributes['email'] ?? '')->lower()->trim()->toString(),
+            projectDetails: str($attributes['project_details'] ?? '')->trim()->toString(),
+            company: self::nullableString($attributes, 'company'),
+            phone: self::nullableString($attributes, 'phone'),
+            website: self::nullableString($attributes, 'website'),
+            budgetRange: self::nullableString($attributes, 'budget_range'),
+            timeline: self::nullableString($attributes, 'timeline'),
+            serviceInterests: array_values($attributes['service_interest'] ?? []),
+            referralSource: self::nullableString($attributes, 'referral_source'),
+            landingPage: self::nullableString($attributes, 'landing_page'),
+            referrer: self::nullableString($attributes, 'referrer'),
+            utmSource: self::nullableString($attributes, 'utm_source'),
+            utmMedium: self::nullableString($attributes, 'utm_medium'),
+            utmCampaign: self::nullableString($attributes, 'utm_campaign'),
+            utmTerm: self::nullableString($attributes, 'utm_term'),
+            utmContent: self::nullableString($attributes, 'utm_content'),
+            ipAddress: $ipAddress,
+            userAgent: $userAgent,
         );
     }
 
-    private static function nullableString(StorePublicIntakeRequest $request, string $key): ?string
+    /**
+     * @param  array<string, mixed>  $attributes
+     */
+    private static function nullableString(array $attributes, string $key): ?string
     {
-        $value = $request->string($key)->trim()->toString();
+        $value = str($attributes[$key] ?? '')->trim()->toString();
 
         return $value === '' ? null : $value;
     }

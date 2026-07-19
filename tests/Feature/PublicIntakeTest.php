@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Actions\SubmitPublicIntake;
 use App\Enums\CrmActivityType;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
@@ -14,6 +15,7 @@ use App\Models\Organization;
 use App\Notifications\NewLeadReceived;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 afterEach(function (): void {
     Date::setTestNow();
@@ -87,6 +89,42 @@ test('organization is optional for public inquiries', function (): void {
         ->and(Lead::query()->sole()->organization_id)->toBeNull();
 });
 
+test('formatted budget amounts are normalized before persistence', function (): void {
+    Notification::fake();
+
+    $this->post(route('contact.store'), validIntake([
+        'budget_range' => '25,000',
+    ]))->assertSessionHasNoErrors();
+
+    expect(Lead::query()->sole()->budget_range)->toBe('25000');
+});
+
+test('the public intake action can be called outside HTTP', function (): void {
+    Notification::fake();
+
+    $lead = app(SubmitPublicIntake::class)->handle(validIntake([
+        'budget_range' => '$25,000',
+    ]));
+
+    expect($lead)->toBeInstanceOf(Lead::class)
+        ->and($lead->budget_range)->toBe('25000');
+});
+
+test('the public intake action exposes validation errors outside HTTP', function (): void {
+    Notification::fake();
+    $exception = null;
+
+    try {
+        app(SubmitPublicIntake::class)->handle(validIntake(['email' => 'not-an-email']));
+    } catch (ValidationException $validationException) {
+        $exception = $validationException;
+    }
+
+    expect($exception)->toBeInstanceOf(ValidationException::class)
+        ->and($exception?->errors())->toHaveKey('email')
+        ->and(Lead::query()->count())->toBe(0);
+});
+
 test('repeat inquiries update the contact without duplicating it', function (): void {
     Notification::fake();
 
@@ -111,6 +149,7 @@ test('public inquiry validation rejects invalid or spam submissions', function (
     'required fields' => [['name' => '', 'email' => '', 'project_details' => '', 'consent' => null], ['name', 'email', 'project_details', 'consent']],
     'invalid email' => [['email' => 'not-an-email'], ['email']],
     'invalid website' => [['website' => 'ftp://example.com'], ['website']],
+    'invalid formatted budget' => [['budget_range' => '25.000.00'], ['budget_range']],
     'honeypot' => [['website_confirmation' => 'bot-filled-this'], ['website_confirmation']],
 ]);
 

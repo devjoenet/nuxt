@@ -19,6 +19,13 @@ conventions before feature work accelerates.
 - Keep controllers thin: validation in form requests, business side effects in action classes, read-heavy list shaping
   in query/filter classes or resources.
 - Use Laravel policies and route middleware for authorization. Inertia permission props are only for UI visibility.
+- Route every state-changing application workflow through a single-purpose action class. Controllers, jobs, commands,
+  tests, and Tinker must call the same action rather than reproducing persistence logic or submitting through a browser.
+- Keep HTTP form requests responsible for transport-level authorization and request validation; actions must accept a
+  typed data object or validated input and expose predictable success results or validation/domain exceptions for CLI and
+  Tinker callers.
+- When an action needs raw input outside HTTP, give it an explicit input-validation path so Tinker and automated tests
+  exercise the same application behavior as controllers.
 - Do not add new dependencies during this phase unless the roadmap is updated to explain why.
 
 ## Repository And Documentation
@@ -70,6 +77,8 @@ conventions before feature work accelerates.
 - Confirm UUID usage conventions based on the existing `users` UUID migration.
 - Add architecture tests when route/controller conventions change or when thin controllers/action-class boundaries need
   enforcement.
+- Name action classes after the business operation (`SubmitPublicIntake`, `CreateLeadFromIntake`, `UpdateLead`) and keep
+  database writes, notifications, activity entries, and follow-up side effects inside the action boundary.
 - Confirm model factory and seeder organization for system data versus demo/local data.
 
 ## Acceptance Criteria
@@ -83,6 +92,32 @@ conventions before feature work accelerates.
 - The documented backend conventions are specific enough to create the first CRM controller, request, action, policy,
   resource/DTO, factory, and Pest feature test without another architecture decision.
 - A focused test or architecture test covers any changed route/access convention that can regress.
+- Every state-changing action has at least one direct application test that can be reused from Tinker; browser tests are
+  reserved for rendering, interaction, accessibility, and visual behavior.
+
+## Application Action And Skill Workflow
+
+- Use the `laravel-best-practices` skill for Laravel architecture, validation, routing, persistence, notifications, and
+  error handling; read the relevant rule file before changing that concern.
+- Use the `spatie-laravel-php-standards` skill for every PHP/Laravel edit and run Pint before handoff.
+- Use the `pest-testing` skill for every Pest test change; prefer focused feature/action coverage before browser smoke.
+- Use the `inertia-vue-development` and `wayfinder-development` skills for Inertia/Vue pages and generated route calls;
+  do not use those browser flows to create database fixtures for backend verification.
+- Use the `user-testing-roadmap` skill when user-testing notes, roadmap tasks, or review status change.
+
+For a public intake check from Tinker, call the application action directly:
+
+```php
+$lead = app(App\\Actions\\SubmitPublicIntake::class)->handle([
+    'name' => 'Jordan Rivera',
+    'email' => 'jordan@example.com',
+    'project_details' => 'Our dispatch workflow depends on several spreadsheets and repeated manual entry.',
+    'consent' => '1',
+]);
+```
+
+The action returns the created `Lead` on success and throws Laravel's validation exception with field errors on invalid
+input. HTTP controllers, jobs, commands, tests, and Tinker should use this same boundary.
 
 ## Verification
 

@@ -1,13 +1,18 @@
 <script lang="ts" setup>
   import FormInput from "@/components/FormInput.vue";
+  import FormCurrencyInput from "@/components/FormCurrencyInput.vue";
   import FormMultiSelect from "@/components/FormMultiSelect.vue";
+  import FormPhoneInput from "@/components/FormPhoneInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
   import { privacy } from "@/routes";
   import { store } from "@/routes/contact";
-  import { Form, Link } from "@inertiajs/vue3";
-  import { onMounted, reactive } from "vue";
+  import { Form, Link, usePage } from "@inertiajs/vue3";
+  import { nextTick, onMounted, reactive, ref } from "vue";
   import { Motion } from "motion-v";
+  import type { AppPageProps } from "@/types";
+
+  const page = usePage<AppPageProps>();
 
   const attribution = reactive({
     landingPage: "",
@@ -18,6 +23,22 @@
     utmTerm: "",
     utmContent: "",
   });
+
+  const budgetRange = ref<number | null>(null);
+  const budgetOptions = { valueRange: { min: 0 } };
+  const phoneNumber = ref("");
+  const successMessage = ref<HTMLElement | null>(null);
+
+  const resetCustomFields = (): void => {
+    budgetRange.value = null;
+    phoneNumber.value = "";
+  };
+
+  const handleSuccess = async (): Promise<void> => {
+    resetCustomFields();
+    await nextTick();
+    successMessage.value?.focus();
+  };
 
   onMounted(() => {
     const search = new URLSearchParams(window.location.search);
@@ -40,17 +61,24 @@
     :viewport="{ once: true, amount: 0.2 }"
     :while-in-view="{ opacity: 1, x: 0 }"
   >
-    <Form #default="{ errors, processing, wasSuccessful }" aria-label="Project inquiry form" class="grid gap-5" reset-on-success v-bind="store.form()">
-      <div v-if="wasSuccessful" class="rounded-lg border border-success-500/30 bg-success-500/10 p-5 text-success-800 dark:text-success-200" role="status" tabindex="-1">
-        <p class="font-semibold">Thanks. Your inquiry is in.</p>
-        <p class="mt-1 text-sm">We’ll review the workflow details and follow up shortly.</p>
+    <Form #default="{ errors, processing, wasSuccessful }" aria-label="Project inquiry form" class="grid gap-5" reset-on-success v-bind="store.form()" @success="handleSuccess">
+      <div
+        v-if="wasSuccessful || page.props.flash.intakeSuccess"
+        ref="successMessage"
+        aria-live="polite"
+        class="rounded-lg border border-success-500/30 bg-success-500/10 p-5 text-success-800 dark:text-success-200"
+        role="status"
+        tabindex="-1"
+      >
+        <p class="font-semibold">Your message was sent successfully.</p>
+        <p class="mt-1 text-sm">Thanks — we received your inquiry and will follow up shortly.</p>
       </div>
 
       <div class="grid gap-5 sm:grid-cols-2">
         <FormInput id="intake-name" :error="errors.name" autocomplete="name" label="Name" name="name" required variant="filled" />
         <FormInput id="intake-email" :error="errors.email" autocomplete="email" label="Email" name="email" required type="email" variant="filled" />
         <FormInput id="intake-company" :error="errors.company" autocomplete="organization" label="Organization (optional)" name="company" variant="filled" />
-        <FormInput id="intake-phone" :error="errors.phone" autocomplete="tel" label="Phone (optional)" name="phone" type="tel" variant="filled" />
+        <FormPhoneInput id="intake-phone" v-model="phoneNumber" :error="errors.phone" autocomplete="tel" label="Phone (optional)" name="phone" variant="filled" />
         <FormInput id="intake-website" :error="errors.website" autocomplete="url" label="Website (optional)" name="website" type="url" variant="filled" />
         <FormMultiSelect
           id="intake-service"
@@ -67,19 +95,17 @@
           name="service_interest"
           variant="filled"
         />
-        <FormInput
+        <FormCurrencyInput
           id="intake-budget"
           :error="errors.budget_range"
-          inputmode="decimal"
+          v-model="budgetRange"
+          :auto-emit="false"
+          :options="budgetOptions"
           label="Estimated budget (optional)"
-          min="0"
           name="budget_range"
-          placeholder="0"
-          step="1000"
-          type="number"
           variant="filled"
-          ><template #leading><span class="text-muted">$</span></template></FormInput
-        >
+          autocomplete="off"
+        />
         <FormSelect
           id="intake-timeline"
           :error="errors.timeline"

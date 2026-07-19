@@ -36,8 +36,9 @@ Those belong to Phase 3 and Phase 4.
 - Create seeders for realistic local marketing/CRM data.
 - Create a request class for public contact/intake submission validation.
 - Create a DTO/data object for sanitized intake payloads.
-- Create a single action class such as `CreateLeadFromIntake` to own lead, contact, organization, activity, and
-  follow-up creation.
+- Create an application action boundary such as `SubmitPublicIntake` for raw-input validation and orchestration, with
+  `CreateLeadFromIntake` owning lead, contact, organization, activity, and follow-up creation. Controllers, jobs,
+  commands, tests, and Tinker call the application action instead of submitting through the browser.
 - Create a public controller action for intake submission.
 - Add route definitions for contact/intake submission using named routes and Wayfinder generation.
 - Add spam controls: honeypot field, rate limit middleware, and optional IP/user-agent metadata capture.

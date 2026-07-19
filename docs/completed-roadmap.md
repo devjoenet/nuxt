@@ -247,3 +247,16 @@ defaults above remain the executable path until those decisions are made.
   remain settled after they enter, and remove the Reality card color-fill transition.
 - [x] Move the remaining focused verification and visual-review pass to Task 14; keep the landing page testing record
   unapproved for final human review.
+
+### Task 14 — Resolve Landing Review Follow-ups
+
+- [x] Remove the entrance animations from the Reality, Transformation, and Services sections while preserving the hero,
+  contact form, and Process section treatment.
+- [x] Keep section entrance animations one-way and settled after first entry where they remain enabled.
+- [x] Remove the footer's `Use the contact form` text link and retain the contact icon action.
+- [x] Remove the filled multi-select background seam and preserve the existing field shell treatment.
+- [x] Change the estimated budget field to a text input with comma-separated currency formatting, an explicit placeholder,
+  and server-side normalization/validation.
+- [x] Run the focused feature tests, frontend typecheck, lint, production build, and direct Chrome review across the
+  changed landing states. The temporary Pest browser server still reports its pre-existing keyboard-focus/
+  `ResizeObserver` harness failure; the public testing record remains unapproved for human review.

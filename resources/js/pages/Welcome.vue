@@ -242,7 +242,7 @@
         <LandingHero :hero-image-src="heroImage" />
         <section id="reality" class="scroll-mt-28 border-y border-accent-500/15 bg-muted-100/90 px-5 py-16 sm:px-8 lg:py-20 dark:bg-muted-950/95">
           <div class="mx-auto max-w-7xl">
-            <SectionHeading kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
+            <SectionHeading :animated="false" kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
 
             <ul class="mt-8 grid gap-5 md:grid-cols-3">
               <li v-for="card in realityCards" :key="card.title">
@@ -257,7 +257,7 @@
           class="scroll-mt-28 bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.12),transparent_34rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.14),transparent_34rem)]"
         >
           <div class="mx-auto max-w-7xl">
-            <SectionHeading kicker="The transformation" title="From scattered data to operational control." tone="secondary" />
+            <SectionHeading :animated="false" kicker="The transformation" title="From scattered data to operational control." tone="secondary" />
 
             <ol class="mt-8 grid gap-5 lg:grid-cols-3">
               <li v-for="card in transformationCards" :key="card.title" class="relative">
@@ -269,7 +269,7 @@
 
         <section id="services" class="scroll-mt-28 px-5 py-16 sm:px-8 lg:py-20">
           <div class="mx-auto max-w-7xl">
-            <SectionHeading kicker="Our services" title="Software shaped around the operation." tone="primary" />
+            <SectionHeading :animated="false" kicker="Our services" title="Software shaped around the operation." tone="primary" />
 
             <ul class="mt-8 grid gap-5 lg:grid-cols-3">
               <li v-for="service in services" :key="service.title">
