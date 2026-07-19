@@ -331,3 +331,17 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
   deep-link navigation, mobile overflow, and JavaScript errors.
 - [x] Verify the lazy boundary in `public/build/manifest.json`: `PrivacyDialog.vue` is listed under the landing bundle's
   `dynamicImports`, while the extracted `PrivacyPolicyContent` is a separate chunk.
+
+### Task 16 — Brand And Theme Shared Error Pages
+
+User testing found that the shared 403, 404, 419, 429, 500, and 503 states were not fully compatible with dark mode
+and did not carry Southeast Code branding.
+
+- [x] Apply shared light/dark theme tokens with accessible local contrast pairings across every supported error state.
+- [x] Add Southeast Code branding, useful recovery copy, and context-aware navigation without exposing debug details.
+- [x] Render the same branded `ErrorPage` for direct documents and Inertia requests while preserving supported status codes;
+  unsupported statuses continue through Laravel's normal handling.
+- [x] Verify status-specific rendering, shared authentication props, responsive layout, dark mode, accessibility, browser
+  console cleanliness, and narrow-viewport overflow with focused feature and browser coverage.
+- [x] Run formatting, PHPStan, typecheck, lint, production build, launch-readiness, focused error-page tests, and
+  `git diff --check`.

@@ -44,16 +44,6 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 16 — Brand And Theme Shared Error Pages
-
-User testing found that the shared 403, 404, 419, 429, 500, and 503 states are not yet fully compatible with dark mode
-and do not carry Southeast Code branding.
-
-- [ ] Apply the shared light/dark theme tokens and verify readable contrast across every supported error state.
-- [ ] Add Southeast Code branding, useful recovery copy, and the appropriate navigation or home action without exposing
-  debug details.
-- [ ] Verify the error-page variants at responsive breakpoints and add focused coverage for status-specific rendering.
-
 ### Task 17 — Refine Audit Log Filters
 
 User testing found three audit-screen issues: the search placeholder overlaps the magnifying-glass icon, the Subject

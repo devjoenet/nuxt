@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Inertia\ExceptionResponse;
+use Inertia\Inertia;
 use Override;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
@@ -35,6 +37,16 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Inertia::handleExceptionsUsing(function (ExceptionResponse $response): ?ExceptionResponse {
+            if (! in_array($response->statusCode(), [403, 404, 419, 429, 500, 503], true)) {
+                return null;
+            }
+
+            return $response
+                ->render('ErrorPage', ['status' => $response->statusCode()])
+                ->withSharedData();
+        });
+
         RateLimiter::for('public-intake', fn (Request $request): Limit => Limit::perMinute(5)->by($request->ip()));
         RateLimiter::for('login-route', fn (Request $request): Limit => Limit::perMinute(30)->by($request->ip()));
         RateLimiter::for('two-factor-management', fn (Request $request): Limit => Limit::perMinute(10)->by(
