@@ -99,3 +99,48 @@ test('landing form masks phone numbers and keeps service options readable', func
         ->assertScript('getComputedStyle(document.querySelector("#intake-details").closest(".form-field__shell")?.querySelector(".form-field__label")).top', '8px')
         ->assertNoJavaScriptErrors();
 });
+
+test('privacy consent link opens an accessible lazy modal without losing form state', function (): void {
+    visit('/#contact')
+        ->fill('#intake-name', 'Jordan Rivera')
+        ->assertDontSee('Information we collect')
+        ->keys('#intake-privacy-notice', 'Enter')
+        ->wait(0.5)
+        ->assertSee('Information we collect')
+        ->assertAttribute('[role="dialog"]', 'aria-modal', 'true')
+        ->assertPathIs('/')
+        ->assertScript('document.activeElement?.closest("[role=dialog]") !== null', true)
+        ->keys('[role="dialog"]', 'Escape')
+        ->wait(0.3)
+        ->assertScript('document.activeElement?.id', 'intake-privacy-notice')
+        ->assertScript('document.querySelector("#intake-name")?.value', 'Jordan Rivera')
+        ->assertNoJavaScriptErrors();
+});
+
+test('privacy footer modal preserves its deep link to the canonical page', function (): void {
+    visit('/')
+        ->assertAttribute('#footer-privacy-notice', 'href', '/privacy')
+        ->click('#footer-privacy-notice')
+        ->wait(0.5)
+        ->assertSee('Retention and requests')
+        ->click('[data-slot="close"]')
+        ->wait(0.3)
+        ->click('#footer-privacy-notice')
+        ->wait(0.5)
+        ->click('Open full privacy page')
+        ->assertPathIs('/privacy')
+        ->assertSee('Information we collect')
+        ->assertSee('How we use it')
+        ->assertSee('Retention and requests')
+        ->assertNoJavaScriptErrors();
+});
+
+test('privacy modal keeps a scrollable policy region within a mobile viewport', function (): void {
+    visit('/')
+        ->resize(320, 568)
+        ->click('#footer-privacy-notice')
+        ->wait(0.5)
+        ->assertScript('document.querySelector("[aria-label=\"Privacy policy\"]")?.scrollHeight > document.querySelector("[aria-label=\"Privacy policy\"]")?.clientHeight', true)
+        ->assertScript('document.querySelector("[role=dialog]")?.getBoundingClientRect().bottom <= window.innerHeight', true)
+        ->assertNoJavaScriptErrors();
+});

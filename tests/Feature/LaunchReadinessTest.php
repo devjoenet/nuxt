@@ -11,7 +11,12 @@ beforeEach(function (): void {
 
 test('public launch surfaces remain available without authentication', function (): void {
     $this->get(route('home'))->assertOk();
-    $this->get(route('privacy'))->assertOk();
+    $this->get(route('privacy'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Privacy')
+            ->where('canonicalUrl', config('app.url').'/privacy'));
+    expect(app('router')->getRoutes()->getByName('privacy')->uri())->toBe('privacy');
     $this->get('/inbox')->assertNotFound();
 });
 
