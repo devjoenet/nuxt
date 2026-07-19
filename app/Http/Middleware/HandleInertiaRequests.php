@@ -33,8 +33,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user() ? new UserResource($request->user())->resolve() : null,
             ],
             'flash' => [
-                'intakeSuccess' => fn (): bool => (bool) $request->session()->get('intakeSuccess', false),
-                'success' => fn (): ?string => $request->session()->get('success'),
+                'intakeSuccess' => fn (): bool => $request->hasSession() && $request->session()->get('intakeSuccess', false),
+                'success' => fn (): ?string => $request->hasSession() ? $request->session()->get('success') : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
