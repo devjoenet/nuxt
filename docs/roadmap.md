@@ -44,57 +44,6 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 12 — Resolve Larascan Findings And Harden Security Gates
-
-The first Larascan run reported 54 passed, 22 failed, and 12 skipped checks, with a reported highest severity of
-`CRITICAL`. Treat this as a triage task rather than a blind fix list: several failures are false positives caused by
-Larascan not recognizing Laravel 13 native attributes, Fortify's configured limiters, or controller middleware
-attributes. Do not add a blanket baseline or lower the CI fail threshold until each failure has an owner and disposition.
-
-- [x] **Fix the scan integration first.** Change `.github/workflows/larascan.yml` from PHP 8.4 to PHP 8.5, copy and key
-  `.env.example` before booting Artisan, prepare the SQLite database if the scan requires application boot, and add a
-  clean CI run that proves the scan itself is executable. Keep the existing `fail_on=high` gate.
-- [x] **Remove or gate newly exposed diagnostic tooling.** Review why `garygreen/pretty-routes` and
-  `jaydeep/laravel-time-machine` were added to production `require` dependencies. Remove them if they were incidental;
-  otherwise move them to development-only scope, disable their dashboards outside local development, protect any local
-  routes, ensure `storage/time-machine/` is ignored and empty from source control, and add production assertions that
-  `/routes` and `/time-machine` are unavailable.
-- [x] **Close the authentication findings.** Add focused tests for repeated failed login and 2FA challenge requests,
-  confirm the custom `LoginRequest` limiter and Fortify `two-factor` limiter protect the POST flows, and decide whether
-  the password-confirmed 2FA management mutations need an additional explicit throttle. Do not throttle harmless GET
-  screens solely to satisfy a static rule. Add a narrow documented Larascan suppression for the GET/static false
-  positives only after the runtime behavior is covered.
-- [x] **Resolve the model and generated-secret findings safely.** Audit the three `forceFill()` call sites individually:
-  use explicit attribute assignment where it improves mass-assignment clarity, retain a bypass only for intentional
-  internal state changes, and cover password reset, admin 2FA reset, and reminder persistence with regression tests.
-  Replace the admin invitation's generated password seed with `Str::password()`; keep remember tokens as tokens rather
-  than treating them as passwords. Record narrow suppressions for intentional internal writes instead of suppressing
-  the rule globally.
-- [x] **Record existing Laravel controls as verified false positives.** `User` already hides password data and uses the
-  `hashed` cast; the parameterized email-verification endpoint already has `signed` and `throttle` middleware; and the
-  custom security-headers middleware already emits `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
-  and production HSTS. Add serialization, invalid-signature, and runtime-header assertions, then use the scanner's
-  supported narrow ignore/baseline mechanism with file/rule justification so these findings do not obscure real
-  regressions.
-- [x] **Harden environment and session profiles.** Make `.env.example` scanner-visible and secret-free for the full
-  supported key set, including queue, Redis, mail, activity-log, Horizon, Larascan probe, and AWS endpoint keys. Define
-  separate local/testing versus staging/production expectations: production must use `APP_ENV=production`,
-  `APP_DEBUG=false`, HTTPS-only session cookies, encrypted sessions, an explicit secure same-site policy, and a
-  non-debug log level. Confirm whether the debug-blacklist check is supported by this Laravel version before adding
-  unsupported configuration.
-- [x] **Harden deployment/runtime settings.** Set S3 disk visibility explicitly to `private`; validate that the
-  application does not rely on remote URL wrappers before disabling `allow_url_fopen`; disable `expose_php` in the PHP
-  8.5 deployment runtime; add custom 500 and 503 error pages; and configure the Larascan HTTPS runtime probe against
-  staging so HSTS, headers, cookies, HTTPS redirects, and server disclosure are checked on a real response.
-- [x] **Close repository and dependency hygiene gaps.** Add Dependabot coverage for Composer, npm, and GitHub Actions;
-  add `public/.well-known/security.txt` with the approved security contact and expiry; and upgrade the current esbuild
-  `0.27.7` to `0.28.1` or newer before relying on the frontend development tooling on Windows. The current advisory
-  affects esbuild versions `>=0.27.3` and `<0.28.1`.
-- [ Defer to Task 21 ] **Define the completion gate.** The production-profile CI scan is clean with no unresolved high/critical findings,
-  accepted findings have documented rationale, diagnostic routes are unavailable outside local development, and the
-  Larascan report is uploaded without hiding new findings. The remaining release check is the live staging HTTPS probe,
-  which requires the Forge/GitHub `LARASCAN_PROBE_URL` secret and a deployed staging site.
-
 ### Task 15 — Rework Public Privacy Presentation
 
 The privacy-page testing record asks whether the policy should remain a scrollable page or become an on-demand surface.
