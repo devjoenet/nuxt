@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect UI"
+  short_description: "Review live pages, designs, and UI references"
+  default_prompt: "Use $inspect-ui to inspect this page or design and report evidence-backed UI findings."

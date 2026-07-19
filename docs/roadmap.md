@@ -26,6 +26,10 @@ decision is later made differently, update this roadmap and the affected phase d
   pages.
 - Use Pest feature tests for every shipped workflow and policy/authorization boundary. Add focused unit tests only where
   domain logic is isolated enough to make them useful.
+- Route state-changing workflows through single-purpose action classes. Controllers, jobs, commands, tests, and Tinker
+  must call the same action; browser automation is for UI behavior and must not be the backend fixture mechanism.
+- Keep transport validation in Form Requests while giving actions an explicit raw-input validation path whenever they
+  need to be callable outside HTTP.
 - Use database queues for local/simple development defaults and Redis plus Horizon for staging/production operations.
   Tests should fake queues/notifications unless a persistence or Horizon authorization behavior is under test.
 - Use the business notification email for internal lead/reminder mail, keep visitor confirmations and scheduling links
@@ -90,22 +94,6 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
   accepted findings have documented rationale, diagnostic routes are unavailable outside local development, and the
   Larascan report is uploaded without hiding new findings. The remaining release check is the live staging HTTPS probe,
   which requires the Forge/GitHub `LARASCAN_PROBE_URL` secret and a deployed staging site.
-
-### Task 14 — Resolve Landing Review Follow-ups
-
-The welcome-page testing record contains the following unapproved findings. Keep these tasks separate from the completed
-landing implementation so the original feedback remains traceable:
-
-- [ ] Rework or remove the entrance animations for the Reality, Transformation, and Services sections while preserving
-  the hero, contact form, and Process section treatment.
-- [ ] Make section entrance animations settle after first entry and prevent replay when scrolling in either direction.
-- [ ] Remove the footer's `Use the contact form` text link and keep the contact action as the available link icon.
-- [ ] Fix the slight background-color anomaly around the contact form multi-select inputs; request the user's screen
-  capture before finalizing the visual correction.
-- [ ] Change the estimated budget field to a currency-formatting string input and correct its placeholder behavior;
-  request the user's screen capture before finalizing the visual correction.
-- [ ] Run the focused Pest feature tests, frontend typecheck, and browser smoke pass; visually review the landing page at
-  mobile, desktop, light, dark, reduced-motion, and keyboard-only states.
 
 ### Task 15 — Rework Public Privacy Presentation
 

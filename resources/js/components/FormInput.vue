@@ -42,11 +42,11 @@
   type InputUi = NonNullable<InputProps["ui"]>;
 
   const placeholder = computed(() => {
-    if (props.label) {
-      return " ";
+    if (typeof attrs.placeholder === "string") {
+      return attrs.placeholder;
     }
 
-    return typeof attrs.placeholder === "string" ? attrs.placeholder : undefined;
+    return props.label ? " " : undefined;
   });
 
   const defaultBaseClass = computed(() => {

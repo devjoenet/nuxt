@@ -123,6 +123,44 @@
   .form-field__shell[data-multiline="true"]:focus-within .form-field__label,
   .form-field__shell[data-multiline="true"]:has(textarea:not(:placeholder-shown)) .form-field__label {
     top: 0;
+    transform: translateY(-50%) scale(0.75);
+    transform-origin: left center;
+    padding-inline: 0.25rem;
+    line-height: 1rem;
+    background-color: var(--ui-bg);
+    color: var(--ui-primary);
+  }
+
+  .form-field__shell[data-variant="filled"][data-multiline="true"]:focus-within .form-field__label,
+  .form-field__shell[data-variant="filled"][data-multiline="true"]:has(textarea:not(:placeholder-shown)) .form-field__label {
+    top: 0.5rem;
+    transform: scale(0.75);
+    transform-origin: left top;
+    padding-inline: 0;
+    background-color: color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent);
+  }
+
+  .form-field__shell input:-webkit-autofill,
+  .form-field__shell input:-webkit-autofill:hover,
+  .form-field__shell input:-webkit-autofill:focus,
+  .form-field__shell textarea:-webkit-autofill,
+  .form-field__shell textarea:-webkit-autofill:hover,
+  .form-field__shell textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--ui-text-highlighted);
+    -webkit-box-shadow: 0 0 0 1000px var(--ui-bg) inset;
+    box-shadow: 0 0 0 1000px var(--ui-bg) inset;
+    caret-color: var(--ui-text-highlighted);
+    transition: background-color 9999s ease-out;
+  }
+
+  .form-field__shell[data-variant="filled"] input:-webkit-autofill,
+  .form-field__shell[data-variant="filled"] input:-webkit-autofill:hover,
+  .form-field__shell[data-variant="filled"] input:-webkit-autofill:focus,
+  .form-field__shell[data-variant="filled"] textarea:-webkit-autofill,
+  .form-field__shell[data-variant="filled"] textarea:-webkit-autofill:hover,
+  .form-field__shell[data-variant="filled"] textarea:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent) inset;
+    box-shadow: 0 0 0 1000px color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent) inset;
   }
 
   .form-field__shell[data-invalid="true"] .form-field__label {

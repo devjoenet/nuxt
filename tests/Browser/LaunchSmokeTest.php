@@ -15,10 +15,10 @@ test('public marketing and intake smoke cleanly in a dark browser session', func
     $page
         ->click('#intake-service')
         ->assertAttribute('#intake-service', 'aria-expanded', 'true')
-        ->assertSee('Operations application')
-        ->page()
-        ->getByRole('option', ['name' => 'Operations application', 'exact' => true])
-        ->click();
+        ->assertSee('Operations application');
+
+    $page->page()->getByRole('option', ['name' => 'Operations application', 'exact' => true])->click();
+    $page->wait(0.5)->assertDontSee('Use the contact form');
 
     $page
         ->click('#intake-name')
@@ -42,7 +42,8 @@ test('visitors can submit a valid inquiry from the browser', function (): void {
         ->fill('#intake-details', 'Our dispatch workflow depends on several spreadsheets and repeated manual entry.')
         ->check('#intake-consent')
         ->click('Send project details')
-        ->assertSee('Thanks. Your inquiry is in.')
+        ->assertSee('Your message was sent successfully.')
+        ->assertAttribute('[role="status"]', 'aria-live', 'polite')
         ->assertNoJavaScriptErrors();
 });
 
@@ -68,5 +69,33 @@ test('filled login inputs float their labels', function (): void {
         ->fill('password', 'password')
         ->wait(0.2)
         ->assertScript('document.querySelector(\'.form-field__shell:has(input[name="password"]) .form-field__label\')?.getBoundingClientRect().top < document.querySelector(\'.form-field__shell:has(input[name="password"])\')?.getBoundingClientRect().top + 8', true)
+        ->assertNoJavaScriptErrors();
+});
+
+test('budget input stays empty until typed and formats on blur', function (): void {
+    visit('/#contact')
+        ->assertScript('document.querySelector("#intake-budget")?.value', '')
+        ->type('#intake-budget', '25000')
+        ->assertScript('document.querySelector("#intake-budget")?.value', '25000')
+        ->click('#intake-name')
+        ->assertScript('document.querySelector("#intake-budget")?.value', '$25,000')
+        ->assertNoJavaScriptErrors();
+});
+
+test('landing form masks phone numbers and keeps service options readable', function (): void {
+    visit('/#contact')
+        ->type('#intake-phone', '1112221234')
+        ->assertScript('document.querySelector("#intake-phone")?.value', '111-222-1234')
+        ->assertScript('document.querySelector("#intake-service")?.getBoundingClientRect().right > document.querySelector("#intake-service")?.closest(".form-field__shell")?.getBoundingClientRect().right - 8', true)
+        ->assertScript('document.querySelector("#intake-timeline")?.getBoundingClientRect().right > document.querySelector("#intake-timeline")?.closest(".form-field__shell")?.getBoundingClientRect().right - 8', true)
+        ->click('#intake-service')
+        ->assertSee('Reporting and visibility')
+        ->assertScript("getComputedStyle(document.querySelector('[role=\"option\"] [data-slot=\"itemLabel\"]')).textOverflow", 'clip')
+        ->assertScript("getComputedStyle(document.querySelector('[role=\"option\"] [data-slot=\"itemLabel\"]')).whiteSpace", 'normal')
+        ->click('#intake-name')
+        ->wait(0.3)
+        ->click('#intake-details')
+        ->assertScript('document.activeElement?.id', 'intake-details')
+        ->assertScript('getComputedStyle(document.querySelector("#intake-details").closest(".form-field__shell")?.querySelector(".form-field__label")).top', '8px')
         ->assertNoJavaScriptErrors();
 });

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { computed } from "vue";
-  import { Motion } from "motion-v";
 
   interface LandingCard {
     title: string;
@@ -45,28 +44,11 @@
   const headingClasses = "text-muted-950 dark:text-neutral-50";
   const descriptionClasses = "text-muted-700 dark:text-neutral-300";
   const detailClasses = "text-muted-600 dark:text-neutral-400";
-  const entrance = {
-    primary: { opacity: 1, x: 0, y: 0 },
-    accent: { opacity: 1, x: 0, y: 0 },
-    secondary: { opacity: 1, x: 0, y: 0 },
-    warning: { opacity: 1, x: 0, y: 0 },
-  };
-  const initial = {
-    primary: { opacity: 0, x: -20, y: 18 },
-    accent: { opacity: 0, x: 20, y: 18 },
-    secondary: { opacity: 0, x: 0, y: 28 },
-    warning: { opacity: 0, x: 0, y: 20, scale: 0.96 },
-  };
 </script>
 
 <template>
-  <Motion
-    as="article"
+  <article
     :class="[articleClasses, { 'text-center': centered }]"
-    :initial="initial[item.tone]"
-    :transition="{ duration: 0.7, ease: 'easeOut' }"
-    :viewport="{ once: true, amount: 0.28 }"
-    :while-in-view="entrance[item.tone]"
     class="group relative h-full overflow-hidden rounded-lg border bg-muted-50/90 p-6 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 transition hover:-translate-y-1 dark:bg-muted-900/70 dark:shadow-muted-950/20 dark:ring-neutral-100/5"
   >
     <div class="relative z-10">
@@ -81,5 +63,5 @@
       <p :class="detailClasses" class="mt-1 text-sm leading-6">{{ item.detail }}</p>
       <p v-if="proof" class="mt-5 border-t border-muted-200 pt-4 text-xs leading-5 text-muted-600 dark:border-neutral-100/10 dark:text-neutral-400">{{ proof }}</p>
     </div>
-  </Motion>
+  </article>
 </template>

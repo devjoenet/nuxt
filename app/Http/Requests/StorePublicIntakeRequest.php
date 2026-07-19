@@ -16,6 +16,28 @@ class StorePublicIntakeRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @param  array<string, mixed>  $attributes
+     * @return array<string, mixed>
+     */
+    public static function normalize(array $attributes): array
+    {
+        $budgetRange = $attributes['budget_range'] ?? null;
+
+        if (! is_string($budgetRange)) {
+            return $attributes;
+        }
+
+        $attributes['budget_range'] = str_replace([',', '$', ' '], '', mb_trim($budgetRange));
+
+        return $attributes;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->replace(self::normalize($this->all()));
+    }
+
     /** @return array<string, ValidationRule|array|string> */
     public function rules(): array
     {
@@ -30,7 +52,7 @@ class StorePublicIntakeRequest extends FormRequest
                     return;
                 }
 
-                $fail('Enter a budget amount using numbers only.');
+                $fail('Enter a valid budget amount.');
             }],
             'timeline' => ['nullable', 'string', 'in:urgent,1-3-months,3-6-months,exploring'],
             'service_interest' => ['nullable', 'array'],

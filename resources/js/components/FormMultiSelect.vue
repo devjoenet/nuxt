@@ -42,7 +42,7 @@
   const defaultBaseClass = computed(() => {
     const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
 
-    return `min-h-14 rounded-xl px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
+    return `min-h-14 w-full rounded-xl !bg-transparent px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
   });
 
   type SelectMenuUi = NonNullable<SelectMenuProps["ui"]>;
@@ -53,6 +53,8 @@
     return {
       ...customUi,
       base: customUi?.base ?? defaultBaseClass.value,
+      content: customUi?.content ?? "w-max min-w-[min(20rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)]",
+      itemLabel: customUi?.itemLabel ?? "!whitespace-normal !overflow-visible !text-clip break-words",
     };
   });
 
