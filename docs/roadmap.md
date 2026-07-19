@@ -44,19 +44,6 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 15 — Rework Public Privacy Presentation
-
-The privacy-page testing record asks whether the policy should remain a scrollable page or become an on-demand surface.
-Resolve that presentation choice before implementation; this is a UX follow-up, not a change to the ratified legal scope.
-
-- [ ] Decide whether the privacy policy remains a dedicated page or becomes a reusable modal/dialog available from public
-  pages; preserve a directly addressable policy URL either way.
-- [ ] If a modal/dialog is selected, load the policy content lazily and keep keyboard, screen-reader, focus, and deep-link
-  behavior accessible.
-- [ ] If the page remains, reduce or remove unnecessary scrolling while preserving readable legal-document spacing and
-  responsive behavior.
-- [ ] Add focused coverage for the selected presentation and its public navigation entry points.
-
 ### Task 16 — Brand And Theme Shared Error Pages
 
 User testing found that the shared 403, 404, 419, 429, 500, and 503 states are not yet fully compatible with dark mode

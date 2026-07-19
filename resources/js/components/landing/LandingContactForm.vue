@@ -5,9 +5,9 @@
   import FormPhoneInput from "@/components/FormPhoneInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
-  import { privacy } from "@/routes";
+  import PrivacyDialogLink from "@/components/privacy/PrivacyDialogLink.vue";
   import { store } from "@/routes/contact";
-  import { Form, Link, usePage } from "@inertiajs/vue3";
+  import { Form, usePage } from "@inertiajs/vue3";
   import { nextTick, onMounted, reactive, ref } from "vue";
   import { Motion } from "motion-v";
   import type { AppPageProps } from "@/types";
@@ -152,7 +152,9 @@
         <input id="intake-consent" class="mt-1 size-4 rounded border-muted-400 text-primary-600 focus:ring-primary-400" name="consent" required type="checkbox" value="1" />
         <p>
           <label for="intake-consent">I agree that Southeast Code may use these details to respond to my inquiry.</label> See the
-          <Link :href="privacy()" class="font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300">privacy notice</Link>.
+          <PrivacyDialogLink id="intake-privacy-notice" class="font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300"
+            >privacy notice</PrivacyDialogLink
+          >.
         </p>
       </div>
       <p v-if="errors.consent" class="px-1 text-base text-error sm:text-sm" role="status">{{ errors.consent }}</p>

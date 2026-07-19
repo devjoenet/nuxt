@@ -312,3 +312,22 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
 - [x] Run the focused feature tests, frontend typecheck, lint, production build, and direct Chrome review across the
   changed landing states. The temporary Pest browser server still reports its pre-existing keyboard-focus/
   `ResizeObserver` harness failure; the public testing record remains unapproved for human review.
+
+### Task 15 — Rework Public Privacy Presentation
+
+- [x] **Decision:** Normal activation of public privacy links opens a lazily loaded, scrollable modal. `/privacy` remains
+  the canonical full-page URL and progressive fallback. This keeps the public form usable without forcing policy-page
+  scrolling while preserving direct access, search indexing, modified-click behavior, and no-JavaScript navigation.
+- [x] Extract the ratified policy copy into `PrivacyPolicyContent.vue`, reuse it on the canonical page and modal, and
+  preserve the Wayfinder-generated contact-form link.
+- [x] Add `PrivacyDialog.vue` using Nuxt UI's overlay-backed modal with a constrained scroll region, accessible title and
+  description, explicit `aria-modal`, focus restoration, Escape/outside dismissal, close-before-navigation behavior, and
+  a full-page fallback link.
+- [x] Add `PrivacyDialogLink.vue` with a real `/privacy` anchor, activation-only dynamic import, overlay destruction after
+  leave, modifier/middle-click preservation, loading state, and import-failure fallback navigation.
+- [x] Replace the footer and consent entry points while preserving form state, and retain `/privacy` route/component/
+  canonical metadata behavior.
+- [x] Add feature and browser coverage for the direct route, consent and footer triggers, focus restoration, no URL change,
+  deep-link navigation, mobile overflow, and JavaScript errors.
+- [x] Verify the lazy boundary in `public/build/manifest.json`: `PrivacyDialog.vue` is listed under the landing bundle's
+  `dynamicImports`, while the extracted `PrivacyPolicyContent` is a separate chunk.

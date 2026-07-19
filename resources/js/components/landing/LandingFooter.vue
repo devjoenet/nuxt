@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import AppLogo from "@/components/AppLogo.vue";
-  import { privacy } from "@/routes";
-  import { Link } from "@inertiajs/vue3";
+  import PrivacyDialogLink from "@/components/privacy/PrivacyDialogLink.vue";
   import { Motion } from "motion-v";
 
   interface FooterLink {
@@ -75,7 +74,7 @@
     >
       <p>&copy; 2026 Southeast Code, LLC. All rights reserved.</p>
       <div class="flex gap-5">
-        <Link :href="privacy()" class="transition hover:text-muted-800 dark:hover:text-neutral-300">Privacy</Link>
+        <PrivacyDialogLink id="footer-privacy-notice" class="transition hover:text-muted-800 dark:hover:text-neutral-300">Privacy</PrivacyDialogLink>
       </div>
     </div>
   </Motion>
