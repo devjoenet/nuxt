@@ -36,10 +36,11 @@ class AdminUserController extends Controller
     public function store(StoreAdminUserRequest $request): RedirectResponse
     {
         $this->authorize('create', User::class);
+        $currentUser = $this->authenticatedUser($request);
 
         $attributes = $request->validated();
 
-        if ($attributes['role'] === RoleName::SuperAdmin->value && ! $request->user()->hasRole(RoleName::SuperAdmin->value)) {
+        if ($attributes['role'] === RoleName::SuperAdmin->value && ! $currentUser->hasRole(RoleName::SuperAdmin->value)) {
             throw ValidationException::withMessages(['role' => 'Only a Super Admin can assign the Super Admin role.']);
         }
 
@@ -62,14 +63,15 @@ class AdminUserController extends Controller
     public function update(UpdateAdminUserRequest $request, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
+        $currentUser = $this->authenticatedUser($request);
 
         $attributes = $request->validated();
 
-        if ($attributes['role'] === RoleName::SuperAdmin->value && ! $request->user()->hasRole(RoleName::SuperAdmin->value)) {
+        if ($attributes['role'] === RoleName::SuperAdmin->value && ! $currentUser->hasRole(RoleName::SuperAdmin->value)) {
             throw ValidationException::withMessages(['role' => 'Only a Super Admin can assign the Super Admin role.']);
         }
 
-        if ($user->is($request->user()) && ! $attributes['is_active']) {
+        if ($user->is($currentUser) && ! $attributes['is_active']) {
             throw ValidationException::withMessages(['is_active' => 'You cannot deactivate your own account.']);
         }
 
@@ -77,7 +79,7 @@ class AdminUserController extends Controller
             throw ValidationException::withMessages(['role' => 'The Super Admin role is protected.']);
         }
 
-        if ($user->hasRole(RoleName::SuperAdmin->value) && ! $request->user()->hasRole(RoleName::SuperAdmin->value)) {
+        if ($user->hasRole(RoleName::SuperAdmin->value) && ! $currentUser->hasRole(RoleName::SuperAdmin->value)) {
             throw ValidationException::withMessages(['role' => 'Only a Super Admin can manage a Super Admin account.']);
         }
 

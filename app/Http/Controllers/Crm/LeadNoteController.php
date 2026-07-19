@@ -14,9 +14,10 @@ class LeadNoteController extends Controller
 {
     public function store(StoreLeadNoteRequest $request, Lead $lead): RedirectResponse
     {
-        $lead->notes()->create([...$request->validated(), 'user_id' => $request->user()->id]);
+        $user = $this->authenticatedUser($request);
+        $lead->notes()->create([...$request->validated(), 'user_id' => $user->id]);
         $lead->activities()->create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'type' => CrmActivityType::NoteAdded,
             'description' => 'A note was added.',
         ]);

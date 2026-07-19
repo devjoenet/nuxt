@@ -8,16 +8,22 @@ use App\Enums\CrmActivityType;
 use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class CreateLead
 {
-    public function handle(array $attributes): Lead
+    /** @param array<string, mixed> $attributes */
+    public function handle(array $attributes, User $user): Lead
     {
-        return DB::transaction(function () use ($attributes): Lead {
-            $user = auth()->user();
-            $ownerId = $user?->isCrmAdministrator() === true ? ($attributes['owner_id'] ?? $user->id) : $user?->id;
+        return DB::transaction(function () use ($attributes, $user): Lead {
+            $ownerId = $user->id;
+            $requestedOwnerId = filter_var($attributes['owner_id'] ?? null, FILTER_VALIDATE_INT);
+
+            if ($user->isCrmAdministrator() && $requestedOwnerId !== false) {
+                $ownerId = $requestedOwnerId;
+            }
             $organization = filled($attributes['organization_name'] ?? null)
                 ? Organization::query()->firstOrCreate(['name' => $attributes['organization_name']], ['website' => $attributes['organization_website'] ?? null])
                 : null;
@@ -27,10 +33,8 @@ class CreateLead
                 ['name' => $attributes['contact_name'], 'phone' => $attributes['contact_phone'] ?? null, 'organization_id' => $organization?->id],
             );
 
-            if ($ownerId !== null) {
-                $organization?->update(['owner_id' => $organization->owner_id ?? $ownerId]);
-                $contact->update(['owner_id' => $contact->owner_id ?? $ownerId]);
-            }
+            $organization?->update(['owner_id' => $organization->owner_id ?? $ownerId]);
+            $contact->update(['owner_id' => $contact->owner_id ?? $ownerId]);
 
             $serviceInterests = array_values($attributes['service_interest'] ?? []);
 
@@ -45,7 +49,7 @@ class CreateLead
             ]);
 
             $lead->activities()->create([
-                'user_id' => auth()->id(),
+                'user_id' => $user->id,
                 'type' => CrmActivityType::LeadCreated,
                 'description' => 'Lead created in the CRM workspace.',
             ]);

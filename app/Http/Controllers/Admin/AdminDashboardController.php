@@ -19,7 +19,8 @@ class AdminDashboardController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        abort_unless($request->user()?->can('admin.dashboard.view'), 403);
+        $user = $this->authenticatedUser($request);
+        abort_unless($user->can('admin.dashboard.view'), 403);
 
         $recentActivities = Activity::query()
             ->with('causer')

@@ -6,6 +6,8 @@ namespace App\Http\Requests;
 
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,17 +16,25 @@ class UpdateLeadRequest extends FormRequest
 {
     public function authorize(): bool
     {
+        $user = $this->user();
         $lead = $this->route('lead');
-        abort_unless($lead instanceof \App\Models\Lead && $lead->isVisibleTo($this->user()), 404);
+        if (! $user instanceof User) {
+            return false;
+        }
 
-        return $this->user()?->can('update', $lead) === true;
+        abort_unless($lead instanceof Lead && $lead->isVisibleTo($user), 404);
+
+        return $user->can('update', $lead);
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
+        $lead = $this->route('lead');
+
         return [
             'contact_name' => ['required', 'string', 'max:255'],
-            'contact_email' => ['required', 'email', 'max:255', Rule::unique('contacts', 'email')->ignore($this->route('lead')->contact_id)],
+            'contact_email' => ['required', 'email', 'max:255', Rule::unique('contacts', 'email')->ignore($lead instanceof Lead ? $lead->contact_id : null)],
             'contact_phone' => ['nullable', 'string', 'max:255'],
             'owner_id' => [
                 Rule::prohibitedIf(fn (): bool => ! $this->user()?->isCrmAdministrator()),

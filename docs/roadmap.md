@@ -73,11 +73,28 @@ an informational treatment for the non-editable Super Admin role.
 
 ### Task 21 — Restore CRM Detail Browser Smoke Coverage
 
-- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM lead, organization, and contact detail URLs
-  while list pages and the other browser smoke flows render normally.
-- [ ] Reinstate focused CRM browser coverage that separately verifies View link navigation and the linked detail-route
-  response for leads, organizations, and contacts.
+This is verification work for the existing organization and contact detail pages, not new CRM feature development.
+Their user-testing cards should show `Needs verification` while this browser coverage remains deferred. Lead detail
+rendering is tracked separately in Task 22.
+
+- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM organization and contact detail URLs while
+  list pages and the other browser smoke flows render normally.
+- [ ] Reinstate focused browser coverage that separately verifies View link navigation and the linked detail-route
+  response for organizations and contacts.
 - [ ] Run the browser suite and full quality contract after the detail-route rendering issue is resolved.
+
+### Task 22 — Fix CRM Lead Detail Rendering
+
+The lead detail user-testing note identifies a separate rendering defect: valid lead records can blank-render because the
+page reads `lead.contact.name` when the contact payload is missing. This is implementation work, not Task 21's browser
+smoke verification.
+
+- [ ] Reproduce the blank lead detail page and determine why the required contact relation is missing from the Inertia
+  payload or not handled by the page.
+- [ ] Make valid lead detail records render safely while preserving the intended contact relationship semantics.
+- [ ] Add focused feature/browser regression coverage for the lead detail payload, rendered page, and relevant missing
+  relation state.
+- [ ] Run the focused tests and full quality contract after the rendering fix.
 
 ## Later, Not MVP
 

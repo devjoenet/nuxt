@@ -9,17 +9,14 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\Attributes\Backoff;
+use Illuminate\Queue\Attributes\Timeout;
 
+#[Backoff([60, 300, 900])]
+#[Timeout(60)]
 class NewLeadReceived extends Notification implements ShouldQueue
 {
     use Queueable;
-
-    public int $tries = 3;
-
-    /** @var array<int, int> */
-    public array $backoff = [60, 300, 900];
-
-    public int $timeout = 60;
 
     public function __construct(public Lead $lead)
     {

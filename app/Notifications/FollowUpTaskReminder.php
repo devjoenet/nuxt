@@ -9,17 +9,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\Attributes\Backoff;
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
+use LogicException;
 
+#[Backoff([60, 300, 900])]
+#[Timeout(60)]
+#[Tries(3)]
 class FollowUpTaskReminder extends Notification implements ShouldQueue
 {
     use Queueable;
-
-    public int $tries = 3;
-
-    /** @var array<int, int> */
-    public array $backoff = [60, 300, 900];
-
-    public int $timeout = 60;
 
     public function __construct(public FollowUpTask $task)
     {
@@ -46,12 +46,20 @@ class FollowUpTaskReminder extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
+        $lead = $this->task->lead;
+
+        if ($lead === null) {
+            throw new LogicException("Cannot send a follow-up reminder for task `{$this->task->uuid}` without a lead.");
+        }
+
+        $contact = $lead->contact;
+
         return (new MailMessage)
-            ->subject('Follow up with '.$this->task->lead->contact->name)
+            ->subject('Follow up with '.$contact->name)
             ->greeting('A CRM follow-up is due.')
             ->line('Task: '.$this->task->title)
-            ->line('Lead: '.$this->task->lead->contact->name)
-            ->line('Email: '.$this->task->lead->contact->email)
+            ->line('Lead: '.$contact->name)
+            ->line('Email: '.$contact->email)
             ->line('Due: '.$this->task->due_at->toDayDateTimeString())
             ->line($this->task->description ?? 'Review the lead and make the next contact attempt.');
     }

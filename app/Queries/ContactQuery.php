@@ -10,7 +10,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ContactQuery
 {
-    /** @param array<string, mixed> $filters */
+    /**
+     * @param  array<string, mixed>  $filters
+     * @return Builder<Contact>
+     */
     public function build(User $user, array $filters): Builder
     {
         $sort = in_array($filters['sort'] ?? null, ['name', 'created_at'], true) ? $filters['sort'] : 'created_at';

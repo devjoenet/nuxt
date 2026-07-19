@@ -18,12 +18,13 @@ class PasswordController extends Controller
     #[Middleware('throttle:6,1')]
     public function update(Request $request): RedirectResponse
     {
+        $user = $this->authenticatedUser($request);
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        $user->update([
             'password' => Hash::make($validated['password']),
         ]);
 

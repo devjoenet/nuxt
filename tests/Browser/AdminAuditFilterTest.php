@@ -22,6 +22,7 @@ test('audit filters remain usable across themes and narrow widths', function ():
 
     $page = visit('/admin/audit')
         ->assertSee('Audit log')
+        ->assertScript('getComputedStyle(document.querySelector(".audit-toolbar"))?.overflowY', 'visible')
         ->assertAttribute('#audit-event', 'aria-expanded', 'false')
         ->assertScript('document.querySelector("#audit-search")?.closest(".form-field__shell")?.querySelector("[data-slot=leading]")?.getBoundingClientRect().right < document.querySelector("#audit-search")?.closest(".form-field__shell")?.querySelector(".form-field__label")?.getBoundingClientRect().left', true)
         ->click('#audit-event')
@@ -53,6 +54,7 @@ test('audit filters remain usable across themes and narrow widths', function ():
 
     visit('/admin/audit')->inDarkMode()
         ->assertScript('document.documentElement.classList.contains("dark")', true)
+        ->assertScript('getComputedStyle(document.querySelector(".audit-toolbar"))?.overflowY', 'visible')
         ->assertScript('document.querySelector("#audit-search")?.closest(".form-field__shell")?.querySelector("[data-slot=leading]")?.getBoundingClientRect().right < document.querySelector("#audit-search")?.closest(".form-field__shell")?.querySelector(".form-field__label")?.getBoundingClientRect().left', true)
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();

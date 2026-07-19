@@ -23,7 +23,7 @@ class OrganizationController extends Controller
 {
     public function index(Request $request, OrganizationQuery $query): Response
     {
-        $user = $request->user();
+        $user = $this->authenticatedUser($request);
         $filters = $request->only(['search', 'owner', 'sort', 'direction', 'archived']);
 
         return Inertia::render('Crm/Organizations/Index', [
@@ -47,55 +47,59 @@ class OrganizationController extends Controller
     public function create(Request $request): Response
     {
         $this->authorize('create', Organization::class);
+        $user = $this->authenticatedUser($request);
 
         return Inertia::render('Crm/Organizations/Form', [
             'organization' => null,
             'owners' => $this->owners(),
-            'canAssign' => $request->user()->isCrmAdministrator(),
+            'canAssign' => $user->isCrmAdministrator(),
         ]);
     }
 
     public function store(StoreOrganizationRequest $request, CreateOrganization $action): RedirectResponse
     {
-        $organization = $action->handle($request->validated(), $request->user());
+        $organization = $action->handle($request->validated(), $this->authenticatedUser($request));
 
         return to_route('crm.organizations.show', $organization)->with('success', 'Organization created.');
     }
 
     public function show(Request $request, Organization $organization): Response
     {
-        abort_unless($organization->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($organization->isVisibleTo($user), 404);
         $organization->load([
             'owner',
             'contacts' => fn (Builder $query): Builder => $query
-                ->when(! $request->user()->isCrmAdministrator(), fn (Builder $query): Builder => $query->where(function (Builder $query) use ($request): void {
-                    $query->where('owner_id', $request->user()->id)->orWhereNull('owner_id');
+                ->when(! $user->isCrmAdministrator(), fn (Builder $query): Builder => $query->where(function (Builder $query) use ($user): void {
+                    $query->where('owner_id', $user->id)->orWhereNull('owner_id');
                 }))
                 ->with('owner'),
         ])->loadCount('leads');
 
         return Inertia::render('Crm/Organizations/Show', [
             'organization' => OrganizationResource::make($organization),
-            'canManage' => $request->user()->can('crm.manage'),
-            'canAssign' => $request->user()->isCrmAdministrator(),
+            'canManage' => $user->can('crm.manage'),
+            'canAssign' => $user->isCrmAdministrator(),
         ]);
     }
 
     public function edit(Request $request, Organization $organization): Response
     {
-        abort_unless($organization->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('update', $organization);
 
         return Inertia::render('Crm/Organizations/Form', [
             'organization' => OrganizationResource::make($organization->load('owner')),
             'owners' => $this->owners(),
-            'canAssign' => $request->user()->isCrmAdministrator(),
+            'canAssign' => $user->isCrmAdministrator(),
         ]);
     }
 
     public function archive(Request $request, Organization $organization): RedirectResponse
     {
-        abort_unless($organization->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('archive', $organization);
         $organization->update(['archived_at' => now()]);
 
@@ -104,14 +108,15 @@ class OrganizationController extends Controller
 
     public function update(UpdateOrganizationRequest $request, Organization $organization, UpdateOrganization $action): RedirectResponse
     {
-        $organization = $action->handle($organization, $request->validated(), $request->user());
+        $organization = $action->handle($organization, $request->validated(), $this->authenticatedUser($request));
 
         return to_route('crm.organizations.show', $organization)->with('success', 'Organization updated.');
     }
 
     public function restore(Request $request, Organization $organization): RedirectResponse
     {
-        abort_unless($organization->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('restore', $organization);
         $organization->update(['archived_at' => null]);
 
@@ -120,7 +125,8 @@ class OrganizationController extends Controller
 
     public function destroy(Request $request, Organization $organization): RedirectResponse
     {
-        abort_unless($organization->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('delete', $organization);
         $organization->delete();
 

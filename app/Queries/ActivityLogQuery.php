@@ -69,7 +69,10 @@ final class ActivityLogQuery
         ];
     }
 
-    /** @param array<int, array{label: string, value: string}> $options */
+    /**
+     * @param  array<int, array{label: string, value: string}>  $options
+     * @return array<int, array{label: string, value: string}>
+     */
     private function sortOptions(array $options): array
     {
         $special = array_values(array_filter($options, fn (array $option): bool => str_starts_with($option['value'], '__')));
@@ -94,7 +97,7 @@ final class ActivityLogQuery
         $from = $this->parseDate($filters['from']);
         $to = $this->parseDate($filters['to']);
 
-        return Activity::query()
+        $query = Activity::query()
             ->with(['causer', 'subject'])
             ->when($filters['search'], function (Builder $query, string $search): void {
                 $term = "%{$search}%";
@@ -142,9 +145,17 @@ final class ActivityLogQuery
                     }
                 });
             })
-            ->when($from instanceof Carbon, fn (Builder $query): Builder => $query->where('created_at', '>=', $from->copy()->startOfDay()))
-            ->when($to instanceof Carbon, fn (Builder $query): Builder => $query->where('created_at', '<=', $to->copy()->endOfDay()))
             ->latest();
+
+        if ($from instanceof Carbon) {
+            $query->where('created_at', '>=', $from->copy()->startOfDay());
+        }
+
+        if ($to instanceof Carbon) {
+            $query->where('created_at', '<=', $to->copy()->endOfDay());
+        }
+
+        return $query;
     }
 
     private function parseDate(?string $date): ?Carbon

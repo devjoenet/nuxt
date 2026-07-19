@@ -37,7 +37,7 @@
       <UDashboardNavbar description="Safe before-and-after visibility for sensitive workspace changes." title="Audit log">
         <template #leading><UDashboardSidebarCollapse /></template>
       </UDashboardNavbar>
-      <UDashboardToolbar>
+      <UDashboardToolbar :ui="{ root: 'overflow-visible' }" class="audit-toolbar">
         <Form
           class="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(16rem,1.4fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_9rem_9rem_auto]"
           v-bind="index.form()"

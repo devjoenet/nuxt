@@ -34,6 +34,7 @@ class Note extends Model
             ->dontLogEmptyChanges();
     }
 
+    /** @return array<int, string> */
     #[Override]
     public function uniqueIds(): array
     {

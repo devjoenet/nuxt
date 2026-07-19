@@ -14,7 +14,8 @@ class LeadConversionController extends Controller
 {
     public function __invoke(Request $request, Lead $lead, ConvertLead $action): RedirectResponse
     {
-        abort_unless($lead->isVisibleTo($request->user()), 404);
+        $user = $this->authenticatedUser($request);
+        abort_unless($lead->isVisibleTo($user), 404);
         $this->authorize('convert', $lead);
         $action->handle($lead);
 

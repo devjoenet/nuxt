@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Concerns;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -29,7 +30,12 @@ trait HasCrmOwnership
         return $this->owner_id === $user->id;
     }
 
-    public function scopeVisibleTo(Builder $query, User $user): Builder
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
+     */
+    #[Scope]
+    protected function visibleTo(Builder $query, User $user): Builder
     {
         if ($user->isCrmAdministrator()) {
             return $query;

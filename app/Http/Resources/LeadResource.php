@@ -47,8 +47,8 @@ class LeadResource extends JsonResource
             'notes' => $this->whenLoaded('notes', fn (): array => $this->notes->map(fn (Note $note): array => [
                 'id' => $note->uuid,
                 'body' => $note->body,
-                'author' => $note->user->name,
-                'created_at' => $note->created_at->toISOString(),
+                'author' => $note->user === null ? 'Unknown user' : $note->user->name,
+                'created_at' => $note->created_at?->toISOString(),
             ])->all()),
             'activities' => $this->whenLoaded('activities', fn (): array => $this->activities->map(fn (CrmActivity $activity): array => [
                 'id' => $activity->uuid,

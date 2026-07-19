@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Models\Lead;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,9 +15,10 @@ class StoreLeadRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can('create', \App\Models\Lead::class) === true;
+        return $this->user()?->can('create', Lead::class) === true;
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [

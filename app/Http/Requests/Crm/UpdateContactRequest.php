@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Crm;
 
 use App\Models\Contact;
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,10 +15,15 @@ class UpdateContactRequest extends FormRequest
 {
     public function authorize(): bool
     {
+        $user = $this->user();
         $contact = $this->route('contact');
-        abort_unless($contact instanceof Contact && $contact->isVisibleTo($this->user()), 404);
+        if (! $user instanceof User) {
+            return false;
+        }
 
-        return $this->user()?->can('update', $contact) === true;
+        abort_unless($contact instanceof Contact && $contact->isVisibleTo($user), 404);
+
+        return $user->can('update', $contact);
     }
 
     /** @return array<string, ValidationRule|array<mixed>|string> */
