@@ -50,11 +50,12 @@ test('admin, jobs, settings, and audit screens smoke cleanly', function (): void
     $page->assertPathIs('/settings/security');
 });
 
-test('admin user controls explain unavailable two-factor reset state', function (): void {
+test('admin user controls only show two-factor reset for configured users', function (): void {
     app(RolePermissionSeeder::class)->run();
 
     $admin = User::factory()->create();
     $admin->assignRole('Admin');
+    $twoFactorUser = User::factory()->withTwoFactorAuthentication()->create();
     $unverified = User::factory()->unverified()->create();
 
     $this->actingAs($admin);
@@ -62,8 +63,8 @@ test('admin user controls explain unavailable two-factor reset state', function 
     visit('/admin/users')
         ->assertSee('Resend verification')
         ->assertSee('Reset 2FA')
-        ->assertSee('2FA is not configured for this user.')
-        ->assertDisabled("[data-testid=\"reset-2fa-disabled-{$unverified->getKey()}\"]")
+        ->assertPresent("[data-testid=\"reset-2fa-{$twoFactorUser->getKey()}\"]")
+        ->assertMissing("[data-testid=\"reset-2fa-{$unverified->getKey()}\"]")
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
