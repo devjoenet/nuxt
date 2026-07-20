@@ -38,6 +38,7 @@ export interface AdminUser {
   email: string;
   is_active: boolean;
   email_verified_at: string | null;
+  two_factor_enabled: boolean;
   roles: string[];
   created_at: string;
 }

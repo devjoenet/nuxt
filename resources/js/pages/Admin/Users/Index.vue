@@ -65,10 +65,25 @@
                   </td>
                   <td class="px-3 py-3 text-right">
                     <div class="flex flex-wrap justify-end gap-2">
-                      <Form v-if="!user.email_verified_at" v-bind="resendVerification.form(user.id)"
-                        ><UButton label="Resend verification" size="xs" type="submit" variant="ghost"
-                      /></Form>
-                      <Form v-bind="resetTwoFactor.form(user.id)"><UButton label="Reset 2FA" size="xs" type="submit" variant="ghost" /></Form>
+                      <Form v-if="!user.email_verified_at" #default="{ errors, processing }" v-bind="resendVerification.form(user.id)">
+                        <UButton :aria-busy="processing" :loading="processing" label="Resend verification" size="xs" type="submit" variant="ghost" />
+                        <p v-if="errors.email" class="mt-1 text-xs text-error" role="alert">{{ errors.email }}</p>
+                      </Form>
+                      <Form v-if="user.two_factor_enabled" #default="{ errors, processing }" v-bind="resetTwoFactor.form(user.id)">
+                        <UButton :aria-busy="processing" :loading="processing" label="Reset 2FA" size="xs" type="submit" variant="ghost" />
+                        <p v-if="errors.two_factor" class="mt-1 text-xs text-error" role="alert">{{ errors.two_factor }}</p>
+                      </Form>
+                      <div v-else class="flex flex-col items-end">
+                        <UButton
+                          :aria-describedby="`two-factor-help-${user.id}`"
+                          :data-testid="`reset-2fa-disabled-${user.id}`"
+                          disabled
+                          label="Reset 2FA"
+                          size="xs"
+                          variant="ghost"
+                        />
+                        <p :id="`two-factor-help-${user.id}`" class="mt-1 text-xs text-muted">2FA is not configured for this user.</p>
+                      </div>
                     </div>
                     <p class="mt-1 text-xs text-muted">{{ user.roles.join(", ") }}</p>
                   </td>

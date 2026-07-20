@@ -9,7 +9,11 @@ use App\Models\CrmActivity;
 use App\Models\Lead;
 use App\Models\Note;
 use App\Models\User;
+use App\Notifications\UserInvitationNotification;
 use Database\Seeders\RolePermissionSeeder;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia as Assert;
 use Spatie\Activitylog\Models\Activity;
@@ -59,7 +63,7 @@ test('admins can view the dashboard and protected admin screens', function (): v
     $this->actingAs($user)->get(route('admin.audit.index'))->assertOk();
 });
 
-test('admins can invite users with a role and a password setup notification', function (): void {
+test('admins can invite users with a role and a queued onboarding notification', function (): void {
     Notification::fake();
     $admin = adminUser();
 
@@ -72,7 +76,44 @@ test('admins can invite users with a role and a password setup notification', fu
     $invited = User::query()->where('email', 'operator@example.com')->sole();
 
     expect($invited->hasRole(RoleName::SalesOps->value))->toBeTrue();
-    Notification::assertSentTo($invited, Illuminate\Auth\Notifications\ResetPassword::class);
+
+    /** @var UserInvitationNotification $notification */
+    $notification = Notification::sent($invited, UserInvitationNotification::class)->sole();
+    $mail = $notification->toMail($invited);
+
+    expect($notification)->toBeInstanceOf(ShouldQueue::class)
+        ->and($mail->subject)->toBe('Set up your Southeast Code account')
+        ->and($mail->actionText)->toBe('Set up your account')
+        ->and($mail->actionUrl)->toBe(route('password.reset', [
+            'token' => $notification->token,
+            'email' => $invited->email,
+        ]))
+        ->and(implode(' ', $mail->introLines))->toContain('administrator created')
+        ->and(implode(' ', $mail->introLines))->toContain('Choose your password')
+        ->and(implode(' ', $mail->introLines))->toContain('verify your email address');
+
+    auth()->logout();
+    $this->get($mail->actionUrl)->assertOk();
+
+    expect(Activity::query()->where('description', 'User invitation sent.')->exists())->toBeTrue();
+    Notification::assertNotSentTo($invited, ResetPassword::class);
+});
+
+test('admin invitations enforce role and duplicate-email boundaries', function (): void {
+    $admin = adminUser();
+    $existing = User::factory()->create(['email' => 'existing@example.com']);
+
+    $this->actingAs($admin)->post(route('admin.users.store'), [
+        'name' => 'Blocked Super Admin',
+        'email' => 'blocked@example.com',
+        'role' => RoleName::SuperAdmin->value,
+    ])->assertSessionHasErrors('role');
+
+    $this->actingAs($admin)->post(route('admin.users.store'), [
+        'name' => 'Duplicate User',
+        'email' => $existing->email,
+        'role' => RoleName::SalesOps->value,
+    ])->assertSessionHasErrors('email');
 });
 
 test('admins can update access and the change is auditable', function (): void {
@@ -91,9 +132,9 @@ test('admins can update access and the change is auditable', function (): void {
 });
 
 test('admins can resend verification and reset two-factor authentication', function (): void {
-    Notification::fake();
     $admin = adminUser();
     $user = User::factory()->unverified()->withTwoFactorAuthentication()->create();
+    Notification::fake();
 
     $this->actingAs($admin)->post(route('admin.users.resendVerification', $user))->assertRedirect();
     $this->actingAs($admin)->post(route('admin.users.resetTwoFactor', $user))->assertRedirect();
@@ -101,7 +142,38 @@ test('admins can resend verification and reset two-factor authentication', funct
     expect($user->refresh()->two_factor_secret)->toBeNull()
         ->and($user->two_factor_recovery_codes)->toBeNull()
         ->and($user->two_factor_confirmed_at)->toBeNull();
-    Notification::assertSentTo($user, Illuminate\Auth\Notifications\VerifyEmail::class);
+    Notification::assertSentTo($user, VerifyEmail::class);
+    expect(Activity::query()->where('description', 'Verification email resent.')->exists())->toBeTrue()
+        ->and(Activity::query()->where('description', 'Two-factor authentication reset.')->exists())->toBeTrue();
+});
+
+test('admin user actions reject false-success states', function (): void {
+    $admin = adminUser();
+    $verified = User::factory()->create();
+    $unconfigured = User::factory()->unverified()->create();
+    Notification::fake();
+
+    $verificationActivities = Activity::query()->where('description', 'Verification email resent.')->count();
+    $resetActivities = Activity::query()->where('description', 'Two-factor authentication reset.')->count();
+
+    $this->actingAs($admin)
+        ->post(route('admin.users.resendVerification', $verified))
+        ->assertSessionHasErrors('email');
+    $this->actingAs($admin)
+        ->post(route('admin.users.resetTwoFactor', $unconfigured))
+        ->assertSessionHasErrors('two_factor');
+
+    Notification::assertNotSentTo($verified, VerifyEmail::class);
+    expect(Activity::query()->where('description', 'Verification email resent.')->count())->toBe($verificationActivities)
+        ->and(Activity::query()->where('description', 'Two-factor authentication reset.')->count())->toBe($resetActivities);
+});
+
+test('users without admin access cannot invoke admin user actions', function (): void {
+    $user = User::factory()->create();
+    $target = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->post(route('admin.users.resendVerification', $target))->assertForbidden();
+    $this->actingAs($user)->post(route('admin.users.resetTwoFactor', $target))->assertForbidden();
 });
 
 test('admins cannot deactivate themselves or demote a super admin', function (): void {
