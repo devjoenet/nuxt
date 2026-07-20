@@ -6,16 +6,16 @@ return [
     'roadmap_tasks' => [
         'public-welcome' => 14,
         'public-privacy' => 15,
-        'crm-leads-show' => 22,
-        'crm-organizations-show' => 21,
-        'crm-contacts-show' => 21,
+        'crm-leads-show' => 21,
+        'crm-organizations-show' => 20,
+        'crm-contacts-show' => 20,
         'admin-users' => 18,
         'admin-roles' => 19,
         'admin-audit' => 17,
         'shared-error-pages' => 16,
     ],
     'roadmap_task_statuses' => [
-        21 => 'Needs verification',
+        20 => 'Needs verification',
     ],
     'pages' => [
         ['slug' => 'public-welcome', 'category' => 'Public', 'title' => 'Welcome / landing page', 'route_name' => 'home', 'path' => '/', 'sort_order' => 10, 'notes' => 'Review every landing-page section, link, animation, responsive state, dark mode state, and the project inquiry form.'],

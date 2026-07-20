@@ -44,11 +44,11 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 21 — Restore CRM Detail Browser Smoke Coverage
+### Task 20 — Restore CRM Detail Browser Smoke Coverage
 
 This is verification work for the existing organization and contact detail pages, not new CRM feature development.
 Their user-testing cards should show `Needs verification` while this browser coverage remains deferred. Lead detail
-rendering is tracked separately in Task 22.
+rendering is tracked separately in Task 21.
 
 - [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM organization and contact detail URLs while
   list pages and the other browser smoke flows render normally.
@@ -116,7 +116,7 @@ rendering is tracked separately in Task 22.
       - list every focused, repeated browser, and full quality-contract command run, with its result
       ```
 
-### Task 22 — Fix CRM Lead Detail Rendering
+### Task 21 — Fix CRM Lead Detail Rendering
 
 The lead detail user-testing note identifies a separate rendering defect: valid lead records can blank-render because the
 page reads `lead.contact.name` when the contact payload is missing. This is implementation work, not Task 21's browser
