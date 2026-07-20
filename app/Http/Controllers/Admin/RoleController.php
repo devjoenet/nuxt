@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\UpdateRolePermissions;
+use App\Data\RolePermissionsData;
 use App\Enums\RoleName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateRoleRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Permission;
@@ -35,22 +36,11 @@ class RoleController extends Controller
         ]);
     }
 
-    public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
+    public function update(UpdateRoleRequest $request, Role $role, UpdateRolePermissions $updateRolePermissions): RedirectResponse
     {
         $this->authorize('update', $role);
 
-        if ($role->name === RoleName::SuperAdmin->value) {
-            throw ValidationException::withMessages(['permission_ids' => 'The Super Admin permissions are managed by code.']);
-        }
-
-        $permissionIds = $request->validated('permission_ids') ?? [];
-        $permissionNames = Permission::query()->whereKey($permissionIds)->pluck('name');
-        $role->syncPermissions($permissionNames);
-
-        activity()
-            ->performedOn($role)
-            ->withProperties(['permission_ids' => $permissionIds])
-            ->log('Role permissions updated.');
+        $updateRolePermissions->handle($role, RolePermissionsData::fromValidated($request->validated()));
 
         return back()->with('success', 'Role permissions updated.');
     }
