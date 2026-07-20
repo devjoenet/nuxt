@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRoleRequest extends FormRequest
 {
@@ -19,7 +21,11 @@ class UpdateRoleRequest extends FormRequest
     {
         return [
             'permission_ids' => ['nullable', 'array'],
-            'permission_ids.*' => ['integer', 'exists:permissions,id'],
+            'permission_ids.*' => [
+                'integer',
+                'distinct:strict',
+                Rule::exists('permissions', 'id')->where(fn (Builder $query): Builder => $query->where('guard_name', 'web')),
+            ],
         ];
     }
 }

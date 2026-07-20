@@ -381,3 +381,22 @@ frontend typecheck/lint/format/build, focused Rector, max-level PHPStan, Pint, a
 full `composer test` contract reached its coverage-gated test phase but could not complete because this PHP runtime has
 no coverage driver; the full browser contract also exposed a LaunchSmoke focus-order failure outside Task 18, and
 the full lint contract retains unrelated pre-existing Rector dry-run findings outside this task.
+### Task 19 — Simplify Role Editing And Super Admin Presentation
+
+- [x] Replace the all-roles permission lists with one accessible large role selector and a focused permission list while
+  preserving server-side authorization, the existing route, Wayfinder form binding, and native checkbox submission.
+- [x] Move role permission updates behind `RolePermissionsData` and `UpdateRolePermissions`, including web-guard,
+  distinct-ID validation, exact replacement and clearing behavior, cache-aware `syncPermissions()`, audit logging, and
+  action-level Super Admin protection.
+- [x] Render the protected Super Admin state as the required compact info alert, retain explicit role/catalog/loading/
+  validation states, keep role switching disabled during submission, and preserve accessible responsive light/dark UI.
+- [x] Add focused feature coverage for payloads, replacement, clearing, invalid/duplicate/other-guard IDs,
+  authorization, audit properties, protected immutability, and Gate bypass behavior, plus browser coverage for role
+  selection, persistence, keyboard interaction, responsive themes, accessibility, and browser cleanliness.
+
+Completion note: Task 19 focused verification passed with 9 feature tests and 60 assertions, 2 role-editor browser tests
+and 24 assertions, frontend typecheck/lint/format/build, Herd-backed coverage-gated Unit/Feature tests with 144 tests,
+939 assertions, and 87.9% total coverage, max-level PHPStan, Pint, and `git diff --check`. The repository's direct
+`composer test` command could not run its coverage stage because this PHP runtime has no coverage driver; the full
+browser contract exposed an unrelated LaunchSmoke focus-order failure, and the full lint contract retains four
+unrelated pre-existing Rector dry-run findings outside this task.

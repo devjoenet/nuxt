@@ -104,6 +104,10 @@
     color: var(--ui-primary);
   }
 
+  .role-selector .form-field__shell[data-static-label="true"] .form-field__label {
+    color: var(--ui-text-toned);
+  }
+
   .form-field__shell[data-variant="filled"] .form-field__label,
   .form-field__shell[data-variant="filled"]:focus-within .form-field__label,
   .form-field__shell[data-variant="filled"]:has(input:not(:placeholder-shown)) .form-field__label,

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Actions\UpdateRolePermissions;
+use App\Data\RolePermissionsData;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
 use App\Models\Contact;
@@ -15,10 +17,12 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 use Inertia\Testing\AssertableInertia as Assert;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 beforeEach(function (): void {
     app(RolePermissionSeeder::class)->run();
@@ -61,6 +65,74 @@ test('admins can view the dashboard and protected admin screens', function (): v
     $this->actingAs($user)->get(route('admin.users.index'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Users/Index'));
     $this->actingAs($user)->get(route('admin.roles.index'))->assertOk();
     $this->actingAs($user)->get(route('admin.audit.index'))->assertOk();
+});
+
+test('role management exposes the role and permission payload for a focused editor', function (): void {
+    $admin = adminUser();
+
+    $this->actingAs($admin)
+        ->get(route('admin.roles.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Admin/Roles/Index')
+            ->where('roles', fn (mixed $roles): bool => collect($roles)->contains(fn (mixed $role): bool => data_get($role, 'name') === RoleName::Admin->value
+                && data_get($role, 'protected') === false
+                && is_array(data_get($role, 'permission_ids'))))
+            ->where('roles', fn (mixed $roles): bool => collect($roles)->contains(fn (mixed $role): bool => data_get($role, 'name') === RoleName::SuperAdmin->value
+                && data_get($role, 'protected') === true))
+            ->where('permissions', fn (mixed $permissions): bool => collect($permissions)->contains(fn (mixed $permission): bool => data_get($permission, 'name') === 'admin.roles.manage'
+                && data_get($permission, 'label') === 'Admin Roles Manage')));
+});
+
+test('admins can replace and clear ordinary role permissions with an audit record', function (): void {
+    $admin = adminUser();
+    $role = Role::findByName(RoleName::SalesOps->value);
+    $permissionIds = Permission::query()->where('guard_name', 'web')->orderBy('id')->limit(2)->pluck('id')->all();
+
+    $this->actingAs($admin)
+        ->patch(route('admin.roles.update', $role), ['permission_ids' => $permissionIds])
+        ->assertRedirect();
+
+    expect($role->refresh()->permissions->pluck('id')->sort()->values()->all())->toBe(collect($permissionIds)->sort()->values()->all());
+
+    $activity = Activity::query()->where('description', 'Role permissions updated.')->latest('id')->sole();
+
+    expect($activity->properties->get('permission_ids'))->toBe($permissionIds);
+
+    $this->actingAs($admin)
+        ->patch(route('admin.roles.update', $role), ['permission_ids' => []])
+        ->assertRedirect();
+
+    expect($role->refresh()->permissions)->toBeEmpty();
+});
+
+test('role permission updates reject duplicate, missing, and other-guard permission ids', function (): void {
+    $admin = adminUser();
+    $role = Role::findByName(RoleName::SalesOps->value);
+    $webPermission = Permission::query()->where('guard_name', 'web')->firstOrFail();
+    $apiPermission = Permission::findOrCreate('api-only', 'api');
+
+    $role->syncPermissions([$webPermission]);
+
+    foreach ([
+        ['permission_ids' => [$webPermission->getKey(), $webPermission->getKey()]],
+        ['permission_ids' => [$apiPermission->getKey()]],
+        ['permission_ids' => [99999999]],
+    ] as $payload) {
+        $this->actingAs($admin)
+            ->patch(route('admin.roles.update', $role), $payload)
+            ->assertSessionHasErrors('permission_ids.0');
+    }
+
+    expect($role->refresh()->permissions->pluck('id')->all())->toBe([$webPermission->getKey()]);
+});
+
+test('users without role management cannot view or update roles', function (): void {
+    $user = User::factory()->create();
+    $role = Role::findByName(RoleName::Admin->value);
+
+    $this->actingAs($user)->get(route('admin.roles.index'))->assertForbidden();
+    $this->actingAs($user)->patch(route('admin.roles.update', $role), ['permission_ids' => []])->assertForbidden();
 });
 
 test('admins can invite users with a role and a queued onboarding notification', function (): void {
@@ -313,6 +385,8 @@ test('unknown audit filter selections cannot broaden results and scalar events r
 test('super admins bypass permission checks while protected role permissions remain immutable', function (): void {
     $superAdmin = adminUser(RoleName::SuperAdmin->value);
     $role = Role::findByName(RoleName::Admin->value);
+    $protectedRole = Role::findByName(RoleName::SuperAdmin->value);
+    $protectedPermissionIds = $protectedRole->permissions->pluck('id')->sort()->values()->all();
 
     $this->actingAs($superAdmin)->get(route('admin.audit.index'))->assertOk();
     $this->actingAs($superAdmin)->patch(route('admin.roles.update', $role), [
@@ -322,4 +396,27 @@ test('super admins bypass permission checks while protected role permissions rem
     $this->actingAs($superAdmin)->patch(route('admin.roles.update', Role::findByName(RoleName::SuperAdmin->value)), [
         'permission_ids' => [],
     ])->assertSessionHasErrors('permission_ids');
+
+    expect($protectedRole->refresh()->permissions->pluck('id')->sort()->values()->all())->toBe($protectedPermissionIds);
+
+    $protectedRole->syncPermissions([]);
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+    expect($superAdmin->can('jobs.manage'))->toBeTrue();
+});
+
+test('the role permission action protects Super Admin outside the controller', function (): void {
+    $protectedRole = Role::findByName(RoleName::SuperAdmin->value);
+    $permissionIds = $protectedRole->permissions->pluck('id')->all();
+    $activityCount = Activity::query()->where('description', 'Role permissions updated.')->count();
+
+    expect(fn (): mixed => app(UpdateRolePermissions::class)->handle(
+        $protectedRole,
+        RolePermissionsData::fromValidated(['permission_ids' => []]),
+    ))->toThrow(ValidationException::class);
+
+    expect($protectedRole->refresh()->permissions->pluck('id')->all())->toBe($permissionIds)
+        ->and(Activity::query()->where('description', 'Role permissions updated.')->count())->toBe($activityCount)
+        ->and(RolePermissionsData::fromValidated([])->permissionIds)->toBe([])
+        ->and(RolePermissionsData::fromValidated(['permission_ids' => null])->permissionIds)->toBe([]);
 });
