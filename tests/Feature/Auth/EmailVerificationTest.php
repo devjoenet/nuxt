@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
 test('email verification screen can be rendered', function (): void {
@@ -17,14 +19,15 @@ test('email verification screen can be rendered', function (): void {
 
 test('email can be verified', function (): void {
     $user = User::factory()->unverified()->create();
+    Notification::fake();
+
+    $this->actingAs($user)->post('email/verification-notification');
+
+    /** @var VerifyEmail $notification */
+    $notification = Notification::sent($user, VerifyEmail::class)->sole();
+    $verificationUrl = $notification->toMail($user)->actionUrl;
 
     Event::fake();
-
-    $verificationUrl = URL::temporarySignedRoute(
-        'verification.verify',
-        now()->addMinutes(60),
-        ['id' => $user->id, 'hash' => sha1((string) $user->email)]
-    );
 
     $response = $this->actingAs($user)->get($verificationUrl);
 

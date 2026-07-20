@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\InviteUser;
+use App\Actions\ResendUserVerification;
+use App\Actions\ResetUserTwoFactorAuthentication;
+use App\Data\InviteUserData;
 use App\Enums\RoleName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAdminUserRequest;
@@ -11,8 +15,6 @@ use App\Http\Requests\Admin\UpdateAdminUserRequest;
 use App\Http\Resources\AdminUserResource;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,29 +35,14 @@ class AdminUserController extends Controller
         ]);
     }
 
-    public function store(StoreAdminUserRequest $request): RedirectResponse
+    public function store(StoreAdminUserRequest $request, InviteUser $inviteUser): RedirectResponse
     {
         $this->authorize('create', User::class);
-        $currentUser = $this->authenticatedUser($request);
 
-        $attributes = $request->validated();
-
-        if ($attributes['role'] === RoleName::SuperAdmin->value && ! $currentUser->hasRole(RoleName::SuperAdmin->value)) {
-            throw ValidationException::withMessages(['role' => 'Only a Super Admin can assign the Super Admin role.']);
-        }
-
-        $user = User::query()->create([
-            'name' => $attributes['name'],
-            'email' => $attributes['email'],
-            'password' => Str::password(64),
-        ]);
-        $user->assignRole($attributes['role']);
-        $user->sendPasswordResetNotification(Password::broker()->createToken($user));
-
-        activity()
-            ->performedOn($user)
-            ->withProperties(['role' => $attributes['role']])
-            ->log('User invitation sent.');
+        $inviteUser->handle(
+            InviteUserData::fromValidated($request->validated()),
+            $this->authenticatedUser($request),
+        );
 
         return to_route('admin.users.index')->with('success', 'Invitation sent.');
     }
@@ -97,28 +84,19 @@ class AdminUserController extends Controller
         return back()->with('success', 'User access updated.');
     }
 
-    public function resendVerification(User $user): RedirectResponse
+    public function resendVerification(User $user, ResendUserVerification $resendUserVerification): RedirectResponse
     {
         $this->authorize('update', $user);
 
-        if (! $user->hasVerifiedEmail()) {
-            $user->sendEmailVerificationNotification();
-        }
-
-        activity()->performedOn($user)->log('Verification email resent.');
+        $resendUserVerification->handle($user);
 
         return back()->with('success', 'Verification email sent.');
     }
 
-    public function resetTwoFactor(User $user): RedirectResponse
+    public function resetTwoFactor(User $user, ResetUserTwoFactorAuthentication $resetUserTwoFactorAuthentication): RedirectResponse
     {
         $this->authorize('update', $user);
-        $user->two_factor_secret = null;
-        $user->two_factor_recovery_codes = null;
-        $user->two_factor_confirmed_at = null;
-        $user->save();
-
-        activity()->performedOn($user)->log('Two-factor authentication reset.');
+        $resetUserTwoFactorAuthentication->handle($user);
 
         return back()->with('success', 'Two-factor authentication reset.');
     }

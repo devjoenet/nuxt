@@ -357,3 +357,27 @@ model-or-ID field was too verbose/truncated, and Event, Causer, and Subject need
 - [x] Preserve server-side filtering, authorization, pagination, legacy scalar-event compatibility, and empty-state behavior; add focused feature and browser coverage for array combinations, null sentinels, unknown selections, responsive geometry, themes, keyboard dismissal, and overflow.
 
 Completion note: Task 17 treats Subject as a constrained multi-select of distinct `subject_type` classes. Verification passed with the focused feature and browser suites, frontend typecheck/lint/format/build, PHPStan, Pint, and `git diff --check`.
+
+### Task 18 — Repair User Invitation And Verification Flows
+
+User testing found that the invitation form sent a password-reset email without explaining the actual onboarding step,
+the resend-confirmation action generated a link that returned 404, and the 2FA reset action shown for a user pending
+email verification had no effect.
+
+- [x] Add a dedicated queued Southeast Code invitation notification that explains account setup, password selection,
+  email verification, token expiry, and the single setup action while preserving Laravel's ordinary self-service reset
+  notification.
+- [x] Move invitation, verification resend, and 2FA reset state transitions into typed single-purpose actions; keep
+  invitation creation, role assignment, password-broker token creation, and audit behavior atomic and authorized.
+- [x] Verify the delivered framework verification URL against the named route, configured host, internal user key, email
+  hash, signature, and expiry; cover successful, guest, wrong-user, tampered, expired, and already-verified behavior.
+- [x] Expose 2FA state without secrets, make reset unavailable with an explanatory disabled control when 2FA is not
+  configured, and preserve accessible processing/error feedback for available admin actions.
+- [x] Add focused feature and browser regressions for invitation mail, authorization, verification links, resend/reset
+  transitions, audit entries, disabled UI state, and JavaScript/console cleanliness.
+
+Completion note: Task 18 verification passed with 35 focused tests and 214 assertions, the focused admin browser test,
+frontend typecheck/lint/format/build, focused Rector, max-level PHPStan, Pint, and `git diff --check`. The repository's
+full `composer test` contract reached its coverage-gated test phase but could not complete because this PHP runtime has
+no coverage driver; the full browser contract also exposed a LaunchSmoke focus-order failure outside Task 18, and
+the full lint contract retains unrelated pre-existing Rector dry-run findings outside this task.

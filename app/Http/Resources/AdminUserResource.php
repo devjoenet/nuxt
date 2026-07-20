@@ -22,6 +22,7 @@ class AdminUserResource extends JsonResource
             'email' => $this->email,
             'is_active' => $this->is_active,
             'email_verified_at' => $this->email_verified_at,
+            'two_factor_enabled' => $this->resource->hasEnabledTwoFactorAuthentication(),
             'roles' => $this->whenLoaded('roles', fn (): array => $this->roles->pluck('name')->all()),
             'created_at' => $this->created_at?->toISOString(),
         ];
