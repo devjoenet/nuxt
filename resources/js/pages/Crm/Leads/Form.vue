@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Form, Link } from "@inertiajs/vue3";
+  import { Form } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
   import FormMultiSelect from "@/components/FormMultiSelect.vue";
   import FormSelect from "@/components/FormSelect.vue";
@@ -75,7 +75,7 @@
         </div>
         <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />
         <div class="flex justify-end gap-3">
-          <UButton :as="Link" :href="lead ? show(lead.id) : index()" color="neutral" label="Cancel" variant="ghost" /><UButton
+          <UButton :to="lead ? show(lead.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton
             :label="lead ? 'Save changes' : 'Create lead'"
             :loading="processing"
             type="submit"

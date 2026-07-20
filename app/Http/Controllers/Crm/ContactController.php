@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Crm;
 
 use App\Actions\CreateContact;
 use App\Actions\UpdateContact;
+use App\Data\ContactData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\StoreContactRequest;
 use App\Http\Requests\Crm\UpdateContactRequest;
@@ -60,7 +61,7 @@ class ContactController extends Controller
 
     public function store(StoreContactRequest $request, CreateContact $action): RedirectResponse
     {
-        $contact = $action->handle($request->validated(), $this->authenticatedUser($request));
+        $contact = $action->handle(ContactData::fromValidated($request->validated()), $this->authenticatedUser($request));
 
         return to_route('crm.contacts.show', $contact)->with('success', 'Contact created.');
     }
@@ -72,7 +73,7 @@ class ContactController extends Controller
         $contact->load(['organization', 'owner'])->loadCount('leads');
 
         return Inertia::render('Crm/Contacts/Show', [
-            'contact' => ContactResource::make($contact),
+            'contact' => ContactResource::make($contact)->resolve($request),
             'canManage' => $user->can('crm.manage'),
         ]);
     }
@@ -84,7 +85,7 @@ class ContactController extends Controller
         $this->authorize('update', $contact);
 
         return Inertia::render('Crm/Contacts/Form', [
-            'contact' => ContactResource::make($contact->load(['organization', 'owner'])),
+            'contact' => ContactResource::make($contact->load(['organization', 'owner']))->resolve($request),
             'organizations' => Organization::query()->visibleTo($user)->whereNull('archived_at')->orderBy('name')->get(['id', 'name']),
             'owners' => $this->owners(),
             'canAssign' => $user->isCrmAdministrator(),
@@ -103,7 +104,7 @@ class ContactController extends Controller
 
     public function update(UpdateContactRequest $request, Contact $contact, UpdateContact $action): RedirectResponse
     {
-        $contact = $action->handle($contact, $request->validated(), $this->authenticatedUser($request));
+        $contact = $action->handle($contact, ContactData::fromValidated($request->validated()), $this->authenticatedUser($request));
 
         return to_route('crm.contacts.show', $contact)->with('success', 'Contact updated.');
     }

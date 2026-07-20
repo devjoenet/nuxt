@@ -106,6 +106,7 @@
     ],
     "test:type-coverage": "pest --type-coverage --min=100",
     "coverage": "herd coverage ./vendor/bin/pest",
+    "test:types:max": "phpstan --configuration=phpstan.max.neon --memory-limit=512M",
     "test:lint": [
       "pint --parallel --test",
       "rector --dry-run",
@@ -122,7 +123,8 @@
       "@test:unit",
       "@test:browser",
       "@test:lint",
-      "@test:types"
+      "@test:types",
+      "@test:types:max"
     ]
   },
   "extra": {

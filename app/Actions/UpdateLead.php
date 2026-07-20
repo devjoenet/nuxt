@@ -4,30 +4,35 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Data\LeadData;
 use App\Enums\CrmActivityType;
 use App\Models\Lead;
 use App\Models\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class UpdateLead
 {
-    /** @param array<string, mixed> $attributes */
-    public function handle(Lead $lead, array $attributes, User $user): Lead
+    public function handle(Lead $lead, LeadData $data, User $user): Lead
     {
-        return DB::transaction(function () use ($lead, $attributes, $user): Lead {
+        return DB::transaction(function () use ($lead, $data, $user): Lead {
             $lead->contact->update([
-                'name' => $attributes['contact_name'],
-                'email' => $attributes['contact_email'],
-                'phone' => $attributes['contact_phone'] ?? null,
+                'name' => $data->contactName,
+                'email' => $data->contactEmail,
+                'phone' => $data->contactPhone,
             ]);
-            $serviceInterests = array_values($attributes['service_interest'] ?? []);
-            $updates = Arr::only($attributes, ['status', 'source', 'budget_range', 'timeline', 'project_details']);
+            $serviceInterests = array_values($data->serviceInterest);
+            $updates = [
+                'status' => $data->status,
+                'source' => $data->source,
+                'budget_range' => $data->budgetRange,
+                'timeline' => $data->timeline,
+                'project_details' => $data->projectDetails,
+            ];
             $updates['service_interest'] = $serviceInterests[0] ?? null;
             $updates['service_interests'] = $serviceInterests;
 
-            if ($user->isCrmAdministrator() && array_key_exists('owner_id', $attributes)) {
-                $updates['owner_id'] = $attributes['owner_id'];
+            if ($user->isCrmAdministrator() && $data->ownerIdWasProvided) {
+                $updates['owner_id'] = $data->ownerId;
             }
 
             $lead->update($updates);

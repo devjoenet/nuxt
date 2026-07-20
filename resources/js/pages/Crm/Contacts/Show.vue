@@ -21,10 +21,9 @@
       ><UDashboardNavbar :title="contact.name"
         ><template #leading><UDashboardSidebarCollapse /></template
         ><template #right
-          ><UButton :as="Link" :href="index()" color="neutral" label="All contacts" variant="ghost" /><UButton
+          ><UButton :to="index().url" color="neutral" label="All contacts" variant="ghost" /><UButton
             v-if="canManage"
-            :as="Link"
-            :href="edit(contact.id)"
+            :to="edit(contact.id).url"
             color="neutral"
             label="Edit"
             variant="outline" /></template></UDashboardNavbar
@@ -37,7 +36,7 @@
             <p class="text-base text-muted sm:text-sm">{{ contact.email }} · {{ contact.phone ?? "No phone recorded" }}</p>
             <Link
               v-if="contact.organization"
-              :href="organizationShow(contact.organization.id)"
+              :href="organizationShow(contact.organization.id).url"
               class="mt-1 inline-block text-base text-muted hover:text-highlighted hover:underline sm:text-sm"
               >{{ contact.organization.name }}</Link
             >
@@ -46,8 +45,7 @@
           <div v-if="canManage" class="flex gap-2">
             <UButton v-if="!contact.archived_at" color="error" label="Archive" variant="soft" @click="confirmArchive" /><UButton
               v-else
-              :as="Link"
-              :href="restore(contact.id)"
+              :to="restore(contact.id).url"
               color="neutral"
               label="Restore"
               variant="outline"

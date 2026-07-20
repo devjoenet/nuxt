@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Link, router } from "@inertiajs/vue3";
+  import { router } from "@inertiajs/vue3";
   import type { TableColumn } from "@nuxt/ui";
   import { h, resolveComponent, watch } from "vue";
   import FormInput from "@/components/FormInput.vue";
@@ -32,7 +32,7 @@
     { accessorKey: "contacts_count", header: "Contacts" },
     { accessorKey: "leads_count", header: "Leads" },
     { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
-    { id: "actions", cell: ({ row }) => h(UButton, { as: Link, href: show(row.original.id), label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
+    { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
   ];
 </script>
 
@@ -41,7 +41,7 @@
     <template #header>
       <UDashboardNavbar title="Organizations">
         <template #leading><UDashboardSidebarCollapse /></template>
-        <template #right><UButton v-if="canManage" :as="Link" :href="create()" icon="i-ph-plus" label="New organization" /></template>
+        <template #right><UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New organization" /></template>
       </UDashboardNavbar>
     </template>
     <template #body>
@@ -53,7 +53,7 @@
         <div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8"><UTable :columns="columns" :data="organizations.data" class="w-full" /></div>
       </div>
       <UEmpty v-else description="Create an organization to keep client context in one place." icon="i-ph-buildings" title="No organizations found">
-        <template #actions><UButton v-if="canManage" :as="Link" :href="create()" label="Create organization" /></template>
+        <template #actions><UButton v-if="canManage" :to="create().url" label="Create organization" /></template>
       </UEmpty>
       <div v-if="organizations.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
         <p class="text-base text-muted sm:text-sm">{{ organizations.meta.total }} organizations</p>

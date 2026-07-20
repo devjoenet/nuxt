@@ -21,10 +21,9 @@
       ><UDashboardNavbar :title="organization.name"
         ><template #leading><UDashboardSidebarCollapse /></template
         ><template #right
-          ><UButton :as="Link" :href="index()" color="neutral" label="All organizations" variant="ghost" /><UButton
+          ><UButton :to="index().url" color="neutral" label="All organizations" variant="ghost" /><UButton
             v-if="canManage"
-            :as="Link"
-            :href="edit(organization.id)"
+            :to="edit(organization.id).url"
             color="neutral"
             label="Edit"
             variant="outline" /></template></UDashboardNavbar
@@ -43,8 +42,7 @@
             <div v-if="canManage" class="flex gap-2">
               <UButton v-if="!organization.archived_at" color="error" label="Archive" variant="soft" @click="confirmArchive" /><UButton
                 v-else
-                :as="Link"
-                :href="restore(organization.id)"
+                :to="restore(organization.id).url"
                 color="neutral"
                 label="Restore"
                 variant="outline"
@@ -70,7 +68,7 @@
             <ul class="mt-4 divide-y divide-default" role="list">
               <li v-for="contact in organization.contacts" :key="contact.id" class="flex items-center justify-between gap-4 py-3">
                 <div>
-                  <Link :href="contactShow(contact.id)" class="font-medium text-highlighted hover:underline">{{ contact.name }}</Link>
+                  <Link :href="contactShow(contact.id).url" class="font-medium text-highlighted hover:underline">{{ contact.name }}</Link>
                   <p class="text-base text-muted sm:text-sm">{{ contact.email }} · {{ contact.phone ?? "No phone" }}</p>
                 </div>
                 <span class="text-base text-muted sm:text-sm">{{ contact.owner?.name ?? "Unassigned" }}</span>

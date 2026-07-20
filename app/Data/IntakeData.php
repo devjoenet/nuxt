@@ -5,72 +5,59 @@ declare(strict_types=1);
 namespace App\Data;
 
 use App\Http\Requests\StorePublicIntakeRequest;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Spatie\LaravelData\Attributes\MapInputName;
+use Spatie\LaravelData\Dto;
+use Spatie\LaravelData\Mappers\SnakeCaseMapper;
+use UnexpectedValueException;
 
-readonly class IntakeData
+#[MapInputName(SnakeCaseMapper::class)]
+final class IntakeData extends Dto
 {
     public function __construct(
-        public string $name,
-        public string $email,
-        public string $projectDetails,
-        public ?string $company,
-        public ?string $phone,
-        public ?string $website,
-        public ?string $budgetRange,
-        public ?string $timeline,
+        public readonly string $name,
+        public readonly string $email,
+        public readonly string $projectDetails,
+        public readonly ?string $company = null,
+        public readonly ?string $phone = null,
+        public readonly ?string $website = null,
+        public readonly ?string $budgetRange = null,
+        public readonly ?string $timeline = null,
         /** @var array<int, string> */
-        public array $serviceInterests,
-        public ?string $referralSource,
-        public ?string $landingPage,
-        public ?string $referrer,
-        public ?string $utmSource,
-        public ?string $utmMedium,
-        public ?string $utmCampaign,
-        public ?string $utmTerm,
-        public ?string $utmContent,
-        public ?string $ipAddress,
-        public ?string $userAgent,
+        #[MapInputName('service_interest')]
+        public readonly array $serviceInterests = [],
+        public readonly ?string $referralSource = null,
+        public readonly ?string $landingPage = null,
+        public readonly ?string $referrer = null,
+        public readonly ?string $utmSource = null,
+        public readonly ?string $utmMedium = null,
+        public readonly ?string $utmCampaign = null,
+        public readonly ?string $utmTerm = null,
+        public readonly ?string $utmContent = null,
+        public readonly ?string $ipAddress = null,
+        public readonly ?string $userAgent = null,
+        public readonly ?string $consent = null,
+        public readonly ?string $websiteConfirmation = null,
     ) {}
 
     public static function fromRequest(StorePublicIntakeRequest $request): self
     {
-        return self::fromArray($request->validated(), $request->ip(), $request->userAgent());
+        $data = self::factory()->ignoreMagicalMethod('fromRequest')->from([
+            ...$request->validated(),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        if (! $data instanceof self) {
+            throw new UnexpectedValueException('Intake data could not be created.');
+        }
+
+        return $data;
     }
 
-    /**
-     * @param  array<string, mixed>  $attributes
-     */
-    public static function fromArray(array $attributes, ?string $ipAddress = null, ?string $userAgent = null): self
+    /** @return array<string, ValidationRule|array<mixed>|string> */
+    public static function rules(): array
     {
-        return new self(
-            name: str($attributes['name'] ?? '')->trim()->toString(),
-            email: str($attributes['email'] ?? '')->lower()->trim()->toString(),
-            projectDetails: str($attributes['project_details'] ?? '')->trim()->toString(),
-            company: self::nullableString($attributes, 'company'),
-            phone: self::nullableString($attributes, 'phone'),
-            website: self::nullableString($attributes, 'website'),
-            budgetRange: self::nullableString($attributes, 'budget_range'),
-            timeline: self::nullableString($attributes, 'timeline'),
-            serviceInterests: array_values($attributes['service_interest'] ?? []),
-            referralSource: self::nullableString($attributes, 'referral_source'),
-            landingPage: self::nullableString($attributes, 'landing_page'),
-            referrer: self::nullableString($attributes, 'referrer'),
-            utmSource: self::nullableString($attributes, 'utm_source'),
-            utmMedium: self::nullableString($attributes, 'utm_medium'),
-            utmCampaign: self::nullableString($attributes, 'utm_campaign'),
-            utmTerm: self::nullableString($attributes, 'utm_term'),
-            utmContent: self::nullableString($attributes, 'utm_content'),
-            ipAddress: $ipAddress,
-            userAgent: $userAgent,
-        );
-    }
-
-    /**
-     * @param  array<string, mixed>  $attributes
-     */
-    private static function nullableString(array $attributes, string $key): ?string
-    {
-        $value = str($attributes[$key] ?? '')->trim()->toString();
-
-        return $value === '' ? null : $value;
+        return (new StorePublicIntakeRequest)->rules();
     }
 }

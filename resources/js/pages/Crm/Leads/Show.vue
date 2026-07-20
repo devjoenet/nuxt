@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Form, Link, router, usePage } from "@inertiajs/vue3";
+  import { Form, router, usePage } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
@@ -37,8 +37,8 @@
       <UDashboardNavbar :title="lead.contact.name">
         <template #leading><UDashboardSidebarCollapse /></template>
         <template #right>
-          <UButton :as="Link" :href="index()" color="neutral" label="All leads" variant="ghost" />
-          <UButton v-if="canManage" :as="Link" :href="edit(lead.id)" color="neutral" label="Edit" variant="outline" />
+          <UButton :to="index().url" color="neutral" label="All leads" variant="ghost" />
+          <UButton v-if="canManage" :to="edit(lead.id).url" color="neutral" label="Edit" variant="outline" />
         </template>
       </UDashboardNavbar>
     </template>
