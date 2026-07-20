@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Link, router } from "@inertiajs/vue3";
+  import { router } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import type { TableColumn } from "@nuxt/ui";
@@ -38,7 +38,7 @@
     { accessorKey: "status", header: "Status", cell: ({ row }) => h(LeadStatusBadge, { status: row.original.status }) },
     { accessorKey: "source", header: "Source", cell: ({ row }) => h("span", { class: "capitalize" }, row.original.source) },
     { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
-    { id: "actions", cell: ({ row }) => h(UButton, { as: Link, href: show(row.original.id), label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
+    { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
   ];
 </script>
 
@@ -47,7 +47,7 @@
     <template #header>
       <UDashboardNavbar title="CRM leads">
         <template #leading><UDashboardSidebarCollapse /></template>
-        <template #right><UButton v-if="canManage" :as="Link" :href="create()" icon="i-ph-plus" label="New lead" /></template>
+        <template #right><UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New lead" /></template>
       </UDashboardNavbar>
     </template>
     <template #body>
@@ -62,7 +62,7 @@
         </div>
       </div>
       <UEmpty v-else description="Try changing the filters or create the first lead." icon="i-ph-address-book" title="No leads found">
-        <template #actions><UButton v-if="canManage" :as="Link" :href="create()" label="Create lead" /></template>
+        <template #actions><UButton v-if="canManage" :to="create().url" label="Create lead" /></template>
       </UEmpty>
       <div v-if="leads.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
         <p class="text-base text-muted sm:text-sm">{{ leads.meta.total }} leads</p>

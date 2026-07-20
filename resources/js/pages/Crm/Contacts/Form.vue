@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Form, Link } from "@inertiajs/vue3";
+  import { Form } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import Layout from "@/layouts/Default.vue";
@@ -51,7 +51,7 @@
           />
         </div>
         <div class="flex justify-end gap-3">
-          <UButton :as="Link" :href="contact ? show(contact.id) : index()" color="neutral" label="Cancel" variant="ghost" /><UButton
+          <UButton :to="contact ? show(contact.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton
             :label="contact ? 'Save changes' : 'Create contact'"
             :loading="processing"
             type="submit"

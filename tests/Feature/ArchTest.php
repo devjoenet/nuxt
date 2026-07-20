@@ -12,3 +12,26 @@ it('checks the validator facade is not used', function (): void {
         ->not->toBeUsed()
         ->ignoring('App\Actions\Fortify');
 });
+
+test('action handlers do not accept untyped structured payloads', function (): void {
+    foreach (glob(app_path('Actions/*.php')) ?: [] as $path) {
+        $class = 'App\\Actions\\'.pathinfo($path, PATHINFO_FILENAME);
+        $method = (new ReflectionClass($class))->getMethod('handle');
+
+        foreach ($method->getParameters() as $parameter) {
+            $type = $parameter->getType();
+            $typeNames = match (true) {
+                $type instanceof ReflectionNamedType => [$type->getName()],
+                $type instanceof ReflectionUnionType => array_map(
+                    fn (ReflectionNamedType $type): string => $type->getName(),
+                    $type->getTypes(),
+                ),
+                default => [],
+            };
+
+            expect($typeNames)->not->toBeEmpty();
+            expect($typeNames)->not->toContain('array');
+            expect($typeNames)->not->toContain('mixed');
+        }
+    }
+});

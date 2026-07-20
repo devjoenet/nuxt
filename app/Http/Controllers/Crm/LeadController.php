@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Crm;
 
 use App\Actions\CreateLead;
 use App\Actions\UpdateLead;
+use App\Data\LeadData;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
 use App\Http\Controllers\Controller;
@@ -69,7 +70,7 @@ class LeadController extends Controller
 
     public function store(StoreLeadRequest $request, CreateLead $action): RedirectResponse
     {
-        $lead = $action->handle($request->validated(), $this->authenticatedUser($request));
+        $lead = $action->handle(LeadData::fromValidated($request->validated()), $this->authenticatedUser($request));
 
         return to_route('crm.leads.show', $lead)->with('success', 'Lead created.');
     }
@@ -88,7 +89,7 @@ class LeadController extends Controller
         ]);
 
         return Inertia::render('Crm/Leads/Show', [
-            'lead' => LeadResource::make($lead),
+            'lead' => LeadResource::make($lead)->resolve($request),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
@@ -102,7 +103,7 @@ class LeadController extends Controller
         $lead->load(['contact', 'organization', 'owner']);
 
         return Inertia::render('Crm/Leads/Form', [
-            'lead' => LeadResource::make($lead),
+            'lead' => LeadResource::make($lead)->resolve($request),
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),
@@ -112,7 +113,7 @@ class LeadController extends Controller
 
     public function update(UpdateLeadRequest $request, Lead $lead, UpdateLead $action): RedirectResponse
     {
-        $action->handle($lead, $request->validated(), $this->authenticatedUser($request));
+        $action->handle($lead, LeadData::fromValidated($request->validated()), $this->authenticatedUser($request));
 
         return to_route('crm.leads.show', $lead)->with('success', 'Lead updated.');
     }

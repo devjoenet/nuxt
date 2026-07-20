@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use App\Actions\SubmitPublicIntake;
+use App\Data\IntakeData;
 use App\Enums\CrmActivityType;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Http\Requests\StorePublicIntakeRequest;
 use App\Models\BusinessSetting;
 use App\Models\Contact;
 use App\Models\CrmActivity;
@@ -102,9 +104,9 @@ test('formatted budget amounts are normalized before persistence', function (): 
 test('the public intake action can be called outside HTTP', function (): void {
     Notification::fake();
 
-    $lead = app(SubmitPublicIntake::class)->handle(validIntake([
+    $lead = app(SubmitPublicIntake::class)->handle(IntakeData::validateAndCreate(StorePublicIntakeRequest::normalize(validIntake([
         'budget_range' => '$25,000',
-    ]));
+    ]))));
 
     expect($lead)->toBeInstanceOf(Lead::class)
         ->and($lead->budget_range)->toBe('25000');
@@ -115,7 +117,7 @@ test('the public intake action exposes validation errors outside HTTP', function
     $exception = null;
 
     try {
-        app(SubmitPublicIntake::class)->handle(validIntake(['email' => 'not-an-email']));
+        app(SubmitPublicIntake::class)->handle(IntakeData::validateAndCreate(StorePublicIntakeRequest::normalize(validIntake(['email' => 'not-an-email']))));
     } catch (ValidationException $validationException) {
         $exception = $validationException;
     }

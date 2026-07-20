@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Crm;
 
 use App\Actions\CreateOrganization;
 use App\Actions\UpdateOrganization;
+use App\Data\OrganizationData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\StoreOrganizationRequest;
 use App\Http\Requests\Crm\UpdateOrganizationRequest;
@@ -14,6 +15,7 @@ use App\Models\Organization;
 use App\Models\User;
 use App\Queries\OrganizationQuery;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -58,7 +60,7 @@ class OrganizationController extends Controller
 
     public function store(StoreOrganizationRequest $request, CreateOrganization $action): RedirectResponse
     {
-        $organization = $action->handle($request->validated(), $this->authenticatedUser($request));
+        $organization = $action->handle(OrganizationData::fromValidated($request->validated()), $this->authenticatedUser($request));
 
         return to_route('crm.organizations.show', $organization)->with('success', 'Organization created.');
     }
@@ -69,15 +71,17 @@ class OrganizationController extends Controller
         abort_unless($organization->isVisibleTo($user), 404);
         $organization->load([
             'owner',
-            'contacts' => fn (Builder $query): Builder => $query
-                ->when(! $user->isCrmAdministrator(), fn (Builder $query): Builder => $query->where(function (Builder $query) use ($user): void {
-                    $query->where('owner_id', $user->id)->orWhereNull('owner_id');
-                }))
-                ->with('owner'),
+            'contacts' => function (Relation $query) use ($user): void {
+                $query
+                    ->when(! $user->isCrmAdministrator(), fn (Builder $query): Builder => $query->where(function (Builder $query) use ($user): void {
+                        $query->where('owner_id', $user->id)->orWhereNull('owner_id');
+                    }))
+                    ->with('owner');
+            },
         ])->loadCount('leads');
 
         return Inertia::render('Crm/Organizations/Show', [
-            'organization' => OrganizationResource::make($organization),
+            'organization' => OrganizationResource::make($organization)->resolve($request),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
@@ -90,7 +94,7 @@ class OrganizationController extends Controller
         $this->authorize('update', $organization);
 
         return Inertia::render('Crm/Organizations/Form', [
-            'organization' => OrganizationResource::make($organization->load('owner')),
+            'organization' => OrganizationResource::make($organization->load('owner'))->resolve($request),
             'owners' => $this->owners(),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
@@ -108,7 +112,7 @@ class OrganizationController extends Controller
 
     public function update(UpdateOrganizationRequest $request, Organization $organization, UpdateOrganization $action): RedirectResponse
     {
-        $organization = $action->handle($organization, $request->validated(), $this->authenticatedUser($request));
+        $organization = $action->handle($organization, OrganizationData::fromValidated($request->validated()), $this->authenticatedUser($request));
 
         return to_route('crm.organizations.show', $organization)->with('success', 'Organization updated.');
     }

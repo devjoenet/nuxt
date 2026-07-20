@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Data\ContactData;
 use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\User;
 
 class UpdateContact
 {
-    /** @param array<string, mixed> $attributes */
-    public function handle(Contact $contact, array $attributes, User $user): Contact
+    public function handle(Contact $contact, ContactData $data, User $user): Contact
     {
-        $organization = $this->organization($attributes['organization_id'] ?? null, $user);
+        $organization = $this->organization($data->organizationId, $user);
 
         $contact->update([
-            'name' => $attributes['name'],
-            'email' => $attributes['email'],
-            'phone' => $attributes['phone'] ?? null,
+            'name' => $data->name,
+            'email' => $data->email,
+            'phone' => $data->phone,
             'organization_id' => $organization?->id,
-            ...($user->isCrmAdministrator() && array_key_exists('owner_id', $attributes)
-                ? ['owner_id' => $attributes['owner_id']]
+            ...($user->isCrmAdministrator() && $data->ownerIdWasProvided
+                ? ['owner_id' => $data->ownerId]
                 : []),
         ]);
 

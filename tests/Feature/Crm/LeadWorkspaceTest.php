@@ -12,6 +12,7 @@ use App\Models\Organization;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function (): void {
     $this->withoutVite();
@@ -49,14 +50,27 @@ test('CRM viewers can search and filter the paginated lead list', function (): v
             ->where('leads.data.0.id', $match->uuid));
 });
 
+test('CRM viewers can view a lead with flat resource props', function (): void {
+    $user = crmUser();
+    $lead = Lead::factory()->create(['owner_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.show', $lead))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Leads/Show')
+            ->where('lead.id', $lead->uuid));
+});
+
 test('CRM managers can create and update leads', function (): void {
     $user = crmUser(manage: true);
+    $user->assignRole(Role::findOrCreate('Admin'));
 
     $response = $this->actingAs($user)->post(route('crm.leads.store'), [
         'contact_name' => 'Morgan Lee',
         'contact_email' => 'morgan@example.com',
         'organization_name' => 'Lee Logistics',
         'organization_website' => 'https://lee.example',
+        'owner_id' => (string) $user->id,
         'status' => 'new',
         'source' => 'referral',
         'project_details' => 'Replace manual dispatch reporting.',
@@ -66,11 +80,13 @@ test('CRM managers can create and update leads', function (): void {
     $response->assertRedirect(route('crm.leads.show', $lead));
     expect($lead->contact->name)->toBe('Morgan Lee')
         ->and($lead->organization?->name)->toBe('Lee Logistics')
+        ->and($lead->owner_id)->toBe($user->id)
         ->and(CrmActivity::query()->count())->toBe(1);
 
     $this->actingAs($user)->patch(route('crm.leads.update', $lead), [
         'contact_name' => 'Morgan Lee',
         'contact_email' => 'morgan@example.com',
+        'owner_id' => (string) $user->id,
         'status' => 'qualified',
         'source' => 'referral',
         'project_details' => 'Updated scope.',
