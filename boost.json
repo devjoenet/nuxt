@@ -21,6 +21,7 @@
         "inertia-vue-development",
         "laravel-permission-development",
         "spatie-laravel-php-standards",
+        "audit-laravel-application",
         "brand-kit",
         "canonicalize-tailwind",
         "componentize",
@@ -28,6 +29,7 @@
         "ideas",
         "laravel-native-attributes",
         "markup-from-image",
-        "nuxt-ui"
+        "nuxt-ui",
+        "review-laravel-pr"
     ]
 }

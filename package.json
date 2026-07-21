@@ -20,7 +20,7 @@
     "@types/node": "^25.9.3",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/eslint-config-typescript": "^14.3.0",
-    "concurrently": "^10.0.3",
+    "concurrently": "^9.2.4",
     "esbuild": "^0.28.1",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.0.1",
@@ -62,10 +62,10 @@
   "allowScripts": {
     "vue-demi@0.14.10": true,
     "core-js-pure@3.49.0": true,
-    "esbuild@0.27.7": true,
     "maplibre-gl@2.4.0": true,
     "fsevents@2.3.2": true,
-    "fsevents@2.3.3": true
+    "fsevents@2.3.3": true,
+    "esbuild@0.28.1": true
   },
   "overrides": {
     "esbuild": "^0.28.1"
