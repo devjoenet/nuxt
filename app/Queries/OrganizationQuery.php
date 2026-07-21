@@ -27,8 +27,7 @@ class OrganizationQuery
             ->when(! ($filters['archived'] ?? false), fn (Builder $query): Builder => $query->whereNull('archived_at'))
             ->when($filters['search'] ?? null, function (Builder $query, string $search): void {
                 $query->where(fn (Builder $query): Builder => $query
-                    ->where('name', 'like', sprintf('%%%s%%', $search))
-                    ->orWhere('website', 'like', sprintf('%%%s%%', $search)));
+                    ->where('name', 'like', sprintf('%%%s%%', $search)));
             })
             ->when($filters['owner'] ?? null, fn (Builder $query, string $owner): Builder => $query->where('owner_id', $owner))
             ->orderBy($sort, $direction);
