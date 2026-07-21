@@ -44,183 +44,276 @@ The next tasks are ordered around the remaining unchecked work and the decisions
 
 __Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
 
-### Task 20 — Restore CRM Detail Browser Smoke Coverage
+### Task 20 — Make The Organization Owner Filter Clearable
 
-This is verification work for the existing organization and contact detail pages, not new CRM feature development.
-Their user-testing cards should show `Needs verification` while this browser coverage remains deferred. Lead detail
-rendering is tracked separately in Task 21.
+This task applies only to the owner filter on the organizations index. It does not change owner assignment on the
+organization create/edit form, CRM ownership policy, or server-side visibility rules.
 
-- [ ] Diagnose why Pest's temporary browser HTTP server blank-renders CRM organization and contact detail URLs while
-  list pages and the other browser smoke flows render normally.
-- [ ] Reinstate focused browser coverage that separately verifies View link navigation and the linked detail-route
-  response for organizations and contacts.
-- [ ] Run the browser suite and full quality contract after the detail-route rendering issue is resolved.
+- [ ] Let an Admin or Super Admin clear a selected organization owner and return to the unfiltered `All owners` state.
+- [ ] Remove the `owner` query parameter without clearing the search term or adding an empty-valued Reka select item.
+- [ ] Add focused browser regression coverage for selecting and clearing the owner filter.
 - [ ] **Implementation instructions (complete in order):**
-  1. Keep this task verification-only unless a current failure provides concrete production-code evidence. Start with
-     `php artisan route:list --name=crm.organizations.show -vv`,
-     `php artisan route:list --name=crm.contacts.show -vv`, and
-     `php artisan test --compact tests/Feature/Crm/EntityWorkspaceTest.php`. Preserve UUID route binding, Wayfinder links,
-     `crm.view`, ownership-scoped visibility, direct-URL 404 concealment, existing resource shapes, and Task 22's
-     separate ownership of lead-detail rendering. Do not add CRM features, schema, or dependencies.
-  2. Run `npm run build` before reproducing the browser failure so Pest's temporary server uses the current Vite
-     manifest and generated Wayfinder modules. Confirm the list props expose organization/contact UUIDs and that
-     `show(row.original.id).url` resolves to the exact named detail route; do not substitute internal numeric keys or
-     hardcoded URLs.
-  3. Recreate `tests/Browser/CrmDetailSmokeTest.php` with isolated factory/seeder setup matching existing browser tests.
-     Build authenticated Admin or Sales/Ops fixtures in PHP before browser interaction, create only the organization or
-     contact required by each case, and use unique visible names so every `View` control and detail assertion is
-     unambiguous. Do not use browser forms as a backend fixture mechanism.
-  4. Add two direct-route tests first: visit `route('crm.organizations.show', $organization, false)` and
-     `route('crm.contacts.show', $contact, false)` separately, then assert the expected path, detail panel/test ID,
-     record name, core relationship/count text, `assertNoJavaScriptErrors()`, and `assertNoConsoleLogs()`. Keep these
-     cases separate so one blank render identifies the failing entity and layer.
-  5. Add two independent list-navigation tests: visit the relevant index with exactly one visible fixture, assert the
-     rendered `View` link's `href` is the UUID detail path, click it, and assert the browser reaches and renders the same
-     detail state as the direct-route test. If accessible role/href selection is not stable enough, add only narrowly
-     scoped `data-testid` attributes to the two existing View buttons; do not change their behavior or replace
-     Wayfinder.
-  6. Diagnose in a fixed order if either direct-route case still blanks: record the current URL/status, run the focused
-     test with `--debug` or `--headed`, take a failure screenshot, inspect recent browser console output and Laravel
-     logs, and compare the failing request with the passing feature response. Classify it as route/model binding,
-     authorization/session, missing test-process fixture data, Inertia/Vite component resolution, or a concrete PHP/JS
-     exception before editing anything.
-  7. Apply the smallest evidence-backed repair only. A link-only failure belongs in the relevant Index.vue/Wayfinder
-     call; a direct browser failure with a passing feature test belongs in isolated Browser-suite database/session/asset
-     configuration; a real controller/resource/component exception belongs in the exact organization/contact file and
-     needs a matching feature regression. Never point browser tests at the development database, weaken visibility
-     checks, change 404 concealment, start a manual application server, or fold lead-detail work into this task. If all
-     four reinstated tests pass after the clean build, make no production code change.
-  8. Extend `tests/Feature/Crm/EntityWorkspaceTest.php` only where the diagnosis exposes a missing contract. At minimum,
-     keep explicit assertions for UUID payloads, component names, organization scoped-contact IDs, contact relationship
-     props, visibility for owned/unassigned records, and 404 responses for another owner's direct URLs. These feature
-     tests remain the server contract; the browser file proves rendering and navigation on top of it.
-  9. Run the focused feature file, each new browser case individually, and
-     `tests/Browser/CrmDetailSmokeTest.php` twice consecutively to rule out order dependence. Follow with
-     `vendor/bin/pint --dirty --format agent` if PHP changed, `npm run typecheck`, `npm run lint:check`,
-     `npm run format:check`, `npm run build`, and the repository's complete `composer test` contract (including the full
-     non-browser, browser, PHPStan, and max-level PHPStan checks), followed by `git diff --check`.
-  10. After the full contract is green, move Task 21 to `docs/completed-roadmap.md`. Through the authorized user-testing
-      workflow, mark both `crm-organizations-show` and `crm-contacts-show` as tested, prepend `FIXED VIA TASK-21` to any
-      existing notes, preserve `roadmap_task_at`, leave `approved_at` null, and confirm both cards now report
-      `Needs Approval` rather than `Needs verification`. Verify the three timestamps through read-only Eloquent in
-      Tinker and update the focused `UserTestingPageTest` expectations if the status configuration changes.
-  11. Output a fenced `markdown` code block containing a PR summary in this structure:
+  1. Reproduce the issue as an Admin or Super Admin at the organization index with two organizations assigned to
+     different active owners. Select one owner and confirm the list and `owner` query parameter narrow correctly, then
+     confirm the current control provides no way back to `All owners`. Run
+     `php artisan test --compact tests/Feature/Crm/EntityWorkspaceTest.php` first to preserve the existing ownership,
+     authorization, pagination, and filtering baseline. Keep this task scoped to
+     `resources/js/pages/Crm/Organizations/Index.vue`; do not change the organization form, `OrganizationQuery`,
+     policies, schema, dependencies, or the shared `FormSelect` API unless current evidence disproves the recorded
+     frontend-only cause.
+  2. Keep `owner` as the existing string ref and keep `ownerOptions` limited to real active-owner IDs. Do not add an
+     `{ label: "All owners", value: "" }` option: Reka reserves the empty string for clearing and rejects empty-valued
+     `SelectItem` records. Add the smallest explicit reset handler beside the existing `visit()` function:
+
+     ```ts
+     const clearOwnerFilter = (): void => {
+       owner.value = "";
+     };
+     ```
+
+     Preserve the existing debounced watcher and request payload. Its
+     `owner: owner.value || undefined` contract must remain responsible for omitting the cleared query parameter while
+     leaving `search.value` intact, and `router.get(index().url, ..., { preserveState: true, replace: true })` must
+     continue using the generated Wayfinder URL rather than a hardcoded path.
+  3. Give the existing `FormSelect` a stable `id="organization-owner-filter"`, then group it with a conditional,
+     page-local clear button. Use the repository's Nuxt UI components and semantic colors, keep the control full-width
+     on small screens, and give the icon-only button an accessible name:
+
+     ```vue
+     <div v-if="canAssign" class="flex w-full items-center gap-2 sm:w-auto">
+       <FormSelect
+         id="organization-owner-filter"
+         v-model="owner"
+         :items="ownerOptions"
+         class="w-full sm:w-48"
+         label="Owner"
+         placeholder="All owners"
+       />
+       <UButton
+         v-if="owner"
+         aria-label="Clear owner filter"
+         color="neutral"
+         icon="i-ph-x"
+         size="sm"
+         type="button"
+         variant="ghost"
+         @click="clearOwnerFilter"
+       />
+     </div>
+     ```
+
+     The reset must be keyboard reachable, must disappear when no owner is selected, and must not be nested inside the
+     select trigger. After clearing, the placeholder must again read `All owners` and the search input must retain its
+     current value.
+  4. Preserve the server contract rather than introducing a special sentinel. `OrganizationController::index()` should
+     continue accepting an optional `owner` query value, and `OrganizationQuery::build()` should continue applying the
+     owner constraint only when that value is present. Extend `tests/Feature/Crm/EntityWorkspaceTest.php` only if the
+     focused browser regression exposes a missing server assertion; if needed, prove an Admin sees only the selected
+     owner's organization with `?owner={id}` and sees both organizations again when the parameter is absent.
+  5. Add `tests/Browser/CrmOrganizationFilterTest.php` using the existing Pest browser conventions and backend-created
+     fixtures. Seed roles/permissions, authenticate an Admin, create two active owners and one distinctly named
+     organization for each, then visit the generated organization-index route. Open `#organization-owner-filter`, choose
+     the first owner by visible name, and assert that only their organization remains and the URL contains that owner's
+     ID. Click the `Clear owner filter` button and assert that both organizations return, the URL no longer contains the
+     `owner` parameter, `All owners` is restored, and there are no JavaScript errors or console logs. Use explicit unique
+     names and accessible/id selectors; do not use browser forms to create fixtures or arbitrary sleeps to hide the
+     existing 250 ms debounce.
+  6. Verify the responsive interaction at a narrow mobile viewport as part of the same browser case: the filter group
+     must remain within the viewport, the clear button must remain operable, and clearing must still restore both rows.
+     Do not broaden this task into redesigning the contacts/leads filters; record a separate finding if current testing
+     proves those pages have the same user-facing defect.
+  7. Run `php artisan test --compact tests/Feature/Crm/EntityWorkspaceTest.php` and
+     `php artisan test --compact tests/Browser/CrmOrganizationFilterTest.php`, then run
+     `vendor/bin/pint --dirty --format agent` if PHP test code changed, `npm run typecheck`, `npm run lint:check`,
+     `npm run format:check`, `npm run build`, and the repository's complete `composer test` contract, followed by
+     `git diff --check`. Distinguish checks actually run from coverage merely added.
+  8. After the full contract passes, move Task 20 to `docs/completed-roadmap.md`. Through the authorized user-testing
+     workflow, prepend `FIXED VIA TASK-20` to the organization-index note while preserving the feedback below it,
+     preserve `tested_at` and `roadmap_task_at`, leave `approved_at` null, and confirm the card reports
+     `Needs Approval`. Verify all three timestamps with a read-only Eloquent query in Tinker; task completion must not
+     approve or remove the card from the human review queue.
+  9. Output a fenced `markdown` code block containing a PR summary in this structure:
+
+     ```markdown
+     ## Summary
+     - describe the accessible organization owner-filter reset and preserved search state
+     - describe the Reka-safe empty-state handling and unchanged ownership/query boundaries
+     - describe the focused browser regression and user-testing handoff
+
+     ## Verification
+     - list every focused and full quality-contract command actually run, with its result
+     ```
+
+### Task 21 — Redesign The Organization And Contact Detail Workspaces
+
+This task addresses the shared layout problem on the organization and contact detail pages. It must improve their
+information hierarchy and responsive behavior without changing CRM data ownership, authorization, persistence, or
+record lifecycle behavior.
+
+- [ ] Give both detail pages one clear record heading, useful relationship context, and an intentional bounded layout.
+- [ ] Replace the duplicated page scaffolding with a small shared CRM detail shell while keeping entity-specific content
+  and state-changing handlers in their pages.
+- [ ] Make organization contacts and contact information readable and actionable on desktop, mobile, light mode, and
+  dark mode without horizontal overflow.
+- [ ] Preserve the existing Resource payloads, UUID Wayfinder routes, permission-gated controls, archive/restore/delete
+  behavior, and scoped-record authorization.
+- [ ] Extend the existing feature and browser coverage for both detail pages instead of creating a second competing smoke
+  suite.
+- [ ] **Implementation instructions (complete in order):**
+  1. Establish the current behavior before editing. As an Admin, open a populated organization detail and a populated
+     contact detail at desktop and `390 x 844` viewports in both color modes. Record the current duplicate record title,
+     unused wide-screen column, detached organization-contact owner label, long mobile website wrapping, and contact
+     page's sparse metadata layout. Run
+     `php artisan test --compact tests/Feature/Crm/EntityWorkspaceTest.php` and
+     `php artisan test --compact tests/Browser/CrmDetailSmokeTest.php` first. Keep the task limited to
+     `resources/js/components/crm/CrmDetailLayout.vue`, the two existing `Show.vue` pages, and their focused tests unless
+     a failing assertion proves that an existing Resource omits required data. Do not change the schema, policies,
+     queries, controller actions, route names, dependencies, or archive/restore/delete semantics for a visual-layout
+     complaint.
+  2. Add `resources/js/components/crm/CrmDetailLayout.vue` as the presentation-only shell shared by the two pages. Its
+     API must accept strings already resolved by the calling page, so Wayfinder remains at the page boundary and the
+     component gains no route or authorization knowledge. Use this structure, retaining the exact responsive grid and
+     slot responsibilities:
+
+     ```vue
+     <script lang="ts" setup>
+       defineProps<{
+         panelId: string;
+         navbarTitle: string;
+         indexUrl: string;
+         indexLabel: string;
+         editUrl?: string;
+       }>();
+     </script>
+
+     <template>
+       <UDashboardPanel :id="panelId">
+         <template #header>
+           <UDashboardNavbar :title="navbarTitle">
+             <template #leading><UDashboardSidebarCollapse /></template>
+             <template #right>
+               <UButton :label="indexLabel" :to="indexUrl" color="neutral" icon="i-ph-arrow-left" variant="ghost" />
+               <UButton v-if="editUrl" :to="editUrl" color="neutral" label="Edit" variant="outline" />
+             </template>
+           </UDashboardNavbar>
+         </template>
+
+         <template #body>
+           <div class="mx-auto grid w-full max-w-6xl gap-6 lg:gap-8">
+             <slot name="summary" />
+             <div class="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
+               <main class="min-w-0"><slot /></main>
+               <aside class="grid min-w-0 content-start gap-6"><slot name="aside" /></aside>
+             </div>
+           </div>
+         </template>
+       </UDashboardPanel>
+     </template>
+     ```
+
+     Keep spacing within the shell and content semantics within the call sites; do not add record state, router calls,
+     fixed heights, decorative gradients, or a generic field-schema abstraction to this component. Vue must continue
+     merging caller-supplied classes onto the single `UDashboardPanel` root.
+  3. Refactor `resources/js/pages/Crm/Organizations/Show.vue` to render through `CrmDetailLayout`. Add
+     `<Head :title="organization.name" />`, set the navbar title to the short generic label `Organization detail`, and
+     pass `index().url`, `Organizations`, and `canManage ? edit(organization.id).url : undefined` into the shell. Render
+     the organization name only once as the page `h1` inside a `summary` section with
+     `data-testid="organization-summary"`, a short `Organization` eyebrow, an `Archived` badge when applicable, and a
+     website link that keeps the full value in `href`, opens safely in a new tab, and uses `break-all`/`min-w-0` so a
+     long URL cannot widen the viewport. Retain `No website recorded` when absent. Use only existing semantic Nuxt UI
+     tokens such as `border-default`, `bg-elevated`, `text-highlighted`, and `text-muted`; this is an internal workspace,
+     not a new visual brand exercise.
+  4. Build the organization page's default slot as one `Contacts` section with
+     `data-testid="organization-contacts"`, its count and a short description. Keep a divided semantic list rather than
+     a card per contact. Each populated row must use a responsive grid with `min-w-0`; display the contact's Wayfinder
+     detail link, separate `mailto:` and optional `tel:` links, and a labeled `Owner` value beneath or beside the identity
+     block instead of an unlabeled value pushed to the far edge. When the collection is empty, use the repository's
+     existing `UEmpty` pattern with title `No contacts recorded`, a concise description, and no invented create action.
+     In the `aside` slot, add one bounded `Account details` section containing a semantic `dl` for Owner, Contacts,
+     Leads, Client since, and Added. Reuse the existing local date-formatting convention with an explicit return type:
+
+     ```ts
+     const formatDate = (value: string | null): string =>
+       value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded";
+     ```
+
+     Use `organization.client_since_at` and `organization.created_at` already present in `OrganizationResource`; do not
+     add a duplicate date prop. Place the permission-gated Archive/Restore/Delete controls after the account metadata,
+     let them wrap on narrow widths, and set click controls to `type="button"`. Retain the existing archive/delete
+     confirmation copy and generated URLs. Do not preserve the current Restore link's invalid GET navigation: the named
+     restore route requires DELETE, so call it explicitly without a hardcoded URL:
+
+     ```ts
+     const restoreOrganization = (): void => {
+       router.delete(restore(props.organization.id).url);
+     };
+     ```
+
+     Continue using `router.post(archive(props.organization.id).url)` for archive and
+     `router.delete(destroy(props.organization.id).url)` for permanent deletion.
+  5. Refactor `resources/js/pages/Crm/Contacts/Show.vue` through the same shell. Add
+     `<Head :title="contact.name" />`, use the navbar title `Contact detail`, and pass the generated contact index/edit
+     URLs with the same permission rule. Its `summary` section must use `data-testid="contact-summary"`, render the name
+     as the sole `h1`, identify the record as `Contact`, and show the archived badge without repeating the email/phone
+     string in the heading area. Build the default slot as a bounded `Contact information` section containing a semantic
+     `dl` with separate Email, Phone, and Organization entries: email is a `mailto:` link, a present phone is a `tel:`
+     link, organization uses `organizationShow(contact.organization.id).url`, and the existing `No phone recorded` and
+     `Independent contact` fallbacks remain explicit. The `aside` slot must contain `Relationship details` with Owner,
+     Related leads, and Added using the same local `formatDate()` implementation, followed by the permission-gated
+     lifecycle controls. Apply the same HTTP-verb correction through a local handler:
+
+     ```ts
+     const restoreContact = (): void => {
+       router.delete(restore(props.contact.id).url);
+     };
+     ```
+
+     Never render a state-changing restore endpoint as `UButton :to`. Do not add notes, activities, lead lists, or
+     edit-in-place behavior that the current payload and feedback did not request.
+  6. Preserve the current backend boundary and prove it explicitly in
+     `tests/Feature/Crm/EntityWorkspaceTest.php`. Extend the organization-detail assertion to cover `owner`,
+     `contacts_count`, `leads_count`, `client_since_at`, `created_at`, and only the scoped contact IDs already authorized
+     for the viewer. Extend the contact-detail assertion to cover `organization`, `owner`, `leads_count`, and
+     `created_at`. Keep the existing out-of-scope direct-URL 404 assertions and verify `canManage` remains the sole
+     frontend visibility flag for edit and lifecycle controls. No controller, Resource, or TypeScript interface change
+     is expected because `OrganizationResource`, `ContactResource`, and `resources/js/types/crm.ts` already expose these
+     fields; change them only if the baseline test demonstrates a real contract mismatch. Extend the existing lifecycle
+     feature case to archive and restore one organization and one contact through their named routes, proving restore
+     accepts DELETE and clears `archived_at`; do not test the corrected transport by calling controller methods directly.
+  7. Update `tests/Browser/CrmDetailSmokeTest.php` instead of adding another detail suite. Rename its stale `Task 20`
+     fixture copy to neutral, purpose-specific names and keep the current direct-route and list-navigation coverage.
+     Populate an organization with a website, owner, client date, two contacts, and nonzero related counts; populate a
+     contact with email, phone, organization, owner, and related leads. Assert the new summary/section test IDs, the
+     single visible record heading, actionable `mailto:`/`tel:`/website/relationship links, permission-gated Edit and
+     lifecycle controls, one archived record's working Restore action, and the empty-contact `UEmpty` state. In focused
+     mobile cases, call `resize(390, 844)` and
+     assert `document.documentElement.scrollWidth <= window.innerWidth`, the back/Edit controls remain reachable, long
+     website and contact values wrap inside their sections, and the owner label stays associated with its contact.
+     Exercise at least one detail page with `inLightMode()` and the other with `inDarkMode()`, then assert no JavaScript
+     errors or console logs. Use factories for backend state and stable IDs/accessibility text for interaction; do not
+     create records through browser forms, use arbitrary sleeps, or turn screenshots into brittle pixel baselines.
+  8. Run `php artisan test --compact tests/Feature/Crm/EntityWorkspaceTest.php` and
+     `php artisan test --compact tests/Browser/CrmDetailSmokeTest.php`, then run
+     `vendor/bin/pint --dirty --format agent` because the PHP tests changed, `npm run typecheck`,
+     `npm run lint:check`, `npm run format:check`, `npm run build`, and the repository's complete `composer test`
+     contract, followed by `git diff --check`. Perform a final signed-in visual check of both pages at desktop and
+     `390 x 844` widths in light and dark modes. Confirm title hierarchy, focus visibility, wrapping, semantic contrast,
+     and action placement from current rendered output; distinguish checks actually run from coverage merely added.
+  9. After the full contract and final visual review pass, move Task 21 to `docs/completed-roadmap.md`. Through the
+     authorized user-testing workflow, prepend `FIXED VIA TASK-21` to both the organization-detail and contact-detail
+     notes while preserving their original feedback, `tested_at`, and `roadmap_task_at`. Leave both `approved_at`
+     values null and confirm both cards report `Needs Approval`; completion must not silently approve either human review
+     record.
+  10. Output a fenced `markdown` code block containing a PR summary in this structure:
 
       ```markdown
       ## Summary
-      - describe the restored organization/contact direct-route and View-link browser coverage
-      - describe the diagnosed temporary-server cause and any minimal evidence-backed repair, or state that no production fix was required
-      - describe the preserved UUID, authorization, 404, and user-testing boundaries
+      - describe the shared responsive CRM detail shell and corrected single-heading hierarchy
+      - describe the organization/contact information, relationship, link, and lifecycle-action improvements
+      - describe focused feature/browser coverage and the two-record user-testing handoff
 
       ## Verification
-      - list every focused, repeated browser, and full quality-contract command run, with its result
-      ```
-
-### Task 21 — Fix CRM Lead Detail Rendering
-
-The lead detail user-testing note identifies a separate rendering defect: valid lead records can blank-render because the
-page reads `lead.contact.name` when the contact payload is missing. This is implementation work, not Task 21's browser
-smoke verification.
-
-- [ ] Reproduce the blank lead detail page and determine why the required contact relation is missing from the Inertia
-  payload or not handled by the page.
-- [ ] Make valid lead detail records render safely while preserving the intended contact relationship semantics.
-- [ ] Add focused feature/browser regression coverage for the lead detail payload, rendered page, and relevant missing
-  relation state.
-- [ ] Run the focused tests and full quality contract after the rendering fix.
-- [ ] **Implementation instructions (complete in order):**
-  1. Reproduce the defect before editing. Run
-     `php artisan test --compact tests/Feature/Crm/LeadWorkspaceTest.php`, then add a temporary failing assertion or the
-     first permanent regression that creates a lead, stores its contact identity, soft-deletes that contact, and requests
-     `route('crm.leads.show', $lead)`. Confirm the failure is the recorded missing-contact path, and inspect only recent
-     Laravel/browser logs if the response differs. Preserve UUID route binding, `crm.view` visibility, owner scoping,
-     contact direct-route 404 concealment, Wayfinder navigation, and the non-null `leads.contact_id` foreign key. No
-     migration or dependency change is required.
-  2. Treat the model relationship as the source of truth. A contact uses `SoftDeletes`, while a lead's required
-     `contact_id` survives a soft delete and cascades only on a real database delete; therefore a soft-deleted contact is
-     still the lead's historical contact. Update `Lead::contact()` in `app/Models/Lead.php` to include that record without
-     changing the related contact's own route binding or general visibility:
-
-      ```php
-      /** @return BelongsTo<Contact, $this> */
-      public function contact(): BelongsTo
-      {
-          return $this->belongsTo(Contact::class)->withTrashed();
-      }
-      ```
-
-     Keep the `Contact` model soft-deletable and keep the database constraint; do not nullable-migrate `contact_id`,
-     copy contact fields onto leads, restore deleted contacts implicitly, or weaken contact authorization.
-  3. Make `app/Http/Resources/LeadResource.php` deterministic and null-safe even if corrupted/imported data produces a
-     truly absent relation. Resolve only an already eager-loaded relationship, then emit either the existing contact
-     object or an explicit `null` key:
-
-      ```php
-      $contact = $this->relationLoaded('contact') ? $this->contact : null;
-
-      // In the returned array:
-      'contact' => $contact === null ? null : [
-          'id' => $contact->uuid,
-          'name' => $contact->name,
-          'email' => $contact->email,
-          'phone' => $contact->phone,
-      ],
-      ```
-
-     Do not rely on lazy loading, omit the `contact` key conditionally, or hide the error with a fabricated contact.
-     Keep `LeadController::show()` and `LeadQuery` eager-loading `contact`; the corrected relation should make both detail
-     and list/search behavior include the historical contact consistently.
-  4. Change `Lead.contact` in `resources/js/types/crm.ts` to
-     `{ id: string; name: string; email: string; phone: string | null } | null`. In
-     `resources/js/pages/Crm/Leads/Show.vue`, derive `contactName` from
-     `props.lead.contact?.name ?? "Contact unavailable"`, use it for the navbar and heading, and guard email/phone with
-     clear `Not available`/`Not provided` text. When `lead.contact` is null, render a compact warning `UAlert` explaining
-     that the associated contact record is unavailable and hide the Edit control because that workflow requires contact
-     fields. Keep archive, restore, conversion, notes, follow-ups, organization, owner, status, and date content usable.
-  5. Update the lead table in `resources/js/pages/Crm/Leads/Index.vue` for the now-honest nullable contract. Replace
-     direct `row.original.contact.name`/`.email` reads with optional access and the same `Contact unavailable` fallback,
-     while preserving the UUID Wayfinder View link. Confirm search by a soft-deleted contact still works through the
-     relationship definition; do not filter the valid lead out merely because its contact no longer has a public detail
-     route.
-  6. Extend `tests/Feature/Crm/LeadWorkspaceTest.php` with the complete server contract. Assert an ordinary lead still
-     returns the existing flat prop shape; after its contact is soft-deleted, assert the lead index/search and detail
-     responses remain successful and contain that contact's UUID, name, email, and phone; assert the deleted contact's
-     own show route remains 404; and retain unauthorized/other-owner concealment. Add a focused `LeadResource` case that
-     explicitly sets a loaded `contact` relation to null and proves serialization returns `contact: null` instead of
-     throwing. Use factories and model operations rather than disabling foreign keys or inserting impossible orphan
-     rows.
-  7. Add `tests/Browser/CrmLeadDetailTest.php` with backend-created authenticated fixtures. Cover a normal direct detail
-     visit, a lead whose contact was soft-deleted before the visit, and one list-row `View` navigation. Assert the UUID
-     path, lead panel, preserved contact name/email, relevant status/project content, and no JavaScript errors or console
-     logs. Add stable, narrowly scoped `data-testid` values only if accessible text/href selectors are ambiguous; do not
-     fold this lead-specific regression into Task 21's organization/contact smoke file.
-  8. Verify the defensive UI state separately from the historical-contact scenario: exercise `LeadResource` with a
-     loaded null contact, keep TypeScript strict enough to reject unguarded access, and—if the existing frontend/browser
-     harness can supply a page fixture without production-only routes—assert the warning, fallback heading, hidden Edit
-     control, and still-usable lead actions. Do not add a production route or persist invalid data solely to make that
-     browser fixture possible; resource coverage plus typechecking is the fallback when the harness cannot represent an
-     impossible foreign-key state.
-  9. Run `vendor/bin/pint --dirty --format agent`, the focused lead feature/resource tests, each new lead browser case,
-     and the complete `tests/Browser/CrmLeadDetailTest.php` first. Then run `npm run typecheck`, `npm run lint:check`,
-     `npm run format:check`, `npm run build`, and the repository's complete `composer test` contract (type coverage,
-     coverage-gated Unit/Feature tests, browser suite, Pint/Rector/Prettier checks, PHPStan, and max-level PHPStan),
-     followed by `git diff --check`. Re-run the lead browser file after the full build to rule out a stale Vite manifest
-     or order-dependent temporary-server result.
-  10. Move Task 22 to `docs/completed-roadmap.md` only after that contract is green. The current `crm-leads-show`
-      user-testing record is incorrectly approved while its roadmap task is active: through the authorized Eloquent
-      bookkeeping workflow, preserve its original notes, `tested_at`, and `roadmap_task_at`, prepend
-      `FIXED VIA TASK-22`, set `approved_at` to null, and verify the card reports `Needs Approval`. Do not replace the
-      tester's recorded console error, change either earlier timestamp, or mark human approval on their behalf.
-  11. Output a fenced `markdown` code block containing a PR summary in this structure:
-
-      ```markdown
-      ## Summary
-      - describe the restored soft-deleted historical-contact relationship and null-safe resource contract
-      - describe the lead detail/list fallbacks and preserved contact authorization behavior
-      - describe the focused feature/browser regression coverage and corrected user-testing handoff
-
-      ## Verification
-      - list every focused and full quality-contract command run, with its result
+      - list every focused and full quality-contract command and visual check actually completed, with its result
       ```
 
 ## Later, Not MVP
