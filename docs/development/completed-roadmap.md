@@ -19,6 +19,11 @@ These items are already resolved by the roadmap once removed from `./active-deci
 - Task 8 CRM ownership uses one nullable `owner_id` per CRM record. Sales/Ops users see records they own or unassigned
   records awaiting claim; Admin and Super Admin users bypass ownership filters. Only Admin and Super Admin users may
   transfer ownership. Out-of-scope direct URLs return `404`.
+- Public intake identity is isolated: every anonymous submission creates a new unowned Contact and Lead, never reuses
+  or mutates an existing Contact/Organization, remains unlinked from an Organization until staff resolution, and keeps
+  the submitted identity/company values in an immutable Lead snapshot.
+- Lead history preserves the identity of a soft-deleted Contact by loading the trashed relationship, exposing its
+  deleted state, and rendering historical values without a broken Contact detail link.
 
 ## Resolved Decisions
 
@@ -34,7 +39,8 @@ These items are already resolved by the roadmap once removed from `./active-deci
 | DP-10 | What is the deployment target and production operations model?          | Hosting determines PHP/Node availability, Redis, workers, scheduler, backups, logs, and asset build strategy.                       | Choose hosting, environment names, migration strategy, worker/scheduler supervision, Redis availability, backup policy, and error tracking.                | **Resolved:** Laravel Forge-managed staging and production sites with PHP 8.5, MySQL, Redis, Vite builds, Supervisor-managed Horizon workers, and Forge scheduler jobs; zero-downtime release macros with `optimize` and `migrate --force`; daily encrypted backups to a configured storage provider plus isolated restore tests; Forge logs plus `/up` health monitoring; Southeast Code Operations Lead owns incidents, with the Technical Maintainer as escalation. |
 | DP-11 | What frontend component standard should v1 follow?                      | Mixed component systems can create duplicate form/table/dialog patterns and inconsistent accessibility.                             | Decide Nuxt UI first, local primitives first, or a strict hybrid. Define table, drawer/modal, toast, confirmation, and mobile behavior.                    | Use Nuxt UI where it fits; create local wrappers for repeated CRM/admin form, table, dialog, and status patterns.                                                  |
 | DP-12 | Are privacy/legal pages required before public lead capture launches?   | Public intake may collect personal and business information, which can require privacy terms, retention copy, and consent language. | Decide required privacy policy, terms, consent wording, retention statements, and whether marketing footer links are mandatory.                            | Add privacy policy and basic contact-data consent before launch if public intake is enabled.                                                                       |
-
+| DP-13 | How should public and staff CRM identity resolution avoid ownership leaks? | Global email/name upserts let anonymous or restricted actors mutate or attach records outside their visibility boundary.          | Define public deduplication, immutable intake evidence, staff matching identifiers, and the point at which an Organization is associated.                  | **Resolved:** isolate every public submission as a new unowned Contact/Lead with an immutable identity/company snapshot and no Organization; staff resolve only visibility-scoped UUIDs. |
+| DP-14 | What should a Lead display after its Contact is soft-deleted?            | Hiding the related Contact breaks Lead serialization, while linking to its normal detail route produces a 404.                      | Choose historical display or a nullable missing-contact fallback, including the resource/type/link behavior.                                               | **Resolved:** load the Contact with trashed records, expose its deleted state, show historical identity, and omit the unusable Contact detail link.                 |
 
 ## Previously Completed Tasks
 
@@ -98,6 +104,11 @@ defaults above remain the executable path until those decisions are made.
   wrappers for repeated form and workspace patterns.
 - [x] DP-12: decide privacy/legal page requirements for public lead capture. A privacy page and contact-data consent are
   shipped; terms remain unnecessary unless the decision changes.
+- [x] DP-13: isolate anonymous identity from CRM deduplication and ownership. Every public submission creates a new
+  unowned Contact/Lead, stores an immutable submitted identity/company snapshot, creates no Organization, and leaves
+  staff resolution to visibility-scoped UUID selection.
+- [x] DP-14: preserve Lead history after Contact deletion. Leads load soft-deleted Contacts, display the historical
+  identity with a deleted state, and do not offer a Contact detail link that normal route binding cannot resolve.
 
 ## Roadmap Checklist
 
