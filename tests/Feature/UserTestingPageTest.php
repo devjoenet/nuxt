@@ -190,6 +190,6 @@ it('shows the development roadmap to authorized users', function (): void {
         ->assertSuccessful()
         ->assertInertia(fn ($page) => $page
             ->component('Admin/Roadmap/Index')
-            ->where('source', 'docs/roadmap.md')
+            ->where('source', 'docs/development/active-roadmap.md')
             ->where('content', fn ($content): bool => str_contains((string) $content, 'Southeast Code Roadmap')));
 });

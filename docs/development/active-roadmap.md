@@ -4,11 +4,11 @@ This roadmap tracks the work needed to turn the current Laravel/Inertia starter 
 operating app: customer-facing marketing, a basic CRM, and an admin area for users, roles, permissions, queues, jobs,
 audit trails, and business operations.
 
-If at any time while adding a task, a decision with an unclear answer exists, it must be added here. 
+If at any time while adding a task, a decision with an unclear answer exists, it must be added here.
 
 ## Implementation Contract
 
-These defaults make the roadmap executable even when `docs/00-decision-points.md` has not been completed yet. If a
+These defaults make the roadmap executable even when `docs/development/active-decision-points.md` has not been completed yet. If a
 decision is later made differently, update this roadmap and the affected phase document before implementation continues.
 
 - Build the Southeast Code internal operating app first. Starter-kit reuse is secondary and must not keep generic demo
@@ -42,7 +42,7 @@ decision is later made differently, update this roadmap and the affected phase d
 
 The next tasks are ordered around the remaining unchecked work and the decisions that can change implementation scope. 
 
-__Note: Tasks that have been completed are moved to `./completed-roadmap.md`__
+__Note: Tasks that have been completed are moved to `docs/development/completed-roadmap.md`__
 
 ### Task 20 — Make The Organization Owner Filter Clearable
 
@@ -127,7 +127,7 @@ organization create/edit form, CRM ownership policy, or server-side visibility r
      `vendor/bin/pint --dirty --format agent` if PHP test code changed, `npm run typecheck`, `npm run lint:check`,
      `npm run format:check`, `npm run build`, and the repository's complete `composer test` contract, followed by
      `git diff --check`. Distinguish checks actually run from coverage merely added.
-  8. After the full contract passes, move Task 20 to `docs/completed-roadmap.md`. Through the authorized user-testing
+  8. After the full contract passes, move Task 20 to `docs/development/completed-roadmap.md`. Through the authorized user-testing
      workflow, prepend `FIXED VIA TASK-20` to the organization-index note while preserving the feedback below it,
      preserve `tested_at` and `roadmap_task_at`, leave `approved_at` null, and confirm the card reports
      `Needs Approval`. Verify all three timestamps with a read-only Eloquent query in Tinker; task completion must not
@@ -299,7 +299,7 @@ record lifecycle behavior.
      contract, followed by `git diff --check`. Perform a final signed-in visual check of both pages at desktop and
      `390 x 844` widths in light and dark modes. Confirm title hierarchy, focus visibility, wrapping, semantic contrast,
      and action placement from current rendered output; distinguish checks actually run from coverage merely added.
-  9. After the full contract and final visual review pass, move Task 21 to `docs/completed-roadmap.md`. Through the
+  9. After the full contract and final visual review pass, move Task 21 to `docs/development/completed-roadmap.md`. Through the
      authorized user-testing workflow, prepend `FIXED VIA TASK-21` to both the organization-detail and contact-detail
      notes while preserving their original feedback, `tested_at`, and `roadmap_task_at`. Leave both `approved_at`
      values null and confirm both cards report `Needs Approval`; completion must not silently approve either human review

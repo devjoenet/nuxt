@@ -14,9 +14,11 @@ class DevelopmentRoadmapController extends Controller
 {
     public function __invoke(): Response
     {
+        $roadmap = File::get(base_path('docs/development/active-roadmap.md'));
+
         return Inertia::render('Admin/Roadmap/Index', [
-            'content' => Str::markdown(File::get(base_path('docs/roadmap.md'))),
-            'source' => 'docs/roadmap.md',
+            'content' => Str::markdown($roadmap),
+            'source' => 'docs/development/active-roadmap.md',
         ]);
     }
 }

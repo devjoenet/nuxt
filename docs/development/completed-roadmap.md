@@ -1,6 +1,6 @@
 ## Resolved Decision Points
 
-These items are already resolved by the roadmap once removed from `./00-decision-points.md`
+These items are already resolved by the roadmap once removed from `./active-decision-points.md`
 
 - Southeast Code internal operating app first; reusable starter-kit polish second.
 - Single Southeast Code workspace for v1; multi-company tenancy is later.
@@ -65,7 +65,7 @@ These items are already resolved by the roadmap once removed from `./00-decision
 
 ## Open Decisions To Ratify
 
-`docs/00-decision-points.md` tracks the unresolved choices that can still change implementation details. The roadmap
+`docs/development/active-decision-points.md` tracks the unresolved choices that can still change implementation details. The roadmap
 defaults above remain the executable path until those decisions are made.
 
 - [x] DP-01: choose the v1 success metric and launch gate. Task 8 ratifies operational CRM readiness: inbound
@@ -184,9 +184,9 @@ defaults above remain the executable path until those decisions are made.
 - [x] Add tests for marketing contact submission, CRM CRUD, permissions, Horizon/admin access, and queue dispatching.
 - [x] Add browser smoke coverage for critical auth, marketing, CRM lists, admin, jobs, settings, audit, and expressive
   form control behavior.
-- [x] Keep app-facing copy consistent with Southeast Code positioning from `docs/CompanyBrief.md`.
-- [x] Keep app-facing colors aligned with `docs/ColorPalette.md`, while meeting contrast requirements in forms, tables,
-  navigation, and status badges.
+- [x] Keep app-facing copy consistent with current Southeast Code positioning and shipped UI copy.
+- [x] Keep app-facing colors aligned with the current CSS theme tokens, while meeting contrast requirements in forms,
+  tables, navigation, and status badges.
 - [x] Keep the UI practical and operational: dense, scannable, restrained, and built for repeated daily use.
 - [x] After implementation, run the relevant verification commands:
   - `composer test`

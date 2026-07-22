@@ -3,7 +3,7 @@
 This document tracks unresolved decisions that can materially change scope, architecture, launch criteria, or operating
 behavior for the Southeast Code app.
 
-The task documents and `docs/roadmap.md` already define an executable default path. If a decision below is not completed
+The task documents and `docs/development/active-roadmap.md` already define an executable default path. If a decision below is not completed
 before implementation reaches it, follow the default path in the roadmap and record the tradeoff. Do not reopen broad
 scope questions in feature work unless a decision here explicitly changes the baseline.
 
@@ -14,7 +14,7 @@ A decision is complete when it records:
 - the reason that option was chosen;
 - the affected docs, routes, models, tests, or deployment settings;
 - the acceptance criteria that prove the project can continue without stopping on that question again.
-- the decision point is removed from this list and added under 'Resolved Decision Points' in `./docs/completed-roadmap.md`
+- the decision point is removed from this list and added under 'Resolved Decision Points' in `docs/development/completed-roadmap.md`
 
 ## Decision Hygiene
 
