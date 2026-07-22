@@ -26,7 +26,6 @@
     "spatie/laravel-permission": "^8.0"
   },
   "require-dev": {
-    "baspa/larascan": "^3.0",
     "driftingly/rector-laravel": "^2.0",
     "fakerphp/faker": "^1.24",
     "larastan/larastan": "^3.10",
