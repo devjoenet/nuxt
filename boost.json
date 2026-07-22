@@ -22,6 +22,7 @@
         "laravel-permission-development",
         "spatie-laravel-php-standards",
         "audit-laravel-application",
+        "automate-review-findings",
         "brand-kit",
         "canonicalize-tailwind",
         "componentize",
