@@ -30,12 +30,9 @@ class UpdateLeadRequest extends FormRequest
     /** @return array<string, mixed> */
     public function rules(): array
     {
-        $lead = $this->route('lead');
-
         return [
-            'contact_name' => ['required', 'string', 'max:255'],
-            'contact_email' => ['required', 'email', 'max:255', Rule::unique('contacts', 'email')->ignore($lead instanceof Lead ? $lead->contact_id : null)],
-            'contact_phone' => ['nullable', 'string', 'max:255'],
+            'contact_id' => ['required', 'uuid'],
+            'organization_id' => ['nullable', 'uuid'],
             'owner_id' => [
                 Rule::prohibitedIf(fn (): bool => ! $this->user()?->isCrmAdministrator()),
                 'nullable',

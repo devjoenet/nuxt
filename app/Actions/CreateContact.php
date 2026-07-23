@@ -24,15 +24,12 @@ class CreateContact
         ]);
     }
 
-    private function organization(?int $organizationId, User $user): ?Organization
+    private function organization(?string $organizationId, User $user): ?Organization
     {
         if ($organizationId === null) {
             return null;
         }
 
-        $organization = Organization::query()->findOrFail($organizationId);
-        abort_unless($organization->isVisibleTo($user), 404);
-
-        return $organization;
+        return Organization::query()->visibleTo($user)->where('uuid', $organizationId)->firstOrFail();
     }
 }

@@ -16,7 +16,7 @@ final class ContactData extends Dto
         public readonly string $name,
         public readonly string $email,
         public readonly ?string $phone = null,
-        public readonly ?int $organizationId = null,
+        public readonly ?string $organizationId = null,
         public readonly ?int $ownerId = null,
         public readonly bool $ownerIdWasProvided = false,
     ) {}

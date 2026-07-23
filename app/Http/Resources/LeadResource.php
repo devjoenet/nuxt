@@ -32,6 +32,7 @@ class LeadResource extends JsonResource
             'budget_range' => $this->budget_range,
             'timeline' => $this->timeline,
             'project_details' => $this->project_details,
+            'intake_snapshot' => $this->intake_snapshot,
             'archived_at' => $this->archived_at?->toISOString(),
             'converted_at' => $this->converted_at?->toISOString(),
             'created_at' => $this->created_at->toISOString(),

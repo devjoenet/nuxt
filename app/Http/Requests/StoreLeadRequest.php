@@ -22,11 +22,8 @@ class StoreLeadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contact_name' => ['required', 'string', 'max:255'],
-            'contact_email' => ['required', 'email', 'max:255'],
-            'contact_phone' => ['nullable', 'string', 'max:255'],
-            'organization_name' => ['nullable', 'string', 'max:255'],
-            'organization_website' => ['nullable', 'url', 'max:255'],
+            'contact_id' => ['required', 'uuid'],
+            'organization_id' => ['nullable', 'uuid'],
             'owner_id' => [
                 Rule::prohibitedIf(fn (): bool => ! $this->user()?->isCrmAdministrator()),
                 'nullable',

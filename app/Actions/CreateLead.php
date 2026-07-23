@@ -23,17 +23,10 @@ class CreateLead
                 $ownerId = $data->ownerId;
             }
 
-            $organization = filled($data->organizationName)
-                ? Organization::query()->firstOrCreate(['name' => $data->organizationName], ['website' => $data->organizationWebsite])
-                : null;
-
-            $contact = Contact::query()->updateOrCreate(
-                ['email' => $data->contactEmail],
-                ['name' => $data->contactName, 'phone' => $data->contactPhone, 'organization_id' => $organization?->id],
-            );
-
-            $organization?->update(['owner_id' => $organization->owner_id ?? $ownerId]);
-            $contact->update(['owner_id' => $contact->owner_id ?? $ownerId]);
+            $contact = Contact::query()->visibleTo($user)->where('uuid', $data->contactId)->firstOrFail();
+            $organization = $data->organizationId === null
+                ? null
+                : Organization::query()->visibleTo($user)->where('uuid', $data->organizationId)->firstOrFail();
 
             $serviceInterests = array_values($data->serviceInterest);
 

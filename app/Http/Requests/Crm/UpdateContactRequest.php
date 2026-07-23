@@ -29,13 +29,11 @@ class UpdateContactRequest extends FormRequest
     /** @return array<string, ValidationRule|array<mixed>|string> */
     public function rules(): array
     {
-        $contact = $this->route('contact');
-
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('contacts', 'email')->ignore($contact)],
+            'email' => ['required', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
-            'organization_id' => ['nullable', 'integer', 'exists:organizations,id'],
+            'organization_id' => ['nullable', 'uuid'],
             'owner_id' => [
                 Rule::prohibitedIf(fn (): bool => ! $this->user()?->isCrmAdministrator()),
                 'nullable',

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserTestingPageController;
 use App\Http\Controllers\Crm\ContactController;
+use App\Http\Controllers\Crm\CrmRecordOptionController;
 use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
 use App\Http\Controllers\Crm\FollowUpTaskController;
 use App\Http\Controllers\Crm\LeadArchiveController;
@@ -38,6 +39,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('crm')->name('crm.')->middleware('can:crm.view')->group(function (): void {
+        Route::get('options/contacts', [CrmRecordOptionController::class, 'contacts'])->name('options.contacts');
+        Route::get('options/organizations', [CrmRecordOptionController::class, 'organizations'])->name('options.organizations');
         Route::resource('leads', LeadController::class)->except('destroy');
         Route::resource('organizations', OrganizationController::class)->except('destroy');
         Route::post('organizations/{organization}/archive', [OrganizationController::class, 'archive'])->name('organizations.archive');

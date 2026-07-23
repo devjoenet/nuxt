@@ -13,14 +13,11 @@ use UnexpectedValueException;
 final class LeadData extends Dto
 {
     public function __construct(
-        public readonly string $contactName,
-        public readonly string $contactEmail,
+        public readonly string $contactId,
         public readonly string $status,
         public readonly string $source,
         public readonly string $projectDetails,
-        public readonly ?string $contactPhone = null,
-        public readonly ?string $organizationName = null,
-        public readonly ?string $organizationWebsite = null,
+        public readonly ?string $organizationId = null,
         public readonly ?int $ownerId = null,
         public readonly ?string $budgetRange = null,
         public readonly ?string $timeline = null,
