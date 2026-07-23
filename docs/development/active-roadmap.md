@@ -45,9 +45,9 @@ decision is later made differently, update this roadmap and the affected phase d
 
 ## Active Development Tasks
 
-Task 20 remains first as a contained quick win already in progress; after it, the tasks are ordered by urgency first
-and implementation effort second. Existing task identifiers remain stable; numeric order is not a promise that
-findings were copied from the audit in their original order. The audit work is consolidated as follows:
+The active tasks are ordered by urgency first and implementation effort second. Existing task identifiers remain
+stable; numeric order is not a promise that findings were copied from the audit in their original order. The audit
+work is consolidated as follows:
 
 - F-02 is part of Task 21 because its restore controls and browser coverage already live in the organization/contact
   detail workspace change.
@@ -62,10 +62,6 @@ findings were copied from the audit in their original order. The audit work is c
 __Note: Tasks that have been completed are moved to `docs/development/completed-roadmap.md`__
 
 Detailed implementation instructions are in docs/development/active-tasks; this roadmap remains the ordered active-work index.
-
-### Task 20 — Make The Organization Owner Filter Clearable
-
-[View Task 20 instructions](active-tasks/20-make-the-organization-owner-filter-clearable.md)
 
 ### Task 21 — Redesign The Organization And Contact Detail Workspaces And Repair Restore
 

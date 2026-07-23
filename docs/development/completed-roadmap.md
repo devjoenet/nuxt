@@ -411,3 +411,22 @@ and 24 assertions, frontend typecheck/lint/format/build, Herd-backed coverage-ga
 `composer test` command could not run its coverage stage because this PHP runtime has no coverage driver; the full
 browser contract exposed an unrelated LaunchSmoke focus-order failure, and the full lint contract retains four
 unrelated pre-existing Rector dry-run findings outside this task.
+
+### Task 20 — Make The Organization Owner Filter Clearable
+
+- [x] Add a page-local, keyboard-reachable clear action beside the organizations-index owner filter for Admin and Super
+  Admin users while keeping real user IDs as the only select options.
+- [x] Return the owner filter to `All owners` through the select's empty model state, omit the empty `owner` query value,
+  and preserve the existing search, debounced Inertia visit, Wayfinder URL, state-preservation, and history-replacement
+  behavior.
+- [x] Keep the filter group full-width on narrow screens without changing organization ownership, server visibility,
+  query behavior, schema, dependencies, or the shared `FormSelect` API.
+- [x] Add focused browser coverage for owner selection, scoped results, URL state, accessible clearing, restored results,
+  JavaScript and console cleanliness, and 390-pixel viewport behavior.
+
+Completion note: Task 20 verification passed with the 10-test CRM entity feature suite and 98 assertions, the focused
+organization-filter browser test with 29 assertions, frontend typecheck/lint/format/build, both PHPStan levels, Pint,
+and Herd-backed Unit/Feature coverage with 144 tests, 941 assertions, and 87.9% total coverage. The repository's direct
+`composer test` command could not run its coverage stage because this PHP runtime has no coverage driver; the full
+browser contract retained the unrelated LaunchSmoke focus-order failure, and the full lint contract retained four
+unrelated pre-existing Rector dry-run findings outside this task.
