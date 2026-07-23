@@ -51,6 +51,33 @@ test('CRM viewers can search and filter the paginated lead list', function (): v
             ->where('leads.data.0.id', $match->uuid));
 });
 
+test('lead index filters validate enums and normalize false-like archive values', function (): void {
+    $user = crmUser();
+    $active = Lead::factory()->create(['owner_id' => $user->id, 'status' => LeadStatus::Qualified]);
+    Lead::factory()->create(['owner_id' => $user->id, 'archived_at' => now()]);
+
+    foreach ([null, 0, '0', false] as $archived) {
+        $this->actingAs($user)
+            ->get(route('crm.leads.index', ['archived' => $archived, 'status' => 'qualified']))
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->where('leads.data.0.id', $active->uuid)
+                ->where('leads.meta.total', 1));
+    }
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.index', ['status' => ['qualified']]))
+        ->assertRedirect()
+        ->assertSessionHasErrors('status');
+    $this->actingAs($user)
+        ->get(route('crm.leads.index', ['source' => 'unknown']))
+        ->assertRedirect()
+        ->assertSessionHasErrors('source');
+    $this->actingAs($user)
+        ->get(route('crm.leads.index', ['direction' => 'sideways']))
+        ->assertRedirect()
+        ->assertSessionHasErrors('direction');
+});
+
 test('CRM viewers can view a lead with flat resource props', function (): void {
     $user = crmUser();
     $lead = Lead::factory()->create(['owner_id' => $user->id]);

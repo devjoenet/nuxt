@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -121,6 +122,82 @@ test('sales ops can view a contact with flat resource props', function (): void 
             ->where('contact.owner.id', $user->id)
             ->where('contact.leads_count', 0)
             ->where('canManage', true));
+});
+
+test('related CRM counts use the same visibility rule as parent records', function (): void {
+    $user = entityCrmUser();
+    $administrator = entityCrmUser(admin: true);
+    $other = User::factory()->create();
+    $organization = Organization::factory()->create(['owner_id' => $user->id]);
+    $ownedContact = Contact::factory()->create(['organization_id' => $organization->id, 'owner_id' => $user->id]);
+    $unassignedContact = Contact::factory()->create(['organization_id' => $organization->id, 'owner_id' => null]);
+    Contact::factory()->create(['organization_id' => $organization->id, 'owner_id' => $other->id]);
+
+    foreach ([$user, null, $other] as $owner) {
+        Lead::factory()->create([
+            'contact_id' => $ownedContact->id,
+            'organization_id' => $organization->id,
+            'owner_id' => $owner?->id,
+        ]);
+    }
+
+    $this->actingAs($user)
+        ->get(route('crm.organizations.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('organizations.data.0.contacts_count', 2)
+            ->where('organizations.data.0.leads_count', 2));
+
+    $this->actingAs($user)
+        ->get(route('crm.organizations.show', $organization))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('organization.contacts_count', 2)
+            ->where('organization.leads_count', 2));
+
+    $this->actingAs($user)
+        ->get(route('crm.contacts.show', $ownedContact))
+        ->assertInertia(fn (Assert $page): Assert => $page->where('contact.leads_count', 2));
+
+    $this->actingAs($administrator)
+        ->get(route('crm.organizations.show', $organization))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('organization.contacts_count', 3)
+            ->where('organization.leads_count', 3));
+
+    expect($unassignedContact->isVisibleTo($user))->toBeTrue();
+});
+
+test('entity index filters normalize false-like archived values and reject invalid data', function (): void {
+    $user = entityCrmUser();
+    $activeOrganization = Organization::factory()->create(['owner_id' => $user->id]);
+    Organization::factory()->create(['owner_id' => $user->id, 'archived_at' => now()]);
+    $contact = Contact::factory()->create(['owner_id' => $user->id]);
+
+    foreach ([null, 0, '0', false] as $archived) {
+        $this->actingAs($user)
+            ->get(route('crm.organizations.index', ['archived' => $archived]))
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->where('organizations.data.0.id', $activeOrganization->uuid)
+                ->where('organizations.meta.total', 2));
+    }
+
+    $this->actingAs($user)
+        ->get(route('crm.contacts.index', ['search' => '  '.$contact->name.'  ']))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('filters.search', $contact->name)
+            ->where('contacts.data.0.id', $contact->uuid));
+
+    $this->actingAs($user)
+        ->get(route('crm.organizations.index', ['search' => ['invalid']]))
+        ->assertRedirect()
+        ->assertSessionHasErrors('search');
+    $this->actingAs($user)
+        ->get(route('crm.contacts.index', ['organization' => 'not-a-uuid']))
+        ->assertRedirect()
+        ->assertSessionHasErrors('organization');
+    $this->actingAs($user)
+        ->get(route('crm.organizations.index', ['sort' => 'owner_id']))
+        ->assertRedirect()
+        ->assertSessionHasErrors('sort');
 });
 
 test('out of scope direct URLs return not found', function (): void {

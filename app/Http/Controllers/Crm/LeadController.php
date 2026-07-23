@@ -7,9 +7,11 @@ namespace App\Http\Controllers\Crm;
 use App\Actions\CreateLead;
 use App\Actions\UpdateLead;
 use App\Data\LeadData;
+use App\Data\LeadIndexData;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Crm\LeadIndexRequest;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
 use App\Http\Resources\LeadResource;
@@ -25,15 +27,15 @@ use Inertia\Response;
 
 class LeadController extends Controller
 {
-    public function index(Request $request, LeadQuery $query): Response
+    public function index(LeadIndexRequest $request, LeadQuery $query): Response
     {
         $this->authorize('viewAny', Lead::class);
         $user = $this->authenticatedUser($request);
-        $filters = $request->only(['search', 'status', 'source', 'owner', 'sort', 'direction', 'archived']);
+        $filters = LeadIndexData::fromValidated($request->validated());
 
         return Inertia::render('Crm/Leads/Index', [
             'leads' => LeadResource::collection($query->build($user, $filters)->paginate(15)->withQueryString()),
-            'filters' => $filters,
+            'filters' => $filters->filters(),
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),

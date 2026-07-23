@@ -4,28 +4,22 @@ declare(strict_types=1);
 
 namespace App\Queries;
 
+use App\Data\ContactIndexData;
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class ContactQuery
 {
-    /**
-     * @param  array<string, mixed>  $filters
-     * @return Builder<Contact>
-     */
-    public function build(User $user, array $filters): Builder
+    /** @return Builder<Contact> */
+    public function build(User $user, ContactIndexData $filters): Builder
     {
-        $sort = in_array($filters['sort'] ?? null, ['name', 'created_at'], true) ? $filters['sort'] : 'created_at';
-        $direction = ($filters['direction'] ?? null) === 'asc' ? 'asc' : 'desc';
-
         return Contact::query()
             ->visibleTo($user)
             ->with(['organization', 'owner'])
-            ->withCount('leads')
-            ->when($filters['archived'] ?? false, fn (Builder $query): Builder => $query->whereNotNull('archived_at'))
-            ->when(! ($filters['archived'] ?? false), fn (Builder $query): Builder => $query->whereNull('archived_at'))
-            ->when($filters['search'] ?? null, function (Builder $query, string $search): void {
+            ->withCount(['leads' => fn (Builder $query): Builder => $query->visibleTo($user)])
+            ->whereNull('archived_at', not: $filters->archived)
+            ->when($filters->search, function (Builder $query, string $search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->where('name', 'like', sprintf('%%%s%%', $search))
                         ->orWhere('email', 'like', sprintf('%%%s%%', $search))
@@ -33,8 +27,8 @@ class ContactQuery
                         ->orWhereHas('organization', fn (Builder $query): Builder => $query->where('name', 'like', sprintf('%%%s%%', $search)));
                 });
             })
-            ->when($filters['organization'] ?? null, fn (Builder $query, string $organization): Builder => $query->whereHas('organization', fn (Builder $query): Builder => $query->where('uuid', $organization)))
-            ->when($filters['owner'] ?? null, fn (Builder $query, string $owner): Builder => $query->where('owner_id', $owner))
-            ->orderBy($sort, $direction);
+            ->when($filters->organizationId, fn (Builder $query, string $organizationId): Builder => $query->whereHas('organization', fn (Builder $query): Builder => $query->where('uuid', $organizationId)))
+            ->when($filters->ownerId, fn (Builder $query, int $ownerId): Builder => $query->where('owner_id', $ownerId))
+            ->orderBy($filters->sort->value, $filters->direction->value);
     }
 }

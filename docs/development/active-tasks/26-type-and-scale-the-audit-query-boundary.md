@@ -18,9 +18,12 @@ Combine F-08, the audit portion of F-06, and `ARCH-QUERY-001`. Add the audit dat
 7. After Task 25, extend `ArchTest.php` to inspect Query `build()` signatures for native parameter types and reject `array`, `mixed`, or absent structured-filter types. Exclude helper methods such as `filterOptions()`.
 8. Test validation/ranges/special tokens/options/cache reuse-expiry, named index where portable, migration fresh/rollback, and repeat `EXPLAIN`. Do not implement S3 archival; existing 365-day cleanup stays authoritative pending measured volume/search requirements.
 9. Run focused audit/architecture tests, Pint, PHP types/lint, frontend typecheck, full `composer test`, and `git diff --check`; move Task 26 after migration, plan, cache, and guardrail pass.
+10. Once completed, provide the user with a code block containing a PR summary (see below) for these changes.
 
 ```markdown
-## Summary
+Implement Task 26: Type And Scale The Audit Query Boundary
+
+## Changes
 - describe the activity-log date index and measured query-plan change
 - describe the typed audit request/DTO/query boundary and short-lived option cache
 - describe the Query architecture guardrail and focused validation/cache coverage

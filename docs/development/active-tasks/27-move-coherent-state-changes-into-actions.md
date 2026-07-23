@@ -16,9 +16,12 @@ Resolve F-07 after the preceding correctness boundaries stabilize. Extract real 
 6. Make each controller read authorize/validate → DTO → Action → redirect, with explicit injection and unchanged routes/verbs/Wayfinder/flash text. Preserve Task 21 DELETE restore transport.
 7. Add direct Action tests for transaction/invariant behavior; retain feature tests for authorization, validation, redirects, persistence, and observed activities. Prove rollback, repeat-completion semantics, protected Super Admin rules, and hidden-record mutation denial without mocking Eloquent.
 8. Review `ArchTest.php` but do not add a broad controller-mutation static rule. Run focused tests/new Action tests, Pint, PHP types/lint, full `composer test`, and `git diff --check`; confirm activity data remains redacted as required.
+9. Once completed, provide the user with a code block containing a PR summary (see below) for these changes.
 
 ```markdown
-## Summary
+Implement Task 27: Move Coherent State Changes Into Actions
+
+## Changes
 - describe the typed Actions extracted for CRM, admin-user, and business-setting workflows
 - describe preserved authorization, invariants, transactions, audit behavior, and controller responses
 - describe direct Action and behavior-focused feature coverage

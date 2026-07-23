@@ -431,6 +431,23 @@ and Herd-backed Unit/Feature coverage with 144 tests, 941 assertions, and 87.9% 
 browser contract retained the unrelated LaunchSmoke focus-order failure, and the full lint contract retained four
 unrelated pre-existing Rector dry-run findings outside this task.
 
+### Task 25 — Type CRM Filters And Scope Related Counts
+
+- [x] Move Organization, Contact, and Lead index input through authorized Form Requests and immutable typed DTOs,
+  including enum-backed sorting, active-owner validation, UUID and Lead-enum validation, and normalization of
+  false-like archive input before query construction.
+- [x] Make CRM index queries accept only the authenticated user and their typed DTO, retain existing pagination and
+  Inertia filter props, and use one archive comparison with stable enum defaults.
+- [x] Apply the existing `visibleTo($user)` scope to Organization contact/lead and Contact lead count subqueries for
+  both indexes and details, retaining administrator totals naturally.
+- [x] Add feature regressions for typed/invalid/array filter input, trimmed search, false-like archive input,
+  restricted-user counts, administrator totals, resource payloads, and direct-route visibility.
+
+Completion note: Task 25 verification passed with 26 focused CRM feature tests and 361 assertions, max-level PHPStan,
+frontend typecheck, Pint, and `git diff --check`. The Herd-backed Unit/Feature coverage suite passed with 152 tests,
+1,168 assertions, and 90.5% coverage. The direct `composer test` command reached its coverage stage but could not
+complete because the shell PHP runtime has no coverage driver.
+
 ### Task 21 — Redesign The Organization And Contact Detail Workspaces And Repair Restore
 
 - [x] Add a presentation-only CRM detail shell with responsive summary, main-content, and aside slots while preserving
