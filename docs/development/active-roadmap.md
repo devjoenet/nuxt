@@ -63,10 +63,6 @@ __Note: Tasks that have been completed are moved to `docs/development/completed-
 
 Detailed implementation instructions are in docs/development/active-tasks; this roadmap remains the ordered active-work index.
 
-### Task 21 — Redesign The Organization And Contact Detail Workspaces And Repair Restore
-
-[View Task 21 instructions](active-tasks/21-redesign-the-organization-and-contact-detail-workspaces-and-repair-restore.md)
-
 ### Task 22 — Preserve Lead History When A Contact Is Deleted
 
 [View Task 22 instructions](active-tasks/22-preserve-lead-history-when-a-contact-is-deleted.md)

@@ -430,3 +430,21 @@ and Herd-backed Unit/Feature coverage with 144 tests, 941 assertions, and 87.9% 
 `composer test` command could not run its coverage stage because this PHP runtime has no coverage driver; the full
 browser contract retained the unrelated LaunchSmoke focus-order failure, and the full lint contract retained four
 unrelated pre-existing Rector dry-run findings outside this task.
+
+### Task 21 — Redesign The Organization And Contact Detail Workspaces And Repair Restore
+
+- [x] Add a presentation-only CRM detail shell with responsive summary, main-content, and aside slots while preserving
+  each entity page's routes, authorization, state, and lifecycle behavior.
+- [x] Rework the organization and contact workspaces around one clear heading, relationship context, semantic detail
+  lists, resilient absent-value states, and wrapping mobile layouts in both color modes.
+- [x] Correct archived-record restore controls to issue local Inertia DELETE requests while preserving POST archive and
+  DELETE destroy behavior.
+- [x] Extend feature and browser coverage for direct-route scoping, Resource props, lifecycle permissions, DELETE
+  restore, contact-empty state, responsive light/dark layouts, overflow, and browser cleanliness.
+
+Completion note: Task 21 verification passed with 11 focused CRM entity feature tests and 124 assertions, 5 focused
+CRM detail browser tests and 64 assertions, frontend typecheck/lint/format/build, Herd-backed Unit/Feature coverage
+with 145 tests, 967 assertions, 88.6% total coverage, the full browser contract, lint, PHPStan, and max-level PHPStan.
+The direct `composer test` command reached its coverage-gated test phase but could not complete because the shell PHP
+runtime has no coverage driver; the equivalent Herd-backed coverage suite passed. Organization and contact detail
+user-testing records are handed back as Needs Approval.
