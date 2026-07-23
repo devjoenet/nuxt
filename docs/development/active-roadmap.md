@@ -75,10 +75,6 @@ Detailed implementation instructions are in docs/development/active-tasks; this 
 
 [View Task 24 instructions](active-tasks/24-isolate-intake-identity-and-bound-crm-record-selectors.md)
 
-### Task 25 — Type CRM Filters And Scope Related Counts
-
-[View Task 25 instructions](active-tasks/25-type-crm-filters-and-scope-related-counts.md)
-
 ### Task 26 — Type And Scale The Audit Query Boundary
 
 [View Task 26 instructions](active-tasks/26-type-and-scale-the-audit-query-boundary.md)

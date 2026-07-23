@@ -7,13 +7,16 @@ namespace App\Http\Controllers\Crm;
 use App\Actions\CreateContact;
 use App\Actions\UpdateContact;
 use App\Data\ContactData;
+use App\Data\ContactIndexData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Crm\ContactIndexRequest;
 use App\Http\Requests\Crm\StoreContactRequest;
 use App\Http\Requests\Crm\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use App\Models\User;
 use App\Queries\ContactQuery;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,14 +24,14 @@ use Inertia\Response;
 
 class ContactController extends Controller
 {
-    public function index(Request $request, ContactQuery $query): Response
+    public function index(ContactIndexRequest $request, ContactQuery $query): Response
     {
         $user = $this->authenticatedUser($request);
-        $filters = $request->only(['search', 'organization', 'owner', 'sort', 'direction', 'archived']);
+        $filters = ContactIndexData::fromValidated($request->validated());
 
         return Inertia::render('Crm/Contacts/Index', [
             'contacts' => ContactResource::collection($query->build($user, $filters)->paginate(15)->withQueryString()),
-            'filters' => $filters,
+            'filters' => $filters->filters(),
             'owners' => $this->owners(),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => $user->isCrmAdministrator(),
@@ -67,7 +70,9 @@ class ContactController extends Controller
     {
         $user = $this->authenticatedUser($request);
         abort_unless($contact->isVisibleTo($user), 404);
-        $contact->load(['organization', 'owner'])->loadCount('leads');
+        $contact->load(['organization', 'owner'])->loadCount([
+            'leads' => fn (Builder $query): Builder => $query->visibleTo($user),
+        ]);
 
         return Inertia::render('Crm/Contacts/Show', [
             'contact' => ContactResource::make($contact)->resolve($request),

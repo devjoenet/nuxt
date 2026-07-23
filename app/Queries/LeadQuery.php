@@ -4,35 +4,29 @@ declare(strict_types=1);
 
 namespace App\Queries;
 
+use App\Data\LeadIndexData;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class LeadQuery
 {
-    /**
-     * @param  array<string, mixed>  $filters
-     * @return Builder<Lead>
-     */
-    public function build(User $user, array $filters): Builder
+    /** @return Builder<Lead> */
+    public function build(User $user, LeadIndexData $filters): Builder
     {
-        $sort = in_array($filters['sort'] ?? null, ['created_at', 'status'], true) ? $filters['sort'] : 'created_at';
-        $direction = ($filters['direction'] ?? null) === 'asc' ? 'asc' : 'desc';
-
         return Lead::query()
             ->visibleTo($user)
             ->with(['contact', 'organization', 'owner'])
-            ->when($filters['archived'] ?? false, fn (Builder $query): Builder => $query->whereNotNull('archived_at'))
-            ->when(! ($filters['archived'] ?? false), fn (Builder $query): Builder => $query->whereNull('archived_at'))
-            ->when($filters['search'] ?? null, function (Builder $query, string $search): void {
+            ->whereNull('archived_at', not: $filters->archived)
+            ->when($filters->search, function (Builder $query, string $search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->whereHas('contact', fn (Builder $query): Builder => $query->where('name', 'like', sprintf('%%%s%%', $search))->orWhere('email', 'like', sprintf('%%%s%%', $search)))
                         ->orWhereHas('organization', fn (Builder $query): Builder => $query->where('name', 'like', sprintf('%%%s%%', $search)));
                 });
             })
-            ->when($filters['status'] ?? null, fn (Builder $query, string $status): Builder => $query->where('status', $status))
-            ->when($filters['source'] ?? null, fn (Builder $query, string $source): Builder => $query->where('source', $source))
-            ->when($filters['owner'] ?? null, fn (Builder $query, string $owner): Builder => $query->where('owner_id', $owner))
-            ->orderBy($sort, $direction);
+            ->when($filters->status, fn (Builder $query): Builder => $query->where('status', $filters->status))
+            ->when($filters->source, fn (Builder $query): Builder => $query->where('source', $filters->source))
+            ->when($filters->ownerId, fn (Builder $query, int $ownerId): Builder => $query->where('owner_id', $ownerId))
+            ->orderBy($filters->sort->value, $filters->direction->value);
     }
 }

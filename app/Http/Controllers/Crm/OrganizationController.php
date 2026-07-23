@@ -7,7 +7,9 @@ namespace App\Http\Controllers\Crm;
 use App\Actions\CreateOrganization;
 use App\Actions\UpdateOrganization;
 use App\Data\OrganizationData;
+use App\Data\OrganizationIndexData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Crm\OrganizationIndexRequest;
 use App\Http\Requests\Crm\StoreOrganizationRequest;
 use App\Http\Requests\Crm\UpdateOrganizationRequest;
 use App\Http\Resources\OrganizationResource;
@@ -23,14 +25,14 @@ use Inertia\Response;
 
 class OrganizationController extends Controller
 {
-    public function index(Request $request, OrganizationQuery $query): Response
+    public function index(OrganizationIndexRequest $request, OrganizationQuery $query): Response
     {
         $user = $this->authenticatedUser($request);
-        $filters = $request->only(['search', 'owner', 'sort', 'direction', 'archived']);
+        $filters = OrganizationIndexData::fromValidated($request->validated());
 
         return Inertia::render('Crm/Organizations/Index', [
             'organizations' => OrganizationResource::collection($query->build($user, $filters)->paginate(15)->withQueryString()),
-            'filters' => $filters,
+            'filters' => $filters->filters(),
             'owners' => $this->owners(),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => $user->isCrmAdministrator(),
@@ -73,12 +75,13 @@ class OrganizationController extends Controller
             'owner',
             'contacts' => function (Relation $query) use ($user): void {
                 $query
-                    ->when(! $user->isCrmAdministrator(), fn (Builder $query): Builder => $query->where(function (Builder $query) use ($user): void {
-                        $query->where('owner_id', $user->id)->orWhereNull('owner_id');
-                    }))
+                    ->visibleTo($user)
                     ->with('owner');
             },
-        ])->loadCount('leads');
+        ])->loadCount([
+            'contacts' => fn (Builder $query): Builder => $query->visibleTo($user),
+            'leads' => fn (Builder $query): Builder => $query->visibleTo($user),
+        ]);
 
         return Inertia::render('Crm/Organizations/Show', [
             'organization' => OrganizationResource::make($organization)->resolve($request),
