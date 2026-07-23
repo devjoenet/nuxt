@@ -96,12 +96,12 @@ test('CRM viewers retain visible deleted contact history without exposing hidden
 test('CRM managers can create and update leads', function (): void {
     $user = crmUser(manage: true);
     $user->assignRole(Role::findOrCreate('Admin'));
+    $contact = Contact::factory()->create(['owner_id' => $user->id]);
+    $organization = Organization::factory()->create(['owner_id' => $user->id]);
 
     $response = $this->actingAs($user)->post(route('crm.leads.store'), [
-        'contact_name' => 'Morgan Lee',
-        'contact_email' => 'morgan@example.com',
-        'organization_name' => 'Lee Logistics',
-        'organization_website' => 'https://lee.example',
+        'contact_id' => $contact->uuid,
+        'organization_id' => $organization->uuid,
         'owner_id' => (string) $user->id,
         'status' => 'new',
         'source' => 'referral',
@@ -110,14 +110,14 @@ test('CRM managers can create and update leads', function (): void {
 
     $lead = Lead::query()->sole();
     $response->assertRedirect(route('crm.leads.show', $lead));
-    expect($lead->contact->name)->toBe('Morgan Lee')
-        ->and($lead->organization?->name)->toBe('Lee Logistics')
+    expect($lead->contact->is($contact))->toBeTrue()
+        ->and($lead->organization?->is($organization))->toBeTrue()
         ->and($lead->owner_id)->toBe($user->id)
         ->and(CrmActivity::query()->count())->toBe(1);
 
     $this->actingAs($user)->patch(route('crm.leads.update', $lead), [
-        'contact_name' => 'Morgan Lee',
-        'contact_email' => 'morgan@example.com',
+        'contact_id' => $contact->uuid,
+        'organization_id' => $organization->uuid,
         'owner_id' => (string) $user->id,
         'status' => 'qualified',
         'source' => 'referral',
@@ -126,6 +126,45 @@ test('CRM managers can create and update leads', function (): void {
 
     expect($lead->refresh()->status)->toBe(LeadStatus::Qualified)
         ->and($lead->project_details)->toBe('Updated scope.');
+});
+
+test('CRM lead selectors conceal inaccessible UUIDs', function (): void {
+    $user = crmUser(manage: true);
+    $other = User::factory()->create();
+    $hiddenContact = Contact::factory()->create(['owner_id' => $other->id]);
+    $hiddenOrganization = Organization::factory()->create(['owner_id' => $other->id]);
+
+    $this->actingAs($user)
+        ->post(route('crm.leads.store'), [
+            'contact_id' => $hiddenContact->uuid,
+            'organization_id' => $hiddenOrganization->uuid,
+            'status' => 'new',
+            'source' => 'direct',
+            'project_details' => 'This selector must not reveal another user’s records.',
+        ])
+        ->assertNotFound();
+});
+
+test('CRM option endpoints are visibility-scoped and bounded', function (): void {
+    $user = crmUser();
+    Contact::factory()->count(21)->create(['owner_id' => $user->id, 'name' => 'Bounded Contact']);
+    $hiddenContact = Contact::factory()->create(['owner_id' => User::factory()->create()->id, 'name' => 'Bounded Hidden Contact']);
+    Organization::factory()->count(21)->create(['owner_id' => $user->id, 'name' => 'Bounded Organization']);
+
+    $this->actingAs($user)
+        ->getJson(route('crm.options.contacts', ['query' => 'Bounded']))
+        ->assertSuccessful()
+        ->assertJsonCount(20, 'data')
+        ->assertJsonMissing(['value' => $hiddenContact->uuid]);
+
+    $this->actingAs($user)
+        ->getJson(route('crm.options.organizations', ['query' => 'Bounded']))
+        ->assertSuccessful()
+        ->assertJsonCount(20, 'data');
+
+    $this->actingAs($user)
+        ->getJson(route('crm.options.contacts', ['query' => 'x']))
+        ->assertUnprocessable();
 });
 
 test('CRM viewers cannot mutate leads', function (): void {

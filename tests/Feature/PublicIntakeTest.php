@@ -13,11 +13,11 @@ use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
-use App\Models\Organization;
 use App\Notifications\NewLeadReceived;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
+use Spatie\Activitylog\Models\Activity;
 
 afterEach(function (): void {
     Date::setTestNow();
@@ -55,21 +55,35 @@ test('a guest can submit a public inquiry and create the complete lead chain', f
         ->assertSessionHasNoErrors()
         ->assertRedirect(route('home'));
 
-    expect(Organization::query()->count())->toBe(1)
-        ->and(Contact::query()->count())->toBe(1)
+    expect(Contact::query()->count())->toBe(1)
         ->and(Lead::query()->count())->toBe(1)
         ->and(CrmActivity::query()->count())->toBe(1)
         ->and(FollowUpTask::query()->count())->toBe(1);
 
-    $lead = Lead::query()->with(['contact', 'organization', 'activities', 'followUpTasks'])->sole();
+    $lead = Lead::query()->with(['contact', 'activities', 'followUpTasks'])->sole();
 
     expect($lead->contact->email)->toBe('jordan@example.com')
-        ->and($lead->organization?->name)->toBe('Rivera Logistics')
+        ->and($lead->contact->owner_id)->toBeNull()
+        ->and($lead->contact->organization_id)->toBeNull()
+        ->and($lead->organization_id)->toBeNull()
+        ->and($lead->intake_snapshot)->toBe([
+            'name' => 'Jordan Rivera',
+            'email' => 'jordan@example.com',
+            'company' => 'Rivera Logistics',
+            'phone' => '+1 (912) 555-0142',
+            'website' => 'https://rivera-logistics.example',
+        ])
         ->and($lead->service_interests)->toBe(['operations-app'])
         ->and($lead->status)->toBe(LeadStatus::New)
         ->and($lead->source)->toBe(LeadSource::Website)
         ->and($lead->activities->sole()->type)->toBe(CrmActivityType::PublicIntakeCreated)
         ->and($lead->followUpTasks->sole()->due_at->toDateTimeString())->toBe('2026-07-13 17:00:00');
+
+    $activity = Activity::query()->where('subject_type', Lead::class)->where('subject_id', $lead->id)->sole();
+
+    expect($activity->attribute_changes->toArray())->not->toHaveKey('intake_snapshot')
+        ->and($activity->properties->toJson())->not->toContain('jordan@example.com')
+        ->and($activity->properties->toJson())->not->toContain('Rivera Logistics');
 
     Notification::assertSentOnDemand(
         NewLeadReceived::class,
@@ -79,15 +93,16 @@ test('a guest can submit a public inquiry and create the complete lead chain', f
     );
 });
 
-test('organization is optional for public inquiries', function (): void {
+test('public intake never creates or matches an organization', function (): void {
     Notification::fake();
+    $organization = App\Models\Organization::factory()->create([
+        'name' => 'Rivera Logistics',
+        'website' => 'https://rivera-logistics.example',
+    ]);
 
-    $this->post(route('contact.store'), validIntake([
-        'company' => null,
-        'website' => null,
-    ]))->assertSessionHasNoErrors();
+    $this->post(route('contact.store'), validIntake())->assertSessionHasNoErrors();
 
-    expect(Organization::query()->count())->toBe(0)
+    expect($organization->fresh()->name)->toBe('Rivera Logistics')
         ->and(Lead::query()->sole()->organization_id)->toBeNull();
 });
 
@@ -127,15 +142,17 @@ test('the public intake action exposes validation errors outside HTTP', function
         ->and(Lead::query()->count())->toBe(0);
 });
 
-test('repeat inquiries update the contact without duplicating it', function (): void {
+test('repeat inquiries create isolated contacts and immutable snapshots', function (): void {
     Notification::fake();
 
     $this->post(route('contact.store'), validIntake());
     $this->post(route('contact.store'), validIntake(['name' => 'Jordan R.']));
 
-    expect(Contact::query()->count())->toBe(1)
-        ->and(Contact::query()->sole()->name)->toBe('Jordan R.')
-        ->and(Lead::query()->count())->toBe(2);
+    expect(Contact::query()->count())->toBe(2)
+        ->and(Contact::query()->where('email', 'jordan@example.com')->count())->toBe(2)
+        ->and(Lead::query()->count())->toBe(2)
+        ->and(Lead::query()->oldest()->firstOrFail()->intake_snapshot['name'])->toBe('Jordan Rivera')
+        ->and(Lead::query()->latest()->firstOrFail()->intake_snapshot['name'])->toBe('Jordan R.');
 });
 
 test('public inquiry validation rejects invalid or spam submissions', function (array $overrides, array $errors): void {

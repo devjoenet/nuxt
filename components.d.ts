@@ -14,6 +14,7 @@ declare module 'vue' {
     AlertError: typeof import('./resources/js/components/AlertError.vue')['default']
     AppLogo: typeof import('./resources/js/components/AppLogo.vue')['default']
     AppLogoIcon: typeof import('./resources/js/components/AppLogoIcon.vue')['default']
+    AsyncCrmSelect: typeof import('./resources/js/components/AsyncCrmSelect.vue')['default']
     CrmDetailLayout: typeof import('./resources/js/components/crm/CrmDetailLayout.vue')['default']
     DashboardPreview: typeof import('./resources/js/components/landing/previews/DashboardPreview.vue')['default']
     DeleteAccount: typeof import('./resources/js/components/DeleteAccount.vue')['default']

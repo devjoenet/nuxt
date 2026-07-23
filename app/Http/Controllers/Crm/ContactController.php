@@ -12,7 +12,6 @@ use App\Http\Requests\Crm\StoreContactRequest;
 use App\Http\Requests\Crm\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
-use App\Models\Organization;
 use App\Models\User;
 use App\Queries\ContactQuery;
 use Illuminate\Http\RedirectResponse;
@@ -30,7 +29,6 @@ class ContactController extends Controller
         return Inertia::render('Crm/Contacts/Index', [
             'contacts' => ContactResource::collection($query->build($user, $filters)->paginate(15)->withQueryString()),
             'filters' => $filters,
-            'organizations' => Organization::query()->visibleTo($user)->whereNull('archived_at')->orderBy('name')->get(['id', 'name']),
             'owners' => $this->owners(),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => $user->isCrmAdministrator(),
@@ -53,7 +51,6 @@ class ContactController extends Controller
 
         return Inertia::render('Crm/Contacts/Form', [
             'contact' => null,
-            'organizations' => Organization::query()->visibleTo($user)->whereNull('archived_at')->orderBy('name')->get(['id', 'name']),
             'owners' => $this->owners(),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
@@ -86,7 +83,6 @@ class ContactController extends Controller
 
         return Inertia::render('Crm/Contacts/Form', [
             'contact' => ContactResource::make($contact->load(['organization', 'owner']))->resolve($request),
-            'organizations' => Organization::query()->visibleTo($user)->whereNull('archived_at')->orderBy('name')->get(['id', 'name']),
             'owners' => $this->owners(),
             'canAssign' => $user->isCrmAdministrator(),
         ]);

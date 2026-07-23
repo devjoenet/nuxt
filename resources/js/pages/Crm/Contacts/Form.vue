@@ -1,16 +1,18 @@
 <script lang="ts" setup>
   import { Form } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
+  import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import Layout from "@/layouts/Default.vue";
   import { index, show, store, update } from "@/routes/crm/contacts";
-  import type { Contact, Option, Organization, Owner } from "@/types/crm";
+  import { create as createOrganization } from "@/routes/crm/organizations";
+  import type { Contact, Option, Owner } from "@/types/crm";
 
   defineOptions({ layout: Layout });
-  const props = defineProps<{ contact: Contact | null; organizations: Organization[]; owners: Owner[]; canAssign: boolean }>();
+  const props = defineProps<{ contact: Contact | null; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.contact ? update(props.contact.id) : store()));
-  const organizationOptions = computed<Option[]>(() => props.organizations.map((organization) => ({ label: organization.name, value: String(organization.id) })));
   const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+  const organizationId = ref<string | null>(props.contact?.organization?.id ?? null);
 </script>
 
 <template>
@@ -33,13 +35,16 @@
             name="email"
             required
             type="email"
-          /><FormInput :default-value="contact?.phone ?? undefined" :error="errors.phone" label="Phone" name="phone" type="tel" /><FormSelect
-            :default-value="contact?.organization_id ? String(contact.organization_id) : ''"
+          /><FormInput :default-value="contact?.phone ?? undefined" :error="errors.phone" label="Phone" name="phone" type="tel" /><AsyncCrmSelect
+            id="contact-organization"
+            v-model="organizationId"
             :error="errors.organization_id"
-            :items="organizationOptions"
+            :initial-option="contact?.organization ? { label: contact.organization.name, value: contact.organization.id } : null"
+            clearable
             label="Organization"
             name="organization_id"
             placeholder="Independent contact"
+            type="organization"
           /><FormSelect
             v-if="canAssign"
             :default-value="contact?.owner ? String(contact.owner.id) : ''"
@@ -49,6 +54,9 @@
             name="owner_id"
             placeholder="Unassigned"
           />
+        </div>
+        <div>
+          <UButton :to="createOrganization().url" color="neutral" icon="i-ph-buildings" label="Create a new organization" variant="link" />
         </div>
         <div class="flex justify-end gap-3">
           <UButton :to="contact ? show(contact.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton

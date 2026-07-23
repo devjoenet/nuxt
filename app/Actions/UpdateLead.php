@@ -6,7 +6,9 @@ namespace App\Actions;
 
 use App\Data\LeadData;
 use App\Enums\CrmActivityType;
+use App\Models\Contact;
 use App\Models\Lead;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -15,11 +17,10 @@ class UpdateLead
     public function handle(Lead $lead, LeadData $data, User $user): Lead
     {
         return DB::transaction(function () use ($lead, $data, $user): Lead {
-            $lead->contact->update([
-                'name' => $data->contactName,
-                'email' => $data->contactEmail,
-                'phone' => $data->contactPhone,
-            ]);
+            $contact = Contact::query()->visibleTo($user)->where('uuid', $data->contactId)->firstOrFail();
+            $organization = $data->organizationId === null
+                ? null
+                : Organization::query()->visibleTo($user)->where('uuid', $data->organizationId)->firstOrFail();
             $serviceInterests = array_values($data->serviceInterest);
             $updates = [
                 'status' => $data->status,
@@ -27,6 +28,8 @@ class UpdateLead
                 'budget_range' => $data->budgetRange,
                 'timeline' => $data->timeline,
                 'project_details' => $data->projectDetails,
+                'contact_id' => $contact->id,
+                'organization_id' => $organization?->id,
             ];
             $updates['service_interest'] = $serviceInterests[0] ?? null;
             $updates['service_interests'] = $serviceInterests;

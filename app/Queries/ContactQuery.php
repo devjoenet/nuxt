@@ -33,7 +33,7 @@ class ContactQuery
                         ->orWhereHas('organization', fn (Builder $query): Builder => $query->where('name', 'like', sprintf('%%%s%%', $search)));
                 });
             })
-            ->when($filters['organization'] ?? null, fn (Builder $query, string $organization): Builder => $query->where('organization_id', $organization))
+            ->when($filters['organization'] ?? null, fn (Builder $query, string $organization): Builder => $query->whereHas('organization', fn (Builder $query): Builder => $query->where('uuid', $organization)))
             ->when($filters['owner'] ?? null, fn (Builder $query, string $owner): Builder => $query->where('owner_id', $owner))
             ->orderBy($sort, $direction);
     }

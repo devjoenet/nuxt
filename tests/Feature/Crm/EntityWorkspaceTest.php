@@ -147,7 +147,7 @@ test('sales ops can create and update owned organizations and contacts', functio
     $this->actingAs($user)->post(route('crm.contacts.store'), [
         'name' => 'Morgan Lee',
         'email' => 'morgan@southeast-logistics.example',
-        'organization_id' => (string) $organization->id,
+        'organization_id' => $organization->uuid,
     ])->assertSessionHasNoErrors();
 
     $contact = Contact::query()->sole();
@@ -157,7 +157,7 @@ test('sales ops can create and update owned organizations and contacts', functio
     $this->actingAs($user)->patch(route('crm.contacts.update', $contact), [
         'name' => 'Morgan Updated',
         'email' => $contact->email,
-        'organization_id' => (string) $organization->id,
+        'organization_id' => $organization->uuid,
     ])->assertSessionHasNoErrors();
 
     expect($contact->refresh()->name)->toBe('Morgan Updated');

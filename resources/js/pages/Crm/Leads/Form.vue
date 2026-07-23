@@ -1,10 +1,13 @@
 <script lang="ts" setup>
   import { Form } from "@inertiajs/vue3";
+  import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
   import FormInput from "@/components/FormInput.vue";
   import FormMultiSelect from "@/components/FormMultiSelect.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
   import Layout from "@/layouts/Default.vue";
+  import { create as createContact } from "@/routes/crm/contacts";
+  import { create as createOrganization } from "@/routes/crm/organizations";
   import { index, show, store, update } from "@/routes/crm/leads";
   import type { Lead, Option, Owner } from "@/types/crm";
 
@@ -12,6 +15,8 @@
   const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.lead ? update(props.lead.id) : store()));
   const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+  const contactId = ref<string | null>(props.lead?.contact?.id ?? null);
+  const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
 </script>
 
 <template>
@@ -27,13 +32,28 @@
           <p class="text-pretty text-base text-muted sm:text-sm">Keep the useful facts here. Archaeological records can wait.</p>
         </div>
         <div class="grid gap-4 sm:grid-cols-2">
-          <FormInput :default-value="lead?.contact?.name" :error="errors.contact_name" label="Contact name" name="contact_name" required />
-          <FormInput :default-value="lead?.contact?.email" :error="errors.contact_email" label="Contact email" name="contact_email" required type="email" />
-          <FormInput :default-value="lead?.contact?.phone ?? undefined" :error="errors.contact_phone" label="Phone" name="contact_phone" />
-          <template v-if="!lead">
-            <FormInput :error="errors.organization_name" label="Organization" name="organization_name" />
-            <FormInput :error="errors.organization_website" label="Organization website" name="organization_website" type="url" />
-          </template>
+          <AsyncCrmSelect
+            id="lead-contact"
+            v-model="contactId"
+            :error="errors.contact_id"
+            :initial-option="lead?.contact ? { label: `${lead.contact.name} — ${lead.contact.email}`, value: lead.contact.id } : null"
+            label="Contact"
+            name="contact_id"
+            placeholder="Search contacts"
+            required
+            type="contact"
+          />
+          <AsyncCrmSelect
+            id="lead-organization"
+            v-model="organizationId"
+            :error="errors.organization_id"
+            :initial-option="lead?.organization ? { label: lead.organization.name, value: lead.organization.id } : null"
+            clearable
+            label="Organization"
+            name="organization_id"
+            placeholder="Search organizations"
+            type="organization"
+          />
           <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
           <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
           <FormSelect
@@ -72,6 +92,10 @@
             <template #leading><span class="text-muted">$</span></template>
           </FormInput>
           <FormInput :default-value="lead?.timeline ?? undefined" :error="errors.timeline" label="Timeline" name="timeline" />
+        </div>
+        <div class="flex flex-wrap gap-3 text-sm">
+          <UButton :to="createContact().url" color="neutral" icon="i-ph-user-plus" label="Create a new contact" variant="link" />
+          <UButton :to="createOrganization().url" color="neutral" icon="i-ph-buildings" label="Create a new organization" variant="link" />
         </div>
         <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />
         <div class="flex justify-end gap-3">

@@ -8,7 +8,6 @@ use App\Data\IntakeData;
 use App\Models\BusinessSetting;
 use App\Models\Contact;
 use App\Models\Lead;
-use App\Models\Organization;
 use App\Notifications\NewLeadReceived;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -20,20 +19,21 @@ class CreateLeadFromIntake
     public function handle(IntakeData $data): Lead
     {
         $lead = DB::transaction(function () use ($data): Lead {
-            $organization = $this->organization($data);
-
-            $contact = Contact::query()->updateOrCreate(
-                ['email' => $data->email],
-                [
-                    'organization_id' => $organization?->id,
-                    'name' => $data->name,
-                    'phone' => $data->phone,
-                ],
-            );
+            $contact = Contact::query()->create([
+                'name' => $data->name,
+                'email' => $data->email,
+                'phone' => $data->phone,
+            ]);
 
             $lead = Lead::query()->create([
                 'contact_id' => $contact->id,
-                'organization_id' => $organization?->id,
+                'intake_snapshot' => [
+                    'name' => $data->name,
+                    'email' => $data->email,
+                    'company' => $data->company,
+                    'phone' => $data->phone,
+                    'website' => $data->website,
+                ],
                 'status' => 'new',
                 'source' => 'website',
                 'service_interest' => $data->serviceInterests[0] ?? null,
@@ -66,26 +66,12 @@ class CreateLeadFromIntake
                 'due_at' => now()->addWeekday()->setTime(17, 0),
             ]);
 
-            return $lead->load('contact', 'organization');
+            return $lead->load('contact');
         });
 
         Notification::route('mail', (string) BusinessSetting::current()->notification_email)
             ->notify(new NewLeadReceived($lead)->afterCommit());
 
         return $lead;
-    }
-
-    private function organization(IntakeData $data): ?Organization
-    {
-        if ($data->company === null && $data->website === null) {
-            return null;
-        }
-
-        $identity = $data->website !== null ? ['website' => $data->website] : ['name' => $data->company];
-
-        return Organization::query()->firstOrCreate($identity, [
-            'name' => $data->company ?? $data->website,
-            'website' => $data->website,
-        ]);
     }
 }

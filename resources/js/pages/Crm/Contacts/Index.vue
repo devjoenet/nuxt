@@ -2,17 +2,17 @@
   import { router } from "@inertiajs/vue3";
   import type { TableColumn } from "@nuxt/ui";
   import { h, resolveComponent, watch } from "vue";
+  import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
   import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import Layout from "@/layouts/Default.vue";
   import { create, index, show } from "@/routes/crm/contacts";
-  import type { Contact, Option, Organization, Owner, Paginated } from "@/types/crm";
+  import type { Contact, Option, Owner, Paginated } from "@/types/crm";
 
   defineOptions({ layout: Layout });
   const props = defineProps<{
     contacts: Paginated<Contact>;
     filters: Record<string, string>;
-    organizations: Organization[];
     owners: Owner[];
     canManage: boolean;
     canAssign: boolean;
@@ -22,7 +22,6 @@
   const organization = ref(props.filters.organization ?? "");
   const owner = ref(props.filters.owner ?? "");
   let timer: ReturnType<typeof setTimeout>;
-  const organizationOptions = computed<Option[]>(() => props.organizations.map((item) => ({ label: item.name, value: String(item.id) })));
   const ownerOptions = computed<Option[]>(() => props.owners.map((item) => ({ label: item.name, value: String(item.id) })));
   const visit = () =>
     router.get(
@@ -56,12 +55,15 @@
     ></template>
     <template #body>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts" /><FormSelect
+        <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts" /><AsyncCrmSelect
+          id="contact-organization-filter"
           v-model="organization"
-          :items="organizationOptions"
           class="w-full sm:w-52"
+          clearable
           label="Organization"
           placeholder="All organizations"
+          name="organization"
+          type="organization"
         /><FormSelect v-if="canAssign" v-model="owner" :items="ownerOptions" class="w-full sm:w-48" label="Owner" placeholder="All owners" />
       </div>
       <div v-if="contacts.data.length" class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
