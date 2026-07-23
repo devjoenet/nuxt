@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\FollowUpTaskStatus;
 use App\Enums\LeadStatus;
+use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
@@ -59,6 +60,37 @@ test('CRM viewers can view a lead with flat resource props', function (): void {
         ->assertInertia(fn (Assert $page): Assert => $page
             ->component('Crm/Leads/Show')
             ->where('lead.id', $lead->uuid));
+});
+
+test('CRM viewers retain visible deleted contact history without exposing hidden contacts', function (): void {
+    $user = crmUser();
+    $visibleContact = Contact::factory()->create(['owner_id' => $user->id, 'name' => 'Visible Lead Contact']);
+    $leadWithVisibleContact = Lead::factory()->create(['contact_id' => $visibleContact->id, 'owner_id' => $user->id]);
+    $deletedContact = Contact::factory()->create(['owner_id' => $user->id, 'name' => 'Deleted Lead Contact']);
+    $deletedContact->delete();
+    $leadWithDeletedContact = Lead::factory()->create(['contact_id' => $deletedContact->id, 'owner_id' => $user->id]);
+
+    $hiddenContact = Contact::factory()->create(['owner_id' => User::factory()->create()->id, 'name' => 'Hidden Lead Contact']);
+    $leadWithHiddenContact = Lead::factory()->create(['contact_id' => $hiddenContact->id, 'owner_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.show', $leadWithVisibleContact))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('lead.contact.id', $visibleContact->uuid)
+            ->where('lead.contact.deleted_at', null));
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.show', $leadWithDeletedContact))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('lead.contact.id', $deletedContact->uuid)
+            ->where('lead.contact.name', 'Deleted Lead Contact')
+            ->where('lead.contact.deleted_at', $deletedContact->deleted_at?->toISOString()));
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.show', $leadWithHiddenContact))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('lead.contact', null)
+            ->missing('lead.contact.name'));
 });
 
 test('CRM managers can create and update leads', function (): void {

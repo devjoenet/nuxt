@@ -27,9 +27,9 @@
           <p class="text-pretty text-base text-muted sm:text-sm">Keep the useful facts here. Archaeological records can wait.</p>
         </div>
         <div class="grid gap-4 sm:grid-cols-2">
-          <FormInput :default-value="lead?.contact.name" :error="errors.contact_name" label="Contact name" name="contact_name" required />
-          <FormInput :default-value="lead?.contact.email" :error="errors.contact_email" label="Contact email" name="contact_email" required type="email" />
-          <FormInput :default-value="lead?.contact.phone ?? undefined" :error="errors.contact_phone" label="Phone" name="contact_phone" />
+          <FormInput :default-value="lead?.contact?.name" :error="errors.contact_name" label="Contact name" name="contact_name" required />
+          <FormInput :default-value="lead?.contact?.email" :error="errors.contact_email" label="Contact email" name="contact_email" required type="email" />
+          <FormInput :default-value="lead?.contact?.phone ?? undefined" :error="errors.contact_phone" label="Phone" name="contact_phone" />
           <template v-if="!lead">
             <FormInput :error="errors.organization_name" label="Organization" name="organization_name" />
             <FormInput :error="errors.organization_website" label="Organization website" name="organization_website" type="url" />

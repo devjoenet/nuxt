@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
@@ -161,4 +162,38 @@ test('archived detail records restore with DELETE requests', function (): void {
 
     expect($organization->refresh()->archived_at)->toBeNull()
         ->and($contact->refresh()->archived_at)->toBeNull();
+});
+
+test('lead detail preserves deleted contact history without a contact link', function (): void {
+    $admin = crmDetailBrowserAdmin();
+    $visibleContact = Contact::factory()->create(['name' => 'Task 22 Visible Contact']);
+    $visibleLead = Lead::factory()->create(['contact_id' => $visibleContact->id]);
+    $contact = Contact::factory()->create(['name' => 'Task 22 Deleted Contact']);
+    $contact->delete();
+    $lead = Lead::factory()->create(['contact_id' => $contact->id]);
+    $path = route('crm.leads.show', $lead, false);
+
+    $this->actingAs($admin);
+
+    visit(route('crm.leads.index', [], false))
+        ->assertSee('Task 22 Visible Contact')
+        ->assertSee('Task 22 Deleted Contact')
+        ->assertSee('Deleted contact')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+
+    visit(route('crm.leads.show', $visibleLead, false))
+        ->assertSee('Task 22 Visible Contact')
+        ->assertPresent('a[href="'.route('crm.contacts.show', $visibleContact, false).'"]')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+
+    visit($path)
+        ->assertPathIs($path)
+        ->assertSee('Task 22 Deleted Contact')
+        ->assertSee('Deleted contact')
+        ->assertPresent('[data-testid="lead-deleted-contact-status"]')
+        ->assertMissing('a[href="'.route('crm.contacts.show', $contact, false).'"]')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
 });

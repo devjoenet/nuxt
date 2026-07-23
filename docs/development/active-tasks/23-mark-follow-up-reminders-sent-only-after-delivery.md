@@ -13,9 +13,11 @@ Resolve F-03 by making the reminder timestamp reflect successful mail-channel de
 3. Move/remove `ShouldQueue` from the notification if it creates a second dispatch that causes early stamping. Stamp `sent_at` only after success; let failures bubble so retries occur and no timestamp is written.
 4. Add focused tests with a real failing `MailChannel` path plus a success case. Assert success stamps once, failure leaves `sent_at` null, retries remain possible, and duplicate invocation is idempotent or explicitly protected.
 5. Run focused tests, Pint if PHP changed, the relevant queue/mail contract, full `composer test`, and `git diff --check`. Do not broaden this into a notification-system rewrite.
-
+6. Once completed, provide the user with a code block containing a PR summary (see below) for these changes.
 ```markdown
-## Summary
+Implement Task 23: Mark follow-up reminders sent after delivery 
+
+## Changes
 - describe post-delivery reminder timestamping and preserved retry behavior
 - describe the explicit mail queue/notification boundary
 - describe successful and failing mail-channel coverage

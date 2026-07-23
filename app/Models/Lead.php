@@ -27,7 +27,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property ?Carbon $archived_at
  * @property ?Carbon $converted_at
  * @property Carbon $created_at
- * @property Contact $contact
+ * @property ?Contact $contact
  * @property ?Organization $organization
  * @property ?User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Note> $notes
@@ -75,7 +75,7 @@ class Lead extends Model
     /** @return BelongsTo<Contact, $this> */
     public function contact(): BelongsTo
     {
-        return $this->belongsTo(Contact::class);
+        return $this->belongsTo(Contact::class)->withTrashed();
     }
 
     /** @return BelongsTo<Organization, $this> */

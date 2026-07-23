@@ -15,9 +15,11 @@ Combine F-01 and F-11. Public intake must create isolated unowned identity recor
 5. Add bounded, visibility-scoped search endpoints for contact/organization options (maximum 20 records, minimum query length, deterministic labels/UUID values, explicit loading/empty states). Use Form Request validation, typed query/action boundaries, Resources, Wayfinder `.url`, and Inertia `useHttp`/Nuxt UI selector conventions. Remove complete option collections from initial page props while retaining selected values after validation failure/edit and explicit create-new flows.
 6. Test anonymous duplicate submissions, existing staff-owned identities, unowned contacts, inaccessible UUIDs, immutable snapshots, no activity-log leakage, endpoint bounds/visibility, selector keyboard behavior, and clean console output. Use factory state, not browser-created fixtures or sleep.
 7. Run focused tests, fresh migration, Pint, PHP types/lint, frontend type/lint/format/build, full `composer test`, and `git diff --check`. Move only after anonymous and authenticated identity flows pass.
-
+8. Once completed, provide the user with a code block containing a PR summary (see below) for these changes.
 ```markdown
-## Summary
+Implement task 24: Isolate intake identity and bound crm record selectors
+
+## Changes
 - describe isolated public identity creation and immutable intake snapshots
 - describe visibility-scoped UUID selection and removal of global staff upserts
 - describe bounded searchable CRM selectors and preserved create-new behavior

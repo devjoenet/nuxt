@@ -30,8 +30,9 @@
       header: "Contact",
       cell: ({ row }) =>
         h("div", { class: "min-w-48" }, [
-          h("p", { class: "font-medium text-highlighted" }, row.original.contact.name),
-          h("p", { class: "text-muted" }, row.original.contact.email),
+          h("p", { class: "font-medium text-highlighted" }, row.original.contact?.name ?? "Contact unavailable"),
+          h("p", { class: "text-muted" }, row.original.contact?.email ?? "Unavailable"),
+          row.original.contact?.deleted_at ? h("p", { class: "text-warning" }, "Deleted contact") : null,
         ]),
     },
     { accessorKey: "organization.name", header: "Organization", cell: ({ row }) => row.original.organization?.name ?? "Independent" },

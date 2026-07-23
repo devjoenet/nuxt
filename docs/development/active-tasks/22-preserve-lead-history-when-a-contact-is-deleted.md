@@ -14,9 +14,11 @@ Resolve F-04 without resurrecting deleted CRM records: lead history must retain 
 4. In the lead workspace/detail, show name/email as historical identity. Link to the contact only when it is not deleted and visible; otherwise render a visible `Deleted contact` status with no route target. Preserve normal empty-contact fallback.
 5. Extend `LeadWorkspaceTest` and `CrmDetailSmokeTest` for visible deleted contacts, normal contacts, and hidden/out-of-scope records. Assert no broken href, correct labels, and no visibility leak.
 6. Run focused tests, Pint if PHP changed, frontend type/lint/format/build, full `composer test`, and `git diff --check`. Then complete the authorized `crm-leads-show` Task 22 user-testing handoff, preserving existing notes/timestamps and leaving approval null.
-
+7. Once completed, provide the user with a code block containing a PR summary (see below) for these changes.  
 ```markdown
-## Summary
+Implement Task 22: Preserve Lead History When a Contact is Deleted
+
+## Changes
 - describe historical lead-contact visibility after soft deletion
 - describe the explicit deleted-contact UI state and preserved authorization
 - describe focused resource, feature, browser, and user-testing coverage

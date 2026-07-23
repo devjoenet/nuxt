@@ -13,7 +13,7 @@ export interface Lead {
   archived_at: string | null;
   converted_at: string | null;
   created_at: string;
-  contact: { id: string; name: string; email: string; phone: string | null };
+  contact: { id: string; name: string; email: string; phone: string | null; deleted_at: string | null } | null;
   organization: { id: string; name: string; website: string | null; client_since_at: string | null } | null;
   owner: Owner | null;
   notes?: Array<{ id: string; body: string; author: string; created_at: string }>;
