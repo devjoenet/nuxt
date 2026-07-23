@@ -448,6 +448,23 @@ frontend typecheck, Pint, and `git diff --check`. The Herd-backed Unit/Feature c
 1,168 assertions, and 90.5% coverage. The direct `composer test` command reached its coverage stage but could not
 complete because the shell PHP runtime has no coverage driver.
 
+### Task 26 — Type And Scale The Audit Query Boundary
+
+- [x] Add a reversible named B-tree index for `activity_log.created_at`; keep 365-day cleanup authoritative.
+- [x] Move authorized audit filtering through `AuditIndexRequest` and immutable `ActivityLogFiltersData`, preserving
+  special audit tokens, parameter binding, eager loading, ordering, and Inertia filter props.
+- [x] Cache only deterministic scalar audit option catalogs for five minutes under a versioned key.
+- [x] Add Query `build()` signature architecture coverage and focused validation, cache-expiry, index, feature, and
+  browser regressions.
+
+Completion note: The local MySQL audit table had 158 rows. Before the migration, latest and date-range `EXPLAIN` plans
+used a full scan/filesort. The named index is now present; a representative one-day range uses it with a backward index
+scan over 10 rows. Focused audit feature (9 tests, 102 assertions), architecture (4 tests, 95 assertions), and browser
+(1 test, 24 assertions) suites passed. Migration apply/rollback/reapply, PHP lint, Pint, max-level PHPStan, frontend
+typecheck/build, Herd coverage (156 tests, 1,219 assertions, 90.7%), and `git diff --check` passed. The direct
+`composer test` contract reached its coverage-gated phase but cannot complete in the shell PHP runtime because it lacks
+a coverage driver.
+
 ### Task 21 — Redesign The Organization And Contact Detail Workspaces And Repair Restore
 
 - [x] Add a presentation-only CRM detail shell with responsive summary, main-content, and aside slots while preserving

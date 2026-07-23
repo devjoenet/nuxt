@@ -35,3 +35,32 @@ test('action handlers do not accept untyped structured payloads', function (): v
         }
     }
 });
+
+test('query builders do not accept untyped structured filters', function (): void {
+    foreach (glob(app_path('Queries/*.php')) ?: [] as $path) {
+        $class = 'App\\Queries\\'.pathinfo($path, PATHINFO_FILENAME);
+        $reflection = new ReflectionClass($class);
+
+        if (! $reflection->hasMethod('build')) {
+            continue;
+        }
+
+        $method = $reflection->getMethod('build');
+
+        foreach ($method->getParameters() as $parameter) {
+            $type = $parameter->getType();
+            $typeNames = match (true) {
+                $type instanceof ReflectionNamedType => [$type->getName()],
+                $type instanceof ReflectionUnionType => array_map(
+                    fn (ReflectionNamedType $type): string => $type->getName(),
+                    $type->getTypes(),
+                ),
+                default => [],
+            };
+
+            expect($typeNames)->not->toBeEmpty();
+            expect($typeNames)->not->toContain('array');
+            expect($typeNames)->not->toContain('mixed');
+        }
+    }
+});

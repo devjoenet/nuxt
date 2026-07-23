@@ -16,7 +16,9 @@ use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Inertia\Testing\AssertableInertia as Assert;
 use Spatie\Activitylog\Models\Activity;
@@ -380,6 +382,50 @@ test('unknown audit filter selections cannot broaden results and scalar events r
         ->assertInertia(fn (Assert $page): Assert => $page
             ->where('filters.event', ['not-a-real-event'])
             ->where('activities.data', []));
+});
+
+test('audit filters reject nested tokens and invalid date ranges', function (): void {
+    $admin = adminUser();
+
+    $this->actingAs($admin)->get(route('admin.audit.index', ['event' => [['created']]]))
+        ->assertSessionHasErrors('event.0');
+    $this->actingAs($admin)->get(route('admin.audit.index', ['causer' => [['123']]]))
+        ->assertSessionHasErrors('causer.0');
+    $this->actingAs($admin)->get(route('admin.audit.index', ['subject' => ['']]))
+        ->assertSessionHasErrors('subject.0');
+    $this->actingAs($admin)->get(route('admin.audit.index', ['from' => '2026-02-30']))
+        ->assertSessionHasErrors('from');
+    $this->actingAs($admin)->get(route('admin.audit.index', ['from' => '2026-07-24', 'to' => '2026-07-23']))
+        ->assertSessionHasErrors(['from', 'to']);
+});
+
+test('audit filter options are cached for five minutes before being refreshed', function (): void {
+    $admin = adminUser();
+    Cache::forget('activity-log.filter-options.v1');
+
+    activity()->causedBy($admin)->event('initial-event')->log('initial-event');
+
+    $this->actingAs($admin)->get(route('admin.audit.index'));
+
+    activity()->causedBy($admin)->event('later-event')->log('later-event');
+
+    $this->actingAs($admin)->get(route('admin.audit.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('eventOptions', fn (mixed $options): bool => ! collect($options)->contains(['label' => 'Later Event', 'value' => 'later-event'])));
+
+    $this->travel(5)->minutes();
+
+    $this->actingAs($admin)->get(route('admin.audit.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('eventOptions', fn (mixed $options): bool => collect($options)->contains(['label' => 'Later Event', 'value' => 'later-event'])));
+});
+
+test('activity log created at index is present with its stable name', function (): void {
+    $index = collect(Schema::getIndexes('activity_log'))->firstWhere('name', 'activity_log_created_at_index');
+
+    expect($index)->not->toBeNull()
+        ->and($index['columns'])->toBe(['created_at'])
+        ->and($index['unique'])->toBeFalse();
 });
 
 test('super admins bypass permission checks while protected role permissions remain immutable', function (): void {

@@ -75,10 +75,6 @@ Detailed implementation instructions are in docs/development/active-tasks; this 
 
 [View Task 24 instructions](active-tasks/24-isolate-intake-identity-and-bound-crm-record-selectors.md)
 
-### Task 26 — Type And Scale The Audit Query Boundary
-
-[View Task 26 instructions](active-tasks/26-type-and-scale-the-audit-query-boundary.md)
-
 ### Task 27 — Move Coherent State Changes Into Actions
 
 [View Task 27 instructions](active-tasks/27-move-coherent-state-changes-into-actions.md)

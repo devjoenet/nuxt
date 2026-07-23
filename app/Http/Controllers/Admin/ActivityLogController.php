@@ -4,28 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Data\ActivityLogFiltersData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AuditIndexRequest;
 use App\Models\User;
 use App\Queries\ActivityLogQuery;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
-    public function index(Request $request, ActivityLogQuery $activityLogQuery): Response
+    public function index(AuditIndexRequest $request, ActivityLogQuery $activityLogQuery): Response
     {
-        $this->authorize('viewAny', Activity::class);
-        $filters = [
-            'search' => $request->string('search')->trim()->value() ?: null,
-            'event' => $this->normalizeArrayFilter($request->input('event')),
-            'causer' => $this->normalizeArrayFilter($request->input('causer')),
-            'subject' => $this->normalizeArrayFilter($request->input('subject')),
-            'from' => $request->string('from')->trim()->value() ?: null,
-            'to' => $request->string('to')->trim()->value() ?: null,
-        ];
+        $filters = ActivityLogFiltersData::fromValidated($request->validated());
         $activities = $activityLogQuery->build($filters)
             ->paginate(25)
             ->withQueryString();
@@ -47,19 +38,10 @@ class ActivityLogController extends Controller
                     'created_at' => $activity->created_at?->toISOString(),
                 ];
             }),
-            'filters' => $filters,
+            'filters' => $filters->filters(),
             'eventOptions' => $options['events'],
             'causerOptions' => $options['causers'],
             'subjectOptions' => $options['subjects'],
         ]);
-    }
-
-    /** @return array<int, string> */
-    private function normalizeArrayFilter(mixed $value): array
-    {
-        return array_values(array_unique(array_filter(array_map(
-            static fn (mixed $item): ?string => is_string($item) && ($item = mb_trim($item)) !== '' ? $item : null,
-            Arr::wrap($value),
-        ))));
     }
 }

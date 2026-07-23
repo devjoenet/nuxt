@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Queries;
 
+use App\Data\ActivityLogFiltersData;
 use App\Models\User;
-use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
@@ -19,6 +20,8 @@ final class ActivityLogQuery
 
     private const string NO_SUBJECT = '__no_subject__';
 
+    private const string FILTER_OPTIONS_CACHE_KEY = 'activity-log.filter-options.v1';
+
     /**
      * @return array{
      *     events: array<int, array{label: string, value: string}>,
@@ -28,45 +31,47 @@ final class ActivityLogQuery
      */
     public function filterOptions(): array
     {
-        $events = Activity::query()->whereNotNull('event')->distinct()->pluck('event')->filter()->map(
-            fn (mixed $event): array => ['label' => Str::headline((string) $event), 'value' => (string) $event],
-        )->values()->all();
+        return Cache::remember(self::FILTER_OPTIONS_CACHE_KEY, now()->addMinutes(5), function (): array {
+            $events = Activity::query()->whereNotNull('event')->distinct()->pluck('event')->filter()->map(
+                fn (mixed $event): array => ['label' => Str::headline((string) $event), 'value' => (string) $event],
+            )->values()->all();
 
-        if (Activity::query()->whereNull('event')->exists()) {
-            array_unshift($events, ['label' => 'Unspecified', 'value' => self::UNSPECIFIED_EVENT]);
-        }
+            if (Activity::query()->whereNull('event')->exists()) {
+                array_unshift($events, ['label' => 'Unspecified', 'value' => self::UNSPECIFIED_EVENT]);
+            }
 
-        $causerIds = Activity::query()
-            ->where('causer_type', User::class)
-            ->whereNotNull('causer_id')
-            ->distinct()
-            ->pluck('causer_id')
-            ->map(fn (mixed $id): string => (string) $id)
-            ->values();
-        $users = User::query()->whereIn((new User)->getKeyName(), $causerIds->all())->get(['id', 'name']);
-        $nameCounts = $users->countBy('name');
-        $causers = $users->map(fn (User $user): array => [
-            'label' => $nameCounts->get($user->name, 0) > 1 ? "{$user->name} (#{$user->getKey()})" : $user->name,
-            'value' => (string) $user->getKey(),
-        ])->sortBy('label', SORT_NATURAL | SORT_FLAG_CASE)->values()->all();
+            $causerIds = Activity::query()
+                ->where('causer_type', User::class)
+                ->whereNotNull('causer_id')
+                ->distinct()
+                ->pluck('causer_id')
+                ->map(fn (mixed $id): string => (string) $id)
+                ->values();
+            $users = User::query()->whereIn((new User)->getKeyName(), $causerIds->all())->get(['id', 'name']);
+            $nameCounts = $users->countBy('name');
+            $causers = $users->map(fn (User $user): array => [
+                'label' => $nameCounts->get($user->name, 0) > 1 ? "{$user->name} (#{$user->getKey()})" : $user->name,
+                'value' => (string) $user->getKey(),
+            ])->sortBy('label', SORT_NATURAL | SORT_FLAG_CASE)->values()->all();
 
-        if (Activity::query()->whereNull('causer_id')->exists()) {
-            array_unshift($causers, ['label' => 'System', 'value' => self::SYSTEM_CAUSER]);
-        }
+            if (Activity::query()->whereNull('causer_id')->exists()) {
+                array_unshift($causers, ['label' => 'System', 'value' => self::SYSTEM_CAUSER]);
+            }
 
-        $subjects = Activity::query()->whereNotNull('subject_type')->distinct()->pluck('subject_type')->filter()->map(
-            fn (mixed $subject): array => ['label' => Str::headline(class_basename((string) $subject)), 'value' => (string) $subject],
-        )->values()->all();
+            $subjects = Activity::query()->whereNotNull('subject_type')->distinct()->pluck('subject_type')->filter()->map(
+                fn (mixed $subject): array => ['label' => Str::headline(class_basename((string) $subject)), 'value' => (string) $subject],
+            )->values()->all();
 
-        if (Activity::query()->whereNull('subject_type')->exists()) {
-            array_unshift($subjects, ['label' => 'No subject', 'value' => self::NO_SUBJECT]);
-        }
+            if (Activity::query()->whereNull('subject_type')->exists()) {
+                array_unshift($subjects, ['label' => 'No subject', 'value' => self::NO_SUBJECT]);
+            }
 
-        return [
-            'events' => $this->sortOptions($events),
-            'causers' => $this->sortOptions($causers),
-            'subjects' => $this->sortOptions($subjects),
-        ];
+            return [
+                'events' => $this->sortOptions($events),
+                'causers' => $this->sortOptions($causers),
+                'subjects' => $this->sortOptions($subjects),
+            ];
+        });
     }
 
     /**
@@ -82,24 +87,13 @@ final class ActivityLogQuery
     }
 
     /**
-     * @param array{
-     *     search: ?string,
-     *     event: array<int, string>,
-     *     causer: array<int, string>,
-     *     subject: array<int, string>,
-     *     from: ?string,
-     *     to: ?string,
-     * } $filters
      * @return Builder<Activity>
      */
-    public function build(array $filters): Builder
+    public function build(ActivityLogFiltersData $filters): Builder
     {
-        $from = $this->parseDate($filters['from']);
-        $to = $this->parseDate($filters['to']);
-
         $query = Activity::query()
             ->with(['causer', 'subject'])
-            ->when($filters['search'], function (Builder $query, string $search): void {
+            ->when($filters->search, function (Builder $query, string $search): void {
                 $term = "%{$search}%";
 
                 $query->where(function (Builder $query) use ($term): void {
@@ -115,61 +109,46 @@ final class ActivityLogQuery
                             ->orWhere('email', 'like', $term));
                 });
             })
-            ->when($filters['event'] !== [], function (Builder $query) use ($filters): void {
+            ->when($filters->events !== [], function (Builder $query) use ($filters): void {
                 $query->where(function (Builder $query) use ($filters): void {
-                    $events = array_values(array_diff($filters['event'], [self::UNSPECIFIED_EVENT]));
+                    $events = array_values(array_diff($filters->events, [self::UNSPECIFIED_EVENT]));
                     $query->whereIn('event', $events);
 
-                    if (in_array(self::UNSPECIFIED_EVENT, $filters['event'], true)) {
+                    if (in_array(self::UNSPECIFIED_EVENT, $filters->events, true)) {
                         $query->orWhereNull('event');
                     }
                 });
             })
-            ->when($filters['causer'] !== [], function (Builder $query) use ($filters): void {
+            ->when($filters->causers !== [], function (Builder $query) use ($filters): void {
                 $query->where(function (Builder $query) use ($filters): void {
-                    $causers = array_values(array_diff($filters['causer'], [self::SYSTEM_CAUSER]));
+                    $causers = array_values(array_diff($filters->causers, [self::SYSTEM_CAUSER]));
                     $query->whereIn('causer_id', $causers)->where('causer_type', User::class);
 
-                    if (in_array(self::SYSTEM_CAUSER, $filters['causer'], true)) {
+                    if (in_array(self::SYSTEM_CAUSER, $filters->causers, true)) {
                         $query->orWhereNull('causer_id');
                     }
                 });
             })
-            ->when($filters['subject'] !== [], function (Builder $query) use ($filters): void {
+            ->when($filters->subjects !== [], function (Builder $query) use ($filters): void {
                 $query->where(function (Builder $query) use ($filters): void {
-                    $subjects = array_values(array_diff($filters['subject'], [self::NO_SUBJECT]));
+                    $subjects = array_values(array_diff($filters->subjects, [self::NO_SUBJECT]));
                     $query->whereIn('subject_type', $subjects);
 
-                    if (in_array(self::NO_SUBJECT, $filters['subject'], true)) {
+                    if (in_array(self::NO_SUBJECT, $filters->subjects, true)) {
                         $query->orWhereNull('subject_type');
                     }
                 });
             })
             ->latest();
 
-        if ($from instanceof Carbon) {
-            $query->where('created_at', '>=', $from->copy()->startOfDay());
+        if ($filters->from !== null) {
+            $query->where('created_at', '>=', Carbon::createFromFormat('!Y-m-d', $filters->from)->startOfDay());
         }
 
-        if ($to instanceof Carbon) {
-            $query->where('created_at', '<=', $to->copy()->endOfDay());
+        if ($filters->to !== null) {
+            $query->where('created_at', '<=', Carbon::createFromFormat('!Y-m-d', $filters->to)->endOfDay());
         }
 
         return $query;
-    }
-
-    private function parseDate(?string $date): ?Carbon
-    {
-        if ($date === null) {
-            return null;
-        }
-
-        try {
-            $parsed = Carbon::createFromFormat('!Y-m-d', $date);
-        } catch (InvalidFormatException) {
-            return null;
-        }
-
-        return $parsed instanceof Carbon ? $parsed : null;
     }
 }
