@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\SetList;
 
@@ -21,4 +22,4 @@ return RectorConfig::configure()
         SetList::PRIVATIZATION,
         SetList::EARLY_RETURN,
     ])
-    ->withPhpSets();
+    ->withSkip([EncapsedStringsToSprintfRector::class]);

@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class StorePublicIntakeRequest extends FormRequest
 {
@@ -33,6 +34,7 @@ class StorePublicIntakeRequest extends FormRequest
         return $attributes;
     }
 
+    #[Override]
     protected function prepareForValidation(): void
     {
         $this->replace(self::normalize($this->all()));
