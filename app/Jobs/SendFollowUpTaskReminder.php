@@ -38,7 +38,7 @@ class SendFollowUpTaskReminder implements ShouldBeUnique, ShouldQueue
         public string $taskUuid,
         public string $reminderDate,
     ) {
-        $this->onQueue('reminders');
+        $this->onQueue('mail');
     }
 
     public function handle(): void
@@ -73,7 +73,7 @@ class SendFollowUpTaskReminder implements ShouldBeUnique, ShouldQueue
                 return;
             }
 
-            Notification::route('mail', $recipient)->notify(new FollowUpTaskReminder($task));
+            Notification::route('mail', $recipient)->notifyNow(new FollowUpTaskReminder($task));
 
             $task->reminder_sent_at = now();
             $task->saveQuietly();
