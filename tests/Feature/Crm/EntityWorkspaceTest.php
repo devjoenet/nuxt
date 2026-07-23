@@ -92,6 +92,11 @@ test('sales ops can view an organization with scoped contacts', function (): voi
         ->assertInertia(fn (Assert $page): Assert => $page
             ->component('Crm/Organizations/Show')
             ->where('organization.id', $organization->uuid)
+            ->where('organization.name', $organization->name)
+            ->where('organization.website', $organization->website)
+            ->where('organization.owner.id', $user->id)
+            ->where('organization.leads_count', 0)
+            ->where('canManage', true)
             ->where('organization.contacts', fn (Collection $contacts): bool => $contacts->pluck('id')->sort()->values()->all() === collect([
                 $ownedContact->uuid,
                 $unassignedContact->uuid,
@@ -110,7 +115,12 @@ test('sales ops can view a contact with flat resource props', function (): void 
         ->get(route('crm.contacts.show', $contact))
         ->assertInertia(fn (Assert $page): Assert => $page
             ->component('Crm/Contacts/Show')
-            ->where('contact.id', $contact->uuid));
+            ->where('contact.id', $contact->uuid)
+            ->where('contact.email', $contact->email)
+            ->where('contact.organization.id', $organization->uuid)
+            ->where('contact.owner.id', $user->id)
+            ->where('contact.leads_count', 0)
+            ->where('canManage', true));
 });
 
 test('out of scope direct URLs return not found', function (): void {
@@ -187,6 +197,22 @@ test('admins can transfer ownership and users can archive or delete visible enti
 
     $this->actingAs($admin)->delete(route('crm.organizations.destroy', $organization))->assertRedirect(route('crm.organizations.index'));
     expect(Organization::query()->find($organization->id))->toBeNull();
+});
+
+test('authorized users restore archived organizations and contacts with DELETE', function (): void {
+    $admin = entityCrmUser(admin: true);
+    $organization = Organization::factory()->create(['owner_id' => $admin->id, 'archived_at' => now()]);
+    $contact = Contact::factory()->create(['owner_id' => $admin->id, 'archived_at' => now()]);
+
+    $this->actingAs($admin)
+        ->delete(route('crm.organizations.restore', $organization))
+        ->assertRedirect(route('crm.organizations.show', $organization));
+    $this->actingAs($admin)
+        ->delete(route('crm.contacts.restore', $contact))
+        ->assertRedirect(route('crm.contacts.show', $contact));
+
+    expect($organization->refresh()->archived_at)->toBeNull()
+        ->and($contact->refresh()->archived_at)->toBeNull();
 });
 
 test('entity lists filter and paginate on the server', function (): void {
