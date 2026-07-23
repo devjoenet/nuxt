@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-  import { Form, router, usePage } from "@inertiajs/vue3";
+  import { Form, Link, router, usePage } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
   import Layout from "@/layouts/Default.vue";
   import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
   import { archive, convert, edit, index, restore } from "@/routes/crm/leads";
+  import { show as contactShow } from "@/routes/crm/contacts";
   import { store as storeNote } from "@/routes/crm/leads/notes";
   import { complete as completeTask, store as storeTask } from "@/routes/crm/leads/tasks";
   import type { Lead } from "@/types/crm";
@@ -34,7 +35,7 @@
 <template>
   <UDashboardPanel id="crm-lead-detail">
     <template #header>
-      <UDashboardNavbar :title="lead.contact.name">
+      <UDashboardNavbar :title="lead.contact?.name ?? 'Lead details'">
         <template #leading><UDashboardSidebarCollapse /></template>
         <template #right>
           <UButton :to="index().url" color="neutral" label="All leads" variant="ghost" />
@@ -49,7 +50,15 @@
             <div class="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <div class="flex items-center gap-3">
-                  <h1 class="text-balance text-2xl font-semibold tracking-tight text-highlighted">{{ lead.contact.name }}</h1>
+                  <Link
+                    v-if="lead.contact && !lead.contact.deleted_at"
+                    :href="contactShow(lead.contact.id).url"
+                    class="text-balance text-2xl font-semibold tracking-tight text-highlighted hover:underline"
+                  >
+                    {{ lead.contact.name }}
+                  </Link>
+                  <h1 v-else class="text-balance text-2xl font-semibold tracking-tight text-highlighted">{{ lead.contact?.name ?? "Contact unavailable" }}</h1>
+                  <UBadge v-if="lead.contact?.deleted_at" color="warning" data-testid="lead-deleted-contact-status" label="Deleted contact" variant="subtle" />
                   <LeadStatusBadge :status="lead.status" />
                 </div>
                 <p class="text-pretty text-base text-muted sm:text-sm">{{ lead.organization?.name ?? "Independent contact" }} · {{ lead.source }}</p>
@@ -67,11 +76,11 @@
             <dl class="grid gap-4 border-y border-default py-5 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <dt class="text-base text-muted sm:text-sm">Email</dt>
-                <dd class="font-medium text-highlighted">{{ lead.contact.email }}</dd>
+                <dd class="font-medium text-highlighted">{{ lead.contact?.email ?? "Unavailable" }}</dd>
               </div>
               <div>
                 <dt class="text-base text-muted sm:text-sm">Phone</dt>
-                <dd class="font-medium text-highlighted">{{ lead.contact.phone ?? "Not provided" }}</dd>
+                <dd class="font-medium text-highlighted">{{ lead.contact?.phone ?? "Not provided" }}</dd>
               </div>
               <div>
                 <dt class="text-base text-muted sm:text-sm">Owner</dt>

@@ -7,6 +7,7 @@ return [
         'public-welcome' => 14,
         'public-privacy' => 15,
         'crm-organizations-index' => 20,
+        'crm-leads-show' => 22,
         'crm-organizations-show' => 21,
         'crm-contacts-show' => 21,
         'admin-users' => 18,

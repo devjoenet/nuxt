@@ -8,6 +8,7 @@ use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\Note;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
@@ -19,6 +20,9 @@ class LeadResource extends JsonResource
     #[Override]
     public function toArray(Request $request): array
     {
+        $contact = $this->contact;
+        $user = $request->user();
+
         return [
             'id' => $this->uuid,
             'status' => $this->status->value,
@@ -31,12 +35,13 @@ class LeadResource extends JsonResource
             'archived_at' => $this->archived_at?->toISOString(),
             'converted_at' => $this->converted_at?->toISOString(),
             'created_at' => $this->created_at->toISOString(),
-            'contact' => [
-                'id' => $this->contact->uuid,
-                'name' => $this->contact->name,
-                'email' => $this->contact->email,
-                'phone' => $this->contact->phone,
-            ],
+            'contact' => $contact !== null && $user instanceof User && $contact->isVisibleTo($user) ? [
+                'id' => $contact->uuid,
+                'name' => $contact->name,
+                'email' => $contact->email,
+                'phone' => $contact->phone,
+                'deleted_at' => $contact->deleted_at?->toISOString(),
+            ] : null,
             'organization' => $this->organization ? [
                 'id' => $this->organization->uuid,
                 'name' => $this->organization->name,
