@@ -5,37 +5,18 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Models\FollowUpTask;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Queue\Attributes\Backoff;
-use Illuminate\Queue\Attributes\Timeout;
-use Illuminate\Queue\Attributes\Tries;
 use LogicException;
 
-#[Backoff([60, 300, 900])]
-#[Timeout(60)]
-#[Tries(3)]
-class FollowUpTaskReminder extends Notification implements ShouldQueue
+class FollowUpTaskReminder extends Notification
 {
-    use Queueable;
-
-    public function __construct(public FollowUpTask $task)
-    {
-        $this->onQueue('mail');
-    }
+    public function __construct(public FollowUpTask $task) {}
 
     /** @return array<int, string> */
     public function via(object $notifiable): array
     {
         return ['mail'];
-    }
-
-    /** @return array<string, string> */
-    public function viaQueues(): array
-    {
-        return ['mail' => 'mail'];
     }
 
     /** @return array<int, string> */

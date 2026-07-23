@@ -10,9 +10,14 @@ use App\Models\FollowUpTask;
 use App\Models\User;
 use App\Notifications\FollowUpTaskReminder;
 use Database\Seeders\RolePermissionSeeder;
+use Illuminate\Contracts\Mail\Factory as MailFactory;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Queue\Job;
+use Illuminate\Mail\Markdown;
+use Illuminate\Notifications\ChannelManager;
+use Illuminate\Notifications\Channels\MailChannel;
 use Illuminate\Queue\Events\JobFailed;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia as Assert;
 use Spatie\Activitylog\Models\Activity;
@@ -48,18 +53,19 @@ test('users without jobs view permission cannot open the operations page', funct
     $this->actingAs($user)->get(route('admin.jobs.index'))->assertForbidden();
 });
 
-test('the reminder command dispatches due tasks onto the reminders queue', function (): void {
+test('the reminder command dispatches due tasks onto the mail queue', function (): void {
     Queue::fake();
     $task = FollowUpTask::factory()->create(['due_at' => now()->subHour()]);
 
     $this->artisan('crm:dispatch-follow-up-reminders')->assertSuccessful();
 
     Queue::assertPushed(SendFollowUpTaskReminder::class, fn (SendFollowUpTaskReminder $job): bool => $job->taskUuid === $task->uuid
-        && $job->queue === 'reminders');
+        && $job->queue === 'mail');
 });
 
-test('a follow-up reminder is sent once per day', function (): void {
-    Notification::fake();
+test('a follow-up reminder is marked sent once after synchronous mail delivery', function (): void {
+    Mail::fake();
+    Queue::fake();
     $task = FollowUpTask::factory()->create(['due_at' => now()->subHour()]);
     BusinessSetting::current()->update(['notification_email' => 'ops@example.com']);
     $job = new SendFollowUpTaskReminder($task->uuid, now()->toDateString());
@@ -67,14 +73,34 @@ test('a follow-up reminder is sent once per day', function (): void {
     $job->handle();
     $job->handle();
 
-    Notification::assertSentOnDemand(
-        FollowUpTaskReminder::class,
-        fn (FollowUpTaskReminder $notification, array $channels, object $notifiable): bool => $notifiable->routes['mail'] === 'ops@example.com'
-            && $notification->task->is($task)
-            && $notification->queue === 'mail'
-            && $channels === ['mail'],
-    );
-    Notification::assertSentOnDemandTimes(FollowUpTaskReminder::class, 1);
+    Queue::assertNothingPushed();
+    expect($job->queue)->toBe('mail')
+        ->and(new FollowUpTaskReminder($task))->not->toBeInstanceOf(Illuminate\Contracts\Queue\ShouldQueue::class)
+        ->and($task->refresh()->reminder_sent_at)->not->toBeNull();
+});
+
+test('a failed mail-channel delivery leaves a follow-up reminder eligible for retry', function (): void {
+    $task = FollowUpTask::factory()->create(['due_at' => now()->subHour()]);
+    BusinessSetting::current()->update(['notification_email' => 'ops@example.com']);
+    $job = new SendFollowUpTaskReminder($task->uuid, now()->toDateString());
+
+    $mailer = Mockery::mock(Mailer::class);
+    $mailer->shouldReceive('send')->once()->andThrow(new RuntimeException('Mail delivery failed.'));
+
+    $mailFactory = Mockery::mock(MailFactory::class);
+    $mailFactory->shouldReceive('mailer')->once()->with(null)->andReturn($mailer);
+
+    app()->instance(MailChannel::class, new MailChannel($mailFactory, app(Markdown::class)));
+
+    expect(fn (): mixed => $job->handle())->toThrow(RuntimeException::class, 'Mail delivery failed.')
+        ->and($task->refresh()->reminder_sent_at)->toBeNull();
+
+    app(ChannelManager::class)->forgetDrivers();
+    app()->forgetInstance(MailChannel::class);
+    Mail::fake();
+
+    $job->handle();
+
     expect($task->refresh()->reminder_sent_at)->not->toBeNull();
 });
 
