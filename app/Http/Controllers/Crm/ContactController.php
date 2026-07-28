@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Crm;
 
+use App\Actions\ArchiveContact;
 use App\Actions\CreateContact;
+use App\Actions\DeleteContact;
+use App\Actions\RestoreContact;
 use App\Actions\UpdateContact;
 use App\Data\ContactData;
 use App\Data\ContactIndexData;
@@ -14,6 +17,7 @@ use App\Http\Requests\Crm\StoreContactRequest;
 use App\Http\Requests\Crm\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\User;
 use App\Queries\ContactQuery;
 use Illuminate\Database\Eloquent\Builder;
@@ -71,7 +75,9 @@ class ContactController extends Controller
         $user = $this->authenticatedUser($request);
         abort_unless($contact->isVisibleTo($user), 404);
         $contact->load(['organization', 'owner'])->loadCount([
-            'leads' => fn (Builder $query): Builder => $query->visibleTo($user),
+            'leads' => function (Builder $query) use ($user): void {
+                Lead::constrainVisibility($query, $user);
+            },
         ]);
 
         return Inertia::render('Crm/Contacts/Show', [
@@ -93,12 +99,12 @@ class ContactController extends Controller
         ]);
     }
 
-    public function archive(Request $request, Contact $contact): RedirectResponse
+    public function archive(Request $request, Contact $contact, ArchiveContact $action): RedirectResponse
     {
         $user = $this->authenticatedUser($request);
         abort_unless($contact->isVisibleTo($user), 404);
         $this->authorize('archive', $contact);
-        $contact->update(['archived_at' => now()]);
+        $action->handle($contact, $user);
 
         return to_route('crm.contacts.index')->with('success', 'Contact archived.');
     }
@@ -110,22 +116,22 @@ class ContactController extends Controller
         return to_route('crm.contacts.show', $contact)->with('success', 'Contact updated.');
     }
 
-    public function restore(Request $request, Contact $contact): RedirectResponse
+    public function restore(Request $request, Contact $contact, RestoreContact $action): RedirectResponse
     {
         $user = $this->authenticatedUser($request);
         abort_unless($contact->isVisibleTo($user), 404);
         $this->authorize('restore', $contact);
-        $contact->update(['archived_at' => null]);
+        $action->handle($contact, $user);
 
         return to_route('crm.contacts.show', $contact)->with('success', 'Contact restored.');
     }
 
-    public function destroy(Request $request, Contact $contact): RedirectResponse
+    public function destroy(Request $request, Contact $contact, DeleteContact $action): RedirectResponse
     {
         $user = $this->authenticatedUser($request);
         abort_unless($contact->isVisibleTo($user), 404);
         $this->authorize('delete', $contact);
-        $contact->delete();
+        $action->handle($contact, $user);
 
         return to_route('crm.contacts.index')->with('success', 'Contact deleted.');
     }

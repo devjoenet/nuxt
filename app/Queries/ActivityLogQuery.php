@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
+use UnexpectedValueException;
 
 final class ActivityLogQuery
 {
@@ -142,13 +143,22 @@ final class ActivityLogQuery
             ->latest();
 
         if ($filters->from !== null) {
-            $query->where('created_at', '>=', Carbon::createFromFormat('!Y-m-d', $filters->from)->startOfDay());
+            $query->where('created_at', '>=', $this->date($filters->from)->startOfDay());
         }
 
         if ($filters->to !== null) {
-            $query->where('created_at', '<=', Carbon::createFromFormat('!Y-m-d', $filters->to)->endOfDay());
+            $query->where('created_at', '<=', $this->date($filters->to)->endOfDay());
         }
 
         return $query;
+    }
+
+    private function date(string $value): Carbon
+    {
+        if (! Carbon::hasFormat($value, 'Y-m-d')) {
+            throw new UnexpectedValueException("Invalid activity log date `{$value}`.");
+        }
+
+        return Carbon::parse($value);
     }
 }

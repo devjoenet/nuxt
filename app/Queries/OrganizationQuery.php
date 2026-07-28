@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Queries;
 
 use App\Data\OrganizationIndexData;
+use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,8 +20,12 @@ class OrganizationQuery
             ->visibleTo($user)
             ->with('owner')
             ->withCount([
-                'contacts' => fn (Builder $query): Builder => $query->visibleTo($user),
-                'leads' => fn (Builder $query): Builder => $query->visibleTo($user),
+                'contacts' => function (Builder $query) use ($user): void {
+                    Contact::constrainVisibility($query, $user);
+                },
+                'leads' => function (Builder $query) use ($user): void {
+                    Lead::constrainVisibility($query, $user);
+                },
             ])
             ->whereNull('archived_at', not: $filters->archived)
             ->when($filters->search, function (Builder $query, string $search): void {

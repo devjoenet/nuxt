@@ -36,7 +36,7 @@ class LeadResource extends JsonResource
             'archived_at' => $this->archived_at?->toISOString(),
             'converted_at' => $this->converted_at?->toISOString(),
             'created_at' => $this->created_at->toISOString(),
-            'contact' => $contact !== null && $user instanceof User && $contact->isVisibleTo($user) ? [
+            'contact' => $user instanceof User && $contact->isVisibleTo($user) ? [
                 'id' => $contact->uuid,
                 'name' => $contact->name,
                 'email' => $contact->email,

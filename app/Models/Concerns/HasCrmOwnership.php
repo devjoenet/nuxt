@@ -30,18 +30,21 @@ trait HasCrmOwnership
         return $this->owner_id === $user->id;
     }
 
-    /**
-     * @param  Builder<static>  $query
-     * @return Builder<static>
-     */
+    /** @param Builder<static> $query */
     #[Scope]
-    protected function visibleTo(Builder $query, User $user): Builder
+    protected function visibleTo(Builder $query, User $user): void
+    {
+        self::constrainVisibility($query, $user);
+    }
+
+    /** @param Builder<static> $query */
+    public static function constrainVisibility(Builder $query, User $user): void
     {
         if ($user->isCrmAdministrator()) {
-            return $query;
+            return;
         }
 
-        return $query->where(function (Builder $query) use ($user): void {
+        $query->where(function (Builder $query) use ($user): void {
             $query->where('owner_id', $user->id)->orWhereNull('owner_id');
         });
     }

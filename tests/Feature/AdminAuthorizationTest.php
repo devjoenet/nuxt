@@ -270,6 +270,13 @@ test('admins cannot deactivate themselves or demote a super admin', function ():
 test('admins can update business settings', function (): void {
     $admin = adminUser();
 
+    $this->actingAs($admin)
+        ->get(route('admin.settings.edit'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Admin/Settings/Index')
+            ->has('setting'));
+
     $this->actingAs($admin)->patch(route('admin.settings.update'), [
         'company_name' => 'Southeast Code LLC',
         'notification_email' => 'ops@example.com',

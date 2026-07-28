@@ -48,11 +48,7 @@ final class IntakeData extends Dto
             'user_agent' => $request->userAgent(),
         ]);
 
-        if (! $data instanceof self) {
-            throw new UnexpectedValueException('Intake data could not be created.');
-        }
-
-        return $data;
+        return $data instanceof self ? $data : throw new UnexpectedValueException('Intake data could not be created.');
     }
 
     /** @return array<string, ValidationRule|array<mixed>|string> */

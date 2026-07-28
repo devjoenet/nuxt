@@ -16,7 +16,10 @@ use Illuminate\Contracts\Queue\Job;
 use Illuminate\Mail\Markdown;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Notifications\Channels\MailChannel;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -104,6 +107,45 @@ test('a failed mail-channel delivery leaves a follow-up reminder eligible for re
     expect($task->refresh()->reminder_sent_at)->not->toBeNull();
 });
 
+test('follow-up reminder jobs skip ineligible, duplicate, locked, and unconfigured deliveries', function (): void {
+    Mail::fake();
+    Log::spy();
+
+    (new SendFollowUpTaskReminder('missing-task', now()->toDateString()))->handle();
+
+    $completed = FollowUpTask::factory()->create([
+        'status' => 'completed',
+        'completed_at' => now(),
+    ]);
+    (new SendFollowUpTaskReminder($completed->uuid, now()->toDateString()))->handle();
+
+    $alreadySent = FollowUpTask::factory()->create([
+        'reminder_sent_at' => now(),
+    ]);
+    (new SendFollowUpTaskReminder($alreadySent->uuid, now()->toDateString()))->handle();
+
+    $locked = FollowUpTask::factory()->create();
+    $lockedJob = new SendFollowUpTaskReminder($locked->uuid, now()->toDateString());
+    $lock = Cache::lock($lockedJob->uniqueId(), 120);
+    $lock->get();
+    $lockedJob->handle();
+    $lock->release();
+
+    $unconfigured = FollowUpTask::factory()->create();
+    BusinessSetting::current()->update(['notification_email' => null]);
+    $unconfiguredJob = new SendFollowUpTaskReminder($unconfigured->uuid, now()->toDateString());
+    $unconfiguredJob->handle();
+    $unconfiguredJob->failed(new RuntimeException('Delivery failed.'));
+
+    expect($completed->refresh()->reminder_sent_at)->toBeNull()
+        ->and($alreadySent->refresh()->reminder_sent_at)->not->toBeNull()
+        ->and($locked->refresh()->reminder_sent_at)->toBeNull()
+        ->and($unconfigured->refresh()->reminder_sent_at)->toBeNull()
+        ->and($unconfiguredJob->tags())->toContain('follow-up-task:'.$unconfigured->uuid);
+    Log::shouldHaveReceived('warning')->once();
+    Log::shouldHaveReceived('error')->once();
+});
+
 test('queue failures create safe operational audit records', function (): void {
     Notification::fake();
     config(['services.horizon.notification_email' => 'ops@example.com']);
@@ -131,4 +173,29 @@ test('queue failures create safe operational audit records', function (): void {
             'exception' => RuntimeException::class,
         ])
         ->and($activity->properties->toArray())->not->toHaveKey('exception_message');
+});
+
+test('queue failure alerts avoid notification loops and tolerate a missing recipient', function (): void {
+    Notification::fake();
+
+    foreach ([
+        [SendQueuedNotifications::class, 'ops@example.com'],
+        ['App\\Jobs\\ExampleJob', null],
+    ] as [$jobName, $recipient]) {
+        config(['services.horizon.notification_email' => $recipient]);
+        $job = Mockery::mock(Job::class);
+        $job->allows('resolveName')->andReturn($jobName);
+        $job->allows('getQueue')->andReturn('mail');
+        $job->allows('uuid')->andReturn(null);
+        $job->allows('getJobId')->andReturn('failed-job-id');
+
+        (new SendFailedJobAlert)->handle(new JobFailed(
+            'database',
+            $job,
+            new RuntimeException('delivery failed'),
+        ));
+    }
+
+    Notification::assertNothingSent();
+    expect(Activity::query()->where('description', 'Queue job failed.')->count())->toBe(2);
 });
