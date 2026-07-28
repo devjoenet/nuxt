@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0582b5501d465db8b24d94766098b10",
+    "content-hash": "bdc8007648fad5cfdc514ffaea7a4afa",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -12845,78 +12845,6 @@
                 "source": "https://github.com/revoltphp/event-loop/tree/v1.0.9"
             },
             "time": "2026-05-16T17:55:38+00:00"
-        },
-        {
-            "name": "sajjadhossainshohag/laravel-doctor",
-            "version": "v0.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sajjadhossainshohag/laravel-doctor.git",
-                "reference": "098a9a2a02b77840bfd1ee029cf30b2700be1213"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sajjadhossainshohag/laravel-doctor/zipball/098a9a2a02b77840bfd1ee029cf30b2700be1213",
-                "reference": "098a9a2a02b77840bfd1ee029cf30b2700be1213",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/cache": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/contracts": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/routing": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/view": "^10.0|^11.0|^12.0|^13.0",
-                "nikic/php-parser": "^5.0",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
-                "phpunit/phpunit": "^10.0|^11.0"
-            },
-            "suggest": {
-                "laravel/agent-detector": "^2.0 — Auto-detect AI coding agents (requires PHP 8.2+) for agent-friendly output format (required for automatic --format=agent detection)."
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Doctor": "SajjadHossain\\Doctor\\Facades\\Doctor"
-                    },
-                    "providers": [
-                        "SajjadHossain\\Doctor\\DoctorServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "SajjadHossain\\Doctor\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sajjad Hossain Shohag",
-                    "email": "sajjadhossainshohagbd@gmail.com"
-                }
-            ],
-            "description": "Code Health Checker for Laravel — catch broken routes, missing views, schema mismatches, and runtime errors before deployment.",
-            "keywords": [
-                "code-quality",
-                "health-check",
-                "laravel",
-                "static-analysis"
-            ],
-            "support": {
-                "issues": "https://github.com/sajjadhossainshohag/laravel-doctor/issues",
-                "source": "https://github.com/sajjadhossainshohag/laravel-doctor/tree/v0.3.1"
-            },
-            "time": "2026-07-27T04:28:51+00:00"
         },
         {
             "name": "sebastian/cli-parser",
