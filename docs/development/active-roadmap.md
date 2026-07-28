@@ -46,38 +46,51 @@ decision is later made differently, update this roadmap and the affected phase d
 ## Active Development Tasks
 
 The active tasks are ordered by urgency first and implementation effort second. Existing task identifiers remain
-stable; numeric order is not a promise that findings were copied from the audit in their original order. The audit
-work is consolidated as follows:
+stable; numeric order is not a promise that findings were copied from the audit in their original order. The
+2026-07-28 audit is consolidated as follows:
 
-- F-02 is part of Task 21 because its restore controls and browser coverage already live in the organization/contact
-  detail workspace change.
-- F-04 is Task 22; F-03 is Task 23.
-- F-01 and F-11 are Task 24 because safe UUID-based identity selection and bounded searchable option endpoints are one
-  boundary.
-- F-05 and the CRM portion of F-06 are Task 25.
-- F-08, the audit portion of F-06, and `ARCH-QUERY-001` are Task 26.
-- F-07 is Task 27, and F-09 is Task 28.
-- F-10 is already reconciled and does not need a duplicate implementation task.
+- F-10 is Task 29 and must land before the remaining findings so the roadmap, user-testing status, and deployment
+  contracts are trustworthy.
+- F-01, F-02, and F-03 are Task 30 because default role access, dashboard scoping, and related-record disclosure are one
+  CRM visibility boundary.
+- F-04 is Task 31; F-05 is Task 32.
+- F-08 is Task 33; F-07 is Task 34; F-06 is Task 35; F-09 is Task 36.
 
 __Note: Tasks that have been completed are moved to `docs/development/completed-roadmap.md`__
 
 Detailed implementation instructions are in docs/development/active-tasks; this roadmap remains the ordered active-work index.
 
-### Task 22 — Preserve Lead History When A Contact Is Deleted
+### Task 29 — Reconcile User-Testing And Deployment Documentation Contracts
 
-[View Task 22 instructions](active-tasks/22-preserve-lead-history-when-a-contact-is-deleted.md)
+[View Task 29 instructions](active-tasks/29-reconcile-user-testing-and-deployment-documentation-contracts.md)
 
-### Task 23 — Mark Follow-Up Reminders Sent Only After Delivery
+### Task 30 — Harden CRM Role And Ownership Visibility
 
-[View Task 23 instructions](active-tasks/23-mark-follow-up-reminders-sent-only-after-delivery.md)
+[View Task 30 instructions](active-tasks/30-harden-crm-role-and-ownership-visibility.md)
 
-### Task 24 — Isolate Intake Identity And Bound CRM Record Selectors
+### Task 31 — End Deactivated Sessions At Fortify Boundaries
 
-[View Task 24 instructions](active-tasks/24-isolate-intake-identity-and-bound-crm-record-selectors.md)
+[View Task 31 instructions](active-tasks/31-end-deactivated-sessions-at-fortify-boundaries.md)
 
-### Task 27 — Move Coherent State Changes Into Actions
+### Task 32 — Preserve User-Testing State And Rename Its Permission
 
-[View Task 27 instructions](active-tasks/27-move-coherent-state-changes-into-actions.md)
+[View Task 32 instructions](active-tasks/32-preserve-user-testing-state-and-rename-its-permission.md)
+
+### Task 33 — Remove Dead Shared UI Actions
+
+[View Task 33 instructions](active-tasks/33-remove-dead-shared-ui-actions.md)
+
+### Task 34 — Optimize Public Landing Assets
+
+[View Task 34 instructions](active-tasks/34-optimize-public-landing-assets.md)
+
+### Task 35 — Centralize And Bound Service Interests
+
+[View Task 35 instructions](active-tasks/35-centralize-and-bound-service-interests.md)
+
+### Task 36 — Enforce Dependency Audit Policy
+
+[View Task 36 instructions](active-tasks/36-enforce-dependency-audit-policy.md)
 
 ## Later, Not MVP
 

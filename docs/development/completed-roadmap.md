@@ -483,6 +483,54 @@ The direct `composer test` command reached its coverage-gated test phase but cou
 runtime has no coverage driver; the equivalent Herd-backed coverage suite passed. Organization and contact detail
 user-testing records are handed back as Needs Approval.
 
+### Task 22 — Preserve Lead History When A Contact Is Deleted
+
+- [x] Preserve soft-deleted Contacts through the Lead relationship and expose their deletion state without weakening
+  normal Contact visibility.
+- [x] Render historical identity with an explicit deleted state and no unusable Contact detail link.
+- [x] Keep inaccessible Contact data out of Lead payloads and cover active, deleted, and hidden relationship states.
+
+Completion note: Task 22 verification passed 25 focused feature/browser tests with 300 assertions, frontend
+typecheck/lint/format/build, Pint, and `git diff --check`. Herd-backed Unit/Feature coverage passed with 146 tests,
+998 assertions, and 88.6% coverage. The direct `composer test` command reached its coverage phase but could not
+complete because the shell PHP runtime has no coverage driver.
+
+### Task 23 — Mark Follow-Up Reminders Sent Only After Delivery
+
+- [x] Run reminder jobs on the explicit `mail` queue and deliver the mail channel synchronously within the job.
+- [x] Stamp `reminder_sent_at` only after successful delivery and let failures bubble so the unique job can retry.
+- [x] Remove the notification's second queue boundary and cover success, idempotency, delivery failure, and retry state.
+
+Completion note: Task 23 verification passed 6 focused jobs/operations tests, Pint, and `git diff --check`.
+Herd-backed Unit/Feature coverage passed with 147 tests and 89.3% coverage. The direct `composer test` command could
+not complete because the shell PHP runtime has no coverage driver.
+
+### Task 24 — Isolate Intake Identity And Bound CRM Record Selectors
+
+- [x] Make every anonymous submission create a new unowned Contact and Lead with an immutable intake snapshot and no
+  Organization matching or creation.
+- [x] Resolve staff Contact and Organization associations by UUID through visibility-scoped queries that conceal
+  inaccessible records.
+- [x] Add bounded, visibility-scoped search endpoints and async selectors with selected-value retention and explicit
+  create-new paths.
+
+Completion note: Task 24 verification passed both migrations, 36 focused feature/browser tests with 293 assertions,
+Pint, max-level PHPStan, frontend typecheck/lint/format/build, the lint contract, and `git diff --check`. The direct
+`composer test` command passed type coverage and then stopped because the shell PHP runtime has no coverage driver.
+
+### Task 27 — Move Coherent State Changes Into Actions
+
+- [x] Move coherent CRM lifecycle, note, follow-up, admin-user, and business-setting state changes into focused typed
+  Actions and DTOs.
+- [x] Keep HTTP authorization and validation at the transport boundary while Actions own reusable invariants,
+  transactions, audit effects, and persistence.
+- [x] Centralize CRM visibility constraints used by relationship counts/eager loading and add direct Action and domain
+  boundary coverage.
+
+Completion note: Task 27 verification passed 178 Unit/Feature tests with 1,537 assertions and 100% measured coverage,
+30 browser tests with 298 assertions, normal and maximum PHPStan, 100% type coverage, Pint, Rector, Prettier, ESLint,
+Vue typecheck, the production build, the production npm audit, and `git diff --check`.
+
 ### Task 28 — Enable Strict Frontend Lint Guardrails
 
 - [x] Remove the unused `useFillInObjects` composable, its unsafe `Record<any, unknown>` baseline, and stale generated
