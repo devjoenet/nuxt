@@ -482,3 +482,19 @@ with 145 tests, 967 assertions, 88.6% total coverage, the full browser contract,
 The direct `composer test` command reached its coverage-gated test phase but could not complete because the shell PHP
 runtime has no coverage driver; the equivalent Herd-backed coverage suite passed. Organization and contact detail
 user-testing records are handed back as Needs Approval.
+
+### Task 28 — Enable Strict Frontend Lint Guardrails
+
+- [x] Remove the unused `useFillInObjects` composable, its unsafe `Record<any, unknown>` baseline, and stale generated
+  auto-import declarations after confirming there were no live callers.
+- [x] Remove the unused `UserMenu` `chip-leading` slot and its unsafe template assertion after confirming there were
+  no implementation-time consumers.
+- [x] Enable `@typescript-eslint/no-explicit-any` and `@typescript-eslint/no-unused-vars` as errors, with only the
+  narrow underscore exceptions for intentionally unused values.
+- [x] Keep frontend lint and typecheck as separate scripts and required CI steps.
+
+Completion note: Task 28 verification passed strict ESLint, `npm run typecheck`, `npm run lint:check`,
+`npm run format:check`, `npm run build`, Herd-backed Unit/Feature coverage with 178 tests, 1,537 assertions, and
+100.0% coverage, the full browser contract with 30 tests and 298 assertions, `composer test:lint`,
+`composer test:types`, `composer test:types:max`, and `git diff --check`. The direct `composer test` command reached
+its coverage-gated phase but could not complete because the shell PHP runtime has no coverage driver.

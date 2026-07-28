@@ -79,10 +79,6 @@ Detailed implementation instructions are in docs/development/active-tasks; this 
 
 [View Task 27 instructions](active-tasks/27-move-coherent-state-changes-into-actions.md)
 
-### Task 28 — Enable Strict Frontend Lint Guardrails
-
-[View Task 28 instructions](active-tasks/28-enable-strict-frontend-lint-guardrails.md)
-
 ## Later, Not MVP
 
 - [ ] Client portal for project status, shared files, notes, and approvals.
