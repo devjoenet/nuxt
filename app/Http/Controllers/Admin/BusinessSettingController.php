@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\UpdateBusinessSetting;
+use App\Data\BusinessSettingData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateBusinessSettingRequest;
 use App\Models\BusinessSetting;
@@ -21,21 +23,14 @@ class BusinessSettingController extends Controller
         return Inertia::render('Admin/Settings/Index', ['setting' => $setting]);
     }
 
-    public function update(UpdateBusinessSettingRequest $request): RedirectResponse
+    public function update(UpdateBusinessSettingRequest $request, UpdateBusinessSetting $action): RedirectResponse
     {
         $setting = BusinessSetting::current();
         $this->authorize('update', $setting);
-        $setting->update($request->validated());
-
-        $changedFields = array_keys($setting->getChanges());
-
-        if ($changedFields !== []) {
-            activity()
-                ->useLog('settings')
-                ->performedOn($setting)
-                ->withProperties(['changed_fields' => $changedFields])
-                ->log('Business settings updated.');
-        }
+        $action->handle(
+            BusinessSettingData::fromValidated($request->validated()),
+            $this->authenticatedUser($request),
+        );
 
         return back()->with('success', 'Business settings updated.');
     }

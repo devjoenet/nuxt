@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Queries\ActivityLogQuery;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
@@ -23,8 +24,7 @@ class ActivityLogController extends Controller
         $options = $activityLogQuery->filterOptions();
 
         return Inertia::render('Admin/Audit/Index', [
-            'activities' => $activities->through(function (mixed $activity): array {
-                /** @var Activity $activity */
+            'activities' => $activities->through(function (Activity $activity): array {
                 $causer = $activity->causer;
 
                 return [

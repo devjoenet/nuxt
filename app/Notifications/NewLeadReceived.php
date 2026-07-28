@@ -43,11 +43,13 @@ class NewLeadReceived extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
+        $contact = $this->lead->contact;
+
         $message = (new MailMessage)
-            ->subject('New website inquiry from '.$this->lead->contact->name)
+            ->subject('New website inquiry from '.$contact->name)
             ->greeting('A new website inquiry is ready for review.')
-            ->line('Name: '.$this->lead->contact->name)
-            ->line('Email: '.$this->lead->contact->email);
+            ->line('Name: '.$contact->name)
+            ->line('Email: '.$contact->email);
 
         if ($this->lead->organization !== null) {
             $message->line('Organization: '.$this->lead->organization->name);

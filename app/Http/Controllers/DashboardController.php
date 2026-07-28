@@ -46,12 +46,8 @@ class DashboardController extends Controller
                 ->orderBy('due_at')
                 ->limit(5)
                 ->get()
-                ->map(function (FollowUpTask $task): ?array {
+                ->map(function (FollowUpTask $task): array {
                     $lead = $task->lead;
-
-                    if ($lead === null) {
-                        return null;
-                    }
 
                     return [
                         'uuid' => $task->uuid,
@@ -61,7 +57,7 @@ class DashboardController extends Controller
                         'due_at' => $task->due_at->toISOString(),
                         'is_overdue' => $task->due_at->isPast(),
                     ];
-                })->filter()->values() : [],
+                }) : [],
         ]);
     }
 }

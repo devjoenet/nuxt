@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Crm;
 
+use App\Actions\ArchiveOrganization;
 use App\Actions\CreateOrganization;
+use App\Actions\DeleteOrganization;
+use App\Actions\RestoreOrganization;
 use App\Actions\UpdateOrganization;
 use App\Data\OrganizationData;
 use App\Data\OrganizationIndexData;
@@ -13,11 +16,12 @@ use App\Http\Requests\Crm\OrganizationIndexRequest;
 use App\Http\Requests\Crm\StoreOrganizationRequest;
 use App\Http\Requests\Crm\UpdateOrganizationRequest;
 use App\Http\Resources\OrganizationResource;
+use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
 use App\Queries\OrganizationQuery;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -71,16 +75,16 @@ class OrganizationController extends Controller
     {
         $user = $this->authenticatedUser($request);
         abort_unless($organization->isVisibleTo($user), 404);
-        $organization->load([
-            'owner',
-            'contacts' => function (Relation $query) use ($user): void {
-                $query
-                    ->visibleTo($user)
-                    ->with('owner');
+        $organization->load('owner')->setRelation(
+            'contacts',
+            $organization->contacts()->visibleTo($user)->with('owner')->get(),
+        )->loadCount([
+            'contacts' => function (Builder $query) use ($user): void {
+                Contact::constrainVisibility($query, $user);
             },
-        ])->loadCount([
-            'contacts' => fn (Builder $query): Builder => $query->visibleTo($user),
-            'leads' => fn (Builder $query): Builder => $query->visibleTo($user),
+            'leads' => function (Builder $query) use ($user): void {
+                Lead::constrainVisibility($query, $user);
+            },
         ]);
 
         return Inertia::render('Crm/Organizations/Show', [
@@ -103,12 +107,12 @@ class OrganizationController extends Controller
         ]);
     }
 
-    public function archive(Request $request, Organization $organization): RedirectResponse
+    public function archive(Request $request, Organization $organization, ArchiveOrganization $action): RedirectResponse
     {
         $user = $this->authenticatedUser($request);
         abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('archive', $organization);
-        $organization->update(['archived_at' => now()]);
+        $action->handle($organization, $user);
 
         return to_route('crm.organizations.index')->with('success', 'Organization archived.');
     }
@@ -120,22 +124,22 @@ class OrganizationController extends Controller
         return to_route('crm.organizations.show', $organization)->with('success', 'Organization updated.');
     }
 
-    public function restore(Request $request, Organization $organization): RedirectResponse
+    public function restore(Request $request, Organization $organization, RestoreOrganization $action): RedirectResponse
     {
         $user = $this->authenticatedUser($request);
         abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('restore', $organization);
-        $organization->update(['archived_at' => null]);
+        $action->handle($organization, $user);
 
         return to_route('crm.organizations.show', $organization)->with('success', 'Organization restored.');
     }
 
-    public function destroy(Request $request, Organization $organization): RedirectResponse
+    public function destroy(Request $request, Organization $organization, DeleteOrganization $action): RedirectResponse
     {
         $user = $this->authenticatedUser($request);
         abort_unless($organization->isVisibleTo($user), 404);
         $this->authorize('delete', $organization);
-        $organization->delete();
+        $action->handle($organization, $user);
 
         return to_route('crm.organizations.index')->with('success', 'Organization deleted.');
     }

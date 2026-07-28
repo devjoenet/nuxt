@@ -17,7 +17,7 @@ class LeadConversionController extends Controller
         $user = $this->authenticatedUser($request);
         abort_unless($lead->isVisibleTo($user), 404);
         $this->authorize('convert', $lead);
-        $action->handle($lead);
+        $action->handle($lead, $user);
 
         return to_route('crm.leads.show', $lead)->with('success', 'Lead converted to a client.');
     }

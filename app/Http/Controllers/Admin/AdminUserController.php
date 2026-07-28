@@ -7,15 +7,15 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\InviteUser;
 use App\Actions\ResendUserVerification;
 use App\Actions\ResetUserTwoFactorAuthentication;
+use App\Actions\UpdateAdminUserAccess;
+use App\Data\AdminUserAccessData;
 use App\Data\InviteUserData;
-use App\Enums\RoleName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAdminUserRequest;
 use App\Http\Requests\Admin\UpdateAdminUserRequest;
 use App\Http\Resources\AdminUserResource;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -47,39 +47,14 @@ class AdminUserController extends Controller
         return to_route('admin.users.index')->with('success', 'Invitation sent.');
     }
 
-    public function update(UpdateAdminUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateAdminUserRequest $request, User $user, UpdateAdminUserAccess $action): RedirectResponse
     {
         $this->authorize('update', $user);
-        $currentUser = $this->authenticatedUser($request);
-
-        $attributes = $request->validated();
-
-        if ($attributes['role'] === RoleName::SuperAdmin->value && ! $currentUser->hasRole(RoleName::SuperAdmin->value)) {
-            throw ValidationException::withMessages(['role' => 'Only a Super Admin can assign the Super Admin role.']);
-        }
-
-        if ($user->is($currentUser) && ! $attributes['is_active']) {
-            throw ValidationException::withMessages(['is_active' => 'You cannot deactivate your own account.']);
-        }
-
-        if ($user->hasRole(RoleName::SuperAdmin->value) && $attributes['role'] !== RoleName::SuperAdmin->value) {
-            throw ValidationException::withMessages(['role' => 'The Super Admin role is protected.']);
-        }
-
-        if ($user->hasRole(RoleName::SuperAdmin->value) && ! $currentUser->hasRole(RoleName::SuperAdmin->value)) {
-            throw ValidationException::withMessages(['role' => 'Only a Super Admin can manage a Super Admin account.']);
-        }
-
-        $user->update([
-            'is_active' => $attributes['is_active'],
-            'deactivated_at' => $attributes['is_active'] ? null : now(),
-        ]);
-        $user->syncRoles([$attributes['role']]);
-
-        activity()
-            ->performedOn($user)
-            ->withProperties(['role' => $attributes['role'], 'is_active' => $attributes['is_active']])
-            ->log('User access updated.');
+        $action->handle(
+            $user,
+            AdminUserAccessData::fromValidated($request->validated()),
+            $this->authenticatedUser($request),
+        );
 
         return back()->with('success', 'User access updated.');
     }

@@ -6,6 +6,7 @@ namespace App\Queries;
 
 use App\Data\ContactIndexData;
 use App\Models\Contact;
+use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -17,7 +18,9 @@ class ContactQuery
         return Contact::query()
             ->visibleTo($user)
             ->with(['organization', 'owner'])
-            ->withCount(['leads' => fn (Builder $query): Builder => $query->visibleTo($user)])
+            ->withCount(['leads' => function (Builder $query) use ($user): void {
+                Lead::constrainVisibility($query, $user);
+            }])
             ->whereNull('archived_at', not: $filters->archived)
             ->when($filters->search, function (Builder $query, string $search): void {
                 $query->where(function (Builder $query) use ($search): void {

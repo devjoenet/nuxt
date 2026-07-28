@@ -103,6 +103,19 @@ it('marks reviewed pages with explicit no-change notes as needing approval', fun
             ->where('pages.0.status', 'Needs Approval'));
 });
 
+it('treats reviewed pages without notes as reviewed', function (): void {
+    $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+    UserTestingPage::factory()->create([
+        'tested_at' => now(),
+        'notes' => null,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('admin.userTesting.index'))
+        ->assertInertia(fn ($page) => $page
+            ->where('pages.0.status', 'Reviewed'));
+});
+
 it('marks completed roadmap notes as needing approval', function (): void {
     $user = User::factory()->create()->assignRole(RoleName::Admin->value);
     $page = UserTestingPage::factory()->create([

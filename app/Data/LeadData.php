@@ -36,10 +36,6 @@ final class LeadData extends Dto
 
         $data = self::factory()->ignoreMagicalMethod('fromValidated')->from($attributes);
 
-        if (! $data instanceof self) {
-            throw new UnexpectedValueException('Lead data could not be created.');
-        }
-
-        return $data;
+        return $data instanceof self ? $data : throw new UnexpectedValueException('Lead data could not be created.');
     }
 }

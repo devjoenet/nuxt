@@ -17,12 +17,15 @@ test('public marketing and intake smoke cleanly in a dark browser session', func
         ->assertAttribute('#intake-service', 'aria-expanded', 'true')
         ->assertSee('Operations application');
 
-    $page->page()->getByRole('option', ['name' => 'Operations application', 'exact' => true])->click();
+    $serviceOption = $page->page()->getByRole('option', ['name' => 'Operations application', 'exact' => true]);
+    $serviceOption->click();
+    $serviceOption->press('Escape');
     $page->wait(0.5)->assertDontSee('Use the contact form');
 
+    $page->page()->locator('#intake-name')->focus();
+    $page->assertScript('document.activeElement?.id', 'intake-name');
+    $page->page()->locator('#intake-name')->press('Tab');
     $page
-        ->click('#intake-name')
-        ->keys('#intake-name', 'Tab')
         ->assertScript('document.activeElement?.id', 'intake-email')
         ->fill('#intake-name', 'Jordan Rivera')
         ->fill('#intake-email', 'not-an-email')

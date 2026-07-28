@@ -27,7 +27,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property ?Carbon $archived_at
  * @property ?Carbon $converted_at
  * @property Carbon $created_at
- * @property ?Contact $contact
+ * @property Contact $contact
  * @property ?Organization $organization
  * @property ?User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Note> $notes

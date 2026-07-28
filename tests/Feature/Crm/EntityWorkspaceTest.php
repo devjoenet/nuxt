@@ -195,6 +195,10 @@ test('entity index filters normalize false-like archived values and reject inval
         ->assertRedirect()
         ->assertSessionHasErrors('organization');
     $this->actingAs($user)
+        ->get(route('crm.contacts.index', ['archived' => 'not-a-boolean']))
+        ->assertRedirect()
+        ->assertSessionHasErrors('archived');
+    $this->actingAs($user)
         ->get(route('crm.organizations.index', ['sort' => 'owner_id']))
         ->assertRedirect()
         ->assertSessionHasErrors('sort');
@@ -274,6 +278,48 @@ test('admins can transfer ownership and users can archive or delete visible enti
 
     $this->actingAs($admin)->delete(route('crm.organizations.destroy', $organization))->assertRedirect(route('crm.organizations.index'));
     expect(Organization::query()->find($organization->id))->toBeNull();
+});
+
+test('CRM managers can open entity forms and complete the remaining lifecycle paths', function (): void {
+    $admin = entityCrmUser(admin: true);
+    $organization = Organization::factory()->create(['owner_id' => $admin->id]);
+    $contact = Contact::factory()->create([
+        'organization_id' => $organization->id,
+        'owner_id' => $admin->id,
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('crm.organizations.create'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Organizations/Form')
+            ->where('organization', null)
+            ->where('canAssign', true));
+    $this->actingAs($admin)
+        ->get(route('crm.organizations.edit', $organization))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Organizations/Form')
+            ->where('organization.id', $organization->uuid));
+    $this->actingAs($admin)
+        ->get(route('crm.contacts.create'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Contacts/Form')
+            ->where('contact', null)
+            ->where('canAssign', true));
+    $this->actingAs($admin)
+        ->get(route('crm.contacts.edit', $contact))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Contacts/Form')
+            ->where('contact.id', $contact->uuid));
+
+    $this->actingAs($admin)
+        ->post(route('crm.organizations.archive', $organization))
+        ->assertRedirect(route('crm.organizations.index'));
+    $this->actingAs($admin)
+        ->delete(route('crm.contacts.destroy', $contact))
+        ->assertRedirect(route('crm.contacts.index'));
+
+    expect($organization->refresh()->archived_at)->not->toBeNull()
+        ->and(Contact::query()->find($contact->id))->toBeNull();
 });
 
 test('authorized users restore archived organizations and contacts with DELETE', function (): void {

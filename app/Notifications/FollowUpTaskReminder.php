@@ -7,7 +7,6 @@ namespace App\Notifications;
 use App\Models\FollowUpTask;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use LogicException;
 
 class FollowUpTaskReminder extends Notification
 {
@@ -28,11 +27,6 @@ class FollowUpTaskReminder extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $lead = $this->task->lead;
-
-        if ($lead === null) {
-            throw new LogicException("Cannot send a follow-up reminder for task `{$this->task->uuid}` without a lead.");
-        }
-
         $contact = $lead->contact;
 
         return (new MailMessage)

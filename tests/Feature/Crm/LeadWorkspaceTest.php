@@ -155,6 +155,34 @@ test('CRM managers can create and update leads', function (): void {
         ->and($lead->project_details)->toBe('Updated scope.');
 });
 
+test('CRM managers can open lead forms and archive then restore a visible lead', function (): void {
+    $user = crmUser(manage: true);
+    $user->assignRole(Role::findOrCreate('Admin'));
+    $lead = Lead::factory()->create(['owner_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.create'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Leads/Form')
+            ->where('lead', null)
+            ->where('canAssign', true));
+    $this->actingAs($user)
+        ->get(route('crm.leads.edit', $lead))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->component('Crm/Leads/Form')
+            ->where('lead.id', $lead->uuid));
+
+    $this->actingAs($user)
+        ->post(route('crm.leads.archive', $lead))
+        ->assertRedirect(route('crm.leads.index'));
+    expect($lead->refresh()->archived_at)->not->toBeNull();
+
+    $this->actingAs($user)
+        ->delete(route('crm.leads.restore', $lead))
+        ->assertRedirect(route('crm.leads.show', $lead));
+    expect($lead->refresh()->archived_at)->toBeNull();
+});
+
 test('CRM lead selectors conceal inaccessible UUIDs', function (): void {
     $user = crmUser(manage: true);
     $other = User::factory()->create();
@@ -201,6 +229,24 @@ test('CRM viewers cannot mutate leads', function (): void {
     $this->actingAs($user)->post(route('crm.leads.archive', $lead))->assertForbidden();
     $this->actingAs($user)->post(route('crm.leads.convert', $lead))->assertForbidden();
     $this->actingAs($user)->post(route('crm.leads.notes.store', $lead), ['body' => 'Nope'])->assertForbidden();
+});
+
+test('CRM managers receive not found when mutating a lead they cannot see', function (): void {
+    $manager = crmUser(manage: true);
+    $lead = Lead::factory()->create(['owner_id' => User::factory()->create()->id]);
+    $task = FollowUpTask::factory()->create(['lead_id' => $lead->id]);
+
+    $this->actingAs($manager)->post(route('crm.leads.archive', $lead))->assertNotFound();
+    $this->actingAs($manager)->post(route('crm.leads.notes.store', $lead), ['body' => 'Do not disclose this lead.'])->assertNotFound();
+    $this->actingAs($manager)->post(route('crm.leads.tasks.store', $lead), [
+        'title' => 'Do not create this task',
+        'priority' => 'normal',
+        'due_at' => now()->addDay()->toDateTimeString(),
+    ])->assertNotFound();
+    $this->actingAs($manager)->post(route('crm.leads.tasks.complete', [$lead, $task]))->assertNotFound();
+
+    expect($lead->refresh()->archived_at)->toBeNull()
+        ->and($task->refresh()->status)->toBe(FollowUpTaskStatus::Open);
 });
 
 test('lead conversion is idempotent and completes open follow ups', function (): void {
