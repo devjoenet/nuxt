@@ -81,7 +81,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
             ->middleware('can:jobs.view')
             ->name('jobs.index');
 
-        Route::middleware('can:development.user_testing.view')->group(function (): void {
+        Route::middleware('can:development.user_testing.manage')->group(function (): void {
             Route::get('roadmap', DevelopmentRoadmapController::class)->name('roadmap.index');
             Route::get('user-testing', [UserTestingPageController::class, 'index'])->name('userTesting.index');
             Route::get('user-testing/updates', [UserTestingPageController::class, 'updates'])->name('userTesting.updates');

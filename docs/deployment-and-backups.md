@@ -28,9 +28,9 @@ Staging and production must use `APP_ENV=staging` or `production`, `APP_DEBUG=fa
 `APP_URL`, and environment-injected secrets. Never copy production data into staging without an approved, redacted
 fixture process.
 
-Set `LARASCAN_PROBE_URL` to the staging HTTPS origin in the Forge environment and the GitHub Actions secret store.
-After deployment, run `php artisan larascan:probe --url="$LARASCAN_PROBE_URL" --fail-on=high` from a PHP 8.5
-environment and retain the report with the release evidence.
+Before deployment, retain current CI/release evidence for `composer audit --locked` and
+`npm audit --omit=dev --audit-level=high`. The full development dependency audit remains tracked separately until
+the dependency-audit task resolves its upstream advisory; do not treat it as a clean release gate yet.
 
 ## Deployment contract
 

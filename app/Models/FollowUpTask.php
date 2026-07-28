@@ -72,6 +72,16 @@ class FollowUpTask extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
+    /** @param Builder<static> $query */
+    #[Scope]
+    protected function visibleTo(Builder $query, User $user): void
+    {
+        $leadQuery = Lead::query();
+        Lead::constrainVisibility($leadQuery, $user);
+
+        $query->whereIn('lead_id', $leadQuery->select('id'));
+    }
+
     /** @return array<string, string> */
     #[Override]
     protected function casts(): array

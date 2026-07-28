@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\Note;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,7 +22,8 @@ class LeadResource extends JsonResource
     #[Override]
     public function toArray(Request $request): array
     {
-        $contact = $this->contact;
+        $contact = $this->relationLoaded('contact') ? $this->getRelation('contact') : null;
+        $organization = $this->relationLoaded('organization') ? $this->getRelation('organization') : null;
         $user = $request->user();
 
         return [
@@ -36,18 +39,18 @@ class LeadResource extends JsonResource
             'archived_at' => $this->archived_at?->toISOString(),
             'converted_at' => $this->converted_at?->toISOString(),
             'created_at' => $this->created_at->toISOString(),
-            'contact' => $user instanceof User && $contact->isVisibleTo($user) ? [
+            'contact' => $contact instanceof Contact && $user instanceof User && $contact->isVisibleTo($user) ? [
                 'id' => $contact->uuid,
                 'name' => $contact->name,
                 'email' => $contact->email,
                 'phone' => $contact->phone,
                 'deleted_at' => $contact->deleted_at?->toISOString(),
             ] : null,
-            'organization' => $this->organization ? [
-                'id' => $this->organization->uuid,
-                'name' => $this->organization->name,
-                'website' => $this->organization->website,
-                'client_since_at' => $this->organization->client_since_at?->toISOString(),
+            'organization' => $organization instanceof Organization && $user instanceof User && $organization->isVisibleTo($user) ? [
+                'id' => $organization->uuid,
+                'name' => $organization->name,
+                'website' => $organization->website,
+                'client_since_at' => $organization->client_since_at?->toISOString(),
             ] : null,
             'owner' => $this->owner ? ['id' => $this->owner->id, 'name' => $this->owner->name] : null,
             'notes' => $this->whenLoaded('notes', fn (): array => $this->notes->map(fn (Note $note): array => [

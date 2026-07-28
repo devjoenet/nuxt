@@ -33,7 +33,7 @@ class RolePermissionSeeder extends Seeder
             Permission::JobsView->value,
             Permission::JobsManage->value,
             Permission::SettingsManage->value,
-            Permission::DevelopmentUserTestingView->value,
+            Permission::DevelopmentUserTestingManage->value,
         ])->values());
         Role::findOrCreate(RoleName::SalesOps->value, 'web')->syncPermissions($permissions->only([
             Permission::AdminDashboardView->value,
@@ -41,9 +41,7 @@ class RolePermissionSeeder extends Seeder
             Permission::CrmManage->value,
             Permission::JobsView->value,
         ])->values());
-        Role::findOrCreate(RoleName::ClientViewer->value, 'web')->syncPermissions([
-            $permissions[Permission::CrmView->value],
-        ]);
+        Role::findOrCreate(RoleName::ClientViewer->value, 'web')->syncPermissions([]);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }

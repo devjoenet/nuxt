@@ -1,5 +1,8 @@
 <script setup lang="ts">
   import type { CommandPaletteItem, NavigationMenuItem } from "@nuxt/ui";
+  import { index as contactsIndex } from "@/routes/crm/contacts";
+  import { index as leadsIndex } from "@/routes/crm/leads";
+  import { index as organizationsIndex } from "@/routes/crm/organizations";
   import { index as jobsIndex } from "@/routes/admin/jobs";
   import { index as roadmapIndex } from "@/routes/admin/roadmap";
   import { index as userTestingIndex } from "@/routes/admin/userTesting";
@@ -21,19 +24,23 @@
         to: "/dashboard",
         onSelect: closeNavigation,
       },
-      {
-        label: "CRM",
-        icon: "i-ph-users",
-        to: "/crm/leads",
-        type: "trigger" as const,
-        defaultOpen: true,
-        children: [
-          { label: "Leads", to: "/crm/leads" },
-          { label: "Organizations", to: "/crm/organizations" },
-          { label: "Contacts", to: "/crm/contacts" },
-        ],
-        onSelect: closeNavigation,
-      },
+      ...(auth.value.user?.can?.["crm.view"]
+        ? [
+            {
+              label: "CRM",
+              icon: "i-ph-users",
+              to: leadsIndex.url(),
+              type: "trigger" as const,
+              defaultOpen: true,
+              children: [
+                { label: "Leads", to: leadsIndex.url() },
+                { label: "Organizations", to: organizationsIndex.url() },
+                { label: "Contacts", to: contactsIndex.url() },
+              ],
+              onSelect: closeNavigation,
+            },
+          ]
+        : []),
       ...(auth.value.user?.can?.["admin.dashboard.view"]
         ? [
             {
@@ -50,8 +57,8 @@
                 ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit" }] : []),
                 ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings" }] : []),
                 ...(auth.value.user?.can?.["jobs.view"] ? [{ label: "Jobs & queues", to: jobsIndex.url() }] : []),
-                ...(auth.value.user?.can?.["development.user_testing.view"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
-                ...(auth.value.user?.can?.["development.user_testing.view"] ? [{ label: "Development roadmap", to: roadmapIndex.url() }] : []),
+                ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
+                ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "Development roadmap", to: roadmapIndex.url() }] : []),
               ],
               onSelect: closeNavigation,
             },

@@ -276,23 +276,22 @@ attributes. Do not add a blanket baseline or lower the CI fail threshold until e
   supported narrow ignore/baseline mechanism with file/rule justification so these findings do not obscure real
   regressions.
 - [x] **Harden environment and session profiles.** Make `.env.example` scanner-visible and secret-free for the full
-  supported key set, including queue, Redis, mail, activity-log, Horizon, Larascan probe, and AWS endpoint keys. Define
+  supported key set, including queue, Redis, mail, activity-log, Horizon, and AWS endpoint keys. Define
   separate local/testing versus staging/production expectations: production must use `APP_ENV=production`,
   `APP_DEBUG=false`, HTTPS-only session cookies, encrypted sessions, an explicit secure same-site policy, and a
   non-debug log level. Confirm whether the debug-blacklist check is supported by this Laravel version before adding
   unsupported configuration.
 - [x] **Harden deployment/runtime settings.** Set S3 disk visibility explicitly to `private`; validate that the
   application does not rely on remote URL wrappers before disabling `allow_url_fopen`; disable `expose_php` in the PHP
-  8.5 deployment runtime; add custom 500 and 503 error pages; and configure the Larascan HTTPS runtime probe against
-  staging so HSTS, headers, cookies, HTTPS redirects, and server disclosure are checked on a real response.
+  8.5 deployment runtime; add custom 500 and 503 error pages; and verify release security behavior through the current
+  CI and staging smoke checks.
 - [x] **Close repository and dependency hygiene gaps.** Add Dependabot coverage for Composer, npm, and GitHub Actions;
   add `public/.well-known/security.txt` with the approved security contact and expiry; and upgrade the current esbuild
   `0.27.7` to `0.28.1` or newer before relying on the frontend development tooling on Windows. The current advisory
   affects esbuild versions `>=0.27.3` and `<0.28.1`.
 - [ Defer to Task 21 ] **Define the completion gate.** The production-profile CI scan is clean with no unresolved high/critical findings,
   accepted findings have documented rationale, diagnostic routes are unavailable outside local development, and the
-  Larascan report is uploaded without hiding new findings. The remaining release check is the live staging HTTPS probe,
-  which requires the Forge/GitHub `LARASCAN_PROBE_URL` secret and a deployed staging site.
+  current Composer/npm audit evidence is retained with the release.
 
 
 ### Task 13 — Make Landing QA And Feedback A First-Class Workflow
@@ -546,3 +545,35 @@ Completion note: Task 28 verification passed strict ESLint, `npm run typecheck`,
 100.0% coverage, the full browser contract with 30 tests and 298 assertions, `composer test:lint`,
 `composer test:types`, `composer test:types:max`, and `git diff --check`. The direct `composer test` command reached
 its coverage-gated phase but could not complete because the shell PHP runtime has no coverage driver.
+
+### Task 29 — Reconcile User-Testing And Deployment Documentation Contracts
+
+- [x] Render completed mapped user-testing tasks as Needs verification while preserving persisted review, roadmap,
+  and approval state.
+- [x] Replace obsolete Larascan deployment instructions with current Composer and production npm audit evidence.
+- [x] Add filesystem and Artisan command contracts for maintained documentation and reconcile the active roadmap with
+  completed task records.
+
+### Task 30 — Harden CRM Role And Ownership Visibility
+
+- [x] Remove CRM access from the reserved Client Viewer role and gate CRM navigation by the shared permission map.
+- [x] Scope dashboard lead and follow-up aggregates/lists, related Resources, relationship search, and UUID filters by
+  the existing CRM ownership boundary.
+- [x] Add role, migration, administrator-bypass, direct-route, dashboard, resource, search, filter, and browser
+  regressions for mismatched owners.
+
+### Task 31 — End Deactivated Sessions At Fortify Boundaries
+
+- [x] Add EnsureUserIsActive to Fortify's configured route middleware so authenticated password-confirmation and
+  two-factor management endpoints terminate deactivated sessions.
+- [x] Preserve guest challenge, active-user, password-confirmation, validation, and throttling behavior.
+- [x] Add a route-registry and dataset-driven HTTP matrix covering every sensitive Fortify endpoint and two-factor
+  state preservation.
+
+### Task 32 — Preserve User-Testing State And Rename Its Permission
+
+- [x] Move user-testing state transitions behind an immutable DTO and transaction-safe, lock-and-reload Action that
+  preserves actors and timestamps across repeated saves.
+- [x] Rename the capability in place to development.user_testing.manage while retaining existing role assignments.
+- [x] Add frozen-time Action, HTTP transition, permission migration, validation, authorization, and queue-removal
+  regressions.

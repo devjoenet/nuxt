@@ -120,6 +120,38 @@ test('CRM viewers retain visible deleted contact history without exposing hidden
             ->missing('lead.contact.name'));
 });
 
+test('lead resources and searches hide inaccessible related organizations and contacts', function (): void {
+    $user = crmUser();
+    $other = User::factory()->create();
+    $hiddenOrganization = Organization::factory()->create([
+        'owner_id' => $other->id,
+        'name' => 'Hidden Organization Match',
+    ]);
+    $hiddenContact = Contact::factory()->create([
+        'owner_id' => $other->id,
+        'name' => 'Hidden Contact Match',
+    ]);
+    $lead = Lead::factory()->create([
+        'owner_id' => $user->id,
+        'organization_id' => $hiddenOrganization->id,
+        'contact_id' => $hiddenContact->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.show', $lead))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('lead.organization', null)
+            ->where('lead.contact', null));
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.index', ['search' => 'Hidden Organization Match']))
+        ->assertInertia(fn (Assert $page): Assert => $page->has('leads.data', 0));
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.index', ['search' => 'Hidden Contact Match']))
+        ->assertInertia(fn (Assert $page): Assert => $page->has('leads.data', 0));
+});
+
 test('CRM managers can create and update leads', function (): void {
     $user = crmUser(manage: true);
     $user->assignRole(Role::findOrCreate('Admin'));

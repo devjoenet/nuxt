@@ -15,7 +15,17 @@ return [
         'admin-audit' => 17,
         'shared-error-pages' => 16,
     ],
-    'roadmap_task_statuses' => [],
+    'roadmap_task_statuses' => [
+        14 => 'Needs verification',
+        15 => 'Needs verification',
+        16 => 'Needs verification',
+        17 => 'Needs verification',
+        18 => 'Needs verification',
+        19 => 'Needs verification',
+        20 => 'Needs verification',
+        21 => 'Needs verification',
+        22 => 'Needs verification',
+    ],
     'pages' => [
         ['slug' => 'public-welcome', 'category' => 'Public', 'title' => 'Welcome / landing page', 'route_name' => 'home', 'path' => '/', 'sort_order' => 10, 'notes' => 'Review every landing-page section, link, animation, responsive state, dark mode state, and the project inquiry form.'],
         ['slug' => 'public-privacy', 'category' => 'Public', 'title' => 'Privacy policy', 'route_name' => 'privacy', 'path' => '/privacy', 'sort_order' => 20],

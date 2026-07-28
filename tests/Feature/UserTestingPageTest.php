@@ -40,21 +40,21 @@ it('resolves database-backed checklist links to the first visible records', func
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.url', route('home', [], false))
             ->where('pages.0.roadmap_task_number', 14)
-            ->where('pages.0.status', 'In Development')
+            ->where('pages.0.status', 'Needs verification')
             ->where('pages.1.url', route('privacy', [], false))
             ->where('pages.1.roadmap_task_number', 15)
             ->where('pages.11.url', route('crm.leads.show', $lead, false))
             ->where('pages.11.roadmap_task_number', 22)
-            ->where('pages.11.status', 'In Development')
+            ->where('pages.11.status', 'Needs verification')
             ->where('pages.12.url', route('crm.leads.edit', $lead, false))
             ->where('pages.13.roadmap_task_number', 20)
-            ->where('pages.13.status', 'In Development')
+            ->where('pages.13.status', 'Needs verification')
             ->where('pages.15.url', route('crm.organizations.show', $organization, false))
             ->where('pages.15.roadmap_task_number', 21)
-            ->where('pages.15.status', 'In Development')
+            ->where('pages.15.status', 'Needs verification')
             ->where('pages.19.url', route('crm.contacts.show', $contact, false))
+            ->where('pages.19.status', 'Needs verification')
             ->where('pages.19.roadmap_task_number', 21)
-            ->where('pages.19.status', 'In Development')
             ->where('pages.22.roadmap_task_number', 18)
             ->where('pages.23.roadmap_task_number', 19)
             ->where('pages.26.roadmap_task_number', 17)
@@ -88,6 +88,62 @@ it('saves a review without removing the page from the queue', function (): void 
         ->assertJsonPath('pages.0.tested', true)
         ->assertJsonPath('pages.0.status', 'Reviewed')
         ->assertJsonPath('pages.0.approved', false);
+});
+
+it('preserves review ownership and timestamps across repeated HTTP saves', function (): void {
+    $firstActor = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $secondActor = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $page = UserTestingPage::factory()->create();
+
+    $this->actingAs($firstActor)
+        ->patch(route('admin.userTesting.update', $page), [
+            'tested' => '1',
+            'approved' => '1',
+            'roadmap_task' => '1',
+            'notes' => 'Initial review',
+        ])
+        ->assertRedirect();
+
+    $initial = $page->refresh()->only(['tested_by', 'tested_at', 'approved_at', 'roadmap_task_at']);
+    $this->travelTo(now()->addDay());
+
+    $this->actingAs($secondActor)
+        ->patch(route('admin.userTesting.update', $page), [
+            'notes' => 'Updated notes',
+        ])
+        ->assertRedirect();
+
+    expect($page->refresh()->only(['tested_by', 'tested_at', 'approved_at', 'roadmap_task_at']))
+        ->toEqual($initial)
+        ->and($page->notes)->toBe('Updated notes');
+});
+
+it('clears each user-testing state only when explicitly unchecked', function (): void {
+    $actor = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $page = UserTestingPage::factory()->create();
+
+    $this->actingAs($actor)
+        ->patch(route('admin.userTesting.update', $page), [
+            'tested' => '1',
+            'approved' => '1',
+            'roadmap_task' => '1',
+            'notes' => 'Ready for approval',
+        ])
+        ->assertRedirect();
+
+    $this->actingAs($actor)
+        ->patch(route('admin.userTesting.update', $page), [
+            'tested' => '0',
+            'approved' => '0',
+            'roadmap_task' => '0',
+        ])
+        ->assertRedirect();
+
+    expect($page->refresh())
+        ->tested_by->toBeNull()
+        ->tested_at->toBeNull()
+        ->approved_at->toBeNull()
+        ->roadmap_task_at->toBeNull();
 });
 
 it('marks reviewed pages with explicit no-change notes as needing approval', function (): void {
@@ -194,6 +250,10 @@ it('blocks users without the testing permission', function (): void {
     $this->actingAs($user)
         ->get(route('admin.roadmap.index'))
         ->assertForbidden();
+
+    $this->actingAs($user)
+        ->get(route('crm.leads.index'))
+        ->assertForbidden();
 });
 
 it('shows the development roadmap to authorized users', function (): void {
@@ -205,5 +265,17 @@ it('shows the development roadmap to authorized users', function (): void {
         ->assertInertia(fn ($page) => $page
             ->component('Admin/Roadmap/Index')
             ->where('source', 'docs/development/active-roadmap.md')
-            ->where('content', fn ($content): bool => str_contains((string) $content, 'Southeast Code Roadmap')));
+            ->where('content', function ($content): bool {
+                $content = (string) $content;
+
+                return str_contains($content, 'Task 33')
+                    && ! str_contains($content, 'Task 29 —')
+                    && ! str_contains($content, 'Task 30 —')
+                    && ! str_contains($content, 'Task 31 —')
+                    && ! str_contains($content, 'Task 32 —')
+                    && ! str_contains($content, 'Task 22 —')
+                    && ! str_contains($content, 'Task 23 —')
+                    && ! str_contains($content, 'Task 24 —')
+                    && ! str_contains($content, 'Task 27 —');
+            }));
 });

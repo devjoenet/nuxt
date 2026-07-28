@@ -124,6 +124,32 @@ test('sales ops can view a contact with flat resource props', function (): void 
             ->where('canManage', true));
 });
 
+test('contact resources and filters hide inaccessible related organizations', function (): void {
+    $user = entityCrmUser();
+    $other = User::factory()->create();
+    $hiddenOrganization = Organization::factory()->create([
+        'owner_id' => $other->id,
+        'name' => 'Hidden Organization Match',
+    ]);
+    $contact = Contact::factory()->create([
+        'owner_id' => $user->id,
+        'organization_id' => $hiddenOrganization->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('crm.contacts.show', $contact))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('contact.organization', null));
+
+    $this->actingAs($user)
+        ->get(route('crm.contacts.index', ['search' => 'Hidden Organization Match']))
+        ->assertInertia(fn (Assert $page): Assert => $page->has('contacts.data', 0));
+
+    $this->actingAs($user)
+        ->get(route('crm.contacts.index', ['organization' => $hiddenOrganization->uuid]))
+        ->assertInertia(fn (Assert $page): Assert => $page->has('contacts.data', 0));
+});
+
 test('related CRM counts use the same visibility rule as parent records', function (): void {
     $user = entityCrmUser();
     $administrator = entityCrmUser(admin: true);

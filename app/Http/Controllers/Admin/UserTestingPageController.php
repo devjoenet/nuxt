@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\UpdateUserTestingPage;
+use App\Data\UserTestingPageData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserTestingPageRequest;
 use App\Models\Contact;
@@ -64,24 +66,10 @@ class UserTestingPageController extends Controller
         ];
     }
 
-    public function update(UpdateUserTestingPageRequest $request, UserTestingPage $userTestingPage): RedirectResponse
+    public function update(UpdateUserTestingPageRequest $request, UserTestingPage $userTestingPage, UpdateUserTestingPage $action): RedirectResponse
     {
-        $attributes = $request->validated();
-        $tested = (bool) ($attributes['tested'] ?? false);
-        $approved = (bool) ($attributes['approved'] ?? false);
-        $roadmapTask = (bool) ($attributes['roadmap_task'] ?? false);
-
-        if ($approved) {
-            $tested = true;
-        }
-
-        $userTestingPage->update([
-            'tested_by' => $tested ? $request->user()?->getKey() : null,
-            'tested_at' => $tested ? now() : null,
-            'approved_at' => $approved ? now() : null,
-            'roadmap_task_at' => $roadmapTask ? now() : null,
-            'notes' => filled($attributes['notes'] ?? null) ? mb_trim($attributes['notes']) : null,
-        ]);
+        $actor = $this->authenticatedUser($request);
+        $action->handle($userTestingPage, UserTestingPageData::fromValidated($request->validated()), $actor);
 
         return to_route('admin.userTesting.index')->with('success', 'Testing notes saved.');
     }

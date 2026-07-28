@@ -23,7 +23,7 @@ link is not the access boundary.
 | Super Admin | System owner and break-glass administrator | All seeded permissions; can manage protected role and Super Admin access |
 | Admin | Day-to-day workspace administrator | Dashboard, users, roles, CRM, jobs, settings, and audit |
 | Sales/Ops | CRM operator | Dashboard, CRM, and read-only jobs visibility; ownership rules still apply to CRM records |
-| Client Viewer | Reserved future client access | CRM view permission only; no active client portal is shipped |
+| Client Viewer | Reserved future client access | No v1 application permissions; no active client portal is shipped |
 
 The current permission set is `crm.view`, `crm.manage`, `admin.dashboard.view`, `admin.users.manage`,
 `admin.roles.manage`, `jobs.view`, `jobs.manage`, `settings.manage`, and `audit.view`.

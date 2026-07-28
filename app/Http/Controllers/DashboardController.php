@@ -23,24 +23,26 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'canViewCrm' => $canViewCrm,
             'stats' => $canViewCrm ? [
-                ['label' => 'Open leads', 'value' => Lead::query()->count(), 'icon' => 'i-ph-users-three'],
-                ['label' => 'Qualified leads', 'value' => Lead::query()->where('status', LeadStatus::Qualified)->count(), 'icon' => 'i-ph-funnel'],
-                ['label' => 'Follow-ups due', 'value' => FollowUpTask::query()->overdue()->count(), 'icon' => 'i-ph-warning-circle'],
-                ['label' => 'Due soon', 'value' => FollowUpTask::query()->where('status', FollowUpTaskStatus::Open)->dueSoon()->count(), 'icon' => 'i-ph-calendar-check'],
+                ['label' => 'Open leads', 'value' => Lead::query()->visibleTo($user)->count(), 'icon' => 'i-ph-users-three'],
+                ['label' => 'Qualified leads', 'value' => Lead::query()->visibleTo($user)->where('status', LeadStatus::Qualified)->count(), 'icon' => 'i-ph-funnel'],
+                ['label' => 'Follow-ups due', 'value' => FollowUpTask::query()->visibleTo($user)->overdue()->count(), 'icon' => 'i-ph-warning-circle'],
+                ['label' => 'Due soon', 'value' => FollowUpTask::query()->visibleTo($user)->where('status', FollowUpTaskStatus::Open)->dueSoon()->count(), 'icon' => 'i-ph-calendar-check'],
             ] : [],
-            'recentLeads' => $canViewCrm ? Lead::query()
+            'recentLeads' => $canViewCrm ? Lead::query()->visibleTo($user)
                 ->with(['contact', 'organization'])
                 ->latest()
                 ->limit(5)
                 ->get()
                 ->map(fn (Lead $lead): array => [
                     'uuid' => $lead->uuid,
-                    'name' => $lead->contact->name,
-                    'organization' => $lead->organization?->name,
+                    'name' => $lead->contact->isVisibleTo($user) ? $lead->contact->name : 'Unknown contact',
+                    'organization' => $lead->organization !== null && $lead->organization->isVisibleTo($user)
+                        ? $lead->organization->name
+                        : null,
                     'status' => $lead->status->value,
                     'created_at' => $lead->created_at->toISOString(),
                 ]) : [],
-            'upcomingTasks' => $canViewCrm ? FollowUpTask::query()
+            'upcomingTasks' => $canViewCrm ? FollowUpTask::query()->visibleTo($user)
                 ->with('lead.contact')
                 ->where('status', FollowUpTaskStatus::Open)
                 ->orderBy('due_at')

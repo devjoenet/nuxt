@@ -46,35 +46,12 @@ decision is later made differently, update this roadmap and the affected phase d
 ## Active Development Tasks
 
 The active tasks are ordered by urgency first and implementation effort second. Existing task identifiers remain
-stable; numeric order is not a promise that findings were copied from the audit in their original order. The
-2026-07-28 audit is consolidated as follows:
-
-- F-10 is Task 29 and must land before the remaining findings so the roadmap, user-testing status, and deployment
-  contracts are trustworthy.
-- F-01, F-02, and F-03 are Task 30 because default role access, dashboard scoping, and related-record disclosure are one
-  CRM visibility boundary.
-- F-04 is Task 31; F-05 is Task 32.
-- F-08 is Task 33; F-07 is Task 34; F-06 is Task 35; F-09 is Task 36.
+stable; numeric order is not a promise that findings were copied from the audit in their original order. The remaining
+2026-07-28 audit findings are F-08 as Task 33, F-07 as Task 34, F-06 as Task 35, and F-09 as Task 36.
 
 __Note: Tasks that have been completed are moved to `docs/development/completed-roadmap.md`__
 
 Detailed implementation instructions are in docs/development/active-tasks; this roadmap remains the ordered active-work index.
-
-### Task 29 — Reconcile User-Testing And Deployment Documentation Contracts
-
-[View Task 29 instructions](active-tasks/29-reconcile-user-testing-and-deployment-documentation-contracts.md)
-
-### Task 30 — Harden CRM Role And Ownership Visibility
-
-[View Task 30 instructions](active-tasks/30-harden-crm-role-and-ownership-visibility.md)
-
-### Task 31 — End Deactivated Sessions At Fortify Boundaries
-
-[View Task 31 instructions](active-tasks/31-end-deactivated-sessions-at-fortify-boundaries.md)
-
-### Task 32 — Preserve User-Testing State And Rename Its Permission
-
-[View Task 32 instructions](active-tasks/32-preserve-user-testing-state-and-rename-its-permission.md)
 
 ### Task 33 — Remove Dead Shared UI Actions
 

@@ -12,7 +12,7 @@ class UpdateUserTestingPageRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can(Permission::DevelopmentUserTestingView->value) === true;
+        return $this->user()?->can(Permission::DevelopmentUserTestingManage->value) === true;
     }
 
     /** @return array<string, ValidationRule|array<mixed>|string> */

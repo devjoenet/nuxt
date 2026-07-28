@@ -68,3 +68,18 @@ test('admin user controls only show two-factor reset for configured users', func
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
+
+test('client viewers do not see CRM navigation', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $user = User::factory()->create();
+    $user->assignRole('Client Viewer');
+
+    $this->actingAs($user);
+
+    visit('/dashboard')
+        ->assertSee('Workspace')
+        ->assertMissing('a[href="/crm/leads"]')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
