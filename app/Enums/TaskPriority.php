@@ -9,4 +9,9 @@ enum TaskPriority: string
     case Low = 'low';
     case Normal = 'normal';
     case High = 'high';
+
+    public function label(): string
+    {
+        return str($this->value)->title()->toString();
+    }
 }
