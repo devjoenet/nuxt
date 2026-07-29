@@ -74,6 +74,7 @@ test('a guest can submit a public inquiry and create the complete lead chain', f
             'website' => 'https://rivera-logistics.example',
         ])
         ->and($lead->service_interests)->toBe(['operations-app'])
+        ->and($lead->service_interest)->toBe('operations-app')
         ->and($lead->status)->toBe(LeadStatus::New)
         ->and($lead->source)->toBe(LeadSource::Website)
         ->and($lead->activities->sole()->type)->toBe(CrmActivityType::PublicIntakeCreated)
@@ -170,6 +171,39 @@ test('public inquiry validation rejects invalid or spam submissions', function (
     'invalid website' => [['website' => 'ftp://example.com'], ['website']],
     'invalid formatted budget' => [['budget_range' => '25.000.00'], ['budget_range']],
     'honeypot' => [['website_confirmation' => 'bot-filled-this'], ['website_confirmation']],
+    'duplicate service interest' => [['service_interest' => ['operations-app', 'operations-app']], ['service_interest.1']],
+    'too many service interests' => [['service_interest' => ['operations-app', 'dashboard-portal', 'integration', 'reporting', 'modernization', 'other', 'operations-app']], ['service_interest']],
+    'invalid service interest' => [['service_interest' => ['not-a-service']], ['service_interest.0']],
+]);
+
+test('public intake accepts ordered service interests including empty input', function (?array $serviceInterests): void {
+    Notification::fake();
+    $payload = validIntake();
+
+    if ($serviceInterests === null) {
+        unset($payload['service_interest']);
+    } else {
+        $payload['service_interest'] = $serviceInterests;
+    }
+
+    $this->post(route('contact.store'), $payload)->assertSessionHasNoErrors();
+
+    $lead = Lead::query()->sole();
+    $expectedInterests = $serviceInterests ?? [];
+
+    expect($lead->service_interests)->toBe($expectedInterests)
+        ->and($lead->service_interest)->toBe($expectedInterests[0] ?? null);
+})->with([
+    'all six values' => [[
+        'operations-app',
+        'dashboard-portal',
+        'integration',
+        'reporting',
+        'modernization',
+        'other',
+    ]],
+    'empty list' => [[]],
+    'omitted input' => [null],
 ]);
 
 test('public inquiries are rate limited by IP address', function (): void {

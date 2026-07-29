@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\ServiceInterest;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -57,8 +58,8 @@ class StorePublicIntakeRequest extends FormRequest
                 $fail('Enter a valid budget amount.');
             }],
             'timeline' => ['nullable', 'string', 'in:urgent,1-3-months,3-6-months,exploring'],
-            'service_interest' => ['nullable', 'array'],
-            'service_interest.*' => ['string', Rule::in(['operations-app', 'dashboard-portal', 'integration', 'reporting', 'modernization', 'other'])],
+            'service_interest' => ['nullable', 'array', 'list', 'max:6'],
+            'service_interest.*' => ['string', 'distinct:strict', Rule::enum(ServiceInterest::class)],
             'referral_source' => ['nullable', 'string', 'max:160'],
             'project_details' => ['required', 'string', 'min:20', 'max:5000'],
             'consent' => ['accepted'],

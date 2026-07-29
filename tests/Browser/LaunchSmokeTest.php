@@ -63,7 +63,44 @@ test('users can sign in through the browser and reach the workspace', function (
         ->assertSee('Southeast Code')
         ->assertDontSee('Create team')
         ->assertDontSee('Manage teams')
+        ->assertDontSee('Accept')
+        ->assertDontSee('Opt out')
         ->assertNoJavaScriptErrors();
+});
+
+test('landing anchors and logo naming stay connected to real sections', function (): void {
+    visit('/')
+        ->assertAttribute('a[aria-label="Southeast Code home"]', 'href', '#hero')
+        ->assertScript('document.querySelector("a[aria-label=\\"Southeast Code home\\"] svg")?.getAttribute("aria-hidden")', 'true')
+        ->assertScript('JSON.stringify([...document.querySelectorAll("a[href^=\\"#\\"]")].map((anchor) => anchor.getAttribute("href")).filter((href) => href !== "#" && !document.getElementById(href.slice(1))))', '[]')
+        ->assertScript('document.querySelector("a[href=\\"#impact\\"]") === null', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
+test('landing hero serves responsive assets in both color modes without overflow', function (): void {
+    visit('/')
+        ->inLightMode()
+        ->on()
+        ->iPhone15Pro()
+        ->assertAttribute('#hero img', 'width', '1264')
+        ->assertAttribute('#hero img', 'height', '842')
+        ->assertScript('document.querySelector("#hero img")?.complete && document.querySelector("#hero img")?.naturalWidth > 0', true)
+        ->assertScript('document.querySelector("#hero img")?.currentSrc.includes("savannah-river-light-1264")', true)
+        ->assertScript('document.querySelector("#hero img")?.getBoundingClientRect().width === document.querySelector("#hero")?.getBoundingClientRect().width', true)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+
+    visit('/')
+        ->inDarkMode()
+        ->on()
+        ->desktop()
+        ->assertScript('document.querySelector("#hero img")?.complete && document.querySelector("#hero img")?.naturalWidth > 0', true)
+        ->assertScript('document.querySelector("#hero img")?.currentSrc.includes("savannah-river-dark-1536")', true)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
 });
 
 test('filled login inputs float their labels', function (): void {

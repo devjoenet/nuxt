@@ -12,7 +12,7 @@
   import type { Lead, Option, Owner } from "@/types/crm";
 
   defineOptions({ layout: Layout });
-  const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; owners: Owner[]; canAssign: boolean }>();
+  const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: Owner[]; canAssign: boolean }>();
   const action = computed(() => (props.lead ? update(props.lead.id) : store()));
   const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
   const contactId = ref<string | null>(props.lead?.contact?.id ?? null);
@@ -68,14 +68,7 @@
           <FormMultiSelect
             :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])"
             :error="errors.service_interest"
-            :items="[
-              { label: 'Operations application', value: 'operations-app' },
-              { label: 'Dashboard or portal', value: 'dashboard-portal' },
-              { label: 'System integration', value: 'integration' },
-              { label: 'Reporting and visibility', value: 'reporting' },
-              { label: 'Legacy modernization', value: 'modernization' },
-              { label: 'Other', value: 'other' },
-            ]"
+            :items="serviceInterests"
             label="Service interests"
             name="service_interest"
           />

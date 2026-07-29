@@ -10,6 +10,7 @@ use App\Data\LeadData;
 use App\Data\LeadIndexData;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Enums\ServiceInterest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\LeadIndexRequest;
 use App\Http\Requests\StoreLeadRequest;
@@ -65,6 +66,7 @@ class LeadController extends Controller
             'lead' => null,
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
+            'serviceInterests' => ServiceInterest::options(),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
@@ -108,6 +110,7 @@ class LeadController extends Controller
             'lead' => LeadResource::make($lead)->resolve($request),
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
+            'serviceInterests' => ServiceInterest::options(),
             'owners' => User::query()->orderBy('name')->get(['id', 'name']),
             'canAssign' => $user->isCrmAdministrator(),
         ]);

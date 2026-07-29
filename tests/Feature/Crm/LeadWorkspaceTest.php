@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\FollowUpTaskStatus;
 use App\Enums\LeadStatus;
+use App\Enums\ServiceInterest;
 use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
@@ -164,6 +165,7 @@ test('CRM managers can create and update leads', function (): void {
         'owner_id' => (string) $user->id,
         'status' => 'new',
         'source' => 'referral',
+        'service_interest' => ['reporting', 'operations-app'],
         'project_details' => 'Replace manual dispatch reporting.',
     ]);
 
@@ -172,6 +174,8 @@ test('CRM managers can create and update leads', function (): void {
     expect($lead->contact->is($contact))->toBeTrue()
         ->and($lead->organization?->is($organization))->toBeTrue()
         ->and($lead->owner_id)->toBe($user->id)
+        ->and($lead->service_interests)->toBe(['reporting', 'operations-app'])
+        ->and($lead->service_interest)->toBe('reporting')
         ->and(CrmActivity::query()->count())->toBe(1);
 
     $this->actingAs($user)->patch(route('crm.leads.update', $lead), [
@@ -197,12 +201,14 @@ test('CRM managers can open lead forms and archive then restore a visible lead',
         ->assertInertia(fn (Assert $page): Assert => $page
             ->component('Crm/Leads/Form')
             ->where('lead', null)
+            ->where('serviceInterests', ServiceInterest::options())
             ->where('canAssign', true));
     $this->actingAs($user)
         ->get(route('crm.leads.edit', $lead))
         ->assertInertia(fn (Assert $page): Assert => $page
             ->component('Crm/Leads/Form')
-            ->where('lead.id', $lead->uuid));
+            ->where('lead.id', $lead->uuid)
+            ->where('serviceInterests', ServiceInterest::options()));
 
     $this->actingAs($user)
         ->post(route('crm.leads.archive', $lead))
@@ -214,6 +220,61 @@ test('CRM managers can open lead forms and archive then restore a visible lead',
         ->assertRedirect(route('crm.leads.show', $lead));
     expect($lead->refresh()->archived_at)->toBeNull();
 });
+
+test('CRM lead service interest validation rejects invalid lists without persistence', function (array $serviceInterests, array $errors): void {
+    $user = crmUser(manage: true);
+    $contact = Contact::factory()->create(['owner_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->from(route('crm.leads.create'))
+        ->post(route('crm.leads.store'), [
+            'contact_id' => $contact->uuid,
+            'status' => 'new',
+            'source' => 'direct',
+            'service_interest' => $serviceInterests,
+            'project_details' => 'Validate the bounded service interest contract.',
+        ])
+        ->assertSessionHasErrors($errors)
+        ->assertRedirect(route('crm.leads.create'));
+
+    expect(Lead::query()->count())->toBe(0);
+})->with([
+    'duplicate values' => [['operations-app', 'operations-app'], ['service_interest.1']],
+    'more than six values' => [['operations-app', 'dashboard-portal', 'integration', 'reporting', 'modernization', 'other', 'operations-app'], ['service_interest']],
+    'non-enum value' => [['not-a-service'], ['service_interest.0']],
+]);
+
+test('CRM lead service interests preserve order for valid empty and full lists', function (?array $serviceInterests): void {
+    $user = crmUser(manage: true);
+    $contact = Contact::factory()->create(['owner_id' => $user->id]);
+    $payload = [
+        'contact_id' => $contact->uuid,
+        'status' => 'new',
+        'source' => 'direct',
+        'project_details' => 'Keep the first service interest compatible.',
+    ];
+
+    if ($serviceInterests !== null) {
+        $payload['service_interest'] = $serviceInterests;
+    }
+
+    $this->actingAs($user)->post(route('crm.leads.store'), $payload)->assertSessionHasNoErrors();
+
+    $lead = Lead::query()->sole();
+    expect($lead->service_interests)->toBe($serviceInterests ?? [])
+        ->and($lead->service_interest)->toBe($serviceInterests[0] ?? null);
+})->with([
+    'all six values' => [[
+        'operations-app',
+        'dashboard-portal',
+        'integration',
+        'reporting',
+        'modernization',
+        'other',
+    ]],
+    'empty list' => [[]],
+    'omitted input' => [null],
+]);
 
 test('CRM lead selectors conceal inaccessible UUIDs', function (): void {
     $user = crmUser(manage: true);

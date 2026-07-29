@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\ServiceInterest;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -27,6 +28,7 @@ use Inertia\Inertia;
 
 Route::get('/', fn () => Inertia::render('Welcome', [
     'canonicalUrl' => config('app.url'),
+    'serviceInterestOptions' => ServiceInterest::options(),
 ]))->name('home');
 Route::get('privacy', fn () => Inertia::render('Privacy', [
     'canonicalUrl' => config('app.url').'/privacy',

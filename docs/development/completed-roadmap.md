@@ -577,3 +577,40 @@ its coverage-gated phase but could not complete because the shell PHP runtime ha
 - [x] Rename the capability in place to development.user_testing.manage while retaining existing role assignments.
 - [x] Add frozen-time Action, HTTP transition, permission migration, validation, authorization, and queue-removal
   regressions.
+
+### Task 33 — Remove Dead Shared UI Actions
+
+- [x] Remove the dead About/Impact navigation targets and the persistent cookie-consent toast while preserving the
+  intake consent and privacy notice workflow.
+- [x] Give the shared landing logo an explicit accessible name and decorative SVG semantics, then cover anchors, logo
+  semantics, responsive themes, and browser cleanliness.
+
+### Task 34 — Optimize Public Landing Assets
+
+- [x] Replace the oversized landing PNGs with responsive light/dark AVIF and WebP hero variants plus a 1200x630 social
+  card, using an accessible responsive `<picture>` fallback with intrinsic dimensions.
+- [x] Enforce the requested asset budgets and verify light/dark current sources, intrinsic sizing, layout overflow, and
+  browser cleanliness.
+
+### Task 35 — Centralize And Bound Service Interests
+
+- [x] Centralize the six service-interest values and labels in the `ServiceInterest` enum and pass one server-owned
+  options catalog to public and CRM forms.
+- [x] Bound and strictly validate ordered, distinct service-interest lists at six values while retaining the legacy
+  first-value field for compatibility.
+- [x] Add feature and browser regressions for valid ordering, empty/omitted input, duplicates, invalid values, and
+  over-limit payloads.
+
+### Task 36 — Enforce Dependency Audit Policy
+
+- [x] Add blocking Composer and production-only npm audit gates before browser dependency installation in CI, with
+  local npm audit scripts matching the policy.
+- [x] Keep the full npm audit visible but non-blocking for the documented upstream Blade formatter development-chain
+  advisory; do not force a downgrade, override, or unrelated dependency change.
+
+Completion note: Tasks 33–36 verification passed with 42 focused feature/asset tests and 404 assertions, 33 browser
+tests and 323 assertions, Herd-backed Unit/Feature coverage with 217 tests, 1,919 assertions, and 99.8% coverage,
+frontend typecheck/lint/format/build, Pint, both PHPStan levels, Rector dry-run, Composer audit, production-only npm
+audit, `npm ci`, and `git diff --check`. The full npm audit remains intentionally non-blocking because the current
+`@shufo/prettier-plugin-blade` development dependency pulls the known `brace-expansion` advisory through its upstream
+formatter chain; `npm audit --audit-level=high` reports seven high findings without a compatible non-breaking fix.

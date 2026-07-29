@@ -5,6 +5,8 @@
     "build": "vite build",
     "build:ssr": "vite build && vite build --ssr",
     "dev": "vite",
+    "audit:production": "npm audit --omit=dev --audit-level=high",
+    "audit:full": "npm audit --audit-level=high",
     "format": "prettier --write resources/",
     "format:check": "prettier --check resources/",
     "lint": "eslint . --fix",

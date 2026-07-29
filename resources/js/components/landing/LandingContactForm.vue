@@ -11,6 +11,9 @@
   import { nextTick, onMounted, reactive, ref } from "vue";
   import { Motion } from "motion-v";
   import type { AppPageProps } from "@/types";
+  import type { Option } from "@/types/crm";
+
+  defineProps<{ serviceInterestOptions: Option[] }>();
 
   const page = usePage<AppPageProps>();
 
@@ -83,14 +86,7 @@
         <FormMultiSelect
           id="intake-service"
           :error="errors.service_interest"
-          :items="[
-            { label: 'Operations application', value: 'operations-app' },
-            { label: 'Dashboard or portal', value: 'dashboard-portal' },
-            { label: 'System integration', value: 'integration' },
-            { label: 'Reporting and visibility', value: 'reporting' },
-            { label: 'Legacy modernization', value: 'modernization' },
-            { label: 'Other', value: 'other' },
-          ]"
+          :items="serviceInterestOptions"
           label="Service interests (optional)"
           name="service_interest"
           variant="filled"

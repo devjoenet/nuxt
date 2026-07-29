@@ -11,7 +11,6 @@
     { id: "services", label: "Services", href: "#services" },
     { id: "process", label: "Process", href: "#process" },
     { id: "operations", label: "Workflows", href: "#operations" },
-    { id: "impact", label: "About", href: "#impact" },
   ];
 
   const { y } = useWindowScroll();
@@ -73,10 +72,12 @@
       ></span>
 
       <a
+        aria-label="Southeast Code home"
         class="relative z-10 flex max-w-43.75 items-center justify-self-start rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
         href="#hero"
       >
         <AppLogo
+          aria-hidden="true"
           :southeast-variant-class="hasGlassBackground ? 'fill-neutral-950 dark:fill-neutral-50' : 'fill-neutral-50 dark:fill-neutral-50'"
           code-variant-class="fill-secondary"
           hr-variant-class="stroke-secondary"

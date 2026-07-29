@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
+use App\Enums\ServiceInterest;
 use App\Models\Lead;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -32,8 +33,8 @@ class StoreLeadRequest extends FormRequest
             ],
             'status' => ['required', Rule::enum(LeadStatus::class)],
             'source' => ['required', Rule::enum(LeadSource::class)],
-            'service_interest' => ['nullable', 'array'],
-            'service_interest.*' => ['string', Rule::in(['operations-app', 'dashboard-portal', 'integration', 'reporting', 'modernization', 'other'])],
+            'service_interest' => ['nullable', 'array', 'list', 'max:6'],
+            'service_interest.*' => ['string', 'distinct:strict', Rule::enum(ServiceInterest::class)],
             'budget_range' => ['nullable', 'string', 'max:255'],
             'timeline' => ['nullable', 'string', 'max:255'],
             'project_details' => ['required', 'string', 'max:10000'],

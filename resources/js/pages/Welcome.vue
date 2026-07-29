@@ -1,7 +1,17 @@
 <script setup lang="ts">
-  import heroImageDark from "../../img/savannah-river-dark-mode.png";
-  import heroImageLight from "../../img/savannah-river-light-mode.png";
-  import socialImageAsset from "@/assets/landing/savannah-riverfront-hero.png";
+  import darkHero640Avif from "../../img/landing/hero/savannah-river-dark-640.avif";
+  import darkHero640Webp from "../../img/landing/hero/savannah-river-dark-640.webp";
+  import darkHero960Avif from "../../img/landing/hero/savannah-river-dark-960.avif";
+  import darkHero960Webp from "../../img/landing/hero/savannah-river-dark-960.webp";
+  import darkHero1536Avif from "../../img/landing/hero/savannah-river-dark-1536.avif";
+  import darkHero1536Webp from "../../img/landing/hero/savannah-river-dark-1536.webp";
+  import lightHero640Avif from "../../img/landing/hero/savannah-river-light-640.avif";
+  import lightHero640Webp from "../../img/landing/hero/savannah-river-light-640.webp";
+  import lightHero960Avif from "../../img/landing/hero/savannah-river-light-960.avif";
+  import lightHero960Webp from "../../img/landing/hero/savannah-river-light-960.webp";
+  import lightHero1264Avif from "../../img/landing/hero/savannah-river-light-1264.avif";
+  import lightHero1264Webp from "../../img/landing/hero/savannah-river-light-1264.webp";
+  import socialImageAsset from "../../img/landing/social/southeast-code-social-card.avif";
   import FeatureCard from "@/components/landing/FeatureCard.vue";
   import LandingFooter from "@/components/landing/LandingFooter.vue";
   import LandingHeader from "@/components/landing/LandingHeader.vue";
@@ -14,8 +24,9 @@
   import { useColorMode } from "@vueuse/core";
   import { Motion, MotionConfig } from "motion-v";
   import { computed } from "vue";
+  import type { Option } from "@/types/crm";
 
-  const props = defineProps<{ canonicalUrl: string }>();
+  const props = defineProps<{ canonicalUrl: string; serviceInterestOptions: Option[] }>();
   const socialImage = computed(() => new URL(socialImageAsset, props.canonicalUrl).href);
 
   interface LandingCard {
@@ -47,8 +58,51 @@
     links: FooterLink[];
   }
 
+  interface HeroAsset {
+    src: string;
+    width: number;
+    height: number;
+  }
+
+  interface HeroAssetSet {
+    avif: HeroAsset[];
+    webp: HeroAsset[];
+    fallback: HeroAsset;
+  }
+
+  const lightHero: HeroAssetSet = {
+    avif: [
+      { src: lightHero640Avif, width: 640, height: 426 },
+      { src: lightHero960Avif, width: 960, height: 640 },
+      { src: lightHero1264Avif, width: 1264, height: 842 },
+    ],
+    webp: [
+      { src: lightHero640Webp, width: 640, height: 427 },
+      { src: lightHero960Webp, width: 960, height: 640 },
+      { src: lightHero1264Webp, width: 1264, height: 842 },
+    ],
+    fallback: { src: lightHero1264Webp, width: 1264, height: 842 },
+  };
+
+  const darkHero: HeroAssetSet = {
+    avif: [
+      { src: darkHero640Avif, width: 640, height: 426 },
+      { src: darkHero960Avif, width: 960, height: 640 },
+      { src: darkHero1536Avif, width: 1536, height: 1024 },
+    ],
+    webp: [
+      { src: darkHero640Webp, width: 640, height: 427 },
+      { src: darkHero960Webp, width: 960, height: 640 },
+      { src: darkHero1536Webp, width: 1536, height: 1024 },
+    ],
+    fallback: { src: darkHero1536Webp, width: 1536, height: 1024 },
+  };
+
   const colorMode = useColorMode();
-  const heroImage = computed(() => (colorMode.state.value === "dark" ? heroImageDark : heroImageLight));
+  const hero = computed(() => (colorMode.state.value === "dark" ? darkHero : lightHero));
+  const heroImage = computed(() => hero.value.fallback.src);
+  const heroImageAvifSrcset = computed(() => hero.value.avif.map((asset) => `${asset.src} ${asset.width}w`).join(", "));
+  const heroImageWebpSrcset = computed(() => hero.value.webp.map((asset) => `${asset.src} ${asset.width}w`).join(", "));
   const realityCards: LandingCard[] = [
     {
       title: "Spreadsheet chains",
@@ -192,7 +246,6 @@
       links: [
         { label: "Process", href: "#process" },
         { label: "Workflows", href: "#operations" },
-        { label: "About", href: "#impact" },
         { label: "Careers", href: "#contact" },
         { label: "Contact", href: "#contact" },
       ],
@@ -239,7 +292,13 @@
     <div class="min-h-screen overflow-hidden bg-muted-50 text-muted-800 selection:bg-primary-500 selection:text-primary-950 dark:bg-muted-950 dark:text-neutral-100">
       <LandingHeader />
       <main>
-        <LandingHero :hero-image-src="heroImage" />
+        <LandingHero
+          :hero-image-avif-srcset="heroImageAvifSrcset"
+          :hero-image-height="hero.fallback.height"
+          :hero-image-src="heroImage"
+          :hero-image-width="hero.fallback.width"
+          :hero-image-webp-srcset="heroImageWebpSrcset"
+        />
         <section id="reality" class="scroll-mt-28 border-y border-accent-500/15 bg-muted-100/90 px-5 py-16 sm:px-8 lg:py-20 dark:bg-muted-950/95">
           <div class="mx-auto max-w-7xl">
             <SectionHeading :animated="false" kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
@@ -342,7 +401,7 @@
                 </li>
               </ul>
             </div>
-            <LandingContactForm />
+            <LandingContactForm :service-interest-options="serviceInterestOptions" />
           </Motion>
         </section>
       </main>

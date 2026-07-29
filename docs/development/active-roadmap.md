@@ -46,28 +46,13 @@ decision is later made differently, update this roadmap and the affected phase d
 ## Active Development Tasks
 
 The active tasks are ordered by urgency first and implementation effort second. Existing task identifiers remain
-stable; numeric order is not a promise that findings were copied from the audit in their original order. The remaining
-2026-07-28 audit findings are F-08 as Task 33, F-07 as Task 34, F-06 as Task 35, and F-09 as Task 36.
+stable; numeric order is not a promise that findings were copied from the audit in their original order. The current
+active task queue is empty.
 
 __Note: Tasks that have been completed are moved to `docs/development/completed-roadmap.md`__
 
-Detailed implementation instructions are in docs/development/active-tasks; this roadmap remains the ordered active-work index.
-
-### Task 33 — Remove Dead Shared UI Actions
-
-[View Task 33 instructions](active-tasks/33-remove-dead-shared-ui-actions.md)
-
-### Task 34 — Optimize Public Landing Assets
-
-[View Task 34 instructions](active-tasks/34-optimize-public-landing-assets.md)
-
-### Task 35 — Centralize And Bound Service Interests
-
-[View Task 35 instructions](active-tasks/35-centralize-and-bound-service-interests.md)
-
-### Task 36 — Enforce Dependency Audit Policy
-
-[View Task 36 instructions](active-tasks/36-enforce-dependency-audit-policy.md)
+Detailed implementation instructions for active work live in docs/development/active-tasks; this roadmap remains the
+ordered active-work index.
 
 ## Later, Not MVP
 
