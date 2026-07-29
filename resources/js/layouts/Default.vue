@@ -59,7 +59,7 @@
                 { label: "Overview", to: developmentIndex.url(), exact: true },
                 ...(auth.value.user?.can?.["development.requests.create"]
                   ? [
-                      { label: "My requests", to: developmentRequestsIndex.url() },
+                      { label: "My requests", to: developmentRequestsIndex.url(), exact: true },
                       { label: "Submit request", to: developmentRequestCreate.url() },
                     ]
                   : []),

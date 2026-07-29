@@ -90,3 +90,21 @@ test('client viewers do not see CRM navigation', function (): void {
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
+
+test('development sidebar only marks the current request page as active', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $user = User::factory()->create();
+    $user->assignRole('Admin');
+
+    $this->actingAs($user);
+
+    $requestsPath = route('development.requests.index', absolute: false);
+    $submitRequestPath = route('development.requests.create', absolute: false);
+
+    visit($submitRequestPath)
+        ->assertAriaAttribute("a[data-slot=\"link\"][href=\"{$submitRequestPath}\"]", 'current', 'page')
+        ->assertAttributeMissing("a[data-slot=\"link\"][href=\"{$requestsPath}\"]", 'aria-current')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
