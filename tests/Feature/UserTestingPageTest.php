@@ -23,9 +23,9 @@ it('shows the seeded review checklist to authorized users', function (): void {
     $user = User::factory()->create()->assignRole(RoleName::Admin->value);
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertSuccessful()
-        ->assertInertia(fn ($page) => $page->component('Admin/UserTesting/Index')->has('pages', 30));
+        ->assertInertia(fn ($page) => $page->component('Development/UserTesting/Index')->has('pages', 30));
 });
 
 it('resolves database-backed checklist links to the first visible records', function (): void {
@@ -36,7 +36,7 @@ it('resolves database-backed checklist links to the first visible records', func
     $lead = Lead::factory()->for($contact)->create(['organization_id' => $organization->getKey()]);
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.url', route('home', [], false))
             ->where('pages.0.roadmap_task_number', 14)
@@ -68,11 +68,11 @@ it('saves a review without removing the page from the queue', function (): void 
     $page = UserTestingPage::factory()->create();
 
     $this->actingAs($user)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'tested' => '1',
             'notes' => 'Check the mobile navigation spacing before release.',
         ])
-        ->assertRedirect(route('admin.userTesting.index'));
+        ->assertRedirect(route('development.userTesting.index'));
 
     expect($page->refresh())
         ->tested_by->toBe($user->getKey())
@@ -82,7 +82,7 @@ it('saves a review without removing the page from the queue', function (): void 
         ->roadmap_task_at->toBeNull();
 
     $this->actingAs($user)
-        ->getJson(route('admin.userTesting.updates', ['since' => now()->subMinute()->toIso8601String()]))
+        ->getJson(route('development.userTesting.updates', ['since' => now()->subMinute()->toIso8601String()]))
         ->assertOk()
         ->assertJsonPath('pages.0.slug', $page->slug)
         ->assertJsonPath('pages.0.tested', true)
@@ -96,7 +96,7 @@ it('preserves review ownership and timestamps across repeated HTTP saves', funct
     $page = UserTestingPage::factory()->create();
 
     $this->actingAs($firstActor)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'tested' => '1',
             'approved' => '1',
             'roadmap_task' => '1',
@@ -108,7 +108,7 @@ it('preserves review ownership and timestamps across repeated HTTP saves', funct
     $this->travelTo(now()->addDay());
 
     $this->actingAs($secondActor)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'notes' => 'Updated notes',
         ])
         ->assertRedirect();
@@ -123,7 +123,7 @@ it('clears each user-testing state only when explicitly unchecked', function ():
     $page = UserTestingPage::factory()->create();
 
     $this->actingAs($actor)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'tested' => '1',
             'approved' => '1',
             'roadmap_task' => '1',
@@ -132,7 +132,7 @@ it('clears each user-testing state only when explicitly unchecked', function ():
         ->assertRedirect();
 
     $this->actingAs($actor)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'tested' => '0',
             'approved' => '0',
             'roadmap_task' => '0',
@@ -154,7 +154,7 @@ it('marks reviewed pages with explicit no-change notes as needing approval', fun
     ]);
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.status', 'Needs Approval'));
 });
@@ -167,7 +167,7 @@ it('treats reviewed pages without notes as reviewed', function (): void {
     ]);
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.status', 'Reviewed'));
 });
@@ -180,7 +180,7 @@ it('marks completed roadmap notes as needing approval', function (): void {
     ]);
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.status', 'Needs Approval'));
 });
@@ -190,12 +190,12 @@ it('records when review notes are added to the roadmap without approving the pag
     $page = UserTestingPage::factory()->create();
 
     $this->actingAs($user)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'tested' => '1',
             'roadmap_task' => '1',
             'notes' => 'Track the responsive navigation issue on the roadmap.',
         ])
-        ->assertRedirect(route('admin.userTesting.index'));
+        ->assertRedirect(route('development.userTesting.index'));
 
     expect($page->refresh())
         ->tested_at->not->toBeNull()
@@ -203,7 +203,7 @@ it('records when review notes are added to the roadmap without approving the pag
         ->approved_at->toBeNull();
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->has('pages', 1)
             ->where('pages.0.roadmap_task', true));
@@ -215,25 +215,25 @@ it('removes an approved page from the user testing queue', function (): void {
     $page = UserTestingPage::query()->where('slug', 'public-welcome')->firstOrFail();
 
     $this->actingAs($user)
-        ->patch(route('admin.userTesting.update', $page), [
+        ->patch(route('development.userTesting.update', $page), [
             'tested' => '1',
             'approved' => '1',
             'notes' => 'The welcome page is ready for release.',
         ])
-        ->assertRedirect(route('admin.userTesting.index'));
+        ->assertRedirect(route('development.userTesting.index'));
 
     expect($page->refresh())
         ->tested_at->not->toBeNull()
         ->approved_at->not->toBeNull();
 
     $this->actingAs($user)
-        ->get(route('admin.userTesting.index'))
+        ->get(route('development.userTesting.index'))
         ->assertInertia(fn ($page) => $page
             ->has('pages', 29)
             ->where('pages.0.slug', 'public-privacy'));
 
     $this->actingAs($user)
-        ->getJson(route('admin.userTesting.updates'))
+        ->getJson(route('development.userTesting.updates'))
         ->assertOk()
         ->assertJsonCount(29, 'pages')
         ->assertJsonPath('pages.0.slug', 'public-privacy')
@@ -242,6 +242,14 @@ it('removes an approved page from the user testing queue', function (): void {
 
 it('blocks users without the testing permission', function (): void {
     $user = User::factory()->create()->assignRole(RoleName::ClientViewer->value);
+
+    $this->actingAs($user)
+        ->get(route('development.userTesting.index'))
+        ->assertForbidden();
+
+    $this->actingAs($user)
+        ->get(route('development.roadmap.index'))
+        ->assertForbidden();
 
     $this->actingAs($user)
         ->get(route('admin.userTesting.index'))
@@ -256,26 +264,52 @@ it('blocks users without the testing permission', function (): void {
         ->assertForbidden();
 });
 
-it('shows the development roadmap to authorized users', function (): void {
+it('enforces independent roadmap and user-testing permissions', function (): void {
+    $roadmapManager = User::factory()->create();
+    $roadmapManager->givePermissionTo('development.roadmap.manage');
+    $testingManager = User::factory()->create();
+    $testingManager->givePermissionTo('development.user_testing.manage');
+
+    $this->actingAs($roadmapManager)
+        ->get(route('development.roadmap.index'))
+        ->assertSuccessful();
+    $this->actingAs($roadmapManager)
+        ->get(route('development.userTesting.index'))
+        ->assertForbidden();
+
+    $this->actingAs($testingManager)
+        ->get(route('development.userTesting.index'))
+        ->assertSuccessful();
+    $this->actingAs($testingManager)
+        ->get(route('development.roadmap.index'))
+        ->assertForbidden();
+});
+
+it('redirects legacy admin development pages to their canonical routes', function (): void {
     $user = User::factory()->create()->assignRole(RoleName::Admin->value);
 
     $this->actingAs($user)
         ->get(route('admin.roadmap.index'))
+        ->assertRedirect(route('development.roadmap.index'));
+
+    $this->actingAs($user)
+        ->get(route('admin.userTesting.index'))
+        ->assertRedirect(route('development.userTesting.index'));
+});
+
+it('shows the development roadmap to authorized users', function (): void {
+    $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+
+    $this->actingAs($user)
+        ->get(route('development.roadmap.index'))
         ->assertSuccessful()
         ->assertInertia(fn ($page) => $page
-            ->component('Admin/Roadmap/Index')
+            ->component('Development/Roadmap/Index')
             ->where('source', 'docs/development/active-roadmap.md')
             ->where('content', function ($content): bool {
                 $content = (string) $content;
 
-                return str_contains($content, 'Task 33')
-                    && ! str_contains($content, 'Task 29 —')
-                    && ! str_contains($content, 'Task 30 —')
-                    && ! str_contains($content, 'Task 31 —')
-                    && ! str_contains($content, 'Task 32 —')
-                    && ! str_contains($content, 'Task 22 —')
-                    && ! str_contains($content, 'Task 23 —')
-                    && ! str_contains($content, 'Task 24 —')
-                    && ! str_contains($content, 'Task 27 —');
+                return str_contains($content, 'Southeast Code Roadmap')
+                    && str_contains($content, 'active task queue is empty');
             }));
 });

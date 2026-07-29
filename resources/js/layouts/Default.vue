@@ -4,8 +4,8 @@
   import { index as leadsIndex } from "@/routes/crm/leads";
   import { index as organizationsIndex } from "@/routes/crm/organizations";
   import { index as jobsIndex } from "@/routes/admin/jobs";
-  import { index as roadmapIndex } from "@/routes/admin/roadmap";
-  import { index as userTestingIndex } from "@/routes/admin/userTesting";
+  import { index as roadmapIndex } from "@/routes/development/roadmap";
+  import { index as userTestingIndex } from "@/routes/development/userTesting";
 
   const auth = useAuth();
 
@@ -40,6 +40,22 @@
             },
           ]
         : []),
+      ...(auth.value.user?.can?.["development.roadmap.manage"] || auth.value.user?.can?.["development.user_testing.manage"]
+        ? [
+            {
+              label: "Development",
+              icon: "i-ph-code",
+              to: auth.value.user?.can?.["development.roadmap.manage"] ? roadmapIndex.url() : userTestingIndex.url(),
+              type: "trigger" as const,
+              defaultOpen: true,
+              children: [
+                ...(auth.value.user?.can?.["development.roadmap.manage"] ? [{ label: "Roadmap", to: roadmapIndex.url() }] : []),
+                ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
+              ],
+              onSelect: closeNavigation,
+            },
+          ]
+        : []),
       ...(auth.value.user?.can?.["admin.dashboard.view"]
         ? [
             {
@@ -56,8 +72,6 @@
                 ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit" }] : []),
                 ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings" }] : []),
                 ...(auth.value.user?.can?.["jobs.view"] ? [{ label: "Jobs & queues", to: jobsIndex.url() }] : []),
-                ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
-                ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "Development roadmap", to: roadmapIndex.url() }] : []),
               ],
               onSelect: closeNavigation,
             },

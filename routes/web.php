@@ -7,10 +7,8 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
-use App\Http\Controllers\Admin\DevelopmentRoadmapController;
 use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserTestingPageController;
 use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\CrmRecordOptionController;
 use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
@@ -21,6 +19,8 @@ use App\Http\Controllers\Crm\LeadConversionController;
 use App\Http\Controllers\Crm\LeadNoteController;
 use App\Http\Controllers\Crm\OrganizationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Development\DevelopmentRoadmapController;
+use App\Http\Controllers\Development\UserTestingPageController;
 use App\Http\Controllers\PublicIntakeController;
 use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Support\Facades\Route;
@@ -83,8 +83,20 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
             ->middleware('can:jobs.view')
             ->name('jobs.index');
 
+        Route::redirect('roadmap', '/development/roadmap')
+            ->middleware('can:development.roadmap.manage')
+            ->name('roadmap.index');
+        Route::redirect('user-testing', '/development/user-testing')
+            ->middleware('can:development.user_testing.manage')
+            ->name('userTesting.index');
+    });
+
+    Route::prefix('development')->name('development.')->group(function (): void {
+        Route::get('roadmap', DevelopmentRoadmapController::class)
+            ->middleware('can:development.roadmap.manage')
+            ->name('roadmap.index');
+
         Route::middleware('can:development.user_testing.manage')->group(function (): void {
-            Route::get('roadmap', DevelopmentRoadmapController::class)->name('roadmap.index');
             Route::get('user-testing', [UserTestingPageController::class, 'index'])->name('userTesting.index');
             Route::get('user-testing/updates', [UserTestingPageController::class, 'updates'])->name('userTesting.updates');
             Route::patch('user-testing/{userTestingPage}', [UserTestingPageController::class, 'update'])->name('userTesting.update');
