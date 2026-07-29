@@ -1,3 +1,8 @@
 [mcp_servers.laravel-boost]
 command = "php"
-args = ["artisan", "boost:mcp"]
+args = [ "artisan", "boost:mcp" ]
+
+[mcp_servers.sideshow]
+type = "http"
+url = "https://sideshow.sh/devjoenet/mcp"
+bearer_token_env_var = "SIDESHOW_MCP_TOKEN"

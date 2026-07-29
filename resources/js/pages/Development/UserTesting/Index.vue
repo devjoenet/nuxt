@@ -40,7 +40,7 @@
 <template>
   <Head title="User testing" />
 
-  <UDashboardPanel id="admin-user-testing">
+  <UDashboardPanel id="development-user-testing">
     <template #header>
       <UDashboardNavbar description="Walk every route, record feedback, and approve the current experience." title="User testing">
         <template #leading><UDashboardSidebarCollapse /></template>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Development;
 
 use App\Actions\UpdateUserTestingPage;
 use App\Data\UserTestingPageData;
@@ -27,7 +27,7 @@ class UserTestingPageController extends Controller
     {
         $records = $this->firstAvailableRecords($this->authenticatedUser($request));
 
-        return Inertia::render('Admin/UserTesting/Index', [
+        return Inertia::render('Development/UserTesting/Index', [
             'pages' => UserTestingPage::query()
                 ->whereNull('approved_at')
                 ->with('testedBy:id,name')
@@ -71,7 +71,7 @@ class UserTestingPageController extends Controller
         $actor = $this->authenticatedUser($request);
         $action->handle($userTestingPage, UserTestingPageData::fromValidated($request->validated()), $actor);
 
-        return to_route('admin.userTesting.index')->with('success', 'Testing notes saved.');
+        return to_route('development.userTesting.index')->with('success', 'Testing notes saved.');
     }
 
     public function updates(Request $request): JsonResponse

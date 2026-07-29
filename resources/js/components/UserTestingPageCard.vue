@@ -2,7 +2,7 @@
   import { computed } from "vue";
   import { Form } from "@inertiajs/vue3";
   import FormTextarea from "@/components/FormTextarea.vue";
-  import { update } from "@/routes/admin/userTesting";
+  import { update } from "@/routes/development/userTesting";
 
   type ReviewStatus = "Needs eyes" | "In Development" | "Needs verification" | "Reviewed" | "Needs Approval";
 
