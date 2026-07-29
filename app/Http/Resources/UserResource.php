@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Enums\DevelopmentTestRunStatus;
 use App\Enums\Permission;
+use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -26,6 +28,10 @@ class UserResource extends JsonResource
             'can' => collect(Permission::cases())->mapWithKeys(fn (Permission $permission): array => [
                 $permission->value => $this->can($permission->value),
             ])->all(),
+            'has_pending_development_tests' => DevelopmentTestRun::query()
+                ->whereBelongsTo($this->resource, 'tester')
+                ->where('status', DevelopmentTestRunStatus::Pending)
+                ->exists(),
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

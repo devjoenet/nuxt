@@ -61,6 +61,7 @@ class DevelopmentTaskPolicy
             DevelopmentTaskStatus::Planned,
             DevelopmentTaskStatus::InProgress,
             DevelopmentTaskStatus::Blocked,
+            DevelopmentTaskStatus::ChangesRequested,
         ], true)) {
             return false;
         }

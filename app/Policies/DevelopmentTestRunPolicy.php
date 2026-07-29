@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Enums\DevelopmentTestRunStatus;
 use App\Enums\Permission;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTestRun;
@@ -20,7 +19,6 @@ class DevelopmentTestRunPolicy
 
         return DevelopmentTestRun::query()
             ->where('tester_id', $user->getKey())
-            ->where('status', DevelopmentTestRunStatus::Pending)
             ->exists();
     }
 

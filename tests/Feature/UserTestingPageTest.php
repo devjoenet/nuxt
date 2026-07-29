@@ -19,14 +19,14 @@ beforeEach(function (): void {
     $this->seed(RolePermissionSeeder::class);
 });
 
-it('shows the seeded review checklist to authorized users', function (): void {
+it('keeps the legacy checklist available to authorized users until cleanup', function (): void {
     $this->seed(UserTestingPageSeeder::class);
     $user = User::factory()->create()->assignRole(RoleName::Admin->value);
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertSuccessful()
-        ->assertInertia(fn ($page) => $page->component('Development/UserTesting/Index')->has('pages', 30));
+        ->assertInertia(fn ($page) => $page->component('Development/UserTesting/Legacy')->has('pages', 30));
 });
 
 it('resolves database-backed checklist links to the first visible records', function (): void {
@@ -37,7 +37,7 @@ it('resolves database-backed checklist links to the first visible records', func
     $lead = Lead::factory()->for($contact)->create(['organization_id' => $organization->getKey()]);
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.url', route('home', [], false))
             ->where('pages.0.roadmap_task_number', 14)
@@ -73,7 +73,7 @@ it('saves a review without removing the page from the queue', function (): void 
             'tested' => '1',
             'notes' => 'Check the mobile navigation spacing before release.',
         ])
-        ->assertRedirect(route('development.userTesting.index'));
+        ->assertRedirect(route('development.userTesting.legacy'));
 
     expect($page->refresh())
         ->tested_by->toBe($user->getKey())
@@ -155,7 +155,7 @@ it('marks reviewed pages with explicit no-change notes as needing approval', fun
     ]);
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.status', 'Needs Approval'));
 });
@@ -168,7 +168,7 @@ it('treats reviewed pages without notes as reviewed', function (): void {
     ]);
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.status', 'Reviewed'));
 });
@@ -181,7 +181,7 @@ it('marks completed roadmap notes as needing approval', function (): void {
     ]);
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertInertia(fn ($page) => $page
             ->where('pages.0.status', 'Needs Approval'));
 });
@@ -196,7 +196,7 @@ it('records when review notes are added to the roadmap without approving the pag
             'roadmap_task' => '1',
             'notes' => 'Track the responsive navigation issue on the roadmap.',
         ])
-        ->assertRedirect(route('development.userTesting.index'));
+        ->assertRedirect(route('development.userTesting.legacy'));
 
     expect($page->refresh())
         ->tested_at->not->toBeNull()
@@ -204,7 +204,7 @@ it('records when review notes are added to the roadmap without approving the pag
         ->approved_at->toBeNull();
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertInertia(fn ($page) => $page
             ->has('pages', 1)
             ->where('pages.0.roadmap_task', true));
@@ -221,14 +221,14 @@ it('removes an approved page from the user testing queue', function (): void {
             'approved' => '1',
             'notes' => 'The welcome page is ready for release.',
         ])
-        ->assertRedirect(route('development.userTesting.index'));
+        ->assertRedirect(route('development.userTesting.legacy'));
 
     expect($page->refresh())
         ->tested_at->not->toBeNull()
         ->approved_at->not->toBeNull();
 
     $this->actingAs($user)
-        ->get(route('development.userTesting.index'))
+        ->get(route('development.userTesting.legacy'))
         ->assertInertia(fn ($page) => $page
             ->has('pages', 29)
             ->where('pages.0.slug', 'public-privacy'));

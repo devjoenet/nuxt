@@ -42,6 +42,7 @@ final class DevelopmentTaskQuery
                 DevelopmentTaskStatus::Planned,
                 DevelopmentTaskStatus::InProgress,
                 DevelopmentTaskStatus::Blocked,
+                DevelopmentTaskStatus::ChangesRequested,
             ])
             ->with(['submitter', 'reviewer', 'assignee'])
             ->orderByRaw('roadmap_position is null')

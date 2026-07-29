@@ -46,7 +46,8 @@
       ...(auth.value.user?.can?.["development.requests.create"] ||
       auth.value.user?.can?.["development.requests.review"] ||
       auth.value.user?.can?.["development.roadmap.manage"] ||
-      auth.value.user?.can?.["development.user_testing.manage"]
+      auth.value.user?.can?.["development.user_testing.manage"] ||
+      auth.value.user?.has_pending_development_tests
         ? [
             {
               label: "Development",
@@ -64,7 +65,9 @@
                   : []),
                 ...(auth.value.user?.can?.["development.requests.review"] ? [{ label: "Review queue", to: developmentReviewIndex.url() }] : []),
                 ...(auth.value.user?.can?.["development.roadmap.manage"] ? [{ label: "Roadmap", to: roadmapIndex.url() }] : []),
-                ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
+                ...(auth.value.user?.can?.["development.user_testing.manage"] || auth.value.user?.has_pending_development_tests
+                  ? [{ label: "User testing", to: userTestingIndex.url() }]
+                  : []),
               ],
               onSelect: closeNavigation,
             },

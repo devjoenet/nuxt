@@ -1,40 +1,29 @@
 <script lang="ts" setup>
-  import { computed } from "vue";
-  import { Head } from "@inertiajs/vue3";
-  import UserTestingPageCard from "@/components/UserTestingPageCard.vue";
+  import { Form, Head, usePage } from "@inertiajs/vue3";
+  import FormTextarea from "@/components/FormTextarea.vue";
   import Layout from "@/layouts/Default.vue";
+  import { show } from "@/routes/development/tasks";
+  import { update as updateTestRun } from "@/routes/development/testRuns";
+  import type { AppPageProps } from "@/types";
+  import type { DevelopmentTestRun } from "@/types/development";
 
   defineOptions({ layout: Layout });
 
-  interface UserTestingPage {
-    id: number;
-    category: string;
-    title: string;
-    roadmap_task_number: number | null;
-    status: "Needs eyes" | "In Development" | "Needs verification" | "Reviewed" | "Needs Approval";
-    path: string;
-    url: string | null;
-    tested: boolean;
-    tested_at: string | null;
-    tested_by: string | null;
-    approved: boolean;
-    approved_at: string | null;
-    roadmap_task: boolean;
-    roadmap_task_at: string | null;
-    notes: string | null;
-  }
+  defineProps<{ testRuns: DevelopmentTestRun[] }>();
 
-  const props = defineProps<{ pages: UserTestingPage[] }>();
-  const testedCount = computed(() => props.pages.filter((page) => page.tested).length);
-  const categories = computed(() => {
-    const grouped = new Map<string, UserTestingPage[]>();
+  const page = usePage<AppPageProps>();
+  const toast = useToast();
 
-    for (const page of props.pages) {
-      grouped.set(page.category, [...(grouped.get(page.category) ?? []), page]);
-    }
+  watch(
+    () => page.props.flash.success,
+    (value) => {
+      if (value) toast.add({ title: value, color: "success" });
+    },
+    { immediate: true },
+  );
 
-    return [...grouped.entries()].map(([name, pages]) => ({ name, pages }));
-  });
+  const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
 </script>
 
 <template>
@@ -42,51 +31,101 @@
 
   <UDashboardPanel id="development-user-testing">
     <template #header>
-      <UDashboardNavbar description="Walk every route, record feedback, and approve the current experience." title="User testing">
+      <UDashboardNavbar description="Run task-specific test rounds and preserve every feedback cycle." title="User testing">
         <template #leading><UDashboardSidebarCollapse /></template>
       </UDashboardNavbar>
     </template>
 
     <template #body>
       <div class="grid gap-6">
-        <UPageCard class="overflow-hidden" variant="subtle">
-          <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end">
-            <div>
-              <p class="text-xs font-bold tracking-[0.22em] text-primary uppercase">Release gate</p>
-              <h1 class="mt-3 text-3xl font-semibold tracking-tight text-highlighted">Every page gets a deliberate set of eyes.</h1>
-              <p class="mt-3 max-w-2xl leading-7 text-muted">
-                Use this checklist for exploratory testing, responsive review, and final approval. Notes are saved per page so another teammate—or an automated poller—can pick up
-                the latest feedback.
-              </p>
-            </div>
-            <div class="rounded-2xl bg-elevated p-5">
-              <p class="text-sm text-muted">Review progress</p>
-              <p class="mt-1 text-4xl font-semibold text-highlighted">
-                {{ testedCount }}<span class="text-xl text-muted"> / {{ pages.length }}</span>
-              </p>
-              <UProgress :model-value="pages.length ? (testedCount / pages.length) * 100 : 0" class="mt-3" color="primary" />
-            </div>
-          </div>
+        <UPageCard variant="subtle">
+          <p class="text-xs font-bold tracking-[0.22em] text-highlighted uppercase">Release gate</p>
+          <h1 class="mt-3 text-3xl font-semibold tracking-tight text-highlighted">Test the requested outcome, not a generic page checklist.</h1>
+          <p class="mt-3 max-w-3xl leading-7 text-muted">
+            Each round keeps its instructions, build reference, tester, and result. Accepted work is completed and archived; requested changes return to implementation without
+            erasing the previous round.
+          </p>
         </UPageCard>
 
-        <UPageCard v-if="pages.length === 0" class="p-8 text-center" variant="subtle">
-          <UIcon class="mx-auto size-10 text-success" name="i-ph-check-circle" />
-          <h2 class="mt-4 text-xl font-semibold text-highlighted">The review queue is clear.</h2>
-          <p class="mx-auto mt-2 max-w-lg text-sm leading-6 text-muted">Every queued page has been reviewed and approved.</p>
-        </UPageCard>
+        <UEmpty v-if="testRuns.length === 0" description="There are no task rounds waiting for your result." icon="i-ph-check-circle" title="The testing queue is clear" />
 
-        <section v-for="category in categories" :key="category.name" class="grid gap-4">
-          <div class="flex items-end justify-between gap-4">
-            <div>
-              <p class="text-xs font-bold tracking-[0.18em] text-muted uppercase">{{ category.name }}</p>
-              <h2 class="mt-1 text-xl font-semibold text-highlighted">{{ category.pages.length }} {{ category.pages.length === 1 ? "page" : "pages" }}</h2>
-            </div>
-            <p class="text-sm text-muted">{{ category.pages.filter((page) => page.tested).length }} reviewed</p>
-          </div>
-          <div class="grid gap-4 xl:grid-cols-2">
-            <UserTestingPageCard v-for="page in category.pages" :key="page.id" :page="page" />
-          </div>
-        </section>
+        <ol v-else class="grid gap-5" role="list">
+          <li v-for="testRun in testRuns" :key="testRun.id">
+            <UPageCard variant="subtle">
+              <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(22rem,0.8fr)]">
+                <div class="grid content-start gap-5">
+                  <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p class="text-xs font-bold tracking-[0.16em] text-primary uppercase">{{ testRun.task?.affected_area_label }}</p>
+                      <h2 class="mt-2 text-xl font-semibold text-highlighted">{{ testRun.task?.title ?? "Archived task" }}</h2>
+                    </div>
+                    <UBadge :label="testRun.status_label" color="info" variant="subtle" />
+                  </div>
+
+                  <dl class="grid gap-3 border-y border-default py-4 text-sm sm:grid-cols-3">
+                    <div>
+                      <dt class="text-muted">Tester</dt>
+                      <dd class="font-medium text-highlighted">{{ testRun.tester }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-muted">Requested by</dt>
+                      <dd class="font-medium text-highlighted">{{ testRun.requested_by }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-muted">Requested</dt>
+                      <dd class="font-medium text-highlighted">{{ formatDateTime(testRun.requested_at) }}</dd>
+                    </div>
+                  </dl>
+
+                  <div>
+                    <h3 class="font-semibold text-highlighted">Testing instructions</h3>
+                    <p class="mt-2 whitespace-pre-wrap text-sm leading-6 text-muted">{{ testRun.instructions }}</p>
+                  </div>
+
+                  <div v-if="testRun.task">
+                    <h3 class="font-semibold text-highlighted">Acceptance criteria</h3>
+                    <p class="mt-2 whitespace-pre-wrap text-sm leading-6 text-muted">{{ testRun.task.acceptance_criteria }}</p>
+                  </div>
+
+                  <div v-if="testRun.build_reference">
+                    <h3 class="font-semibold text-highlighted">Build or deployment reference</h3>
+                    <a
+                      v-if="isWebReference(testRun.build_reference)"
+                      :href="testRun.build_reference"
+                      class="mt-2 inline-block break-all text-sm text-primary hover:underline"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      {{ testRun.build_reference }}
+                      <span class="sr-only">(opens in a new tab)</span>
+                    </a>
+                    <p v-else class="mt-2 break-all text-sm text-muted">{{ testRun.build_reference }}</p>
+                  </div>
+
+                  <UButton v-if="testRun.task" :to="show(testRun.task.id).url" class="justify-self-start" color="neutral" label="Open task workspace" variant="ghost" />
+                </div>
+
+                <Form
+                  v-if="testRun.can.record_result"
+                  #default="{ errors, processing }"
+                  class="grid content-start gap-4 rounded-lg bg-elevated p-5"
+                  v-bind="updateTestRun.form(testRun.id)"
+                >
+                  <div>
+                    <h3 class="font-semibold text-highlighted">Record this round</h3>
+                    <p class="mt-1 text-sm leading-6 text-muted">Feedback is optional when accepting and required when requesting changes.</p>
+                  </div>
+                  <FormTextarea :error="errors.feedback" label="Feedback" name="feedback" placeholder="What passed, or what needs another pass?" />
+                  <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
+                  <div class="flex flex-wrap justify-end gap-3">
+                    <UButton :disabled="processing" color="warning" label="Request changes" name="status" type="submit" value="changes_requested" variant="soft" />
+                    <UButton :loading="processing" label="Accept and complete" name="status" type="submit" value="accepted" />
+                  </div>
+                </Form>
+              </div>
+            </UPageCard>
+          </li>
+        </ol>
       </div>
     </template>
   </UDashboardPanel>

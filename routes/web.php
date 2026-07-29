@@ -29,6 +29,7 @@ use App\Http\Controllers\Development\DevelopmentTaskPromotionController;
 use App\Http\Controllers\Development\DevelopmentTaskRejectionController;
 use App\Http\Controllers\Development\DevelopmentTaskReviewController;
 use App\Http\Controllers\Development\DevelopmentTaskRoadmapController;
+use App\Http\Controllers\Development\DevelopmentTestRunController;
 use App\Http\Controllers\Development\UserTestingPageController;
 use App\Http\Controllers\PublicIntakeController;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -121,13 +122,19 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
             ->name('tasks.progress.update');
         Route::post('tasks/{developmentTask}/links', [DevelopmentTaskLinkController::class, 'store'])
             ->name('tasks.links.store');
+        Route::post('tasks/{developmentTask}/test-runs', [DevelopmentTestRunController::class, 'store'])
+            ->name('tasks.testRuns.store');
+        Route::patch('test-runs/{developmentTestRun}', [DevelopmentTestRunController::class, 'update'])
+            ->name('testRuns.update');
 
         Route::get('roadmap', DevelopmentRoadmapController::class)
             ->middleware('can:development.roadmap.manage')
             ->name('roadmap.index');
 
+        Route::get('user-testing', [DevelopmentTestRunController::class, 'index'])->name('userTesting.index');
+
         Route::middleware('can:development.user_testing.manage')->group(function (): void {
-            Route::get('user-testing', [UserTestingPageController::class, 'index'])->name('userTesting.index');
+            Route::get('user-testing/legacy-checklist', [UserTestingPageController::class, 'index'])->name('userTesting.legacy');
             Route::get('user-testing/updates', [UserTestingPageController::class, 'updates'])->name('userTesting.updates');
             Route::patch('user-testing/{userTestingPage}', [UserTestingPageController::class, 'update'])->name('userTesting.update');
         });

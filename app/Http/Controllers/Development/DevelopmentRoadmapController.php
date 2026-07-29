@@ -18,7 +18,8 @@ class DevelopmentRoadmapController extends Controller
     {
         $tasks = DevelopmentTaskResource::collection($query->roadmap()->get())
             ->resolve($request);
-        $tasksByStatus = collect($tasks)->groupBy('status');
+        $taskCollection = collect($tasks);
+        $tasksByStatus = $taskCollection->groupBy('status');
 
         return Inertia::render('Development/Roadmap/Index', [
             'tasks' => [
@@ -26,8 +27,11 @@ class DevelopmentRoadmapController extends Controller
                     ->get(DevelopmentTaskStatus::Planned->value, collect())
                     ->values()
                     ->all(),
-                DevelopmentTaskStatus::InProgress->value => $tasksByStatus
-                    ->get(DevelopmentTaskStatus::InProgress->value, collect())
+                DevelopmentTaskStatus::InProgress->value => $taskCollection
+                    ->whereIn('status', [
+                        DevelopmentTaskStatus::InProgress->value,
+                        DevelopmentTaskStatus::ChangesRequested->value,
+                    ])
                     ->values()
                     ->all(),
                 DevelopmentTaskStatus::Blocked->value => $tasksByStatus

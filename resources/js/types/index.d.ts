@@ -24,6 +24,7 @@ export interface User {
   is_active: boolean;
   roles: string[];
   can: Record<string, boolean>;
+  has_pending_development_tests: boolean;
   email_verified_at: string | null;
   avatar?: AvatarProps;
   status: UserStatus;

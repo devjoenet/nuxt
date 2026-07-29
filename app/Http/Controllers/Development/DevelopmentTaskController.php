@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Development\StoreDevelopmentTaskRequest;
 use App\Http\Resources\DevelopmentTaskResource;
 use App\Models\DevelopmentTask;
+use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use App\Queries\DevelopmentTaskQuery;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -42,6 +43,7 @@ class DevelopmentTaskController extends Controller
                     DevelopmentTaskStatus::Planned,
                     DevelopmentTaskStatus::InProgress,
                     DevelopmentTaskStatus::Blocked,
+                    DevelopmentTaskStatus::ChangesRequested,
                 ])->count()
                 : 0,
             'canCreate' => $user->can('create', DevelopmentTask::class),
@@ -112,6 +114,10 @@ class DevelopmentTaskController extends Controller
             'assignee',
             'links' => fn (Relation $query): Relation => $query->with('addedBy')->latest()->orderByDesc('id'),
             'notes' => fn (Relation $query): Relation => $query->with('author')->oldest()->orderBy('id'),
+            'testRuns' => fn (Relation $query): Relation => $query
+                ->with(['tester', 'requestedBy'])
+                ->latest('requested_at')
+                ->orderByDesc('id'),
         ]);
         $user = $this->authenticatedUser($request);
 
@@ -137,6 +143,18 @@ class DevelopmentTaskController extends Controller
                 'label' => $type->label(),
                 'value' => $type->value,
             ], DevelopmentTaskLinkType::cases()),
+            'testers' => $user->can('create', [DevelopmentTestRun::class, $developmentTask])
+                ? User::query()
+                    ->where('is_active', true)
+                    ->orderBy('name')
+                    ->get(['uuid', 'name'])
+                    ->map(fn (User $user): array => [
+                        'label' => $user->name,
+                        'value' => $user->uuid,
+                    ])
+                    ->values()
+                    ->all()
+                : [],
         ]);
     }
 }

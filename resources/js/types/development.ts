@@ -22,6 +22,32 @@ export interface DevelopmentTaskLink {
   created_at: string | null;
 }
 
+export interface DevelopmentTestRunTask {
+  id: string;
+  title: string;
+  status: string;
+  status_label: string;
+  affected_area_label: string;
+  acceptance_criteria: string;
+}
+
+export interface DevelopmentTestRun {
+  id: string;
+  instructions: string;
+  build_reference: string | null;
+  status: "pending" | "accepted" | "changes_requested";
+  status_label: string;
+  feedback: string | null;
+  tester: string;
+  requested_by: string;
+  requested_at: string;
+  completed_at: string | null;
+  task: DevelopmentTestRunTask | null;
+  can: {
+    record_result: boolean;
+  };
+}
+
 export interface DevelopmentTask {
   id: string;
   title: string;
@@ -45,6 +71,7 @@ export interface DevelopmentTask {
   updated_at: string;
   notes?: DevelopmentTaskNote[];
   links?: DevelopmentTaskLink[];
+  test_runs?: DevelopmentTestRun[];
   can: {
     review: boolean;
     manage_roadmap: boolean;
@@ -52,6 +79,7 @@ export interface DevelopmentTask {
     attach_link: boolean;
     add_participant_note: boolean;
     add_internal_note: boolean;
+    request_testing: boolean;
   };
 }
 

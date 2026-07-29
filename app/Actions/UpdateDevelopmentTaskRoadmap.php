@@ -35,6 +35,7 @@ class UpdateDevelopmentTaskRoadmap
                 DevelopmentTaskStatus::Planned,
                 DevelopmentTaskStatus::InProgress,
                 DevelopmentTaskStatus::Blocked,
+                DevelopmentTaskStatus::ChangesRequested,
             ], true)) {
                 throw ValidationException::withMessages([
                     'status' => 'Only active roadmap tasks can be prioritized or assigned.',

@@ -27,7 +27,7 @@ class UserTestingPageController extends Controller
     {
         $records = $this->firstAvailableRecords($this->authenticatedUser($request));
 
-        return Inertia::render('Development/UserTesting/Index', [
+        return Inertia::render('Development/UserTesting/Legacy', [
             'pages' => UserTestingPage::query()
                 ->whereNull('approved_at')
                 ->with('testedBy:id,name')
@@ -71,7 +71,7 @@ class UserTestingPageController extends Controller
         $actor = $this->authenticatedUser($request);
         $action->handle($userTestingPage, UserTestingPageData::fromValidated($request->validated()), $actor);
 
-        return to_route('development.userTesting.index')->with('success', 'Testing notes saved.');
+        return to_route('development.userTesting.legacy')->with('success', 'Testing notes saved.');
     }
 
     public function updates(Request $request): JsonResponse

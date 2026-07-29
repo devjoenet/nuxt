@@ -13,6 +13,8 @@
   import { update as updateProgress } from "@/routes/development/tasks/progress";
   import { store as startReview } from "@/routes/development/tasks/review";
   import { update as updateRoadmap } from "@/routes/development/tasks/roadmap";
+  import { store as requestTesting } from "@/routes/development/tasks/testRuns";
+  import { update as updateTestRun } from "@/routes/development/testRuns";
   import type { AppPageProps } from "@/types";
   import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
@@ -22,6 +24,7 @@
     assignees: DevelopmentOption[];
     priorities: DevelopmentOption[];
     linkTypes: DevelopmentOption[];
+    testers: DevelopmentOption[];
   }>();
   const page = usePage<AppPageProps>();
   const toast = useToast();
@@ -37,13 +40,14 @@
   const canStartReview = computed(() => props.task.can.review && ["submitted", "needs_information"].includes(props.task.status));
   const canRequestInformation = computed(() => props.task.can.review && props.task.status === "submitted");
   const canDecide = computed(() => props.task.can.review && props.task.status === "under_review");
-  const isRoadmapTask = computed(() => ["planned", "in_progress", "blocked"].includes(props.task.status));
-  const showActionSidebar = computed(() => props.task.can.review || props.task.can.manage_roadmap || props.task.can.update_progress);
+  const isRoadmapTask = computed(() => ["planned", "in_progress", "blocked", "changes_requested"].includes(props.task.status));
+  const showActionSidebar = computed(() => props.task.can.review || props.task.can.manage_roadmap || props.task.can.update_progress || props.task.can.request_testing);
   const assigneeOptions = computed(() => [{ label: "Unassigned", value: "" }, ...props.assignees]);
   const progressAction = computed<{ color: "neutral" | "primary" | "warning"; label: string; status: string } | null>(() => {
     if (props.task.status === "planned") return { label: "Start work", status: "in_progress", color: "primary" };
     if (props.task.status === "in_progress") return { label: "Mark blocked", status: "blocked", color: "warning" };
     if (props.task.status === "blocked") return { label: "Resume work", status: "in_progress", color: "primary" };
+    if (props.task.status === "changes_requested") return { label: "Resume implementation", status: "in_progress", color: "primary" };
 
     return null;
   });
@@ -52,6 +56,7 @@
     { label: "Development team only", value: "development_team" },
   ];
   const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
 </script>
 
 <template>
@@ -188,6 +193,70 @@
             </ul>
             <p v-else class="text-sm text-muted">No links have been attached.</p>
           </section>
+
+          <section class="grid gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-highlighted">User-testing history</h2>
+              <p class="mt-1 text-sm text-muted">Every round remains attached to the task, including feedback that caused another implementation pass.</p>
+            </div>
+
+            <ol v-if="task.test_runs?.length" class="grid gap-4" role="list">
+              <li v-for="testRun in task.test_runs" :key="testRun.id" class="rounded-lg border border-default p-4">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p class="font-medium text-highlighted">{{ testRun.tester }}</p>
+                    <p class="mt-1 text-sm text-muted">Requested by {{ testRun.requested_by }} · {{ formatDateTime(testRun.requested_at) }}</p>
+                  </div>
+                  <UBadge
+                    :color="testRun.status === 'accepted' ? 'success' : testRun.status === 'changes_requested' ? 'warning' : 'info'"
+                    :label="testRun.status_label"
+                    variant="subtle"
+                  />
+                </div>
+
+                <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <h3 class="text-sm font-semibold text-highlighted">Instructions</h3>
+                    <p class="mt-1 whitespace-pre-wrap text-sm leading-6 text-muted">{{ testRun.instructions }}</p>
+                  </div>
+                  <div v-if="testRun.build_reference">
+                    <h3 class="text-sm font-semibold text-highlighted">Build reference</h3>
+                    <a
+                      v-if="isWebReference(testRun.build_reference)"
+                      :href="testRun.build_reference"
+                      class="mt-1 inline-block break-all text-sm text-primary hover:underline"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      {{ testRun.build_reference }}
+                      <span class="sr-only">(opens in a new tab)</span>
+                    </a>
+                    <p v-else class="mt-1 break-all text-sm text-muted">{{ testRun.build_reference }}</p>
+                  </div>
+                </div>
+
+                <div v-if="testRun.feedback" class="mt-4 border-t border-default pt-4">
+                  <h3 class="text-sm font-semibold text-highlighted">Feedback</h3>
+                  <p class="mt-1 whitespace-pre-wrap text-sm leading-6 text-muted">{{ testRun.feedback }}</p>
+                </div>
+
+                <Form
+                  v-if="testRun.can.record_result"
+                  #default="{ errors, processing }"
+                  class="mt-4 grid gap-3 border-t border-default pt-4"
+                  v-bind="updateTestRun.form(testRun.id)"
+                >
+                  <FormTextarea :error="errors.feedback" label="Testing feedback" name="feedback" />
+                  <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
+                  <div class="flex flex-wrap justify-end gap-3">
+                    <UButton :disabled="processing" color="warning" label="Request changes" name="status" type="submit" value="changes_requested" variant="soft" />
+                    <UButton :loading="processing" label="Accept and complete" name="status" type="submit" value="accepted" />
+                  </div>
+                </Form>
+              </li>
+            </ol>
+            <p v-else class="text-sm text-muted">No user-testing rounds have been requested.</p>
+          </section>
         </div>
 
         <aside v-if="showActionSidebar" class="grid content-start gap-5">
@@ -232,6 +301,17 @@
               />
               <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
               <UButton :loading="processing" class="justify-self-end" label="Save roadmap details" type="submit" />
+            </Form>
+          </UPageCard>
+
+          <UPageCard v-if="task.can.request_testing" title="Request user testing" variant="subtle">
+            <p class="text-sm leading-6 text-muted">Assign a tester and describe the exact build and behavior they should verify.</p>
+            <Form #default="{ errors, processing }" :options="{ preserveScroll: true }" class="mt-4 grid gap-3" v-bind="requestTesting.form(task.id)">
+              <FormSelect :default-value="task.assignee_id ?? ''" :error="errors.tester_id" :items="testers" label="Tester" name="tester_id" required />
+              <FormTextarea :error="errors.instructions" label="Testing instructions" name="instructions" required />
+              <FormInput :error="errors.build_reference" label="Build or deployment reference" name="build_reference" placeholder="Deployment URL, commit, or build identifier" />
+              <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
+              <UButton :loading="processing" class="justify-self-end" icon="i-ph-test-tube" label="Send to testing" type="submit" />
             </Form>
           </UPageCard>
 

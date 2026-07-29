@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Resources;
 
 use App\Enums\DevelopmentNoteAudience;
+use App\Enums\DevelopmentTaskStatus;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTaskLink;
 use App\Models\DevelopmentTaskNote;
+use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -61,6 +63,10 @@ class DevelopmentTaskResource extends JsonResource
                         ->values(),
                 )->resolve($request);
             }),
+            'test_runs' => $this->whenLoaded(
+                'testRuns',
+                fn (): array => DevelopmentTestRunResource::collection($this->testRuns)->resolve($request),
+            ),
             'can' => $user instanceof User ? [
                 'review' => $user->can('review', $this->resource),
                 'manage_roadmap' => $user->can('manageRoadmap', $this->resource),
@@ -79,6 +85,11 @@ class DevelopmentTaskResource extends JsonResource
                     $this->resource,
                     DevelopmentNoteAudience::DevelopmentTeam,
                 ]),
+                'request_testing' => $this->status === DevelopmentTaskStatus::InProgress
+                    && $user->can('create', [
+                        DevelopmentTestRun::class,
+                        $this->resource,
+                    ]),
             ] : [
                 'review' => false,
                 'manage_roadmap' => false,
@@ -86,6 +97,7 @@ class DevelopmentTaskResource extends JsonResource
                 'attach_link' => false,
                 'add_participant_note' => false,
                 'add_internal_note' => false,
+                'request_testing' => false,
             ],
         ];
     }

@@ -15,7 +15,13 @@ use Override;
 
 /**
  * @property string $uuid
+ * @property int $development_task_id
+ * @property ?int $tester_id
+ * @property ?int $requested_by_id
+ * @property string $instructions
+ * @property ?string $build_reference
  * @property DevelopmentTestRunStatus $status
+ * @property ?string $feedback
  * @property Carbon $requested_at
  * @property ?Carbon $completed_at
  * @property DevelopmentTask $task

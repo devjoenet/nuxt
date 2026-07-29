@@ -10,6 +10,11 @@ enum DevelopmentTestRunStatus: string
     case Accepted = 'accepted';
     case ChangesRequested = 'changes_requested';
 
+    public function label(): string
+    {
+        return str($this->value)->replace('_', ' ')->title()->toString();
+    }
+
     public function isComplete(): bool
     {
         return $this !== self::Pending;
