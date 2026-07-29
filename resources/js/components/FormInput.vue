@@ -48,6 +48,7 @@
 
     return props.label ? " " : undefined;
   });
+  const hasVisiblePlaceholder = computed(() => typeof attrs.placeholder === "string" && attrs.placeholder.trim().length > 0);
 
   const defaultBaseClass = computed(() => {
     const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
@@ -82,6 +83,7 @@
     :label="label"
     :name="name"
     :required="required"
+    :static-label="hasVisiblePlaceholder"
     :success-text="successText"
     :valid="valid"
     :variant="variant"

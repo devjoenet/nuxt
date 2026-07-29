@@ -39,12 +39,42 @@ test('roadmap managers can navigate the database-backed board and task workspace
         ->assertPresent('a[href="'.route('development.tasks.show', $task, false).'"]')
         ->navigate(route('development.tasks.show', $task, false))
         ->assertPathIs(route('development.tasks.show', $task, false))
+        ->resize(1440, 1000)
+        ->assertVisible('[data-testid="development-task-summary"]')
+        ->assertVisible('[data-testid="development-task-brief"]')
+        ->assertVisible('[data-testid="development-task-workflow"]')
+        ->assertSee('Request brief')
+        ->assertSee('Move this work forward')
         ->assertSee('Roadmap details')
         ->assertSee('Implementation progress')
         ->assertSee('Task links')
         ->assertSee('Start work')
+        ->assertScript('getComputedStyle(document.querySelector(\'[data-testid="development-task-layout"]\')).gridTemplateColumns.split(" ").length', 2)
         ->resize(375, 812)
+        ->assertScript('getComputedStyle(document.querySelector(\'[data-testid="development-task-layout"]\')).gridTemplateColumns.split(" ").length', 1)
         ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});
+
+test('task link placeholders do not overlap their floating labels', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $manager = User::factory()->create();
+    $manager->assignRole(RoleName::Admin->value);
+    $task = DevelopmentTask::factory()
+        ->planned()
+        ->for($manager, 'assignee')
+        ->create();
+
+    $this->actingAs($manager);
+
+    visit(route('development.tasks.show', $task, false))
+        ->inDarkMode()
+        ->assertSee('Task links')
+        ->assertScript('document.querySelector(\'.form-field__shell:has(input[name="label"]) .form-field__label\')?.getBoundingClientRect().top < document.querySelector(\'.form-field__shell:has(input[name="label"])\')?.getBoundingClientRect().top + 8', true)
+        ->assertScript('document.querySelector(\'.form-field__shell:has(input[name="url"]) .form-field__label\')?.getBoundingClientRect().top < document.querySelector(\'.form-field__shell:has(input[name="url"])\')?.getBoundingClientRect().top + 8', true)
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
