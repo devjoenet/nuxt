@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\RoleName;
 use App\Models\Contact;
+use App\Models\DevelopmentTask;
 use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
@@ -299,17 +300,19 @@ it('redirects legacy admin development pages to their canonical routes', functio
 
 it('shows the development roadmap to authorized users', function (): void {
     $user = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $planned = DevelopmentTask::factory()->planned()->create();
+    $inProgress = DevelopmentTask::factory()->inProgress()->create();
 
     $this->actingAs($user)
         ->get(route('development.roadmap.index'))
         ->assertSuccessful()
         ->assertInertia(fn ($page) => $page
             ->component('Development/Roadmap/Index')
-            ->where('source', 'docs/development/active-roadmap.md')
-            ->where('content', function ($content): bool {
-                $content = (string) $content;
-
-                return str_contains($content, 'Southeast Code Roadmap')
-                    && str_contains($content, 'active task queue is empty');
-            }));
+            ->has('tasks.planned', 1)
+            ->where('tasks.planned.0.id', $planned->uuid)
+            ->has('tasks.in_progress', 1)
+            ->where('tasks.in_progress.0.id', $inProgress->uuid)
+            ->has('tasks.blocked', 0)
+            ->missing('source')
+            ->missing('content'));
 });

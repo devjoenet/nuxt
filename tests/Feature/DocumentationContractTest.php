@@ -6,9 +6,11 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-test('every active task link resolves to a local markdown file', function (): void {
+test('every listed active task link resolves to a local markdown file', function (): void {
     $roadmapPath = base_path('docs/development/active-roadmap.md');
     $roadmap = File::get($roadmapPath);
+    expect($roadmap)->toContain('## Active Development Tasks');
+
     preg_match_all('/\]\(([^)]+)\)/', $roadmap, $matches);
 
     $links = collect($matches[1])
@@ -16,8 +18,6 @@ test('every active task link resolves to a local markdown file', function (): vo
         ->map(fn (string $link): string => Str::before($link, '#'))
         ->unique()
         ->values();
-
-    expect($links)->not->toBeEmpty();
 
     foreach ($links as $link) {
         $path = realpath(dirname($roadmapPath).'/'.$link);

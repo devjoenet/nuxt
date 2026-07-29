@@ -1,18 +1,28 @@
 <script lang="ts" setup>
   import { Form, usePage } from "@inertiajs/vue3";
+  import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
   import FormTextarea from "@/components/FormTextarea.vue";
   import Layout from "@/layouts/Default.vue";
   import { index as requestsIndex } from "@/routes/development/requests";
+  import { index as roadmapIndex } from "@/routes/development/roadmap";
   import { promote, reject } from "@/routes/development/tasks";
   import { store as requestInformation } from "@/routes/development/tasks/informationRequest";
+  import { store as storeLink } from "@/routes/development/tasks/links";
   import { store as storeNote } from "@/routes/development/tasks/notes";
+  import { update as updateProgress } from "@/routes/development/tasks/progress";
   import { store as startReview } from "@/routes/development/tasks/review";
+  import { update as updateRoadmap } from "@/routes/development/tasks/roadmap";
   import type { AppPageProps } from "@/types";
-  import type { DevelopmentTask } from "@/types/development";
+  import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
   defineOptions({ layout: Layout });
-  const props = defineProps<{ task: DevelopmentTask }>();
+  const props = defineProps<{
+    task: DevelopmentTask;
+    assignees: DevelopmentOption[];
+    priorities: DevelopmentOption[];
+    linkTypes: DevelopmentOption[];
+  }>();
   const page = usePage<AppPageProps>();
   const toast = useToast();
 
@@ -27,6 +37,16 @@
   const canStartReview = computed(() => props.task.can.review && ["submitted", "needs_information"].includes(props.task.status));
   const canRequestInformation = computed(() => props.task.can.review && props.task.status === "submitted");
   const canDecide = computed(() => props.task.can.review && props.task.status === "under_review");
+  const isRoadmapTask = computed(() => ["planned", "in_progress", "blocked"].includes(props.task.status));
+  const showActionSidebar = computed(() => props.task.can.review || props.task.can.manage_roadmap || props.task.can.update_progress);
+  const assigneeOptions = computed(() => [{ label: "Unassigned", value: "" }, ...props.assignees]);
+  const progressAction = computed<{ color: "neutral" | "primary" | "warning"; label: string; status: string } | null>(() => {
+    if (props.task.status === "planned") return { label: "Start work", status: "in_progress", color: "primary" };
+    if (props.task.status === "in_progress") return { label: "Mark blocked", status: "blocked", color: "warning" };
+    if (props.task.status === "blocked") return { label: "Resume work", status: "in_progress", color: "primary" };
+
+    return null;
+  });
   const noteAudiences = [
     { label: "Participants", value: "participants" },
     { label: "Development team only", value: "development_team" },
@@ -39,7 +59,9 @@
     <template #header>
       <UDashboardNavbar :title="task.title">
         <template #leading><UDashboardSidebarCollapse /></template>
-        <template #right><UButton :to="requestsIndex().url" color="neutral" label="My requests" variant="ghost" /></template>
+        <template #right>
+          <UButton :label="isRoadmapTask ? 'Roadmap' : 'My requests'" :to="isRoadmapTask ? roadmapIndex().url : requestsIndex().url" color="neutral" variant="ghost" />
+        </template>
       </UDashboardNavbar>
     </template>
 
@@ -55,7 +77,7 @@
               <UBadge :label="task.request_type_label" color="neutral" variant="subtle" />
               <UBadge :label="task.affected_area_label" color="neutral" variant="subtle" />
             </div>
-            <dl class="grid gap-4 border-y border-default py-5 sm:grid-cols-3">
+            <dl class="grid gap-4 border-y border-default py-5 sm:grid-cols-2 xl:grid-cols-4">
               <div>
                 <dt class="text-sm text-muted">Submitted by</dt>
                 <dd class="font-medium text-highlighted">{{ task.submitter }}</dd>
@@ -67,6 +89,13 @@
               <div>
                 <dt class="text-sm text-muted">Submitted</dt>
                 <dd class="font-medium text-highlighted">{{ formatDateTime(task.submitted_at) }}</dd>
+              </div>
+              <div>
+                <dt class="text-sm text-muted">Roadmap</dt>
+                <dd class="font-medium text-highlighted">
+                  {{ task.assignee ?? "Unassigned" }} · {{ task.priority_label }}
+                  <span v-if="task.roadmap_position"> · #{{ task.roadmap_position }}</span>
+                </dd>
               </div>
             </dl>
             <div>
@@ -124,9 +153,44 @@
             </ol>
             <p v-else class="text-sm text-muted">No notes yet.</p>
           </section>
+
+          <section class="grid gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-highlighted">Task links</h2>
+              <p class="mt-1 text-sm text-muted">Branches, pull requests, commits, deployments, and supporting references stay attached to this task.</p>
+            </div>
+
+            <Form
+              v-if="task.can.attach_link"
+              #default="{ errors, processing }"
+              :options="{ preserveScroll: true }"
+              class="grid gap-3 rounded-lg bg-elevated p-4 sm:grid-cols-2"
+              reset-on-success
+              v-bind="storeLink.form(task.id)"
+            >
+              <FormSelect :error="errors.type" :items="linkTypes" label="Link type" name="type" required />
+              <FormInput :error="errors.label" label="Label" name="label" placeholder="Optional display label" />
+              <FormInput :error="errors.url" class="sm:col-span-2" label="URL" name="url" placeholder="https://…" required type="url" />
+              <UButton :loading="processing" class="justify-self-end sm:col-span-2" color="neutral" label="Attach link" type="submit" variant="soft" />
+            </Form>
+
+            <ul v-if="task.links?.length" class="grid gap-3" role="list">
+              <li v-for="link in task.links" :key="link.id" class="flex items-start justify-between gap-4 border-t border-default pt-4">
+                <div class="min-w-0">
+                  <a :href="link.url" class="font-medium text-primary hover:underline" rel="noreferrer" target="_blank">
+                    {{ link.label || link.type_label }}
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </a>
+                  <p class="mt-1 truncate text-sm text-muted">{{ link.url }}</p>
+                </div>
+                <UBadge :label="link.type_label" color="neutral" size="sm" variant="subtle" />
+              </li>
+            </ul>
+            <p v-else class="text-sm text-muted">No links have been attached.</p>
+          </section>
         </div>
 
-        <aside v-if="task.can.review" class="grid content-start gap-5">
+        <aside v-if="showActionSidebar" class="grid content-start gap-5">
           <UPageCard v-if="canStartReview" title="Review this request" variant="subtle">
             <p class="text-sm leading-6 text-muted">Starting review assigns the request to you. You can then add internal notes, promote it, or reject it.</p>
             <Form #default="{ processing }" class="mt-4" v-bind="startReview.form(task.id)">
@@ -149,6 +213,34 @@
             <Form #default="{ errors, processing }" class="grid gap-3" v-bind="reject.form(task.id)">
               <FormTextarea :error="errors.body" label="Reason for rejection" name="body" required />
               <UButton :loading="processing" class="justify-self-end" color="error" label="Reject request" type="submit" variant="soft" />
+            </Form>
+          </UPageCard>
+
+          <UPageCard v-if="task.can.manage_roadmap && isRoadmapTask" title="Roadmap details" variant="subtle">
+            <Form #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" v-bind="updateRoadmap.form(task.id)">
+              <FormSelect :default-value="task.priority" :error="errors.priority" :items="priorities" label="Priority" name="priority" required />
+              <FormSelect :default-value="task.assignee_id ?? ''" :error="errors.assignee_id" :items="assigneeOptions" label="Assignee" name="assignee_id" />
+              <FormInput
+                :default-value="task.roadmap_position ?? 1"
+                :error="errors.roadmap_position"
+                label="Roadmap position"
+                max="9999"
+                min="1"
+                name="roadmap_position"
+                required
+                type="number"
+              />
+              <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
+              <UButton :loading="processing" class="justify-self-end" label="Save roadmap details" type="submit" />
+            </Form>
+          </UPageCard>
+
+          <UPageCard v-if="task.can.update_progress && progressAction" title="Implementation progress" variant="subtle">
+            <p class="text-sm leading-6 text-muted">Status changes use the same lifecycle action for the web workspace and future agent tools.</p>
+            <Form #default="{ errors, processing }" :options="{ preserveScroll: true }" class="mt-4 grid gap-3" v-bind="updateProgress.form(task.id)">
+              <input :value="progressAction.status" name="status" type="hidden" />
+              <UAlert v-if="errors.assignee_id || errors.status" :description="errors.assignee_id || errors.status" color="error" variant="subtle" />
+              <UButton :color="progressAction.color" :label="progressAction.label" :loading="processing" block type="submit" />
             </Form>
           </UPageCard>
         </aside>

@@ -12,6 +12,16 @@ export interface DevelopmentTaskNote {
   created_at: string;
 }
 
+export interface DevelopmentTaskLink {
+  id: string;
+  type: string;
+  type_label: string;
+  label: string | null;
+  url: string;
+  added_by: string;
+  created_at: string | null;
+}
+
 export interface DevelopmentTask {
   id: string;
   title: string;
@@ -26,17 +36,29 @@ export interface DevelopmentTask {
   status_label: string;
   priority: string;
   priority_label: string;
+  roadmap_position: number | null;
   submitter: string;
   reviewer: string | null;
   assignee: string | null;
+  assignee_id: string | null;
   submitted_at: string;
   updated_at: string;
   notes?: DevelopmentTaskNote[];
+  links?: DevelopmentTaskLink[];
   can: {
     review: boolean;
+    manage_roadmap: boolean;
+    update_progress: boolean;
+    attach_link: boolean;
     add_participant_note: boolean;
     add_internal_note: boolean;
   };
+}
+
+export interface DevelopmentRoadmapTasks {
+  planned: DevelopmentTask[];
+  in_progress: DevelopmentTask[];
+  blocked: DevelopmentTask[];
 }
 
 export interface PaginatedDevelopmentTasks {

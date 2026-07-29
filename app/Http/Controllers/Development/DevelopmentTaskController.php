@@ -7,12 +7,15 @@ namespace App\Http\Controllers\Development;
 use App\Actions\SubmitDevelopmentTask;
 use App\Enums\DevelopmentRequestType;
 use App\Enums\DevelopmentTaskArea;
+use App\Enums\DevelopmentTaskLinkType;
 use App\Enums\DevelopmentTaskStatus;
 use App\Enums\Permission;
+use App\Enums\TaskPriority;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Development\StoreDevelopmentTaskRequest;
 use App\Http\Resources\DevelopmentTaskResource;
 use App\Models\DevelopmentTask;
+use App\Models\User;
 use App\Queries\DevelopmentTaskQuery;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
@@ -107,11 +110,33 @@ class DevelopmentTaskController extends Controller
             'submitter',
             'reviewer',
             'assignee',
+            'links' => fn (Relation $query): Relation => $query->with('addedBy')->latest()->orderByDesc('id'),
             'notes' => fn (Relation $query): Relation => $query->with('author')->oldest()->orderBy('id'),
         ]);
+        $user = $this->authenticatedUser($request);
 
         return Inertia::render('Development/Tasks/Show', [
             'task' => DevelopmentTaskResource::make($developmentTask)->resolve($request),
+            'assignees' => $user->can('manageRoadmap', $developmentTask)
+                ? User::query()
+                    ->where('is_active', true)
+                    ->orderBy('name')
+                    ->get(['uuid', 'name'])
+                    ->map(fn (User $user): array => [
+                        'label' => $user->name,
+                        'value' => $user->uuid,
+                    ])
+                    ->values()
+                    ->all()
+                : [],
+            'priorities' => array_map(fn (TaskPriority $priority): array => [
+                'label' => $priority->label(),
+                'value' => $priority->value,
+            ], TaskPriority::cases()),
+            'linkTypes' => array_map(fn (DevelopmentTaskLinkType $type): array => [
+                'label' => $type->label(),
+                'value' => $type->value,
+            ], DevelopmentTaskLinkType::cases()),
         ]);
     }
 }

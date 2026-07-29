@@ -33,4 +33,20 @@ final class DevelopmentTaskQuery
             ->oldest('submitted_at')
             ->orderBy('id');
     }
+
+    /** @return Builder<DevelopmentTask> */
+    public function roadmap(): Builder
+    {
+        return DevelopmentTask::query()
+            ->whereIn('status', [
+                DevelopmentTaskStatus::Planned,
+                DevelopmentTaskStatus::InProgress,
+                DevelopmentTaskStatus::Blocked,
+            ])
+            ->with(['submitter', 'reviewer', 'assignee'])
+            ->orderByRaw('roadmap_position is null')
+            ->orderBy('roadmap_position')
+            ->oldest('planned_at')
+            ->orderBy('id');
+    }
 }
