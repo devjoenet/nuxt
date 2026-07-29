@@ -22,10 +22,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Development\DevelopmentRoadmapController;
 use App\Http\Controllers\Development\DevelopmentTaskController;
 use App\Http\Controllers\Development\DevelopmentTaskInformationRequestController;
+use App\Http\Controllers\Development\DevelopmentTaskLinkController;
 use App\Http\Controllers\Development\DevelopmentTaskNoteController;
+use App\Http\Controllers\Development\DevelopmentTaskProgressController;
 use App\Http\Controllers\Development\DevelopmentTaskPromotionController;
 use App\Http\Controllers\Development\DevelopmentTaskRejectionController;
 use App\Http\Controllers\Development\DevelopmentTaskReviewController;
+use App\Http\Controllers\Development\DevelopmentTaskRoadmapController;
 use App\Http\Controllers\Development\UserTestingPageController;
 use App\Http\Controllers\PublicIntakeController;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -112,6 +115,12 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
             ->name('tasks.promote');
         Route::post('tasks/{developmentTask}/reject', DevelopmentTaskRejectionController::class)
             ->name('tasks.reject');
+        Route::patch('tasks/{developmentTask}/roadmap', [DevelopmentTaskRoadmapController::class, 'update'])
+            ->name('tasks.roadmap.update');
+        Route::patch('tasks/{developmentTask}/progress', [DevelopmentTaskProgressController::class, 'update'])
+            ->name('tasks.progress.update');
+        Route::post('tasks/{developmentTask}/links', [DevelopmentTaskLinkController::class, 'store'])
+            ->name('tasks.links.store');
 
         Route::get('roadmap', DevelopmentRoadmapController::class)
             ->middleware('can:development.roadmap.manage')

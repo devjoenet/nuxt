@@ -1,16 +1,53 @@
 <script lang="ts" setup>
-  import { Head, Link } from "@inertiajs/vue3";
+  import { Head } from "@inertiajs/vue3";
   import Layout from "@/layouts/Default.vue";
+  import { show } from "@/routes/development/tasks";
   import { index as userTestingIndex } from "@/routes/development/userTesting";
+  import type { DevelopmentRoadmapTasks, DevelopmentTask } from "@/types/development";
 
   defineOptions({ layout: Layout });
 
   const auth = useAuth();
+  const props = defineProps<{ tasks: DevelopmentRoadmapTasks }>();
 
-  defineProps<{
-    content: string;
-    source: string;
-  }>();
+  const columns: Array<{
+    description: string;
+    empty: string;
+    icon: string;
+    key: keyof DevelopmentRoadmapTasks;
+    title: string;
+  }> = [
+    {
+      key: "planned",
+      title: "Planned",
+      description: "Prioritized work waiting to start.",
+      empty: "No work is currently planned.",
+      icon: "i-ph-map-pin",
+    },
+    {
+      key: "in_progress",
+      title: "In progress",
+      description: "Assigned work under active implementation.",
+      empty: "No work is currently in progress.",
+      icon: "i-ph-hammer",
+    },
+    {
+      key: "blocked",
+      title: "Blocked",
+      description: "Work waiting on a decision or dependency.",
+      empty: "No work is currently blocked.",
+      icon: "i-ph-warning",
+    },
+  ];
+
+  const totalTasks = computed(() => Object.values(props.tasks).reduce((total, tasks) => total + tasks.length, 0));
+
+  const priorityColor = (task: DevelopmentTask): "error" | "neutral" | "warning" => {
+    if (task.priority === "high") return "error";
+    if (task.priority === "low") return "neutral";
+
+    return "warning";
+  };
 </script>
 
 <template>
@@ -18,33 +55,57 @@
 
   <UDashboardPanel id="development-roadmap">
     <template #header>
-      <UDashboardNavbar description="The checked-in plan for Southeast Code development." title="Development roadmap">
+      <UDashboardNavbar description="Planned, active, and blocked work from the Development workspace." title="Development roadmap">
         <template #leading><UDashboardSidebarCollapse /></template>
         <template #right>
-          <Link v-if="auth.user?.can?.['development.user_testing.manage']" :href="userTestingIndex.url()" class="text-sm font-medium text-primary hover:underline">
-            User testing
-          </Link>
+          <UButton v-if="auth.user?.can?.['development.user_testing.manage']" :to="userTestingIndex().url" color="neutral" label="User testing" variant="ghost" />
         </template>
       </UDashboardNavbar>
     </template>
 
     <template #body>
-      <div class="min-h-0 flex-1 overflow-y-auto pe-1">
-        <UPageCard class="overflow-hidden" variant="subtle">
-          <div class="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-default pb-4">
+      <UEmpty v-if="totalTasks === 0" description="Promoted requests will appear here as database-backed roadmap tasks." icon="i-ph-map-trifold" title="The roadmap is clear" />
+
+      <div v-else class="grid items-start gap-5 xl:grid-cols-3">
+        <section v-for="column in columns" :key="column.key" :aria-labelledby="`${column.key}-heading`" class="grid min-w-0 gap-3">
+          <header class="flex items-start justify-between gap-3 border-b border-default pb-3">
             <div>
-              <p class="text-xs font-bold tracking-[0.18em] text-primary uppercase">Source of truth</p>
-              <p class="mt-1 text-sm text-muted">{{ source }}</p>
+              <h2 :id="`${column.key}-heading`" class="flex items-center gap-2 font-semibold text-highlighted">
+                <UIcon :name="column.icon" class="size-5 text-primary" />
+                {{ column.title }}
+              </h2>
+              <p class="mt-1 text-sm text-muted">{{ column.description }}</p>
             </div>
-            <Link v-if="auth.user?.can?.['development.user_testing.manage']" :href="userTestingIndex.url()" class="text-sm text-muted hover:text-primary hover:underline">
-              Review page feedback →
-            </Link>
-          </div>
-          <article
-            class="max-w-none text-base leading-7 text-muted [&_a]:text-primary [&_a]:underline [&_blockquote]:my-5 [&_blockquote]:border-s-2 [&_blockquote]:border-primary/40 [&_blockquote]:ps-4 [&_code]:rounded [&_code]:bg-elevated [&_code]:px-1 [&_code]:py-0.5 [&_h1]:mb-6 [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:text-highlighted [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-highlighted [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-highlighted [&_li]:my-1 [&_ol]:my-5 [&_ol]:list-decimal [&_ol]:ps-6 [&_p]:my-4 [&_pre]:my-5 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:bg-elevated [&_pre]:p-4 [&_strong]:font-semibold [&_strong]:text-highlighted [&_table]:my-5 [&_table]:w-full [&_td]:border [&_td]:border-default [&_td]:p-2 [&_th]:border [&_th]:border-default [&_th]:bg-elevated [&_th]:p-2 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:ps-6"
-            v-html="content"
-          />
-        </UPageCard>
+            <UBadge :label="String(tasks[column.key].length)" color="neutral" variant="subtle" />
+          </header>
+
+          <ul v-if="tasks[column.key].length" class="grid gap-3" role="list">
+            <li v-for="task in tasks[column.key]" :key="task.id">
+              <UPageCard :to="show(task.id).url" variant="subtle">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <p v-if="task.roadmap_position" class="text-xs font-bold tracking-[0.14em] text-primary uppercase">Position {{ task.roadmap_position }}</p>
+                    <h3 class="mt-1 font-semibold text-highlighted">{{ task.title }}</h3>
+                  </div>
+                  <UBadge :color="priorityColor(task)" :label="task.priority_label" size="sm" variant="subtle" />
+                </div>
+                <p class="mt-3 line-clamp-2 text-sm leading-6 text-muted">{{ task.desired_outcome }}</p>
+                <dl class="mt-4 grid grid-cols-2 gap-3 border-t border-default pt-3 text-sm">
+                  <div>
+                    <dt class="text-muted">Assignee</dt>
+                    <dd class="truncate font-medium text-highlighted">{{ task.assignee ?? "Unassigned" }}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-muted">Area</dt>
+                    <dd class="truncate font-medium text-highlighted">{{ task.affected_area_label }}</dd>
+                  </div>
+                </dl>
+              </UPageCard>
+            </li>
+          </ul>
+
+          <UEmpty v-else :description="column.empty" :icon="column.icon" :title="`No ${column.title.toLowerCase()} tasks`" />
+        </section>
       </div>
     </template>
   </UDashboardPanel>

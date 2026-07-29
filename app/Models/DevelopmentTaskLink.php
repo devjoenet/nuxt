@@ -15,6 +15,8 @@ use Override;
 /**
  * @property string $uuid
  * @property DevelopmentTaskLinkType $type
+ * @property ?string $label
+ * @property string $url
  * @property DevelopmentTask $task
  * @property ?User $addedBy
  */

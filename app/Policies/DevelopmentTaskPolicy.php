@@ -55,6 +55,23 @@ class DevelopmentTaskPolicy
         return $user->can(Permission::DevelopmentRoadmapManage->value);
     }
 
+    public function updateProgress(User $user, DevelopmentTask $task): bool
+    {
+        if (! in_array($task->status, [
+            DevelopmentTaskStatus::Planned,
+            DevelopmentTaskStatus::InProgress,
+            DevelopmentTaskStatus::Blocked,
+        ], true)) {
+            return false;
+        }
+
+        if ($task->assignee_id === $user->getKey()) {
+            return true;
+        }
+
+        return $user->can(Permission::DevelopmentRoadmapManage->value);
+    }
+
     public function manageTesting(User $user, DevelopmentTask $task): bool
     {
         return $user->can(Permission::DevelopmentUserTestingManage->value);

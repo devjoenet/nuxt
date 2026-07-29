@@ -6,6 +6,7 @@ namespace App\Http\Resources;
 
 use App\Enums\DevelopmentNoteAudience;
 use App\Models\DevelopmentTask;
+use App\Models\DevelopmentTaskLink;
 use App\Models\DevelopmentTaskNote;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,11 +39,17 @@ class DevelopmentTaskResource extends JsonResource
             'status_label' => $this->status->label(),
             'priority' => $this->priority->value,
             'priority_label' => $this->priority->label(),
+            'roadmap_position' => $this->roadmap_position,
             'submitter' => $submitter instanceof User ? $submitter->name : 'Former user',
             'reviewer' => $reviewer instanceof User ? $reviewer->name : null,
             'assignee' => $assignee instanceof User ? $assignee->name : null,
+            'assignee_id' => $assignee instanceof User ? $assignee->uuid : null,
             'submitted_at' => $this->submitted_at->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
+            'links' => $this->whenLoaded(
+                'links',
+                fn (): array => DevelopmentTaskLinkResource::collection($this->links)->resolve($request),
+            ),
             'notes' => $this->whenLoaded('notes', function () use ($request, $user): array {
                 if (! $user instanceof User) {
                     return [];
@@ -56,6 +63,12 @@ class DevelopmentTaskResource extends JsonResource
             }),
             'can' => $user instanceof User ? [
                 'review' => $user->can('review', $this->resource),
+                'manage_roadmap' => $user->can('manageRoadmap', $this->resource),
+                'update_progress' => $user->can('updateProgress', $this->resource),
+                'attach_link' => $user->can('create', [
+                    DevelopmentTaskLink::class,
+                    $this->resource,
+                ]),
                 'add_participant_note' => $user->can('create', [
                     DevelopmentTaskNote::class,
                     $this->resource,
@@ -68,6 +81,9 @@ class DevelopmentTaskResource extends JsonResource
                 ]),
             ] : [
                 'review' => false,
+                'manage_roadmap' => false,
+                'update_progress' => false,
+                'attach_link' => false,
                 'add_participant_note' => false,
                 'add_internal_note' => false,
             ],

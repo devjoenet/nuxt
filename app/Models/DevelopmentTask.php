@@ -26,6 +26,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property DevelopmentTaskArea $affected_area
  * @property DevelopmentTaskStatus $status
  * @property TaskPriority $priority
+ * @property ?int $roadmap_position
  * @property ?int $submitter_id
  * @property ?int $reviewer_id
  * @property ?int $assignee_id

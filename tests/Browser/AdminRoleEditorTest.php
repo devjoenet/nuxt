@@ -13,6 +13,7 @@ test('admins can select, update, and keyboard-operate one role permission editor
 
     $admin = User::factory()->create();
     $admin->assignRole(RoleName::Admin->value);
+    $adminPermissionCount = Role::findByName(RoleName::Admin->value)->permissions()->count();
 
     $salesRole = Role::findByName(RoleName::SalesOps->value);
     $crmView = Permission::findByName('crm.view');
@@ -25,7 +26,7 @@ test('admins can select, update, and keyboard-operate one role permission editor
         ->assertSee('Roles and permissions')
         ->assertScript('document.querySelectorAll("#role-selector").length', 1)
         ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"]").length', 1)
-        ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] input:checked").length', 10)
+        ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] input:checked").length', $adminPermissionCount)
         ->click('#role-selector')
         ->assertAttribute('#role-selector', 'aria-expanded', 'true')
         ->keys('#role-selector', 'Escape')
