@@ -18,6 +18,11 @@ enum DevelopmentTaskStatus: string
     case Rejected = 'rejected';
     case Cancelled = 'cancelled';
 
+    public function label(): string
+    {
+        return str($this->value)->replace('_', ' ')->title()->toString();
+    }
+
     public function canTransitionTo(self $status): bool
     {
         return in_array($status, $this->allowedTransitions(), true);

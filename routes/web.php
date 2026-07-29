@@ -20,6 +20,12 @@ use App\Http\Controllers\Crm\LeadNoteController;
 use App\Http\Controllers\Crm\OrganizationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Development\DevelopmentRoadmapController;
+use App\Http\Controllers\Development\DevelopmentTaskController;
+use App\Http\Controllers\Development\DevelopmentTaskInformationRequestController;
+use App\Http\Controllers\Development\DevelopmentTaskNoteController;
+use App\Http\Controllers\Development\DevelopmentTaskPromotionController;
+use App\Http\Controllers\Development\DevelopmentTaskRejectionController;
+use App\Http\Controllers\Development\DevelopmentTaskReviewController;
 use App\Http\Controllers\Development\UserTestingPageController;
 use App\Http\Controllers\PublicIntakeController;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -92,6 +98,21 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
     });
 
     Route::prefix('development')->name('development.')->group(function (): void {
+        Route::get('/', [DevelopmentTaskController::class, 'overview'])->name('index');
+        Route::get('requests', [DevelopmentTaskController::class, 'index'])->name('requests.index');
+        Route::get('requests/create', [DevelopmentTaskController::class, 'create'])->name('requests.create');
+        Route::post('requests', [DevelopmentTaskController::class, 'store'])->name('requests.store');
+        Route::get('review', [DevelopmentTaskReviewController::class, 'index'])->name('review.index');
+        Route::get('tasks/{developmentTask}', [DevelopmentTaskController::class, 'show'])->name('tasks.show');
+        Route::post('tasks/{developmentTask}/notes', [DevelopmentTaskNoteController::class, 'store'])->name('tasks.notes.store');
+        Route::post('tasks/{developmentTask}/review', [DevelopmentTaskReviewController::class, 'store'])->name('tasks.review.store');
+        Route::post('tasks/{developmentTask}/information-request', DevelopmentTaskInformationRequestController::class)
+            ->name('tasks.informationRequest.store');
+        Route::post('tasks/{developmentTask}/promote', DevelopmentTaskPromotionController::class)
+            ->name('tasks.promote');
+        Route::post('tasks/{developmentTask}/reject', DevelopmentTaskRejectionController::class)
+            ->name('tasks.reject');
+
         Route::get('roadmap', DevelopmentRoadmapController::class)
             ->middleware('can:development.roadmap.manage')
             ->name('roadmap.index');

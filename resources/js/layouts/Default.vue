@@ -4,6 +4,9 @@
   import { index as leadsIndex } from "@/routes/crm/leads";
   import { index as organizationsIndex } from "@/routes/crm/organizations";
   import { index as jobsIndex } from "@/routes/admin/jobs";
+  import { index as developmentIndex } from "@/routes/development";
+  import { create as developmentRequestCreate, index as developmentRequestsIndex } from "@/routes/development/requests";
+  import { index as developmentReviewIndex } from "@/routes/development/review";
   import { index as roadmapIndex } from "@/routes/development/roadmap";
   import { index as userTestingIndex } from "@/routes/development/userTesting";
 
@@ -40,15 +43,26 @@
             },
           ]
         : []),
-      ...(auth.value.user?.can?.["development.roadmap.manage"] || auth.value.user?.can?.["development.user_testing.manage"]
+      ...(auth.value.user?.can?.["development.requests.create"] ||
+      auth.value.user?.can?.["development.requests.review"] ||
+      auth.value.user?.can?.["development.roadmap.manage"] ||
+      auth.value.user?.can?.["development.user_testing.manage"]
         ? [
             {
               label: "Development",
               icon: "i-ph-code",
-              to: auth.value.user?.can?.["development.roadmap.manage"] ? roadmapIndex.url() : userTestingIndex.url(),
+              to: developmentIndex.url(),
               type: "trigger" as const,
               defaultOpen: true,
               children: [
+                { label: "Overview", to: developmentIndex.url(), exact: true },
+                ...(auth.value.user?.can?.["development.requests.create"]
+                  ? [
+                      { label: "My requests", to: developmentRequestsIndex.url() },
+                      { label: "Submit request", to: developmentRequestCreate.url() },
+                    ]
+                  : []),
+                ...(auth.value.user?.can?.["development.requests.review"] ? [{ label: "Review queue", to: developmentReviewIndex.url() }] : []),
                 ...(auth.value.user?.can?.["development.roadmap.manage"] ? [{ label: "Roadmap", to: roadmapIndex.url() }] : []),
                 ...(auth.value.user?.can?.["development.user_testing.manage"] ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
               ],
