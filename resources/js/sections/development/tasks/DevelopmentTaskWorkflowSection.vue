@@ -14,9 +14,8 @@ const props = defineProps<{
 <template>
   <aside :class="cn('min-w-0 xl:sticky xl:top-4 xl:self-start', props.class)" data-testid="development-task-workflow">
     <UCard
-      class="bg-default/95 shadow-lg dark:shadow-none"
       :ui="{
-        root: 'relative overflow-hidden rounded-xl ring-default',
+        root: 'relative overflow-hidden rounded-xl',
         header: 'border-b border-default p-5 sm:p-6',
         body: 'p-0 sm:p-0',
       }"

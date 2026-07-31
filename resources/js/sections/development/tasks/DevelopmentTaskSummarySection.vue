@@ -57,9 +57,9 @@ const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US
   <UCard
     id="development-task-summary"
     as="section"
-    :class="cn('bg-default/95 shadow-xl shadow-default/5 dark:shadow-none', props.class)"
+    :class="cn('shadow-lg dark:shadow-none', props.class)"
     :ui="{
-      root: 'relative overflow-hidden rounded-2xl ring-default',
+      root: 'relative overflow-hidden rounded-2xl',
       header: 'border-b border-default p-0 sm:p-0',
       body: 'p-5 sm:p-6 lg:p-8',
     }"

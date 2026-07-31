@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { cn } from "@/lib/utils";
-
 const props = defineProps<{
   headingId: string;
   eyebrow: string;
@@ -14,13 +12,13 @@ const props = defineProps<{
 <template>
   <UCard
     :aria-labelledby="headingId"
-    :class="cn('bg-default/95 dark:shadow-none', props.class)"
+    :class="props.class"
     :ui="{
-      root: 'overflow-hidden rounded-xl ring-default',
+      root: 'overflow-hidden rounded-xl',
       header: 'border-b border-default p-5 sm:p-6',
       body: 'grid gap-6 p-5 sm:p-6',
     }"
-    variant="solid"
+    variant="subtle"
   >
     <template #header>
       <div class="grid gap-3">

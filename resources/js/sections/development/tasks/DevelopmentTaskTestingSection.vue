@@ -23,7 +23,7 @@ const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
 <template>
   <DevelopmentTaskSectionCard :class="$props.class" description="Every round remains attached to the task, including feedback that caused another implementation pass." eyebrow="04 / Verification" heading-id="task-testing-heading" title="User testing history" tone="warning">
     <ol v-if="task.test_runs?.length" class="grid gap-4" role="list">
-      <li v-for="testRun in task.test_runs" :key="testRun.id" class="grid gap-5 rounded-lg bg-elevated/50 p-5 ring ring-default">
+      <li v-for="testRun in task.test_runs" :key="testRun.id" class="grid gap-5 rounded-lg bg-default/70 p-5 ring ring-accented">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="grid gap-1">
             <p class="font-medium text-highlighted">{{ testRun.tester }}</p>

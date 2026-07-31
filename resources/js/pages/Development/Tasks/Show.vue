@@ -56,7 +56,9 @@ const pageContextLabel = computed(() => (isRoadmapTask.value ? "Roadmap task" : 
         :ui="{
           badge: { base: 'rounded-md' },
           button: { base: 'rounded-md' },
-          card: { root: 'rounded-xl' },
+          card: {
+            root: 'rounded-xl bg-elevated ring-accented shadow-sm shadow-default/5 dark:shadow-none dark:inset-ring dark:inset-ring-accented',
+          },
         }"
       >
         <div class="relative min-h-full bg-default" data-testid="development-task-scroll-content">

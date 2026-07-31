@@ -16,21 +16,21 @@ defineProps<{
           :description="task.desired_outcome"
           title="Desired outcome"
           :ui="{
-            root: 'rounded-lg',
+            root: 'rounded-lg bg-default/70 ring-accented',
             container: 'p-4 sm:p-5',
             description: 'whitespace-pre-wrap text-base/7 sm:text-sm/6',
           }"
-          variant="soft"
+          variant="subtle"
         />
         <UPageCard
           :description="task.acceptance_criteria"
           title="Acceptance criteria"
           :ui="{
-            root: 'rounded-lg',
+            root: 'rounded-lg bg-default/70 ring-accented',
             container: 'p-4 sm:p-5',
             description: 'whitespace-pre-wrap text-base/7 sm:text-sm/6',
           }"
-          variant="soft"
+          variant="subtle"
         />
       </div>
     </article>

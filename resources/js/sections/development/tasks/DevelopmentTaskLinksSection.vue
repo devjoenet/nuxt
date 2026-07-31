@@ -15,7 +15,7 @@ defineProps<{
 
 <template>
   <DevelopmentTaskSectionCard :class="$props.class" description="Branches, pull requests, commits, deployments, and supporting references stay attached to this task." eyebrow="03 / Delivery" heading-id="task-links-heading" title="Task links" tone="secondary">
-    <Form v-if="task.can.attach_link" #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3 rounded-lg bg-elevated/50 p-4 ring ring-default sm:grid-cols-2 sm:p-5" reset-on-success v-bind="storeLink.form(task.id)">
+    <Form v-if="task.can.attach_link" #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3 rounded-lg bg-default/70 p-4 ring ring-accented sm:grid-cols-2 sm:p-5" reset-on-success v-bind="storeLink.form(task.id)">
       <FormSelect :error="errors.type" :items="linkTypes" label="Link type" name="type" required />
       <FormInput :error="errors.label" label="Label" name="label" placeholder="Optional display label" />
       <FormInput :error="errors.url" class="sm:col-span-2" label="URL" name="url" placeholder="https://…" required type="url" />
