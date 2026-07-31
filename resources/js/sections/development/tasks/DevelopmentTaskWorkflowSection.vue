@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import { cn } from "@/lib/utils";
-  import DevelopmentTaskLifecycleTimeline from "@/sections/development/tasks/DevelopmentTaskLifecycleTimeline.vue";
-  import DevelopmentTaskWorkflowActions from "@/sections/development/tasks/DevelopmentTaskWorkflowActions.vue";
-  import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
+import { cn } from "@/lib/utils";
+import DevelopmentTaskLifecycleTimeline from "@/sections/development/tasks/DevelopmentTaskLifecycleTimeline.vue";
+import DevelopmentTaskWorkflowActions from "@/sections/development/tasks/DevelopmentTaskWorkflowActions.vue";
+import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
-  const props = defineProps<{
-    task: DevelopmentTask;
-    testers: DevelopmentOption[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  task: DevelopmentTask;
+  testers: DevelopmentOption[];
+  class?: string;
+}>();
 </script>
 
 <template>

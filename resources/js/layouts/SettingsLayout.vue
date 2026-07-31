@@ -1,21 +1,21 @@
 <script setup lang="ts">
-  import type { NavigationMenuItem } from "@nuxt/ui";
+import type { NavigationMenuItem } from "@nuxt/ui";
 
-  const links = [
-    [
-      {
-        label: "Profile",
-        icon: "i-ph-user",
-        to: "/settings/profile",
-        exact: true,
-      },
-      {
-        label: "Security",
-        icon: "i-ph-shield",
-        to: "/settings/security",
-      },
-    ],
-  ] satisfies NavigationMenuItem[][];
+const links = [
+  [
+    {
+      label: "Profile",
+      icon: "i-ph-user",
+      to: "/settings/profile",
+      exact: true,
+    },
+    {
+      label: "Security",
+      icon: "i-ph-shield",
+      to: "/settings/security",
+    },
+  ],
+] satisfies NavigationMenuItem[][];
 </script>
 
 <template>

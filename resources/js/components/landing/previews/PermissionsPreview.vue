@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { Motion } from "motion-v";
+import { Motion } from "motion-v";
 
-  const permissions = ["View dashboard", "Manage orders", "Edit rates", "Approve invoices", "View reports", "Manage users"];
-  const roles = ["Admin", "Ops lead", "Analyst", "Driver"];
+const permissions = ["View dashboard", "Manage orders", "Edit rates", "Approve invoices", "View reports", "Manage users"];
+const roles = ["Admin", "Ops lead", "Analyst", "Driver"];
 </script>
 
 <template>

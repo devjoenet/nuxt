@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import { router } from "@inertiajs/vue3";
-  import Layout from "@/layouts/Default.vue";
-  import { create, index } from "@/routes/development/requests";
-  import { show } from "@/routes/development/tasks";
-  import type { PaginatedDevelopmentTasks } from "@/types/development";
+import { router } from "@inertiajs/vue3";
+import Layout from "@/layouts/Default.vue";
+import { create, index } from "@/routes/development/requests";
+import { show } from "@/routes/development/tasks";
+import type { PaginatedDevelopmentTasks } from "@/types/development";
 
-  defineOptions({ layout: Layout });
-  defineProps<{ requests: PaginatedDevelopmentTasks; canCreate: boolean }>();
+defineOptions({ layout: Layout });
+defineProps<{ requests: PaginatedDevelopmentTasks; canCreate: boolean }>();
 
-  const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
+const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
 </script>
 
 <template>
@@ -43,12 +43,7 @@
 
         <div v-if="requests.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
           <p class="text-sm text-muted">{{ requests.meta.total }} requests</p>
-          <UPagination
-            :items-per-page="requests.meta.per_page"
-            :page="requests.meta.current_page"
-            :total="requests.meta.total"
-            @update:page="router.get(index({ query: { page: $event } }).url)"
-          />
+          <UPagination :items-per-page="requests.meta.per_page" :page="requests.meta.current_page" :total="requests.meta.total" @update:page="router.get(index({ query: { page: $event } }).url)" />
         </div>
       </div>
     </template>

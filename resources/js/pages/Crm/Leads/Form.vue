@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-  import { Form } from "@inertiajs/vue3";
-  import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
-  import FormInput from "@/components/FormInput.vue";
-  import FormMultiSelect from "@/components/FormMultiSelect.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import Layout from "@/layouts/Default.vue";
-  import { create as createContact } from "@/routes/crm/contacts";
-  import { create as createOrganization } from "@/routes/crm/organizations";
-  import { index, show, store, update } from "@/routes/crm/leads";
-  import type { Lead, Option, Owner } from "@/types/crm";
+import { Form } from "@inertiajs/vue3";
+import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
+import FormInput from "@/components/FormInput.vue";
+import FormMultiSelect from "@/components/FormMultiSelect.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import FormTextarea from "@/components/FormTextarea.vue";
+import Layout from "@/layouts/Default.vue";
+import { create as createContact } from "@/routes/crm/contacts";
+import { create as createOrganization } from "@/routes/crm/organizations";
+import { index, show, store, update } from "@/routes/crm/leads";
+import type { Lead, Option, Owner } from "@/types/crm";
 
-  defineOptions({ layout: Layout });
-  const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: Owner[]; canAssign: boolean }>();
-  const action = computed(() => (props.lead ? update(props.lead.id) : store()));
-  const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
-  const contactId = ref<string | null>(props.lead?.contact?.id ?? null);
-  const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
+defineOptions({ layout: Layout });
+const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: Owner[]; canAssign: boolean }>();
+const action = computed(() => (props.lead ? update(props.lead.id) : store()));
+const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+const contactId = ref<string | null>(props.lead?.contact?.id ?? null);
+const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
 </script>
 
 <template>
@@ -56,32 +56,9 @@
           />
           <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
           <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
-          <FormSelect
-            v-if="canAssign"
-            :default-value="lead?.owner ? String(lead.owner.id) : ''"
-            :error="errors.owner_id"
-            :items="ownerOptions"
-            label="Owner"
-            name="owner_id"
-            placeholder="Unassigned"
-          />
-          <FormMultiSelect
-            :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])"
-            :error="errors.service_interest"
-            :items="serviceInterests"
-            label="Service interests"
-            name="service_interest"
-          />
-          <FormInput
-            :default-value="lead?.budget_range ?? undefined"
-            :error="errors.budget_range"
-            inputmode="decimal"
-            label="Estimated budget"
-            min="0"
-            name="budget_range"
-            step="1000"
-            type="number"
-          >
+          <FormSelect v-if="canAssign" :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" placeholder="Unassigned" />
+          <FormMultiSelect :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])" :error="errors.service_interest" :items="serviceInterests" label="Service interests" name="service_interest" />
+          <FormInput :default-value="lead?.budget_range ?? undefined" :error="errors.budget_range" inputmode="decimal" label="Estimated budget" min="0" name="budget_range" step="1000" type="number">
             <template #leading><span class="text-muted">$</span></template>
           </FormInput>
           <FormInput :default-value="lead?.timeline ?? undefined" :error="errors.timeline" label="Timeline" name="timeline" />
@@ -91,13 +68,7 @@
           <UButton :to="createOrganization().url" color="neutral" icon="i-ph-buildings" label="Create a new organization" variant="link" />
         </div>
         <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />
-        <div class="flex justify-end gap-3">
-          <UButton :to="lead ? show(lead.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton
-            :label="lead ? 'Save changes' : 'Create lead'"
-            :loading="processing"
-            type="submit"
-          />
-        </div>
+        <div class="flex justify-end gap-3"><UButton :to="lead ? show(lead.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton :label="lead ? 'Save changes' : 'Create lead'" :loading="processing" type="submit" /></div>
       </Form>
     </template>
   </UDashboardPanel>

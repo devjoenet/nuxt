@@ -1,80 +1,68 @@
 <script lang="ts" setup>
-  import FormField from "@/components/FormField.vue";
-  import type { SelectMenuProps } from "@nuxt/ui";
-  import { computed, ref, useAttrs } from "vue";
+import FormField from "@/components/FormField.vue";
+import type { SelectMenuProps } from "@nuxt/ui";
+import { computed, ref, useAttrs } from "vue";
 
-  defineOptions({ inheritAttrs: false });
+defineOptions({ inheritAttrs: false });
 
-  type SelectItem = { label: string; value: string; disabled?: boolean };
+type SelectItem = { label: string; value: string; disabled?: boolean };
 
-  const props = withDefaults(
-    defineProps<{
-      id?: string;
-      name?: string;
-      label?: string;
-      description?: string;
-      error?: string | boolean;
-      valid?: boolean;
-      successText?: string;
-      variant?: "filled" | "outlined";
-      size?: "sm" | "md" | "lg";
-      required?: boolean;
-      items: SelectItem[];
-      placeholder?: string;
-      defaultValue?: string[] | string;
-    }>(),
-    {
-      variant: "outlined",
-      size: "md",
-      placeholder: "Choose services",
-    },
-  );
+const props = withDefaults(
+  defineProps<{
+    id?: string;
+    name?: string;
+    label?: string;
+    description?: string;
+    error?: string | boolean;
+    valid?: boolean;
+    successText?: string;
+    variant?: "filled" | "outlined";
+    size?: "sm" | "md" | "lg";
+    required?: boolean;
+    items: SelectItem[];
+    placeholder?: string;
+    defaultValue?: string[] | string;
+  }>(),
+  {
+    variant: "outlined",
+    size: "md",
+    placeholder: "Choose services",
+  },
+);
 
-  const attrs = useAttrs();
-  const controlClass = computed(() => attrs.class);
-  const controlAttrs = computed(() => {
-    const { class: _class, ...rest } = attrs;
+const attrs = useAttrs();
+const controlClass = computed(() => attrs.class);
+const controlAttrs = computed(() => {
+  const { class: _class, ...rest } = attrs;
 
-    return rest;
-  });
-  const selected = ref<string[]>(typeof props.defaultValue === "string" ? [props.defaultValue] : [...(props.defaultValue ?? [])]);
+  return rest;
+});
+const selected = ref<string[]>(typeof props.defaultValue === "string" ? [props.defaultValue] : [...(props.defaultValue ?? [])]);
 
-  const defaultBaseClass = computed(() => {
-    const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
+const defaultBaseClass = computed(() => {
+  const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
 
-    return `min-h-14 w-full rounded-xl !bg-transparent px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
-  });
+  return `min-h-14 w-full rounded-xl !bg-transparent px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
+});
 
-  type SelectMenuUi = NonNullable<SelectMenuProps["ui"]>;
+type SelectMenuUi = NonNullable<SelectMenuProps["ui"]>;
 
-  const controlUi = computed<SelectMenuUi>(() => {
-    const customUi = controlAttrs.value.ui as SelectMenuProps["ui"] | undefined;
+const controlUi = computed<SelectMenuUi>(() => {
+  const customUi = controlAttrs.value.ui as SelectMenuProps["ui"] | undefined;
 
-    return {
-      ...customUi,
-      base: customUi?.base ?? defaultBaseClass.value,
-      content: customUi?.content ?? "w-max min-w-[min(20rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)]",
-      itemLabel: customUi?.itemLabel ?? "!whitespace-normal !overflow-visible !text-clip break-words",
-    };
-  });
+  return {
+    ...customUi,
+    base: customUi?.base ?? defaultBaseClass.value,
+    content: customUi?.content ?? "w-max min-w-[min(20rem,calc(100vw-2rem))] max-w-[calc(100vw-2rem)]",
+    itemLabel: customUi?.itemLabel ?? "!whitespace-normal !overflow-visible !text-clip break-words",
+  };
+});
 
-  const selectedItems = computed(() => props.items.filter((item) => selected.value.includes(item.value)));
+const selectedItems = computed(() => props.items.filter((item) => selected.value.includes(item.value)));
 </script>
 
 <template>
-  <FormField
-    :id="id"
-    :class="controlClass"
-    :description="description"
-    :error="error"
-    :label="label"
-    :name="name"
-    :required="required"
-    :static-label="true"
-    :success-text="successText"
-    :valid="valid"
-    :variant="variant"
-  >
+  <FormField :id="id" :class="controlClass" :description="description" :error="error" :label="label" :name="name" :required="required" :static-label="true" :success-text="successText" :valid="valid" :variant="variant">
     <template #default="{ ariaDescribedby, ariaInvalid, id: fieldId }">
       <input v-for="item in selected" :key="`${name}-${item}`" :name="`${name}[]`" :value="item" type="hidden" />
       <USelectMenu

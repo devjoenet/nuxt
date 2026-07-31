@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-  const props = defineProps<{
-    headingId: string;
-    eyebrow: string;
-    title: string;
-    description: string;
-    tone: "primary" | "secondary" | "neutral" | "success" | "info" | "warning" | "error";
-    class?: string;
-  }>();
+const props = defineProps<{
+  headingId: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  tone: "primary" | "secondary" | "neutral" | "success" | "info" | "warning" | "error";
+  class?: string;
+}>();
 </script>
 
 <template>

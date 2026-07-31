@@ -1,76 +1,76 @@
 <script setup lang="ts">
-  import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
-  import FormInput from "@/components/FormInput.vue";
-  import Layout from "@/layouts/Default.vue";
-  import SettingsLayout from "@/layouts/SettingsLayout.vue";
-  import { send } from "@/routes/verification";
-  import { Head } from "@inertiajs/vue3";
-  import type { FormSubmitEvent } from "@nuxt/ui";
-  import * as z from "zod";
+import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
+import FormInput from "@/components/FormInput.vue";
+import Layout from "@/layouts/Default.vue";
+import SettingsLayout from "@/layouts/SettingsLayout.vue";
+import { send } from "@/routes/verification";
+import { Head } from "@inertiajs/vue3";
+import type { FormSubmitEvent } from "@nuxt/ui";
+import * as z from "zod";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  defineProps<{
-    mustVerifyEmail: boolean;
-    status?: string;
-  }>();
+defineProps<{
+  mustVerifyEmail: boolean;
+  status?: string;
+}>();
 
-  const fileRef = ref<HTMLInputElement>();
+const fileRef = ref<HTMLInputElement>();
 
-  const profileSchema = z.object({
-    name: z.string().min(2, "Too short"),
-    email: z.email("Invalid email"),
-    avatar: z.string().optional(),
+const profileSchema = z.object({
+  name: z.string().min(2, "Too short"),
+  email: z.email("Invalid email"),
+  avatar: z.string().optional(),
+});
+
+type ProfileSchema = z.output<typeof profileSchema>;
+type ProfileFormError = { name?: string; message: string };
+const auth = useAuth();
+
+const profile = reactive<Partial<ProfileSchema>>({
+  name: auth.value.user.name,
+  email: auth.value.user.email,
+  avatar: undefined,
+});
+
+const form = useForm<Partial<ProfileSchema>>({
+  name: "",
+  email: "",
+  avatar: undefined,
+});
+
+function fieldError(errors: ProfileFormError[], field: string): string | undefined {
+  return errors.find((error) => error.name === field)?.message;
+}
+
+const toast = useToast();
+async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
+  form.name = event.data.name;
+  form.email = event.data.email;
+  form.avatar = event.data.avatar;
+  form.submit(update());
+
+  toast.add({
+    title: "Success",
+    description: "Your settings have been updated.",
+    icon: "i-ph-check",
+    color: "success",
   });
+}
 
-  type ProfileSchema = z.output<typeof profileSchema>;
-  type ProfileFormError = { name?: string; message: string };
-  const auth = useAuth();
+function onFileChange(e: Event) {
+  const input = e.target as HTMLInputElement;
 
-  const profile = reactive<Partial<ProfileSchema>>({
-    name: auth.value.user.name,
-    email: auth.value.user.email,
-    avatar: undefined,
-  });
-
-  const form = useForm<Partial<ProfileSchema>>({
-    name: "",
-    email: "",
-    avatar: undefined,
-  });
-
-  function fieldError(errors: ProfileFormError[], field: string): string | undefined {
-    return errors.find((error) => error.name === field)?.message;
+  if (!input.files?.length) {
+    return;
   }
 
-  const toast = useToast();
-  async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
-    form.name = event.data.name;
-    form.email = event.data.email;
-    form.avatar = event.data.avatar;
-    form.submit(update());
+  profile.avatar = URL.createObjectURL(input.files[0]);
+}
 
-    toast.add({
-      title: "Success",
-      description: "Your settings have been updated.",
-      icon: "i-ph-check",
-      color: "success",
-    });
-  }
-
-  function onFileChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-
-    if (!input.files?.length) {
-      return;
-    }
-
-    profile.avatar = URL.createObjectURL(input.files[0]);
-  }
-
-  function onFileClick() {
-    fileRef.value?.click();
-  }
+function onFileClick() {
+  fileRef.value?.click();
+}
 </script>
 
 <template>
@@ -83,26 +83,9 @@
       </UPageCard>
 
       <UPageCard variant="subtle">
-        <FormInput
-          v-model="profile.name"
-          :error="fieldError(errors, 'name')"
-          autocomplete="off"
-          description="Will appear on receipts, invoices, and other communication."
-          label="Name"
-          name="name"
-          required
-        />
+        <FormInput v-model="profile.name" :error="fieldError(errors, 'name')" autocomplete="off" description="Will appear on receipts, invoices, and other communication." label="Name" name="name" required />
         <USeparator />
-        <FormInput
-          v-model="profile.email"
-          :error="fieldError(errors, 'email')"
-          autocomplete="off"
-          description="Used to sign in, for email receipts and product updates."
-          label="Email"
-          name="email"
-          required
-          type="email"
-        />
+        <FormInput v-model="profile.email" :error="fieldError(errors, 'email')" autocomplete="off" description="Used to sign in, for email receipts and product updates." label="Email" name="email" required type="email" />
         <div v-if="mustVerifyEmail && !auth.user.email_verified_at" class="text-base text-muted sm:text-sm">
           Your email address is unverified.
           <TextLink :href="send()" as="button" class="font-medium text-primary">Click here to resend the verification email.</TextLink>

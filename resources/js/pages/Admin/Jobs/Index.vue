@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import { Head } from "@inertiajs/vue3";
-  import Layout from "@/layouts/Default.vue";
+import { Head } from "@inertiajs/vue3";
+import Layout from "@/layouts/Default.vue";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  defineProps<{
-    queue: { connection: string; default: string; production_driver: string };
-    stats: { label: string; value: number }[];
-    links: { label: string; description: string; url: string }[];
-  }>();
+defineProps<{
+  queue: { connection: string; default: string; production_driver: string };
+  stats: { label: string; value: number }[];
+  links: { label: string; description: string; url: string }[];
+}>();
 </script>
 
 <template>

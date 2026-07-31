@@ -1,46 +1,45 @@
 <script lang="ts" setup>
-  import { router } from "@inertiajs/vue3";
-  import FormInput from "@/components/FormInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import type { TableColumn } from "@nuxt/ui";
-  import { h, resolveComponent, watch } from "vue";
-  import Layout from "@/layouts/Default.vue";
-  import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
-  import { create, index, show } from "@/routes/crm/leads";
-  import type { Lead, Option, Owner, Paginated } from "@/types/crm";
+import { router } from "@inertiajs/vue3";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import type { TableColumn } from "@nuxt/ui";
+import { h, resolveComponent, watch } from "vue";
+import Layout from "@/layouts/Default.vue";
+import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
+import { create, index, show } from "@/routes/crm/leads";
+import type { Lead, Option, Owner, Paginated } from "@/types/crm";
 
-  defineOptions({ layout: Layout });
-  const props = defineProps<{ leads: Paginated<Lead>; filters: Record<string, string>; statuses: Option[]; sources: Option[]; owners: Owner[]; canManage: boolean }>();
-  const UButton = resolveComponent("UButton");
-  const search = ref(props.filters.search ?? "");
-  const status = ref(props.filters.status ?? "");
-  const source = ref(props.filters.source ?? "");
-  let timer: ReturnType<typeof setTimeout>;
+defineOptions({ layout: Layout });
+const props = defineProps<{ leads: Paginated<Lead>; filters: Record<string, string>; statuses: Option[]; sources: Option[]; owners: Owner[]; canManage: boolean }>();
+const UButton = resolveComponent("UButton");
+const search = ref(props.filters.search ?? "");
+const status = ref(props.filters.status ?? "");
+const source = ref(props.filters.source ?? "");
+let timer: ReturnType<typeof setTimeout>;
 
-  const visit = () =>
-    router.get(index().url, { search: search.value || undefined, status: status.value || undefined, source: source.value || undefined }, { preserveState: true, replace: true });
-  watch([search, status, source], () => {
-    clearTimeout(timer);
-    timer = setTimeout(visit, 250);
-  });
+const visit = () => router.get(index().url, { search: search.value || undefined, status: status.value || undefined, source: source.value || undefined }, { preserveState: true, replace: true });
+watch([search, status, source], () => {
+  clearTimeout(timer);
+  timer = setTimeout(visit, 250);
+});
 
-  const columns: TableColumn<Lead>[] = [
-    {
-      accessorKey: "contact.name",
-      header: "Contact",
-      cell: ({ row }) =>
-        h("div", { class: "min-w-48" }, [
-          h("p", { class: "font-medium text-highlighted" }, row.original.contact?.name ?? "Contact unavailable"),
-          h("p", { class: "text-muted" }, row.original.contact?.email ?? "Unavailable"),
-          row.original.contact?.deleted_at ? h("p", { class: "text-warning" }, "Deleted contact") : null,
-        ]),
-    },
-    { accessorKey: "organization.name", header: "Organization", cell: ({ row }) => row.original.organization?.name ?? "Independent" },
-    { accessorKey: "status", header: "Status", cell: ({ row }) => h(LeadStatusBadge, { status: row.original.status }) },
-    { accessorKey: "source", header: "Source", cell: ({ row }) => h("span", { class: "capitalize" }, row.original.source) },
-    { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
-    { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
-  ];
+const columns: TableColumn<Lead>[] = [
+  {
+    accessorKey: "contact.name",
+    header: "Contact",
+    cell: ({ row }) =>
+      h("div", { class: "min-w-48" }, [
+        h("p", { class: "font-medium text-highlighted" }, row.original.contact?.name ?? "Contact unavailable"),
+        h("p", { class: "text-muted" }, row.original.contact?.email ?? "Unavailable"),
+        row.original.contact?.deleted_at ? h("p", { class: "text-warning" }, "Deleted contact") : null,
+      ]),
+  },
+  { accessorKey: "organization.name", header: "Organization", cell: ({ row }) => row.original.organization?.name ?? "Independent" },
+  { accessorKey: "status", header: "Status", cell: ({ row }) => h(LeadStatusBadge, { status: row.original.status }) },
+  { accessorKey: "source", header: "Source", cell: ({ row }) => h("span", { class: "capitalize" }, row.original.source) },
+  { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
+  { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
+];
 </script>
 
 <template>
@@ -67,12 +66,7 @@
       </UEmpty>
       <div v-if="leads.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
         <p class="text-base text-muted sm:text-sm">{{ leads.meta.total }} leads</p>
-        <UPagination
-          :items-per-page="leads.meta.per_page"
-          :page="leads.meta.current_page"
-          :total="leads.meta.total"
-          @update:page="router.get(index({ query: { ...filters, page: $event } }).url)"
-        />
+        <UPagination :items-per-page="leads.meta.per_page" :page="leads.meta.current_page" :total="leads.meta.total" @update:page="router.get(index({ query: { ...filters, page: $event } }).url)" />
       </div>
     </template>
   </UDashboardPanel>

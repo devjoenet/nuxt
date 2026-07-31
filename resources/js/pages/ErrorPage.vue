@@ -1,56 +1,56 @@
 <script lang="ts" setup>
-  import AppLogo from "@/components/AppLogo.vue";
-  import { dashboard, home } from "@/routes";
-  import { Head, Link, usePage } from "@inertiajs/vue3";
-  import { useColorMode } from "@vueuse/core";
-  import { computed } from "vue";
-  import type { AppPageProps } from "@/types";
+import AppLogo from "@/components/AppLogo.vue";
+import { dashboard, home } from "@/routes";
+import { Head, Link, usePage } from "@inertiajs/vue3";
+import { useColorMode } from "@vueuse/core";
+import { computed } from "vue";
+import type { AppPageProps } from "@/types";
 
-  type ErrorStatus = 403 | 404 | 419 | 429 | 500 | 503;
+type ErrorStatus = 403 | 404 | 419 | 429 | 500 | 503;
 
-  interface ErrorContent {
-    title: string;
-    description: string;
-  }
+interface ErrorContent {
+  title: string;
+  description: string;
+}
 
-  const props = defineProps<{ status: number }>();
-  const page = usePage<AppPageProps>();
-  useColorMode();
+const props = defineProps<{ status: number }>();
+const page = usePage<AppPageProps>();
+useColorMode();
 
-  const copy = {
-    403: {
-      title: "You do not have access to this workspace area",
-      description: "Your account cannot open this area. Return to the workspace or contact an administrator if you need access.",
-    },
-    404: {
-      title: "That page is not here",
-      description: "The address may be outdated or the page may have moved. Try returning to a page you know is available.",
-    },
-    419: {
-      title: "This request expired",
-      description: "Your session expired before the request completed. Return to a safe page before trying again.",
-    },
-    429: {
-      title: "Too many requests",
-      description: "We received too many requests in a short time. Please wait briefly and try again.",
-    },
-    500: {
-      title: "Something went wrong",
-      description: "We could not complete that request, and the issue was recorded. Please try again shortly.",
-    },
-    503: {
-      title: "Southeast Code is temporarily unavailable",
-      description: "The service is unavailable during maintenance or a service interruption. Please try again shortly.",
-    },
-  } satisfies Record<ErrorStatus, ErrorContent>;
+const copy = {
+  403: {
+    title: "You do not have access to this workspace area",
+    description: "Your account cannot open this area. Return to the workspace or contact an administrator if you need access.",
+  },
+  404: {
+    title: "That page is not here",
+    description: "The address may be outdated or the page may have moved. Try returning to a page you know is available.",
+  },
+  419: {
+    title: "This request expired",
+    description: "Your session expired before the request completed. Return to a safe page before trying again.",
+  },
+  429: {
+    title: "Too many requests",
+    description: "We received too many requests in a short time. Please wait briefly and try again.",
+  },
+  500: {
+    title: "Something went wrong",
+    description: "We could not complete that request, and the issue was recorded. Please try again shortly.",
+  },
+  503: {
+    title: "Southeast Code is temporarily unavailable",
+    description: "The service is unavailable during maintenance or a service interruption. Please try again shortly.",
+  },
+} satisfies Record<ErrorStatus, ErrorContent>;
 
-  const status = computed<ErrorStatus>(() => {
-    const supportedStatuses: ErrorStatus[] = [403, 404, 419, 429, 500, 503];
+const status = computed<ErrorStatus>(() => {
+  const supportedStatuses: ErrorStatus[] = [403, 404, 419, 429, 500, 503];
 
-    return supportedStatuses.includes(props.status as ErrorStatus) ? (props.status as ErrorStatus) : 500;
-  });
-  const message = computed(() => copy[status.value]);
-  const isAuthenticated = computed(() => page.props.auth.user !== null);
+  return supportedStatuses.includes(props.status as ErrorStatus) ? (props.status as ErrorStatus) : 500;
+});
+const message = computed(() => copy[status.value]);
+const isAuthenticated = computed(() => page.props.auth.user !== null);
 </script>
 
 <template>
@@ -62,15 +62,8 @@
     <div aria-hidden="true" class="pointer-events-none absolute -top-32 -left-24 size-80 rounded-full bg-primary-500/10 blur-3xl dark:bg-primary-400/10"></div>
     <div aria-hidden="true" class="pointer-events-none absolute -right-24 -bottom-32 size-96 rounded-full bg-secondary-500/10 blur-3xl dark:bg-secondary-400/10"></div>
 
-    <section
-      aria-labelledby="error-title"
-      class="relative w-full max-w-2xl rounded-2xl border border-default bg-elevated/90 p-6 shadow-2xl shadow-muted-950/10 ring-1 ring-default/60 dark:shadow-none sm:p-10"
-    >
-      <Link
-        :href="home.url()"
-        aria-label="Southeast Code home"
-        class="inline-flex max-w-full rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
-      >
+    <section aria-labelledby="error-title" class="relative w-full max-w-2xl rounded-2xl border border-default bg-elevated/90 p-6 shadow-2xl shadow-muted-950/10 ring-1 ring-default/60 dark:shadow-none sm:p-10">
+      <Link :href="home.url()" aria-label="Southeast Code home" class="inline-flex max-w-full rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500">
         <AppLogo
           :icon-class="'h-auto w-44 max-w-full sm:w-56'"
           aria-hidden="true"

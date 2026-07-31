@@ -1,23 +1,23 @@
 <script setup lang="ts">
-  import { Form, router } from "@inertiajs/vue3";
-  import FormInput from "@/components/FormInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import { cn } from "@/lib/utils";
-  import { complete as completeTask, store as storeTask } from "@/routes/crm/leads/tasks";
-  import type { Lead } from "@/types/crm";
+import { Form, router } from "@inertiajs/vue3";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import { cn } from "@/lib/utils";
+import { complete as completeTask, store as storeTask } from "@/routes/crm/leads/tasks";
+import type { Lead } from "@/types/crm";
 
-  const props = defineProps<{
-    lead: Lead;
-    canManage: boolean;
-    class?: string;
-  }>();
+const props = defineProps<{
+  lead: Lead;
+  canManage: boolean;
+  class?: string;
+}>();
 
-  const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-  const priorities = [
-    { label: "Low", value: "low" },
-    { label: "Normal", value: "normal" },
-    { label: "High", value: "high" },
-  ];
+const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const priorities = [
+  { label: "Low", value: "low" },
+  { label: "Normal", value: "normal" },
+  { label: "High", value: "high" },
+];
 </script>
 
 <template>
@@ -37,14 +37,7 @@
           <p class="font-medium text-highlighted">{{ task.title }}</p>
           <p class="text-base text-muted sm:text-sm">Due {{ formatDate(task.due_at) }}</p>
         </div>
-        <UButton
-          v-if="canManage && task.status === 'open'"
-          aria-label="Complete follow-up"
-          color="neutral"
-          icon="i-ph-check"
-          variant="ghost"
-          @click="router.post(completeTask([lead.id, task.id]).url)"
-        />
+        <UButton v-if="canManage && task.status === 'open'" aria-label="Complete follow-up" color="neutral" icon="i-ph-check" variant="ghost" @click="router.post(completeTask([lead.id, task.id]).url)" />
       </li>
       <li v-if="!lead.tasks?.length" class="text-base text-muted sm:text-sm">No follow-ups.</li>
     </ul>

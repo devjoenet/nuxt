@@ -1,17 +1,17 @@
 <script setup lang="ts">
-  import { Form } from "@inertiajs/vue3";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import { cn } from "@/lib/utils";
-  import { store as storeNote } from "@/routes/crm/leads/notes";
-  import type { Lead } from "@/types/crm";
+import { Form } from "@inertiajs/vue3";
+import FormTextarea from "@/components/FormTextarea.vue";
+import { cn } from "@/lib/utils";
+import { store as storeNote } from "@/routes/crm/leads/notes";
+import type { Lead } from "@/types/crm";
 
-  const props = defineProps<{
-    lead: Lead;
-    canManage: boolean;
-    class?: string;
-  }>();
+const props = defineProps<{
+  lead: Lead;
+  canManage: boolean;
+  class?: string;
+}>();
 
-  const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 </script>
 
 <template>

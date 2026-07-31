@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-  import { Head } from "@inertiajs/vue3";
-  import Layout from "@/layouts/Default.vue";
-  import AdminUsersTableSection from "@/sections/admin/users/AdminUsersTableSection.vue";
-  import InviteAdminUserSection from "@/sections/admin/users/InviteAdminUserSection.vue";
-  import type { AdminRoleOption, AdminUsersPage } from "@/sections/admin/users/types";
+import { Head } from "@inertiajs/vue3";
+import Layout from "@/layouts/Default.vue";
+import AdminUsersTableSection from "@/sections/admin/users/AdminUsersTableSection.vue";
+import InviteAdminUserSection from "@/sections/admin/users/InviteAdminUserSection.vue";
+import type { AdminRoleOption, AdminUsersPage } from "@/sections/admin/users/types";
 
-  defineOptions({ layout: Layout });
-  defineProps<{
-    users: AdminUsersPage;
-    roles: AdminRoleOption[];
-  }>();
+defineOptions({ layout: Layout });
+defineProps<{
+  users: AdminUsersPage;
+  roles: AdminRoleOption[];
+}>();
 </script>
 
 <template>

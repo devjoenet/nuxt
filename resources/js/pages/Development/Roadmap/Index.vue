@@ -1,41 +1,41 @@
 <script lang="ts" setup>
-  import { Head } from "@inertiajs/vue3";
-  import Layout from "@/layouts/Default.vue";
-  import { index as userTestingIndex } from "@/routes/development/userTesting";
-  import RoadmapColumnSection from "@/sections/development/roadmap/RoadmapColumnSection.vue";
-  import type { RoadmapColumn } from "@/sections/development/roadmap/types";
-  import type { DevelopmentRoadmapTasks } from "@/types/development";
+import { Head } from "@inertiajs/vue3";
+import Layout from "@/layouts/Default.vue";
+import { index as userTestingIndex } from "@/routes/development/userTesting";
+import RoadmapColumnSection from "@/sections/development/roadmap/RoadmapColumnSection.vue";
+import type { RoadmapColumn } from "@/sections/development/roadmap/types";
+import type { DevelopmentRoadmapTasks } from "@/types/development";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  const auth = useAuth();
-  const props = defineProps<{ tasks: DevelopmentRoadmapTasks }>();
+const auth = useAuth();
+const props = defineProps<{ tasks: DevelopmentRoadmapTasks }>();
 
-  const columns: RoadmapColumn[] = [
-    {
-      key: "planned",
-      title: "Planned",
-      description: "Prioritized work waiting to start.",
-      empty: "No work is currently planned.",
-      icon: "i-ph-map-pin",
-    },
-    {
-      key: "in_progress",
-      title: "In progress",
-      description: "Assigned work under active implementation.",
-      empty: "No work is currently in progress.",
-      icon: "i-ph-hammer",
-    },
-    {
-      key: "blocked",
-      title: "Blocked",
-      description: "Work waiting on a decision or dependency.",
-      empty: "No work is currently blocked.",
-      icon: "i-ph-warning",
-    },
-  ];
+const columns: RoadmapColumn[] = [
+  {
+    key: "planned",
+    title: "Planned",
+    description: "Prioritized work waiting to start.",
+    empty: "No work is currently planned.",
+    icon: "i-ph-map-pin",
+  },
+  {
+    key: "in_progress",
+    title: "In progress",
+    description: "Assigned work under active implementation.",
+    empty: "No work is currently in progress.",
+    icon: "i-ph-hammer",
+  },
+  {
+    key: "blocked",
+    title: "Blocked",
+    description: "Work waiting on a decision or dependency.",
+    empty: "No work is currently blocked.",
+    icon: "i-ph-warning",
+  },
+];
 
-  const totalTasks = computed(() => Object.values(props.tasks).reduce((total, tasks) => total + tasks.length, 0));
+const totalTasks = computed(() => Object.values(props.tasks).reduce((total, tasks) => total + tasks.length, 0));
 </script>
 
 <template>

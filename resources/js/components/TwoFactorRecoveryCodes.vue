@@ -1,53 +1,40 @@
 <script setup lang="ts">
-  import AlertError from "@/components/AlertError.vue";
-  import { useTwoFactorAuth } from "@/composables/useTwoFactorAuth";
-  import { regenerateRecoveryCodes } from "@/routes/two-factor";
-  import { Form } from "@inertiajs/vue3";
-  import { nextTick, onMounted, ref } from "vue";
+import AlertError from "@/components/AlertError.vue";
+import { useTwoFactorAuth } from "@/composables/useTwoFactorAuth";
+import { regenerateRecoveryCodes } from "@/routes/two-factor";
+import { Form } from "@inertiajs/vue3";
+import { nextTick, onMounted, ref } from "vue";
 
-  const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth();
-  const isRecoveryCodesVisible = ref<boolean>(false);
-  const recoveryCodeSectionRef = ref<HTMLDivElement | null>(null);
+const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth();
+const isRecoveryCodesVisible = ref<boolean>(false);
+const recoveryCodeSectionRef = ref<HTMLDivElement | null>(null);
 
-  async function toggleRecoveryCodesVisibility() {
-    if (!isRecoveryCodesVisible.value && !recoveryCodesList.value.length) {
-      await fetchRecoveryCodes();
-    }
-
-    isRecoveryCodesVisible.value = !isRecoveryCodesVisible.value;
-
-    if (isRecoveryCodesVisible.value) {
-      await nextTick();
-      recoveryCodeSectionRef.value?.scrollIntoView({ behavior: "smooth" });
-    }
+async function toggleRecoveryCodesVisibility() {
+  if (!isRecoveryCodesVisible.value && !recoveryCodesList.value.length) {
+    await fetchRecoveryCodes();
   }
 
-  onMounted(async () => {
-    if (!recoveryCodesList.value.length) {
-      await fetchRecoveryCodes();
-    }
-  });
+  isRecoveryCodesVisible.value = !isRecoveryCodesVisible.value;
+
+  if (isRecoveryCodesVisible.value) {
+    await nextTick();
+    recoveryCodeSectionRef.value?.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+onMounted(async () => {
+  if (!recoveryCodesList.value.length) {
+    await fetchRecoveryCodes();
+  }
+});
 </script>
 
 <template>
-  <UPageCard
-    title="2FA Recovery Codes"
-    description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager."
-    icon="i-ph-lock-key"
-  >
+  <UPageCard title="2FA Recovery Codes" description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager." icon="i-ph-lock-key">
     <div class="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
-      <UButton :icon="isRecoveryCodesVisible ? 'i-ph-eye-slash' : 'i-ph-eye'" @click="toggleRecoveryCodesVisibility">
-        {{ isRecoveryCodesVisible ? "Hide" : "View" }} Recovery Codes
-      </UButton>
+      <UButton :icon="isRecoveryCodesVisible ? 'i-ph-eye-slash' : 'i-ph-eye'" @click="toggleRecoveryCodesVisibility"> {{ isRecoveryCodesVisible ? "Hide" : "View" }} Recovery Codes </UButton>
 
-      <Form
-        v-if="isRecoveryCodesVisible && recoveryCodesList.length"
-        v-bind="regenerateRecoveryCodes.form()"
-        method="post"
-        :options="{ preserveScroll: true }"
-        @success="fetchRecoveryCodes"
-        #default="{ processing }"
-      >
+      <Form v-if="isRecoveryCodesVisible && recoveryCodesList.length" v-bind="regenerateRecoveryCodes.form()" method="post" :options="{ preserveScroll: true }" @success="fetchRecoveryCodes" #default="{ processing }">
         <UButton :disabled="processing" color="secondary" icon="i-ph-arrow-clockwise" type="submit"> Regenerate Codes </UButton>
       </Form>
     </div>

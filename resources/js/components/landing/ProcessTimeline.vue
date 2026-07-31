@@ -1,44 +1,44 @@
 <script setup lang="ts">
-  import { Motion } from "motion-v";
+import { Motion } from "motion-v";
 
-  interface ProcessStep {
-    title: string;
-    description: string;
-    icon: string;
-    tone: "primary" | "secondary" | "accent" | "warning";
-  }
+interface ProcessStep {
+  title: string;
+  description: string;
+  icon: string;
+  tone: "primary" | "secondary" | "accent" | "warning";
+}
 
-  defineProps<{
-    steps: ProcessStep[];
-  }>();
+defineProps<{
+  steps: ProcessStep[];
+}>();
 
-  const circleClasses = {
-    primary: "border-primary-400 text-primary-300 shadow-primary-500/30 group-hover:shadow-primary-400/45",
-    secondary: "border-secondary-400 text-secondary-300 shadow-secondary-500/30 group-hover:shadow-secondary-400/45",
-    accent: "border-accent-400 text-accent-300 shadow-accent-500/30 group-hover:shadow-accent-400/45",
-    warning: "border-warning-400 text-warning-300 shadow-warning-500/30 group-hover:shadow-warning-400/45",
-  };
+const circleClasses = {
+  primary: "border-primary-400 text-primary-300 shadow-primary-500/30 group-hover:shadow-primary-400/45",
+  secondary: "border-secondary-400 text-secondary-300 shadow-secondary-500/30 group-hover:shadow-secondary-400/45",
+  accent: "border-accent-400 text-accent-300 shadow-accent-500/30 group-hover:shadow-accent-400/45",
+  warning: "border-warning-400 text-warning-300 shadow-warning-500/30 group-hover:shadow-warning-400/45",
+};
 
-  const cardClasses = {
-    primary: "group-hover:border-primary-400/45 group-hover:shadow-primary-950/30",
-    secondary: "group-hover:border-secondary-400/45 group-hover:shadow-secondary-950/30",
-    accent: "group-hover:border-accent-400/45 group-hover:shadow-accent-950/30",
-    warning: "group-hover:border-warning-400/45 group-hover:shadow-warning-950/30",
-  };
+const cardClasses = {
+  primary: "group-hover:border-primary-400/45 group-hover:shadow-primary-950/30",
+  secondary: "group-hover:border-secondary-400/45 group-hover:shadow-secondary-950/30",
+  accent: "group-hover:border-accent-400/45 group-hover:shadow-accent-950/30",
+  warning: "group-hover:border-warning-400/45 group-hover:shadow-warning-950/30",
+};
 
-  const labelClasses = {
-    primary: "text-primary-300",
-    secondary: "text-secondary-300",
-    accent: "text-accent-300",
-    warning: "text-warning-300",
-  };
+const labelClasses = {
+  primary: "text-primary-300",
+  secondary: "text-secondary-300",
+  accent: "text-accent-300",
+  warning: "text-warning-300",
+};
 
-  const railClasses = {
-    primary: "from-primary-400/90 via-secondary-400/70 to-accent-400/70",
-    secondary: "from-secondary-400/90 via-accent-400/70 to-warning-400/70",
-    accent: "from-accent-400/90 via-warning-400/70 to-primary-400/70",
-    warning: "from-warning-400/90 via-primary-400/70 to-secondary-400/70",
-  };
+const railClasses = {
+  primary: "from-primary-400/90 via-secondary-400/70 to-accent-400/70",
+  secondary: "from-secondary-400/90 via-accent-400/70 to-warning-400/70",
+  accent: "from-accent-400/90 via-warning-400/70 to-primary-400/70",
+  warning: "from-warning-400/90 via-primary-400/70 to-secondary-400/70",
+};
 </script>
 
 <template>
@@ -54,17 +54,8 @@
       class="group relative"
     >
       <div class="relative h-20">
-        <div
-          v-if="index < steps.length - 1"
-          :class="railClasses[step.tone]"
-          aria-hidden="true"
-          class="absolute top-1/2 left-10 hidden h-px w-[calc(100%+1.25rem)] -translate-y-1/2 bg-linear-to-r md:block"
-        ></div>
-        <div
-          v-if="index < steps.length - 1"
-          aria-hidden="true"
-          class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-neutral-100/45 shadow-[0_0_18px_rgba(255,255,255,0.32)] md:block"
-        ></div>
+        <div v-if="index < steps.length - 1" :class="railClasses[step.tone]" aria-hidden="true" class="absolute top-1/2 left-10 hidden h-px w-[calc(100%+1.25rem)] -translate-y-1/2 bg-linear-to-r md:block"></div>
+        <div v-if="index < steps.length - 1" aria-hidden="true" class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-neutral-100/45 shadow-[0_0_18px_rgba(255,255,255,0.32)] md:block"></div>
 
         <div
           :class="circleClasses[step.tone]"

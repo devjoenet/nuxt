@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { Head, Link } from "@inertiajs/vue3";
-  import Layout from "@/layouts/Default.vue";
-  import { index as leadsIndex, show as leadShow } from "@/routes/crm/leads";
+import { Head, Link } from "@inertiajs/vue3";
+import Layout from "@/layouts/Default.vue";
+import { index as leadsIndex, show as leadShow } from "@/routes/crm/leads";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  defineProps<{
-    canViewCrm: boolean;
-    stats: { label: string; value: number; icon: string }[];
-    recentLeads: { uuid: string; name: string; organization: string | null; status: string; created_at: string | null }[];
-    upcomingTasks: { uuid: string; title: string; lead_uuid: string; lead_name: string; due_at: string; is_overdue: boolean }[];
-  }>();
+defineProps<{
+  canViewCrm: boolean;
+  stats: { label: string; value: number; icon: string }[];
+  recentLeads: { uuid: string; name: string; organization: string | null; status: string; created_at: string | null }[];
+  upcomingTasks: { uuid: string; title: string; lead_uuid: string; lead_name: string; due_at: string; is_overdue: boolean }[];
+}>();
 </script>
 
 <template>
@@ -35,12 +35,7 @@
         <div class="mt-6 grid gap-6 xl:grid-cols-2">
           <UPageCard description="The latest records entering the CRM." title="Recent leads" variant="subtle">
             <div v-if="recentLeads.length" class="divide-y divide-default">
-              <Link
-                v-for="lead in recentLeads"
-                :key="lead.uuid"
-                :href="leadShow.url(lead.uuid)"
-                class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 hover:text-primary"
-              >
+              <Link v-for="lead in recentLeads" :key="lead.uuid" :href="leadShow.url(lead.uuid)" class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 hover:text-primary">
                 <div class="min-w-0">
                   <p class="truncate font-medium text-highlighted">{{ lead.name }}</p>
                   <p class="truncate text-sm text-muted">{{ lead.organization ?? "Individual contact" }}</p>
@@ -54,12 +49,7 @@
 
           <UPageCard description="Open tasks ordered by the next action date." title="Follow-ups" variant="subtle">
             <div v-if="upcomingTasks.length" class="divide-y divide-default">
-              <Link
-                v-for="task in upcomingTasks"
-                :key="task.uuid"
-                :href="leadShow.url(task.lead_uuid)"
-                class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 hover:text-primary"
-              >
+              <Link v-for="task in upcomingTasks" :key="task.uuid" :href="leadShow.url(task.lead_uuid)" class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 hover:text-primary">
                 <div class="min-w-0">
                   <p class="truncate font-medium text-highlighted">{{ task.title }}</p>
                   <p class="truncate text-sm text-muted">{{ task.lead_name }}</p>
@@ -72,13 +62,7 @@
         </div>
       </template>
 
-      <UPageCard
-        v-else
-        description="Your account is active, but no CRM permission has been assigned yet. Ask an administrator to update your role."
-        icon="i-ph-shield-check"
-        title="Workspace access is being prepared"
-        variant="subtle"
-      />
+      <UPageCard v-else description="Your account is active, but no CRM permission has been assigned yet. Ask an administrator to update your role." icon="i-ph-shield-check" title="Workspace access is being prepared" variant="subtle" />
     </template>
   </UDashboardPanel>
 </template>

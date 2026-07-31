@@ -1,18 +1,18 @@
 <script setup lang="ts">
-  import { Form } from "@inertiajs/vue3";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import { cn } from "@/lib/utils";
-  import { show } from "@/routes/development/tasks";
-  import { update as updateTestRun } from "@/routes/development/testRuns";
-  import type { DevelopmentTestRun } from "@/types/development";
+import { Form } from "@inertiajs/vue3";
+import FormTextarea from "@/components/FormTextarea.vue";
+import { cn } from "@/lib/utils";
+import { show } from "@/routes/development/tasks";
+import { update as updateTestRun } from "@/routes/development/testRuns";
+import type { DevelopmentTestRun } from "@/types/development";
 
-  const props = defineProps<{
-    testRun: DevelopmentTestRun;
-    class?: string;
-  }>();
+const props = defineProps<{
+  testRun: DevelopmentTestRun;
+  class?: string;
+}>();
 
-  const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-  const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
+const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
 </script>
 
 <template>
@@ -54,13 +54,7 @@
 
         <div v-if="testRun.build_reference">
           <h3 class="font-semibold text-highlighted">Build or deployment reference</h3>
-          <a
-            v-if="isWebReference(testRun.build_reference)"
-            :href="testRun.build_reference"
-            class="mt-2 inline-block break-all text-sm text-primary hover:underline"
-            rel="noreferrer"
-            target="_blank"
-          >
+          <a v-if="isWebReference(testRun.build_reference)" :href="testRun.build_reference" class="mt-2 inline-block break-all text-sm text-primary hover:underline" rel="noreferrer" target="_blank">
             {{ testRun.build_reference }}
             <span class="sr-only">(opens in a new tab)</span>
           </a>

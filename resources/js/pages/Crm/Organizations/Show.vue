@@ -1,46 +1,34 @@
 <script lang="ts" setup>
-  import { Link, router } from "@inertiajs/vue3";
-  import CrmDetailLayout from "@/components/crm/CrmDetailLayout.vue";
-  import Layout from "@/layouts/Default.vue";
-  import { archive, destroy, edit, index, restore } from "@/routes/crm/organizations";
-  import { show as contactShow } from "@/routes/crm/contacts";
-  import type { Organization } from "@/types/crm";
+import { Link, router } from "@inertiajs/vue3";
+import CrmDetailLayout from "@/components/crm/CrmDetailLayout.vue";
+import Layout from "@/layouts/Default.vue";
+import { archive, destroy, edit, index, restore } from "@/routes/crm/organizations";
+import { show as contactShow } from "@/routes/crm/contacts";
+import type { Organization } from "@/types/crm";
 
-  defineOptions({ layout: Layout });
-  const props = defineProps<{ organization: Organization; canManage: boolean }>();
-  const confirmArchive = () => {
-    if (window.confirm("Archive this organization?")) router.post(archive(props.organization.id).url);
-  };
-  const confirmRestore = () => {
-    if (window.confirm("Restore this organization?")) router.delete(restore(props.organization.id).url);
-  };
-  const confirmDelete = () => {
-    if (window.confirm("Delete this organization? This removes it from active CRM results.")) router.delete(destroy(props.organization.id).url);
-  };
-  const formatDate = (value: string | null): string => (value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded");
+defineOptions({ layout: Layout });
+const props = defineProps<{ organization: Organization; canManage: boolean }>();
+const confirmArchive = () => {
+  if (window.confirm("Archive this organization?")) router.post(archive(props.organization.id).url);
+};
+const confirmRestore = () => {
+  if (window.confirm("Restore this organization?")) router.delete(restore(props.organization.id).url);
+};
+const confirmDelete = () => {
+  if (window.confirm("Delete this organization? This removes it from active CRM results.")) router.delete(destroy(props.organization.id).url);
+};
+const formatDate = (value: string | null): string => (value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded");
 </script>
 
 <template>
-  <CrmDetailLayout
-    :edit-url="canManage ? edit(organization.id).url : undefined"
-    :index-url="index().url"
-    index-label="All organizations"
-    navbar-title="Organization details"
-    panel-id="crm-organization-detail"
-  >
+  <CrmDetailLayout :edit-url="canManage ? edit(organization.id).url : undefined" :index-url="index().url" index-label="All organizations" navbar-title="Organization details" panel-id="crm-organization-detail">
     <template #summary>
       <div class="min-w-0" data-testid="organization-summary">
         <div class="flex flex-wrap items-start gap-3">
           <h1 class="break-words text-2xl font-semibold tracking-tight text-highlighted">{{ organization.name }}</h1>
           <UBadge v-if="organization.archived_at" color="warning" data-testid="organization-archived-status" label="Archived" variant="subtle" />
         </div>
-        <a
-          v-if="organization.website"
-          :href="organization.website"
-          class="mt-2 block break-all text-base text-muted hover:text-highlighted hover:underline sm:text-sm"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a v-if="organization.website" :href="organization.website" class="mt-2 block break-all text-base text-muted hover:text-highlighted hover:underline sm:text-sm" rel="noreferrer" target="_blank">
           {{ organization.website }}
         </a>
         <p v-else class="mt-2 text-base text-muted sm:text-sm">No website recorded.</p>

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-  import { computed } from "vue";
+import { computed } from "vue";
 
-  const props = withDefaults(
-    defineProps<{
-      errors: string[];
-      title?: string;
-    }>(),
-    {
-      title: "Something went wrong.",
-    },
-  );
+const props = withDefaults(
+  defineProps<{
+    errors: string[];
+    title?: string;
+  }>(),
+  {
+    title: "Something went wrong.",
+  },
+);
 
-  const uniqueErrors = computed(() => Array.from(new Set(props.errors)));
+const uniqueErrors = computed(() => Array.from(new Set(props.errors)));
 </script>
 
 <template>

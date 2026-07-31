@@ -1,21 +1,21 @@
 <script setup lang="ts">
-  import { cn } from "@/lib/utils";
-  import { show } from "@/routes/development/tasks";
-  import type { RoadmapColumn } from "@/sections/development/roadmap/types";
-  import type { DevelopmentTask } from "@/types/development";
+import { cn } from "@/lib/utils";
+import { show } from "@/routes/development/tasks";
+import type { RoadmapColumn } from "@/sections/development/roadmap/types";
+import type { DevelopmentTask } from "@/types/development";
 
-  const props = defineProps<{
-    column: RoadmapColumn;
-    tasks: DevelopmentTask[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  column: RoadmapColumn;
+  tasks: DevelopmentTask[];
+  class?: string;
+}>();
 
-  const priorityColor = (task: DevelopmentTask): "error" | "neutral" | "warning" => {
-    if (task.priority === "high") return "error";
-    if (task.priority === "low") return "neutral";
+const priorityColor = (task: DevelopmentTask): "error" | "neutral" | "warning" => {
+  if (task.priority === "high") return "error";
+  if (task.priority === "low") return "neutral";
 
-    return "warning";
-  };
+  return "warning";
+};
 </script>
 
 <template>

@@ -1,57 +1,51 @@
 <script lang="ts" setup>
-  import { router } from "@inertiajs/vue3";
-  import type { TableColumn } from "@nuxt/ui";
-  import { h, resolveComponent, watch } from "vue";
-  import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
-  import FormInput from "@/components/FormInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import Layout from "@/layouts/Default.vue";
-  import { create, index, show } from "@/routes/crm/contacts";
-  import type { Contact, Option, Owner, Paginated } from "@/types/crm";
+import { router } from "@inertiajs/vue3";
+import type { TableColumn } from "@nuxt/ui";
+import { h, resolveComponent, watch } from "vue";
+import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import Layout from "@/layouts/Default.vue";
+import { create, index, show } from "@/routes/crm/contacts";
+import type { Contact, Option, Owner, Paginated } from "@/types/crm";
 
-  defineOptions({ layout: Layout });
-  const props = defineProps<{
-    contacts: Paginated<Contact>;
-    filters: Record<string, string>;
-    owners: Owner[];
-    canManage: boolean;
-    canAssign: boolean;
-  }>();
-  const UButton = resolveComponent("UButton");
-  const search = ref(props.filters.search ?? "");
-  const organization = ref(props.filters.organization ?? "");
-  const owner = ref(props.filters.owner ?? "");
-  let timer: ReturnType<typeof setTimeout>;
-  const ownerOptions = computed<Option[]>(() => props.owners.map((item) => ({ label: item.name, value: String(item.id) })));
-  const visit = () =>
-    router.get(
-      index().url,
-      { search: search.value || undefined, organization: organization.value || undefined, owner: owner.value || undefined },
-      { preserveState: true, replace: true },
-    );
-  watch([search, organization, owner], () => {
-    clearTimeout(timer);
-    timer = setTimeout(visit, 250);
-  });
-  const columns: TableColumn<Contact>[] = [
-    {
-      accessorKey: "name",
-      header: "Contact",
-      cell: ({ row }) => h("div", {}, [h("p", { class: "font-medium text-highlighted" }, row.original.name), h("p", { class: "text-muted" }, row.original.email)]),
-    },
-    { accessorKey: "organization.name", header: "Organization", cell: ({ row }) => row.original.organization?.name ?? "Independent" },
-    { accessorKey: "phone", header: "Phone", cell: ({ row }) => row.original.phone ?? "—" },
-    { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
-    { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
-  ];
+defineOptions({ layout: Layout });
+const props = defineProps<{
+  contacts: Paginated<Contact>;
+  filters: Record<string, string>;
+  owners: Owner[];
+  canManage: boolean;
+  canAssign: boolean;
+}>();
+const UButton = resolveComponent("UButton");
+const search = ref(props.filters.search ?? "");
+const organization = ref(props.filters.organization ?? "");
+const owner = ref(props.filters.owner ?? "");
+let timer: ReturnType<typeof setTimeout>;
+const ownerOptions = computed<Option[]>(() => props.owners.map((item) => ({ label: item.name, value: String(item.id) })));
+const visit = () => router.get(index().url, { search: search.value || undefined, organization: organization.value || undefined, owner: owner.value || undefined }, { preserveState: true, replace: true });
+watch([search, organization, owner], () => {
+  clearTimeout(timer);
+  timer = setTimeout(visit, 250);
+});
+const columns: TableColumn<Contact>[] = [
+  {
+    accessorKey: "name",
+    header: "Contact",
+    cell: ({ row }) => h("div", {}, [h("p", { class: "font-medium text-highlighted" }, row.original.name), h("p", { class: "text-muted" }, row.original.email)]),
+  },
+  { accessorKey: "organization.name", header: "Organization", cell: ({ row }) => row.original.organization?.name ?? "Independent" },
+  { accessorKey: "phone", header: "Phone", cell: ({ row }) => row.original.phone ?? "—" },
+  { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
+  { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
+];
 </script>
 
 <template>
   <UDashboardPanel id="crm-contacts">
     <template #header
       ><UDashboardNavbar title="Contacts"
-        ><template #leading><UDashboardSidebarCollapse /></template
-        ><template #right><UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New contact" /></template></UDashboardNavbar
+        ><template #leading><UDashboardSidebarCollapse /></template><template #right><UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New contact" /></template></UDashboardNavbar
     ></template>
     <template #body>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -74,12 +68,7 @@
       ></UEmpty>
       <div v-if="contacts.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
         <p class="text-base text-muted sm:text-sm">{{ contacts.meta.total }} contacts</p>
-        <UPagination
-          :items-per-page="contacts.meta.per_page"
-          :page="contacts.meta.current_page"
-          :total="contacts.meta.total"
-          @update:page="router.get(index({ query: { ...filters, page: $event } }).url)"
-        />
+        <UPagination :items-per-page="contacts.meta.per_page" :page="contacts.meta.current_page" :total="contacts.meta.total" @update:page="router.get(index({ query: { ...filters, page: $event } }).url)" />
       </div>
     </template>
   </UDashboardPanel>

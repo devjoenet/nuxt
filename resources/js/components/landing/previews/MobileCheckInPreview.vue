@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { Motion } from "motion-v";
+import { Motion } from "motion-v";
 </script>
 
 <template>

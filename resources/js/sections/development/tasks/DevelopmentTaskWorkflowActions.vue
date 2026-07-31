@@ -1,37 +1,34 @@
 <script setup lang="ts">
-  import { Form } from "@inertiajs/vue3";
-  import FormInput from "@/components/FormInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import { cn } from "@/lib/utils";
-  import { promote, reject } from "@/routes/development/tasks";
-  import { store as requestInformation } from "@/routes/development/tasks/informationRequest";
-  import { update as updateProgress } from "@/routes/development/tasks/progress";
-  import { store as startReview } from "@/routes/development/tasks/review";
-  import { store as requestTesting } from "@/routes/development/tasks/testRuns";
-  import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
+import { Form } from "@inertiajs/vue3";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import FormTextarea from "@/components/FormTextarea.vue";
+import { cn } from "@/lib/utils";
+import { promote, reject } from "@/routes/development/tasks";
+import { store as requestInformation } from "@/routes/development/tasks/informationRequest";
+import { update as updateProgress } from "@/routes/development/tasks/progress";
+import { store as startReview } from "@/routes/development/tasks/review";
+import { store as requestTesting } from "@/routes/development/tasks/testRuns";
+import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
-  const props = defineProps<{
-    task: DevelopmentTask;
-    testers: DevelopmentOption[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  task: DevelopmentTask;
+  testers: DevelopmentOption[];
+  class?: string;
+}>();
 
-  const canStartReview = computed(() => props.task.can.review && ["submitted", "needs_information"].includes(props.task.status));
-  const canRequestInformation = computed(() => props.task.can.review && props.task.status === "submitted");
-  const canDecide = computed(() => props.task.can.review && props.task.status === "under_review");
-  const progressAction = computed<{ color: "neutral" | "primary" | "warning"; label: string; status: string } | null>(() => {
-    if (props.task.status === "planned") return { label: "Start work", status: "in_progress", color: "primary" };
-    if (props.task.status === "in_progress") return { label: "Mark blocked", status: "blocked", color: "warning" };
-    if (props.task.status === "blocked") return { label: "Resume work", status: "in_progress", color: "primary" };
-    if (props.task.status === "changes_requested") return { label: "Resume implementation", status: "in_progress", color: "primary" };
+const canStartReview = computed(() => props.task.can.review && ["submitted", "needs_information"].includes(props.task.status));
+const canRequestInformation = computed(() => props.task.can.review && props.task.status === "submitted");
+const canDecide = computed(() => props.task.can.review && props.task.status === "under_review");
+const progressAction = computed<{ color: "neutral" | "primary" | "warning"; label: string; status: string } | null>(() => {
+  if (props.task.status === "planned") return { label: "Start work", status: "in_progress", color: "primary" };
+  if (props.task.status === "in_progress") return { label: "Mark blocked", status: "blocked", color: "warning" };
+  if (props.task.status === "blocked") return { label: "Resume work", status: "in_progress", color: "primary" };
+  if (props.task.status === "changes_requested") return { label: "Resume implementation", status: "in_progress", color: "primary" };
 
-    return null;
-  });
-  const showActions = computed(
-    () =>
-      canStartReview.value || canRequestInformation.value || canDecide.value || (props.task.can.update_progress && Boolean(progressAction.value)) || props.task.can.request_testing,
-  );
+  return null;
+});
+const showActions = computed(() => canStartReview.value || canRequestInformation.value || canDecide.value || (props.task.can.update_progress && Boolean(progressAction.value)) || props.task.can.request_testing);
 </script>
 
 <template>

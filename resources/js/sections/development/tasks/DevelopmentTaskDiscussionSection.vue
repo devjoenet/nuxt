@@ -1,40 +1,26 @@
 <script setup lang="ts">
-  import { Form } from "@inertiajs/vue3";
-  import FormSelect from "@/components/FormSelect.vue";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import { store as storeNote } from "@/routes/development/tasks/notes";
-  import DevelopmentTaskSectionCard from "@/sections/development/tasks/DevelopmentTaskSectionCard.vue";
-  import type { DevelopmentTask } from "@/types/development";
+import { Form } from "@inertiajs/vue3";
+import FormSelect from "@/components/FormSelect.vue";
+import FormTextarea from "@/components/FormTextarea.vue";
+import { store as storeNote } from "@/routes/development/tasks/notes";
+import DevelopmentTaskSectionCard from "@/sections/development/tasks/DevelopmentTaskSectionCard.vue";
+import type { DevelopmentTask } from "@/types/development";
 
-  defineProps<{
-    task: DevelopmentTask;
-    class?: string;
-  }>();
+defineProps<{
+  task: DevelopmentTask;
+  class?: string;
+}>();
 
-  const noteAudiences = [
-    { label: "Participants", value: "participants" },
-    { label: "Development team only", value: "development_team" },
-  ];
-  const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const noteAudiences = [
+  { label: "Participants", value: "participants" },
+  { label: "Development team only", value: "development_team" },
+];
+const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 </script>
 
 <template>
-  <DevelopmentTaskSectionCard
-    :class="$props.class"
-    description="Participant notes are shared with the requester. Internal notes stay with the development team."
-    eyebrow="02 / Discussion"
-    heading-id="task-notes-heading"
-    title="Clarification and planning notes"
-    tone="info"
-  >
-    <Form
-      v-if="task.can.add_participant_note || task.can.add_internal_note"
-      #default="{ errors, processing }"
-      :options="{ preserveScroll: true }"
-      class="grid gap-3 rounded-lg bg-elevated/50 p-4 ring ring-default sm:p-5"
-      reset-on-success
-      v-bind="storeNote.form(task.id)"
-    >
+  <DevelopmentTaskSectionCard :class="$props.class" description="Participant notes are shared with the requester. Internal notes stay with the development team." eyebrow="02 / Discussion" heading-id="task-notes-heading" title="Clarification and planning notes" tone="info">
+    <Form v-if="task.can.add_participant_note || task.can.add_internal_note" #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3 rounded-lg bg-elevated/50 p-4 ring ring-default sm:p-5" reset-on-success v-bind="storeNote.form(task.id)">
       <FormTextarea :error="errors.body" label="Add a note" name="body" required />
       <FormSelect v-if="task.can.add_internal_note" :error="errors.audience" :items="noteAudiences" default-value="participants" label="Audience" name="audience" required />
       <input v-else name="audience" type="hidden" value="participants" />
@@ -61,7 +47,7 @@
       description="New context and decisions will appear here in chronological order."
       icon="i-ph-chat-circle-dots"
       title="No notes yet"
-      :ui="{ description: 'text-base/7 text-pretty sm:text-sm/6', icon: 'size-12', title: 'text-sm font-bold'}"
+      :ui="{ description: 'text-base/7 text-pretty sm:text-sm/6', icon: 'size-12', title: 'text-sm font-bold' }"
       variant="subtle"
     />
   </DevelopmentTaskSectionCard>

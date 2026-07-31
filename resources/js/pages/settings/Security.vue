@@ -1,32 +1,32 @@
 <script setup lang="ts">
-  import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
-  import FormInput from "@/components/FormInput.vue";
-  import Layout from "@/layouts/Default.vue";
-  import SettingsLayout from "@/layouts/SettingsLayout.vue";
-  import { Form, Head } from "@inertiajs/vue3";
+import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
+import FormInput from "@/components/FormInput.vue";
+import Layout from "@/layouts/Default.vue";
+import SettingsLayout from "@/layouts/SettingsLayout.vue";
+import { Form, Head } from "@inertiajs/vue3";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  interface Props {
-    requiresConfirmation: boolean;
-    twoFactorEnabled: boolean;
-  }
+interface Props {
+  requiresConfirmation: boolean;
+  twoFactorEnabled: boolean;
+}
 
-  withDefaults(defineProps<Props>(), {
-    requiresConfirmation: false,
-    twoFactorEnabled: false,
+withDefaults(defineProps<Props>(), {
+  requiresConfirmation: false,
+  twoFactorEnabled: false,
+});
+
+const toast = useToast();
+
+function handleSuccess() {
+  toast.add({
+    title: "Success",
+    description: "Your password has been updated.",
+    icon: "i-ph-check",
+    color: "success",
   });
-
-  const toast = useToast();
-
-  function handleSuccess() {
-    toast.add({
-      title: "Success",
-      description: "Your password has been updated.",
-      icon: "i-ph-check",
-      color: "success",
-    });
-  }
+}
 </script>
 
 <template>
@@ -57,11 +57,7 @@
 
     <TwoFactor :requiresConfirmation="requiresConfirmation" :twoFactorEnabled="twoFactorEnabled" />
 
-    <UPageCard
-      title="Account"
-      description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently."
-      class="bg-gradient-to-tl from-error/10 from-5% to-default"
-    >
+    <UPageCard title="Account" description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently." class="bg-gradient-to-tl from-error/10 from-5% to-default">
       <template #footer>
         <DeleteAccount />
       </template>

@@ -1,33 +1,27 @@
 <script lang="ts" setup>
-  import { Link, router } from "@inertiajs/vue3";
-  import CrmDetailLayout from "@/components/crm/CrmDetailLayout.vue";
-  import Layout from "@/layouts/Default.vue";
-  import { archive, destroy, edit, index, restore } from "@/routes/crm/contacts";
-  import { show as organizationShow } from "@/routes/crm/organizations";
-  import type { Contact } from "@/types/crm";
+import { Link, router } from "@inertiajs/vue3";
+import CrmDetailLayout from "@/components/crm/CrmDetailLayout.vue";
+import Layout from "@/layouts/Default.vue";
+import { archive, destroy, edit, index, restore } from "@/routes/crm/contacts";
+import { show as organizationShow } from "@/routes/crm/organizations";
+import type { Contact } from "@/types/crm";
 
-  defineOptions({ layout: Layout });
-  const props = defineProps<{ contact: Contact; canManage: boolean }>();
-  const confirmArchive = () => {
-    if (window.confirm("Archive this contact?")) router.post(archive(props.contact.id).url);
-  };
-  const confirmRestore = () => {
-    if (window.confirm("Restore this contact?")) router.delete(restore(props.contact.id).url);
-  };
-  const confirmDelete = () => {
-    if (window.confirm("Delete this contact? This removes it from active CRM results.")) router.delete(destroy(props.contact.id).url);
-  };
-  const formatDate = (value: string | null): string => (value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded");
+defineOptions({ layout: Layout });
+const props = defineProps<{ contact: Contact; canManage: boolean }>();
+const confirmArchive = () => {
+  if (window.confirm("Archive this contact?")) router.post(archive(props.contact.id).url);
+};
+const confirmRestore = () => {
+  if (window.confirm("Restore this contact?")) router.delete(restore(props.contact.id).url);
+};
+const confirmDelete = () => {
+  if (window.confirm("Delete this contact? This removes it from active CRM results.")) router.delete(destroy(props.contact.id).url);
+};
+const formatDate = (value: string | null): string => (value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded");
 </script>
 
 <template>
-  <CrmDetailLayout
-    :edit-url="canManage ? edit(contact.id).url : undefined"
-    :index-url="index().url"
-    index-label="All contacts"
-    navbar-title="Contact details"
-    panel-id="crm-contact-detail"
-  >
+  <CrmDetailLayout :edit-url="canManage ? edit(contact.id).url : undefined" :index-url="index().url" index-label="All contacts" navbar-title="Contact details" panel-id="crm-contact-detail">
     <template #summary>
       <div class="min-w-0" data-testid="contact-summary">
         <div class="flex flex-wrap items-start gap-3">
@@ -56,9 +50,7 @@
         <div class="grid gap-1 py-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-4">
           <dt class="text-base text-muted sm:text-sm">Organization</dt>
           <dd>
-            <Link v-if="contact.organization" :href="organizationShow(contact.organization.id).url" class="font-medium text-highlighted hover:underline">{{
-              contact.organization.name
-            }}</Link
+            <Link v-if="contact.organization" :href="organizationShow(contact.organization.id).url" class="font-medium text-highlighted hover:underline">{{ contact.organization.name }}</Link
             ><span v-else class="font-medium text-highlighted">Independent contact</span>
           </dd>
         </div>

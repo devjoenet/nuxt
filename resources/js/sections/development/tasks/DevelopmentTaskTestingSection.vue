@@ -1,34 +1,27 @@
 <script setup lang="ts">
-  import { Form } from "@inertiajs/vue3";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import { update as updateTestRun } from "@/routes/development/testRuns";
-  import DevelopmentTaskSectionCard from "@/sections/development/tasks/DevelopmentTaskSectionCard.vue";
-  import type { DevelopmentTask } from "@/types/development";
+import { Form } from "@inertiajs/vue3";
+import FormTextarea from "@/components/FormTextarea.vue";
+import { update as updateTestRun } from "@/routes/development/testRuns";
+import DevelopmentTaskSectionCard from "@/sections/development/tasks/DevelopmentTaskSectionCard.vue";
+import type { DevelopmentTask } from "@/types/development";
 
-  defineProps<{
-    task: DevelopmentTask;
-    class?: string;
-  }>();
+defineProps<{
+  task: DevelopmentTask;
+  class?: string;
+}>();
 
-  const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-  const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
-  const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
-    if (status === "accepted") return "success";
-    if (status === "changes_requested") return "warning";
+const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
+const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
+  if (status === "accepted") return "success";
+  if (status === "changes_requested") return "warning";
 
-    return "info";
-  };
+  return "info";
+};
 </script>
 
 <template>
-  <DevelopmentTaskSectionCard
-    :class="$props.class"
-    description="Every round remains attached to the task, including feedback that caused another implementation pass."
-    eyebrow="04 / Verification"
-    heading-id="task-testing-heading"
-    title="User testing history"
-    tone="warning"
-  >
+  <DevelopmentTaskSectionCard :class="$props.class" description="Every round remains attached to the task, including feedback that caused another implementation pass." eyebrow="04 / Verification" heading-id="task-testing-heading" title="User testing history" tone="warning">
     <ol v-if="task.test_runs?.length" class="grid gap-4" role="list">
       <li v-for="testRun in task.test_runs" :key="testRun.id" class="grid gap-5 rounded-lg bg-elevated/50 p-5 ring ring-default">
         <div class="flex flex-wrap items-start justify-between gap-3">
@@ -60,14 +53,7 @@
           </div>
         </div>
 
-        <UAlert
-          v-if="testRun.feedback"
-          color="info"
-          :description="testRun.feedback"
-          title="Feedback"
-          :ui="{ description: 'whitespace-pre-wrap text-base/7 text-pretty sm:text-sm/6', icon: 'size-4' }"
-          variant="subtle"
-        />
+        <UAlert v-if="testRun.feedback" color="info" :description="testRun.feedback" title="Feedback" :ui="{ description: 'whitespace-pre-wrap text-base/7 text-pretty sm:text-sm/6', icon: 'size-4' }" variant="subtle" />
 
         <Form v-if="testRun.can.record_result" #default="{ errors, processing }" class="grid gap-3 border-t border-default pt-5" v-bind="updateTestRun.form(testRun.id)">
           <FormTextarea :error="errors.feedback" label="Testing feedback" name="feedback" />

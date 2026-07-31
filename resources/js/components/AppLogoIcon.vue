@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  defineOptions({
-    inheritAttrs: true,
-  });
+defineOptions({
+  inheritAttrs: true,
+});
 
-  interface Props {
-    fillVariant?: string;
-  }
+interface Props {
+  fillVariant?: string;
+}
 
-  const props = withDefaults(defineProps<Props>(), {
-    fillVariant: "fill-current",
-  });
+const props = withDefaults(defineProps<Props>(), {
+  fillVariant: "fill-current",
+});
 </script>
 
 <template>

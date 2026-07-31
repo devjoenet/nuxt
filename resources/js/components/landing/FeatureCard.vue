@@ -1,49 +1,49 @@
 <script setup lang="ts">
-  import { computed } from "vue";
+import { computed } from "vue";
 
-  interface LandingCard {
-    title: string;
-    description: string;
-    detail: string;
-    icon: string;
-    tone: "primary" | "accent" | "secondary" | "warning";
-  }
+interface LandingCard {
+  title: string;
+  description: string;
+  detail: string;
+  icon: string;
+  tone: "primary" | "accent" | "secondary" | "warning";
+}
 
-  interface Props {
-    item: LandingCard;
-    proof?: string;
-    centered?: boolean;
-  }
+interface Props {
+  item: LandingCard;
+  proof?: string;
+  centered?: boolean;
+}
 
-  const props = withDefaults(defineProps<Props>(), {
-    centered: false,
-  });
+const props = withDefaults(defineProps<Props>(), {
+  centered: false,
+});
 
-  const toneClasses = computed(() => {
-    const tones = {
-      primary: "text-primary-400 border-primary-500/30 bg-primary-500/10",
-      accent: "text-accent-400 border-accent-500/30 bg-accent-500/10",
-      secondary: "text-secondary-400 border-secondary-500/30 bg-secondary-500/10",
-      warning: "text-warning-400 border-warning-500/30 bg-warning-500/10",
-    };
+const toneClasses = computed(() => {
+  const tones = {
+    primary: "text-primary-400 border-primary-500/30 bg-primary-500/10",
+    accent: "text-accent-400 border-accent-500/30 bg-accent-500/10",
+    secondary: "text-secondary-400 border-secondary-500/30 bg-secondary-500/10",
+    warning: "text-warning-400 border-warning-500/30 bg-warning-500/10",
+  };
 
-    return tones[props.item.tone];
-  });
+  return tones[props.item.tone];
+});
 
-  const articleClasses = computed(() => {
-    const tones = {
-      primary: "border-primary-500/15 hover:border-primary-500/35",
-      accent: "border-accent-500/15 hover:border-accent-500/35",
-      secondary: "border-secondary-500/15 hover:border-secondary-500/35",
-      warning: "border-warning-500/15 hover:border-warning-500/35",
-    };
+const articleClasses = computed(() => {
+  const tones = {
+    primary: "border-primary-500/15 hover:border-primary-500/35",
+    accent: "border-accent-500/15 hover:border-accent-500/35",
+    secondary: "border-secondary-500/15 hover:border-secondary-500/35",
+    warning: "border-warning-500/15 hover:border-warning-500/35",
+  };
 
-    return tones[props.item.tone];
-  });
+  return tones[props.item.tone];
+});
 
-  const headingClasses = "text-muted-950 dark:text-neutral-50";
-  const descriptionClasses = "text-muted-700 dark:text-neutral-300";
-  const detailClasses = "text-muted-600 dark:text-neutral-400";
+const headingClasses = "text-muted-950 dark:text-neutral-50";
+const descriptionClasses = "text-muted-700 dark:text-neutral-300";
+const detailClasses = "text-muted-600 dark:text-neutral-400";
 </script>
 
 <template>

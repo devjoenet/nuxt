@@ -1,32 +1,32 @@
 <script lang="ts" setup>
-  import { Form, Head, Link } from "@inertiajs/vue3";
-  import FormInput from "@/components/FormInput.vue";
-  import FormMultiSelect from "@/components/FormMultiSelect.vue";
-  import Layout from "@/layouts/Default.vue";
-  import { index } from "@/routes/admin/audit";
+import { Form, Head, Link } from "@inertiajs/vue3";
+import FormInput from "@/components/FormInput.vue";
+import FormMultiSelect from "@/components/FormMultiSelect.vue";
+import Layout from "@/layouts/Default.vue";
+import { index } from "@/routes/admin/audit";
 
-  defineOptions({ layout: Layout });
-  type FilterOption = { label: string; value: string };
+defineOptions({ layout: Layout });
+type FilterOption = { label: string; value: string };
 
-  defineProps<{
-    activities: {
-      data: {
-        id: number;
-        description: string;
-        event: string | null;
-        log_name: string | null;
-        causer: string | null;
-        subject: string | null;
-        changes: Record<string, unknown> | null;
-        created_at: string | null;
-      }[];
-      links: { url: string | null; label: string; active: boolean }[];
-    };
-    filters: { search: string | null; event: string[]; causer: string[]; subject: string[]; from: string | null; to: string | null };
-    eventOptions: FilterOption[];
-    causerOptions: FilterOption[];
-    subjectOptions: FilterOption[];
-  }>();
+defineProps<{
+  activities: {
+    data: {
+      id: number;
+      description: string;
+      event: string | null;
+      log_name: string | null;
+      causer: string | null;
+      subject: string | null;
+      changes: Record<string, unknown> | null;
+      created_at: string | null;
+    }[];
+    links: { url: string | null; label: string; active: boolean }[];
+  };
+  filters: { search: string | null; event: string[]; causer: string[]; subject: string[]; from: string | null; to: string | null };
+  eventOptions: FilterOption[];
+  causerOptions: FilterOption[];
+  subjectOptions: FilterOption[];
+}>();
 </script>
 
 <template>
@@ -38,10 +38,7 @@
         <template #leading><UDashboardSidebarCollapse /></template>
       </UDashboardNavbar>
       <UDashboardToolbar :ui="{ root: 'overflow-visible' }" class="audit-toolbar">
-        <Form
-          class="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(16rem,1.4fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_9rem_9rem_auto]"
-          v-bind="index.form()"
-        >
+        <Form class="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(16rem,1.4fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_minmax(12rem,1fr)_9rem_9rem_auto]" v-bind="index.form()">
           <FormInput id="audit-search" :default-value="filters.search ?? undefined" icon="i-ph-magnifying-glass" label="Search activity" name="search" size="sm" />
           <FormMultiSelect id="audit-event" :default-value="filters.event" :items="eventOptions" label="Event" name="event" placeholder="All events" size="sm" />
           <FormMultiSelect id="audit-causer" :default-value="filters.causer" :items="causerOptions" label="Causer" name="causer" placeholder="All causers" size="sm" />
@@ -85,12 +82,7 @@
         </div>
         <p v-if="!activities.data.length" class="p-6 text-sm text-muted">No activity matches these filters.</p>
         <nav v-if="activities.links.length > 3" aria-label="Pagination" class="flex flex-wrap gap-1 border-t border-default p-4">
-          <Link
-            v-for="link in activities.links"
-            :key="link.label"
-            :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']"
-            :href="link.url ?? index()"
-          >
+          <Link v-for="link in activities.links" :key="link.label" :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']" :href="link.url ?? index()">
             <span v-html="link.label" />
           </Link>
         </nav>

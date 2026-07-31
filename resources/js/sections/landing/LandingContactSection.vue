@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import { Motion } from "motion-v";
-  import LandingContactForm from "@/components/landing/LandingContactForm.vue";
-  import { cn } from "@/lib/utils";
-  import type { Option } from "@/types/crm";
+import { Motion } from "motion-v";
+import LandingContactForm from "@/components/landing/LandingContactForm.vue";
+import { cn } from "@/lib/utils";
+import type { Option } from "@/types/crm";
 
-  const props = defineProps<{
-    serviceInterestOptions: Option[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  serviceInterestOptions: Option[];
+  class?: string;
+}>();
 </script>
 
 <template>
@@ -31,15 +31,11 @@
       <div>
         <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-300">Ready to replace the workaround?</p>
         <h2 class="mt-3 text-3xl leading-tight font-semibold text-muted-950 dark:text-neutral-50">Let’s map the workflow before anyone writes code.</h2>
-        <p class="mt-4 leading-7 text-muted-700 dark:text-neutral-300">
-          Tell us where the process breaks down, what your team is doing manually, and what a useful result looks like. Specifics beat polished sales language every time.
-        </p>
+        <p class="mt-4 leading-7 text-muted-700 dark:text-neutral-300">Tell us where the process breaks down, what your team is doing manually, and what a useful result looks like. Specifics beat polished sales language every time.</p>
         <ul class="mt-6 space-y-3 text-sm text-muted-700 dark:text-neutral-300" role="list">
           <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />No generic package pitch</li>
           <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Practical technical review</li>
-          <li class="flex gap-3">
-            <UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Clear next step, even if it is “not yet”
-          </li>
+          <li class="flex gap-3"><UIcon class="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-300" name="i-ph-check-circle" />Clear next step, even if it is “not yet”</li>
         </ul>
       </div>
       <LandingContactForm :service-interest-options="serviceInterestOptions" />

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { Form } from "@inertiajs/vue3";
-  import FormInput from "@/components/FormInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import { cn } from "@/lib/utils";
-  import { store } from "@/routes/admin/users";
-  import type { AdminRoleOption } from "@/sections/admin/users/types";
+import { Form } from "@inertiajs/vue3";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import { cn } from "@/lib/utils";
+import { store } from "@/routes/admin/users";
+import type { AdminRoleOption } from "@/sections/admin/users/types";
 
-  const props = defineProps<{
-    roles: AdminRoleOption[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  roles: AdminRoleOption[];
+  class?: string;
+}>();
 </script>
 
 <template>

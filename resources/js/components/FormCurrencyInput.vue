@@ -1,151 +1,140 @@
 <script lang="ts" setup>
-  import FormField from "@/components/FormField.vue";
-  import type { InputProps } from "@nuxt/ui";
-  import { CurrencyDisplay, type CurrencyInputOptions, useCurrencyInput } from "vue-currency-input";
-  import { computed, nextTick, onMounted, ref, useAttrs, useSlots, watch } from "vue";
+import FormField from "@/components/FormField.vue";
+import type { InputProps } from "@nuxt/ui";
+import { CurrencyDisplay, type CurrencyInputOptions, useCurrencyInput } from "vue-currency-input";
+import { computed, nextTick, onMounted, ref, useAttrs, useSlots, watch } from "vue";
 
-  defineOptions({ inheritAttrs: false });
+defineOptions({ inheritAttrs: false });
 
-  const props = withDefaults(
-    defineProps<{
-      id?: string;
-      name?: string;
-      label?: string;
-      description?: string;
-      error?: string | boolean;
-      valid?: boolean;
-      successText?: string;
-      variant?: "filled" | "outlined";
-      size?: "sm" | "md" | "lg";
-      required?: boolean;
-      modelValue?: number | null;
-      options?: Partial<CurrencyInputOptions>;
-      autoEmit?: boolean;
-    }>(),
-    {
-      variant: "outlined",
-      size: "md",
-      modelValue: null,
-      autoEmit: true,
-    },
-  );
+const props = withDefaults(
+  defineProps<{
+    id?: string;
+    name?: string;
+    label?: string;
+    description?: string;
+    error?: string | boolean;
+    valid?: boolean;
+    successText?: string;
+    variant?: "filled" | "outlined";
+    size?: "sm" | "md" | "lg";
+    required?: boolean;
+    modelValue?: number | null;
+    options?: Partial<CurrencyInputOptions>;
+    autoEmit?: boolean;
+  }>(),
+  {
+    variant: "outlined",
+    size: "md",
+    modelValue: null,
+    autoEmit: true,
+  },
+);
 
-  const emit = defineEmits<{
-    (event: "update:modelValue", value: number | null): void;
-    (event: "change", value: number | null): void;
-  }>();
+const emit = defineEmits<{
+  (event: "update:modelValue", value: number | null): void;
+  (event: "change", value: number | null): void;
+}>();
 
-  const attrs = useAttrs();
-  const slots = useSlots();
-  const controlClass = computed(() => attrs.class);
-  const controlAttrs = computed(() => {
-    const { class: _class, ...rest } = attrs;
+const attrs = useAttrs();
+const slots = useSlots();
+const controlClass = computed(() => attrs.class);
+const controlAttrs = computed(() => {
+  const { class: _class, ...rest } = attrs;
 
-    return rest;
-  });
+  return rest;
+});
 
-  type InputInstance = {
-    inputRef?: HTMLInputElement | { value?: HTMLInputElement | null };
+type InputInstance = {
+  inputRef?: HTMLInputElement | { value?: HTMLInputElement | null };
+};
+
+type InputUi = NonNullable<InputProps["ui"]>;
+
+const placeholder = computed(() => {
+  if (typeof attrs.placeholder === "string") {
+    return attrs.placeholder;
+  }
+
+  return props.label ? " " : undefined;
+});
+
+const defaultBaseClass = computed(() => {
+  const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
+
+  return `min-h-14 rounded-xl !bg-transparent px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
+});
+
+const controlUi = computed<InputUi>(() => {
+  const customUi = controlAttrs.value.ui as InputProps["ui"] | undefined;
+
+  return {
+    ...customUi,
+    root: customUi?.root ?? "w-full",
+    base: customUi?.base ?? defaultBaseClass.value,
   };
+});
 
-  type InputUi = NonNullable<InputProps["ui"]>;
+const currencyOptions: CurrencyInputOptions = {
+  ...props.options,
+  currency: props.options?.currency ?? "USD",
+  locale: props.options?.locale ?? "en-US",
+  currencyDisplay: props.options?.currencyDisplay ?? CurrencyDisplay.symbol,
+  hideCurrencySymbolOnFocus: props.options?.hideCurrencySymbolOnFocus ?? true,
+};
 
-  const placeholder = computed(() => {
-    if (typeof attrs.placeholder === "string") {
-      return attrs.placeholder;
-    }
+const { formattedValue, inputRef: currencyInputRef, numberValue, setOptions, setValue } = useCurrencyInput(currencyOptions, props.autoEmit);
+const input = ref<InputInstance | null>(null);
 
-    return props.label ? " " : undefined;
-  });
+onMounted(async () => {
+  await nextTick();
 
-  const defaultBaseClass = computed(() => {
-    const verticalPadding = props.variant === "filled" ? "pb-2 pt-6" : "py-4";
+  const inputRef = input.value?.inputRef;
 
-    return `min-h-14 rounded-xl !bg-transparent px-4 ${verticalPadding} text-base leading-6 focus:outline-none`;
-  });
+  currencyInputRef.value = inputRef instanceof HTMLInputElement ? inputRef : (inputRef?.value ?? null);
+});
 
-  const controlUi = computed<InputUi>(() => {
-    const customUi = controlAttrs.value.ui as InputProps["ui"] | undefined;
+watch(
+  () => props.modelValue,
+  (value) => {
+    setValue(value);
+  },
+);
 
-    return {
-      ...customUi,
-      root: customUi?.root ?? "w-full",
-      base: customUi?.base ?? defaultBaseClass.value,
-    };
-  });
+watch(
+  () => props.options,
+  (options) => {
+    setOptions({
+      ...options,
+      currency: options?.currency ?? "USD",
+      locale: options?.locale ?? "en-US",
+      currencyDisplay: options?.currencyDisplay ?? CurrencyDisplay.symbol,
+      hideCurrencySymbolOnFocus: options?.hideCurrencySymbolOnFocus ?? true,
+    });
+  },
+  { deep: true },
+);
 
-  const currencyOptions: CurrencyInputOptions = {
-    ...props.options,
-    currency: props.options?.currency ?? "USD",
-    locale: props.options?.locale ?? "en-US",
-    currencyDisplay: props.options?.currencyDisplay ?? CurrencyDisplay.symbol,
-    hideCurrencySymbolOnFocus: props.options?.hideCurrencySymbolOnFocus ?? true,
-  };
+const focus = (): void => {
+  const inputRef = input.value?.inputRef;
+  const nativeInput = inputRef instanceof HTMLInputElement ? inputRef : inputRef?.value;
 
-  const { formattedValue, inputRef: currencyInputRef, numberValue, setOptions, setValue } = useCurrencyInput(currencyOptions, props.autoEmit);
-  const input = ref<InputInstance | null>(null);
+  nativeInput?.focus();
+};
 
-  onMounted(async () => {
-    await nextTick();
+const syncModelValue = (): void => {
+  if (props.autoEmit) {
+    return;
+  }
 
-    const inputRef = input.value?.inputRef;
+  emit("update:modelValue", numberValue.value);
+  emit("change", numberValue.value);
+};
 
-    currencyInputRef.value = inputRef instanceof HTMLInputElement ? inputRef : (inputRef?.value ?? null);
-  });
-
-  watch(
-    () => props.modelValue,
-    (value) => {
-      setValue(value);
-    },
-  );
-
-  watch(
-    () => props.options,
-    (options) => {
-      setOptions({
-        ...options,
-        currency: options?.currency ?? "USD",
-        locale: options?.locale ?? "en-US",
-        currencyDisplay: options?.currencyDisplay ?? CurrencyDisplay.symbol,
-        hideCurrencySymbolOnFocus: options?.hideCurrencySymbolOnFocus ?? true,
-      });
-    },
-    { deep: true },
-  );
-
-  const focus = (): void => {
-    const inputRef = input.value?.inputRef;
-    const nativeInput = inputRef instanceof HTMLInputElement ? inputRef : inputRef?.value;
-
-    nativeInput?.focus();
-  };
-
-  const syncModelValue = (): void => {
-    if (props.autoEmit) {
-      return;
-    }
-
-    emit("update:modelValue", numberValue.value);
-    emit("change", numberValue.value);
-  };
-
-  defineExpose({ focus });
+defineExpose({ focus });
 </script>
 
 <template>
-  <FormField
-    :id="id"
-    :class="controlClass"
-    :description="description"
-    :error="error"
-    :label="label"
-    :name="name"
-    :required="required"
-    :success-text="successText"
-    :valid="valid"
-    :variant="variant"
-  >
+  <FormField :id="id" :class="controlClass" :description="description" :error="error" :label="label" :name="name" :required="required" :success-text="successText" :valid="valid" :variant="variant">
     <template #default="{ ariaDescribedby, ariaInvalid, id: fieldId }">
       <UInput
         :id="fieldId"

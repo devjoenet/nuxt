@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import { cn } from "@/lib/utils";
-  import type { Lead } from "@/types/crm";
+import { cn } from "@/lib/utils";
+import type { Lead } from "@/types/crm";
 
-  const props = defineProps<{
-    activities: Lead["activities"];
-    class?: string;
-  }>();
+const props = defineProps<{
+  activities: Lead["activities"];
+  class?: string;
+}>();
 
-  const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 </script>
 
 <template>

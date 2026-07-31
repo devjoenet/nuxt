@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-  import PrivacyPolicyContent from "@/components/privacy/PrivacyPolicyContent.vue";
-  import { privacy } from "@/routes";
-  import { useMediaQuery } from "@vueuse/core";
+import PrivacyPolicyContent from "@/components/privacy/PrivacyPolicyContent.vue";
+import { privacy } from "@/routes";
+import { useMediaQuery } from "@vueuse/core";
 
-  defineProps<{
-    open: boolean;
-  }>();
+defineProps<{
+  open: boolean;
+}>();
 
-  const emit = defineEmits<{
-    "update:open": [open: boolean];
-  }>();
+const emit = defineEmits<{
+  "update:open": [open: boolean];
+}>();
 
-  const contentProps = { "aria-modal": "true" } as never;
-  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+const contentProps = { "aria-modal": "true" } as never;
+const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
-  const handleNavigation = (): void => {
-    emit("update:open", false);
-  };
+const handleNavigation = (): void => {
+  emit("update:open", false);
+};
 </script>
 
 <template>
@@ -41,9 +41,7 @@
     </template>
 
     <template #footer>
-      <a :href="privacy.url()" class="text-sm font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300" @click="handleNavigation">
-        Open full privacy page
-      </a>
+      <a :href="privacy.url()" class="text-sm font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300" @click="handleNavigation"> Open full privacy page </a>
     </template>
   </UModal>
 </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import AppLogoIcon from "@/components/AppLogoIcon.vue";
+import AppLogoIcon from "@/components/AppLogoIcon.vue";
 
-  defineProps<{
-    collapsed?: boolean;
-  }>();
+defineProps<{
+  collapsed?: boolean;
+}>();
 </script>
 
 <template>

@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import { Form } from "@inertiajs/vue3";
-  import FormInput from "@/components/FormInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import Layout from "@/layouts/Default.vue";
-  import { index, store } from "@/routes/development/requests";
-  import type { DevelopmentOption } from "@/types/development";
+import { Form } from "@inertiajs/vue3";
+import FormInput from "@/components/FormInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import FormTextarea from "@/components/FormTextarea.vue";
+import Layout from "@/layouts/Default.vue";
+import { index, store } from "@/routes/development/requests";
+import type { DevelopmentOption } from "@/types/development";
 
-  defineOptions({ layout: Layout });
-  defineProps<{ requestTypes: DevelopmentOption[]; affectedAreas: DevelopmentOption[] }>();
+defineOptions({ layout: Layout });
+defineProps<{ requestTypes: DevelopmentOption[]; affectedAreas: DevelopmentOption[] }>();
 </script>
 
 <template>
@@ -33,27 +33,9 @@
             <FormSelect :error="errors.request_type" :items="requestTypes" label="Request type" name="request_type" required />
             <FormSelect :error="errors.affected_area" :items="affectedAreas" label="Affected area" name="affected_area" required />
           </div>
-          <FormTextarea
-            :error="errors.description"
-            description="What is happening now, who it affects, and why the current behavior is a problem."
-            label="Problem or request"
-            name="description"
-            required
-          />
-          <FormTextarea
-            :error="errors.desired_outcome"
-            description="Describe the result that would make this request successful."
-            label="Desired outcome"
-            name="desired_outcome"
-            required
-          />
-          <FormTextarea
-            :error="errors.acceptance_criteria"
-            description="List concrete, testable conditions. One criterion per line is fine."
-            label="Acceptance criteria"
-            name="acceptance_criteria"
-            required
-          />
+          <FormTextarea :error="errors.description" description="What is happening now, who it affects, and why the current behavior is a problem." label="Problem or request" name="description" required />
+          <FormTextarea :error="errors.desired_outcome" description="Describe the result that would make this request successful." label="Desired outcome" name="desired_outcome" required />
+          <FormTextarea :error="errors.acceptance_criteria" description="List concrete, testable conditions. One criterion per line is fine." label="Acceptance criteria" name="acceptance_criteria" required />
           <div class="flex justify-end gap-3 border-t border-default pt-5">
             <UButton :to="index().url" color="neutral" label="Cancel" variant="ghost" />
             <UButton :loading="processing" icon="i-ph-paper-plane-tilt" label="Submit request" type="submit" />

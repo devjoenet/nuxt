@@ -1,39 +1,39 @@
 <script lang="ts" setup>
-  import { Head } from "@inertiajs/vue3";
-  import UserTestingPageCard from "@/components/UserTestingPageCard.vue";
-  import Layout from "@/layouts/Default.vue";
+import { Head } from "@inertiajs/vue3";
+import UserTestingPageCard from "@/components/UserTestingPageCard.vue";
+import Layout from "@/layouts/Default.vue";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  interface UserTestingPage {
-    id: number;
-    category: string;
-    title: string;
-    roadmap_task_number: number | null;
-    status: "Needs eyes" | "In Development" | "Needs verification" | "Reviewed" | "Needs Approval";
-    path: string;
-    url: string | null;
-    tested: boolean;
-    tested_at: string | null;
-    tested_by: string | null;
-    approved: boolean;
-    approved_at: string | null;
-    roadmap_task: boolean;
-    roadmap_task_at: string | null;
-    notes: string | null;
+interface UserTestingPage {
+  id: number;
+  category: string;
+  title: string;
+  roadmap_task_number: number | null;
+  status: "Needs eyes" | "In Development" | "Needs verification" | "Reviewed" | "Needs Approval";
+  path: string;
+  url: string | null;
+  tested: boolean;
+  tested_at: string | null;
+  tested_by: string | null;
+  approved: boolean;
+  approved_at: string | null;
+  roadmap_task: boolean;
+  roadmap_task_at: string | null;
+  notes: string | null;
+}
+
+const props = defineProps<{ pages: UserTestingPage[] }>();
+const testedCount = computed(() => props.pages.filter((page) => page.tested).length);
+const categories = computed(() => {
+  const grouped = new Map<string, UserTestingPage[]>();
+
+  for (const page of props.pages) {
+    grouped.set(page.category, [...(grouped.get(page.category) ?? []), page]);
   }
 
-  const props = defineProps<{ pages: UserTestingPage[] }>();
-  const testedCount = computed(() => props.pages.filter((page) => page.tested).length);
-  const categories = computed(() => {
-    const grouped = new Map<string, UserTestingPage[]>();
-
-    for (const page of props.pages) {
-      grouped.set(page.category, [...(grouped.get(page.category) ?? []), page]);
-    }
-
-    return [...grouped.entries()].map(([name, pages]) => ({ name, pages }));
-  });
+  return [...grouped.entries()].map(([name, pages]) => ({ name, pages }));
+});
 </script>
 
 <template>
@@ -48,12 +48,7 @@
 
     <template #body>
       <div class="grid gap-6">
-        <UAlert
-          color="warning"
-          description="This checklist is retained only until the Development workspace cleanup task removes the old records."
-          title="Legacy workflow"
-          variant="subtle"
-        />
+        <UAlert color="warning" description="This checklist is retained only until the Development workspace cleanup task removes the old records." title="Legacy workflow" variant="subtle" />
 
         <UPageCard class="overflow-hidden" variant="subtle">
           <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end">

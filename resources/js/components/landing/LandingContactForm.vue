@@ -1,78 +1,65 @@
 <script lang="ts" setup>
-  import FormInput from "@/components/FormInput.vue";
-  import FormCurrencyInput from "@/components/FormCurrencyInput.vue";
-  import FormMultiSelect from "@/components/FormMultiSelect.vue";
-  import FormPhoneInput from "@/components/FormPhoneInput.vue";
-  import FormSelect from "@/components/FormSelect.vue";
-  import FormTextarea from "@/components/FormTextarea.vue";
-  import PrivacyDialogLink from "@/components/privacy/PrivacyDialogLink.vue";
-  import { store } from "@/routes/contact";
-  import { Form, usePage } from "@inertiajs/vue3";
-  import { nextTick, onMounted, reactive, ref } from "vue";
-  import { Motion } from "motion-v";
-  import type { AppPageProps } from "@/types";
-  import type { Option } from "@/types/crm";
+import FormInput from "@/components/FormInput.vue";
+import FormCurrencyInput from "@/components/FormCurrencyInput.vue";
+import FormMultiSelect from "@/components/FormMultiSelect.vue";
+import FormPhoneInput from "@/components/FormPhoneInput.vue";
+import FormSelect from "@/components/FormSelect.vue";
+import FormTextarea from "@/components/FormTextarea.vue";
+import PrivacyDialogLink from "@/components/privacy/PrivacyDialogLink.vue";
+import { store } from "@/routes/contact";
+import { Form, usePage } from "@inertiajs/vue3";
+import { nextTick, onMounted, reactive, ref } from "vue";
+import { Motion } from "motion-v";
+import type { AppPageProps } from "@/types";
+import type { Option } from "@/types/crm";
 
-  defineProps<{ serviceInterestOptions: Option[] }>();
+defineProps<{ serviceInterestOptions: Option[] }>();
 
-  const page = usePage<AppPageProps>();
+const page = usePage<AppPageProps>();
 
-  const attribution = reactive({
-    landingPage: "",
-    referrer: "",
-    utmSource: "",
-    utmMedium: "",
-    utmCampaign: "",
-    utmTerm: "",
-    utmContent: "",
-  });
+const attribution = reactive({
+  landingPage: "",
+  referrer: "",
+  utmSource: "",
+  utmMedium: "",
+  utmCampaign: "",
+  utmTerm: "",
+  utmContent: "",
+});
 
-  const budgetRange = ref<number | null>(null);
-  const budgetOptions = { valueRange: { min: 0 } };
-  const phoneNumber = ref("");
-  const successMessage = ref<HTMLElement | null>(null);
+const budgetRange = ref<number | null>(null);
+const budgetOptions = { valueRange: { min: 0 } };
+const phoneNumber = ref("");
+const successMessage = ref<HTMLElement | null>(null);
 
-  const resetCustomFields = (): void => {
-    budgetRange.value = null;
-    phoneNumber.value = "";
-  };
+const resetCustomFields = (): void => {
+  budgetRange.value = null;
+  phoneNumber.value = "";
+};
 
-  const handleSuccess = async (): Promise<void> => {
-    resetCustomFields();
-    await nextTick();
-    successMessage.value?.focus();
-  };
+const handleSuccess = async (): Promise<void> => {
+  resetCustomFields();
+  await nextTick();
+  successMessage.value?.focus();
+};
 
-  onMounted(() => {
-    const search = new URLSearchParams(window.location.search);
+onMounted(() => {
+  const search = new URLSearchParams(window.location.search);
 
-    attribution.landingPage = window.location.pathname;
-    attribution.referrer = document.referrer;
-    attribution.utmSource = search.get("utm_source") ?? "";
-    attribution.utmMedium = search.get("utm_medium") ?? "";
-    attribution.utmCampaign = search.get("utm_campaign") ?? "";
-    attribution.utmTerm = search.get("utm_term") ?? "";
-    attribution.utmContent = search.get("utm_content") ?? "";
-  });
+  attribution.landingPage = window.location.pathname;
+  attribution.referrer = document.referrer;
+  attribution.utmSource = search.get("utm_source") ?? "";
+  attribution.utmMedium = search.get("utm_medium") ?? "";
+  attribution.utmCampaign = search.get("utm_campaign") ?? "";
+  attribution.utmTerm = search.get("utm_term") ?? "";
+  attribution.utmContent = search.get("utm_content") ?? "";
+});
 </script>
 
 <template>
-  <Motion
-    as="div"
-    :initial="{ opacity: 0, x: 24 }"
-    :transition="{ duration: 0.7, delay: 0.16, ease: 'easeOut' }"
-    :viewport="{ once: true, amount: 0.2 }"
-    :while-in-view="{ opacity: 1, x: 0 }"
-  >
+  <Motion as="div" :initial="{ opacity: 0, x: 24 }" :transition="{ duration: 0.7, delay: 0.16, ease: 'easeOut' }" :viewport="{ once: true, amount: 0.2 }" :while-in-view="{ opacity: 1, x: 0 }">
     <Form #default="{ errors, processing, wasSuccessful }" aria-label="Project inquiry form" class="grid gap-5" reset-on-success v-bind="store.form()" @success="handleSuccess">
-      <div
-        v-if="wasSuccessful || page.props.flash.intakeSuccess"
-        ref="successMessage"
-        aria-live="polite"
-        class="rounded-lg border border-success-500/30 bg-success-500/10 p-5 text-success-800 dark:text-success-200"
-        role="status"
-        tabindex="-1"
-      >
+      <div v-if="wasSuccessful || page.props.flash.intakeSuccess" ref="successMessage" aria-live="polite" class="rounded-lg border border-success-500/30 bg-success-500/10 p-5 text-success-800 dark:text-success-200" role="status" tabindex="-1">
         <p class="font-semibold">Your message was sent successfully.</p>
         <p class="mt-1 text-sm">Thanks — we received your inquiry and will follow up shortly.</p>
       </div>
@@ -83,25 +70,8 @@
         <FormInput id="intake-company" :error="errors.company" autocomplete="organization" label="Organization (optional)" name="company" variant="filled" />
         <FormPhoneInput id="intake-phone" v-model="phoneNumber" :error="errors.phone" autocomplete="tel" label="Phone (optional)" name="phone" variant="filled" />
         <FormInput id="intake-website" :error="errors.website" autocomplete="url" label="Website (optional)" name="website" type="url" variant="filled" />
-        <FormMultiSelect
-          id="intake-service"
-          :error="errors.service_interest"
-          :items="serviceInterestOptions"
-          label="Service interests (optional)"
-          name="service_interest"
-          variant="filled"
-        />
-        <FormCurrencyInput
-          id="intake-budget"
-          :error="errors.budget_range"
-          v-model="budgetRange"
-          :auto-emit="false"
-          :options="budgetOptions"
-          label="Estimated budget (optional)"
-          name="budget_range"
-          variant="filled"
-          autocomplete="off"
-        />
+        <FormMultiSelect id="intake-service" :error="errors.service_interest" :items="serviceInterestOptions" label="Service interests (optional)" name="service_interest" variant="filled" />
+        <FormCurrencyInput id="intake-budget" :error="errors.budget_range" v-model="budgetRange" :auto-emit="false" :options="budgetOptions" label="Estimated budget (optional)" name="budget_range" variant="filled" autocomplete="off" />
         <FormSelect
           id="intake-timeline"
           :error="errors.timeline"
@@ -117,17 +87,7 @@
         />
       </div>
 
-      <FormTextarea
-        id="intake-details"
-        :error="errors.project_details"
-        :rows="6"
-        label="What workflow or system needs attention?"
-        maxlength="5000"
-        minlength="20"
-        name="project_details"
-        required
-        variant="filled"
-      />
+      <FormTextarea id="intake-details" :error="errors.project_details" :rows="6" label="What workflow or system needs attention?" maxlength="5000" minlength="20" name="project_details" required variant="filled" />
 
       <FormInput id="intake-referral" :error="errors.referral_source" label="How did you hear about us? (optional)" name="referral_source" variant="filled" />
 
@@ -148,9 +108,7 @@
         <input id="intake-consent" class="mt-1 size-4 rounded border-muted-400 text-primary-600 focus:ring-primary-400" name="consent" required type="checkbox" value="1" />
         <p>
           <label for="intake-consent">I agree that Southeast Code may use these details to respond to my inquiry.</label> See the
-          <PrivacyDialogLink id="intake-privacy-notice" class="font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300"
-            >privacy notice</PrivacyDialogLink
-          >.
+          <PrivacyDialogLink id="intake-privacy-notice" class="font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300">privacy notice</PrivacyDialogLink>.
         </p>
       </div>
       <p v-if="errors.consent" class="px-1 text-base text-error sm:text-sm" role="status">{{ errors.consent }}</p>

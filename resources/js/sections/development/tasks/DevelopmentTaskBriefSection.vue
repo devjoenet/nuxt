@@ -1,23 +1,15 @@
 <script setup lang="ts">
-  import DevelopmentTaskSectionCard from "@/sections/development/tasks/DevelopmentTaskSectionCard.vue";
-  import type { DevelopmentTask } from "@/types/development";
+import DevelopmentTaskSectionCard from "@/sections/development/tasks/DevelopmentTaskSectionCard.vue";
+import type { DevelopmentTask } from "@/types/development";
 
-  defineProps<{
-    task: DevelopmentTask;
-    class?: string;
-  }>();
+defineProps<{
+  task: DevelopmentTask;
+  class?: string;
+}>();
 </script>
 
 <template>
-  <DevelopmentTaskSectionCard
-    :class="$props.class"
-    :description="task.description"
-    eyebrow="01 / Request brief"
-    heading-id="task-brief-heading"
-    title="Summary"
-    tone="primary"
-    data-testid="development-task-brief"
-  >
+  <DevelopmentTaskSectionCard :class="$props.class" :description="task.description" eyebrow="01 / Request brief" heading-id="task-brief-heading" title="Summary" tone="primary" data-testid="development-task-brief">
     <article class="@container grid gap-6">
       <div class="grid gap-4 @2xl:grid-cols-2">
         <UPageCard

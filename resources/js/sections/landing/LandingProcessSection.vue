@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import ProcessTimeline from "@/components/landing/ProcessTimeline.vue";
-  import SectionHeading from "@/components/landing/SectionHeading.vue";
-  import { cn } from "@/lib/utils";
-  import type { ProcessStep } from "@/sections/landing/landingContent";
+import ProcessTimeline from "@/components/landing/ProcessTimeline.vue";
+import SectionHeading from "@/components/landing/SectionHeading.vue";
+import { cn } from "@/lib/utils";
+import type { ProcessStep } from "@/sections/landing/landingContent";
 
-  const props = defineProps<{
-    steps: ProcessStep[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  steps: ProcessStep[];
+  class?: string;
+}>();
 </script>
 
 <template>

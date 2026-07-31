@@ -1,24 +1,24 @@
 <script setup lang="ts">
-  import { Link, router } from "@inertiajs/vue3";
-  import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
-  import { cn } from "@/lib/utils";
-  import { archive, convert, restore } from "@/routes/crm/leads";
-  import { show as contactShow } from "@/routes/crm/contacts";
-  import type { Lead } from "@/types/crm";
+import { Link, router } from "@inertiajs/vue3";
+import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
+import { cn } from "@/lib/utils";
+import { archive, convert, restore } from "@/routes/crm/leads";
+import { show as contactShow } from "@/routes/crm/contacts";
+import type { Lead } from "@/types/crm";
 
-  const props = defineProps<{
-    lead: Lead;
-    canManage: boolean;
-    class?: string;
-  }>();
+const props = defineProps<{
+  lead: Lead;
+  canManage: boolean;
+  class?: string;
+}>();
 
-  const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-  const confirmArchive = (): void => {
-    if (window.confirm("Archive this lead? It can be restored later.")) router.post(archive(props.lead.id).url);
-  };
-  const confirmConvert = (): void => {
-    if (window.confirm("Convert this organization to a client?")) router.post(convert(props.lead.id).url);
-  };
+const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+const confirmArchive = (): void => {
+  if (window.confirm("Archive this lead? It can be restored later.")) router.post(archive(props.lead.id).url);
+};
+const confirmConvert = (): void => {
+  if (window.confirm("Convert this organization to a client?")) router.post(convert(props.lead.id).url);
+};
 </script>
 
 <template>
@@ -26,11 +26,7 @@
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div>
         <div class="flex items-center gap-3">
-          <Link
-            v-if="lead.contact && !lead.contact.deleted_at"
-            :href="contactShow(lead.contact.id).url"
-            class="text-balance text-2xl font-semibold tracking-tight text-highlighted hover:underline"
-          >
+          <Link v-if="lead.contact && !lead.contact.deleted_at" :href="contactShow(lead.contact.id).url" class="text-balance text-2xl font-semibold tracking-tight text-highlighted hover:underline">
             {{ lead.contact.name }}
           </Link>
           <h1 v-else class="text-balance text-2xl font-semibold tracking-tight text-highlighted">{{ lead.contact?.name ?? "Contact unavailable" }}</h1>

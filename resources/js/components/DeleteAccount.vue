@@ -1,18 +1,14 @@
 <script setup lang="ts">
-  import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
-  import FormInput from "@/components/FormInput.vue";
-  import { Form } from "@inertiajs/vue3";
+import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
+import FormInput from "@/components/FormInput.vue";
+import { Form } from "@inertiajs/vue3";
 
-  const open = ref(false);
-  const passwordInput = useTemplateRef("passwordInput");
+const open = ref(false);
+const passwordInput = useTemplateRef("passwordInput");
 </script>
 
 <template>
-  <UModal
-    v-model:open="open"
-    title="Are you sure you want to delete your account?"
-    description="Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account."
-  >
+  <UModal v-model:open="open" title="Are you sure you want to delete your account?" description="Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.">
     <UButton label="Delete account" color="error" />
 
     <template #body>

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-  defineProps<{
-    panelId: string;
-    navbarTitle: string;
-    indexUrl: string;
-    indexLabel: string;
-    editUrl?: string;
-  }>();
+defineProps<{
+  panelId: string;
+  navbarTitle: string;
+  indexUrl: string;
+  indexLabel: string;
+  editUrl?: string;
+}>();
 </script>
 
 <template>

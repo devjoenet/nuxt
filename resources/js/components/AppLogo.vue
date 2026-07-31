@@ -1,21 +1,21 @@
 <script setup lang="ts">
-  import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-  interface Props {
-    logoVariantClass: string;
-    southeastVariantClass: string;
-    codeVariantClass: string;
-    hrVariantClass: string;
-    iconClass: string;
-  }
+interface Props {
+  logoVariantClass: string;
+  southeastVariantClass: string;
+  codeVariantClass: string;
+  hrVariantClass: string;
+  iconClass: string;
+}
 
-  const props = withDefaults(defineProps<Props>(), {
-    logoVariantClass: "primary",
-    southeastVariantClass: "fill-neutral-950 dark:neutral-50",
-    codeVariantClass: "secondary",
-    hrVariantClass: "secondary",
-    iconClass: "w-full",
-  });
+const props = withDefaults(defineProps<Props>(), {
+  logoVariantClass: "primary",
+  southeastVariantClass: "fill-neutral-950 dark:neutral-50",
+  codeVariantClass: "secondary",
+  hrVariantClass: "secondary",
+  iconClass: "w-full",
+});
 </script>
 
 <template>
@@ -41,17 +41,11 @@
         :class="props.southeastVariantClass"
         d="M657.03,224.72c0-39.82,30.3-69.3,71.63-69.3s71.63,29.29,71.63,69.3-30.49,69.3-71.63,69.3-71.63-29.48-71.63-69.3h0ZM769.62,224.72c0-25.46-17.58-42.88-40.96-42.88s-40.96,17.42-40.96,42.88,17.58,42.88,40.96,42.88,40.96-17.42,40.96-42.88h0Z"
       />
-      <path
-        :class="props.southeastVariantClass"
-        d="M821.99,232.76v-75.04h30.3v73.89c0,25.46,10.85,35.99,29.17,35.99s29.18-10.53,29.18-35.99v-73.89h29.92v75.04c0,39.43-22.07,61.26-59.29,61.26s-59.29-21.82-59.29-61.26h0Z"
-      />
+      <path :class="props.southeastVariantClass" d="M821.99,232.76v-75.04h30.3v73.89c0,25.46,10.85,35.99,29.17,35.99s29.18-10.53,29.18-35.99v-73.89h29.92v75.04c0,39.43-22.07,61.26-59.29,61.26s-59.29-21.82-59.29-61.26h0Z" />
       <path :class="props.southeastVariantClass" d="M995.37,182.99h-41.89v-25.27h114.09v25.27h-41.89v108.73h-30.3v-108.73h0Z" />
       <path :class="props.southeastVariantClass" d="M1203.91,157.72v134h-30.3v-54.94h-59.47v54.94h-30.3v-134h30.3v52.83h59.47v-52.83h30.3Z" />
       <path :class="props.southeastVariantClass" d="M1336.32,266.84v24.89h-101.37v-134h98.94v24.89h-68.82v29.1h60.78v24.12h-60.78v31.01h71.26Z" />
-      <path
-        :class="props.southeastVariantClass"
-        d="M1446.67,263.01h-60.78l-11.59,28.71h-31.05l58.35-134h29.92l58.54,134h-31.8l-11.59-28.71h0ZM1437.13,239.46l-20.76-51.3-20.76,51.3h41.52Z"
-      />
+      <path :class="props.southeastVariantClass" d="M1446.67,263.01h-60.78l-11.59,28.71h-31.05l58.35-134h29.92l58.54,134h-31.8l-11.59-28.71h0ZM1437.13,239.46l-20.76-51.3-20.76,51.3h41.52Z" />
       <path
         :class="props.southeastVariantClass"
         d="M1493.43,278.51l10.29-23.35c11.03,8.23,27.49,13.97,43.2,13.97,17.95,0,25.25-6.13,25.25-14.36,0-25.08-76.12-7.85-76.12-57.62,0-22.78,17.95-41.73,55.17-41.73,16.46,0,33.29,4.02,45.45,11.87l-9.35,23.55c-12.16-7.08-24.69-10.53-36.28-10.53-17.95,0-24.87,6.89-24.87,15.31,0,24.69,76.12,7.66,76.12,56.85,0,22.4-18.14,41.54-55.55,41.54-20.76,0-41.71-6.32-53.3-15.51h0Z"

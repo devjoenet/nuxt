@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import LandingFooter from "@/components/landing/LandingFooter.vue";
-  import LandingHeader from "@/components/landing/LandingHeader.vue";
-  import PrivacyPolicyContent from "@/components/privacy/PrivacyPolicyContent.vue";
-  import { Head } from "@inertiajs/vue3";
+import LandingFooter from "@/components/landing/LandingFooter.vue";
+import LandingHeader from "@/components/landing/LandingHeader.vue";
+import PrivacyPolicyContent from "@/components/privacy/PrivacyPolicyContent.vue";
+import { Head } from "@inertiajs/vue3";
 
-  defineProps<{ canonicalUrl: string }>();
+defineProps<{ canonicalUrl: string }>();
 </script>
 
 <template>

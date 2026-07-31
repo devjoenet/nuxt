@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import PasswordResetLinkController from "@/actions/App/Http/Controllers/Auth/PasswordResetLinkController";
-  import FormInput from "@/components/FormInput.vue";
-  import TextLink from "@/components/TextLink.vue";
-  import AuthLayout from "@/layouts/AuthLayout.vue";
-  import { login } from "@/routes";
-  import { Form, Head } from "@inertiajs/vue3";
+import PasswordResetLinkController from "@/actions/App/Http/Controllers/Auth/PasswordResetLinkController";
+import FormInput from "@/components/FormInput.vue";
+import TextLink from "@/components/TextLink.vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
+import { login } from "@/routes";
+import { Form, Head } from "@inertiajs/vue3";
 
-  defineProps<{
-    status?: string;
-  }>();
+defineProps<{
+  status?: string;
+}>();
 </script>
 
 <template>

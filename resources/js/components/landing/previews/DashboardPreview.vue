@@ -1,27 +1,27 @@
 <script setup lang="ts">
-  import { Motion } from "motion-v";
+import { Motion } from "motion-v";
 
-  const navItems = ["Overview", "Shipments", "Routes", "Inventory", "Orders", "Approvals", "Field data", "Reports", "Integrations", "Users & roles", "Settings"];
+const navItems = ["Overview", "Shipments", "Routes", "Inventory", "Orders", "Approvals", "Field data", "Reports", "Integrations", "Users & roles", "Settings"];
 
-  const stats = [
-    { label: "Shipments in transit", value: "128", delta: "+21% vs last 7 days" },
-    { label: "On-time delivery", value: "94.2%", delta: "+4.1% vs last 7 days" },
-    { label: "Inventory value", value: "$2.48M", delta: "+3.4% vs last 7 days" },
-    { label: "Exceptions", value: "14", delta: "+6 vs yesterday" },
-  ];
+const stats = [
+  { label: "Shipments in transit", value: "128", delta: "+21% vs last 7 days" },
+  { label: "On-time delivery", value: "94.2%", delta: "+4.1% vs last 7 days" },
+  { label: "Inventory value", value: "$2.48M", delta: "+3.4% vs last 7 days" },
+  { label: "Exceptions", value: "14", delta: "+6 vs yesterday" },
+];
 
-  const routes = [
-    ["SAV to ATL", "In transit", "ETA 10:45 AM"],
-    ["SAV to MIA", "In transit", "ETA 12:15 PM"],
-    ["CHS to SAV", "Delayed", "ETA 02:10 PM"],
-    ["SAV to BHM", "On time", "ETA 04:10 PM"],
-  ];
+const routes = [
+  ["SAV to ATL", "In transit", "ETA 10:45 AM"],
+  ["SAV to MIA", "In transit", "ETA 12:15 PM"],
+  ["CHS to SAV", "Delayed", "ETA 02:10 PM"],
+  ["SAV to BHM", "On time", "ETA 04:10 PM"],
+];
 
-  const approvals = [
-    ["PO-14853", "Vendor invoice", "$18,450", "High"],
-    ["PO-14867", "Purchase order", "$7,250", "Med"],
-    ["PO-14881", "Rate adjustment", "$2,950", "Med"],
-  ];
+const approvals = [
+  ["PO-14853", "Vendor invoice", "$18,450", "High"],
+  ["PO-14867", "Purchase order", "$7,250", "Med"],
+  ["PO-14881", "Rate adjustment", "$2,950", "Med"],
+];
 </script>
 
 <template>
@@ -42,21 +42,14 @@
         </div>
 
         <nav class="mt-3 space-y-1" aria-label="Dashboard preview navigation">
-          <span
-            v-for="item in navItems"
-            :key="item"
-            :class="item === 'Overview' ? 'bg-secondary-500/15 text-secondary-800 ring-1 ring-secondary-500/30 dark:text-secondary-100' : ''"
-            class="flex items-center rounded-md px-2 py-1.5 text-xs text-muted-600 dark:text-neutral-400"
-          >
+          <span v-for="item in navItems" :key="item" :class="item === 'Overview' ? 'bg-secondary-500/15 text-secondary-800 ring-1 ring-secondary-500/30 dark:text-secondary-100' : ''" class="flex items-center rounded-md px-2 py-1.5 text-xs text-muted-600 dark:text-neutral-400">
             {{ item }}
           </span>
         </nav>
       </div>
 
       <div class="space-y-3">
-        <div
-          class="flex flex-col gap-3 rounded-lg border border-muted-200 bg-muted-100/80 p-3 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-100/10 dark:bg-muted-900/80"
-        >
+        <div class="flex flex-col gap-3 rounded-lg border border-muted-200 bg-muted-100/80 p-3 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-100/10 dark:bg-muted-900/80">
           <p class="text-sm font-semibold text-muted-900 dark:text-neutral-100">Operations command</p>
           <div class="flex items-center gap-3 text-muted-500 dark:text-neutral-500">
             <div class="flex items-center gap-2 rounded-md border border-muted-200 px-3 py-1.5 text-xs dark:border-neutral-100/10">

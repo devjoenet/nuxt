@@ -1,73 +1,61 @@
 <script lang="ts" setup>
-  import FormField from "@/components/FormField.vue";
-  import type { TextareaProps } from "@nuxt/ui";
-  import { computed, useAttrs, useSlots } from "vue";
+import FormField from "@/components/FormField.vue";
+import type { TextareaProps } from "@nuxt/ui";
+import { computed, useAttrs, useSlots } from "vue";
 
-  defineOptions({ inheritAttrs: false });
+defineOptions({ inheritAttrs: false });
 
-  const props = withDefaults(
-    defineProps<{
-      id?: string;
-      name?: string;
-      label?: string;
-      description?: string;
-      error?: string | boolean;
-      valid?: boolean;
-      successText?: string;
-      variant?: "filled" | "outlined";
-      size?: "sm" | "md" | "lg";
-      required?: boolean;
-    }>(),
-    {
-      variant: "outlined",
-      size: "md",
-    },
-  );
+const props = withDefaults(
+  defineProps<{
+    id?: string;
+    name?: string;
+    label?: string;
+    description?: string;
+    error?: string | boolean;
+    valid?: boolean;
+    successText?: string;
+    variant?: "filled" | "outlined";
+    size?: "sm" | "md" | "lg";
+    required?: boolean;
+  }>(),
+  {
+    variant: "outlined",
+    size: "md",
+  },
+);
 
-  const attrs = useAttrs();
-  const slots = useSlots();
-  const controlClass = computed(() => attrs.class);
-  const controlAttrs = computed(() => {
-    const { class: _class, ...rest } = attrs;
+const attrs = useAttrs();
+const slots = useSlots();
+const controlClass = computed(() => attrs.class);
+const controlAttrs = computed(() => {
+  const { class: _class, ...rest } = attrs;
 
-    return rest;
-  });
+  return rest;
+});
 
-  type TextareaUi = NonNullable<TextareaProps["ui"]>;
+type TextareaUi = NonNullable<TextareaProps["ui"]>;
 
-  const placeholder = computed(() => {
-    if (props.label) {
-      return " ";
-    }
+const placeholder = computed(() => {
+  if (props.label) {
+    return " ";
+  }
 
-    return typeof attrs.placeholder === "string" ? attrs.placeholder : undefined;
-  });
+  return typeof attrs.placeholder === "string" ? attrs.placeholder : undefined;
+});
 
-  const controlUi = computed<TextareaUi>(() => {
-    const customUi = controlAttrs.value.ui as TextareaProps["ui"] | undefined;
+const controlUi = computed<TextareaUi>(() => {
+  const customUi = controlAttrs.value.ui as TextareaProps["ui"] | undefined;
 
-    return {
-      ...customUi,
-      root: customUi?.root ?? "w-full",
-      base: customUi?.base ?? "min-h-32 rounded-xl px-4 pb-3 pt-6 text-base leading-6 focus:outline-none",
-    };
-  });
+  return {
+    ...customUi,
+    root: customUi?.root ?? "w-full",
+    base: customUi?.base ?? "min-h-32 rounded-xl px-4 pb-3 pt-6 text-base leading-6 focus:outline-none",
+  };
+});
 </script>
 
 <template>
-  <FormField
-    :id="id"
-    :class="controlClass"
-    :description="description"
-    :error="error"
-    :label="label"
-    :multiline="true"
-    :name="name"
-    :required="required"
-    :success-text="successText"
-    :valid="valid"
-    :variant="variant"
-  >
+  <FormField :id="id" :class="controlClass" :description="description" :error="error" :label="label" :multiline="true" :name="name" :required="required" :success-text="successText" :valid="valid" :variant="variant">
     <template #default="{ ariaDescribedby, ariaInvalid, id: fieldId }">
       <UTextarea
         :id="fieldId"

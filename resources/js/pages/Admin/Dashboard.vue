@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import { Head } from "@inertiajs/vue3";
-  import Layout from "@/layouts/Default.vue";
+import { Head } from "@inertiajs/vue3";
+import Layout from "@/layouts/Default.vue";
 
-  defineOptions({ layout: Layout });
+defineOptions({ layout: Layout });
 
-  defineProps<{
-    stats: { label: string; value: number }[];
-    recentActivities: { id: number; description: string; causer: string | null; created_at: string | null }[];
-    recentUsers: { id: number; name: string; email: string; role: string | null; is_active: boolean }[];
-  }>();
+defineProps<{
+  stats: { label: string; value: number }[];
+  recentActivities: { id: number; description: string; causer: string | null; created_at: string | null }[];
+  recentUsers: { id: number; name: string; email: string; role: string | null; is_active: boolean }[];
+}>();
 </script>
 
 <template>

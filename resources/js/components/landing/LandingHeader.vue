@@ -1,48 +1,42 @@
 <script setup lang="ts">
-  import AppLogo from "@/components/AppLogo.vue";
-  import { dashboard } from "@/routes";
-  import { Link } from "@inertiajs/vue3";
-  import { useWindowScroll } from "@vueuse/core";
-  import { computed } from "vue";
-  import { Motion } from "motion-v";
+import AppLogo from "@/components/AppLogo.vue";
+import { dashboard } from "@/routes";
+import { Link } from "@inertiajs/vue3";
+import { useWindowScroll } from "@vueuse/core";
+import { computed } from "vue";
+import { Motion } from "motion-v";
 
-  const navigation = [
-    { id: "reality", label: "Why custom", href: "#reality" },
-    { id: "services", label: "Services", href: "#services" },
-    { id: "process", label: "Process", href: "#process" },
-    { id: "operations", label: "Workflows", href: "#operations" },
-  ];
+const navigation = [
+  { id: "reality", label: "Why custom", href: "#reality" },
+  { id: "services", label: "Services", href: "#services" },
+  { id: "process", label: "Process", href: "#process" },
+  { id: "operations", label: "Workflows", href: "#operations" },
+];
 
-  const { y } = useWindowScroll();
+const { y } = useWindowScroll();
 
-  const hasGlassBackground = computed(() => y.value > 28);
+const hasGlassBackground = computed(() => y.value > 28);
 
-  const activeSection = computed(() => {
-    if (typeof document === "undefined") {
-      return "";
-    }
+const activeSection = computed(() => {
+  if (typeof document === "undefined") {
+    return "";
+  }
 
-    const activationLine = y.value + 160;
-    const activeItem = navigation
-      .map((item) => ({
-        id: item.id,
-        top: document.getElementById(item.id)?.offsetTop ?? Number.POSITIVE_INFINITY,
-      }))
-      .filter((section) => section.top <= activationLine)
-      .at(-1);
+  const activationLine = y.value + 160;
+  const activeItem = navigation
+    .map((item) => ({
+      id: item.id,
+      top: document.getElementById(item.id)?.offsetTop ?? Number.POSITIVE_INFINITY,
+    }))
+    .filter((section) => section.top <= activationLine)
+    .at(-1);
 
-    return activeItem?.id ?? "";
-  });
+  return activeItem?.id ?? "";
+});
 </script>
 
 <template>
-  <Motion
-    as="header"
-    :animate="{ opacity: 1, y: 0 }"
-    :initial="{ opacity: 0, y: -18 }"
-    :transition="{ duration: 0.6, ease: 'easeOut' }"
-    class="fixed inset-x-0 top-0 z-50 px-5 py-3 transition-all duration-500 sm:px-8"
-  >
+  <Motion as="header" :animate="{ opacity: 1, y: 0 }" :initial="{ opacity: 0, y: -18 }" :transition="{ duration: 0.6, ease: 'easeOut' }" class="fixed inset-x-0 top-0 z-50 px-5 py-3 transition-all duration-500 sm:px-8">
     <div
       :class="
         hasGlassBackground
@@ -51,31 +45,15 @@
       "
       class="relative isolate mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 overflow-hidden rounded-[1.45rem] border border-transparent transition-all duration-500 ease-out sm:gap-6"
     >
+      <span :class="hasGlassBackground ? 'opacity-100' : 'opacity-0'" aria-hidden="true" class="nav-liquid-glass-effect pointer-events-none absolute inset-0 z-0 rounded-[inherit] transition-opacity duration-500 ease-out"></span>
       <span
-        :class="hasGlassBackground ? 'opacity-100' : 'opacity-0'"
-        aria-hidden="true"
-        class="nav-liquid-glass-effect pointer-events-none absolute inset-0 z-0 rounded-[inherit] transition-opacity duration-500 ease-out"
-      ></span>
-      <span
-        :class="
-          hasGlassBackground
-            ? 'border-[0.5px] border-muted-200/28 bg-muted-50/72 opacity-100 dark:border-muted-700/24 dark:bg-muted-950/78'
-            : 'border border-transparent bg-transparent opacity-0'
-        "
+        :class="hasGlassBackground ? 'border-[0.5px] border-muted-200/28 bg-muted-50/72 opacity-100 dark:border-muted-700/24 dark:bg-muted-950/78' : 'border border-transparent bg-transparent opacity-0'"
         aria-hidden="true"
         class="pointer-events-none absolute inset-0 z-1 rounded-[inherit] transition-all duration-500 ease-out"
       ></span>
-      <span
-        :class="hasGlassBackground ? 'opacity-100' : 'opacity-0'"
-        aria-hidden="true"
-        class="nav-liquid-glass-shine pointer-events-none absolute inset-0 z-2 rounded-[inherit] transition-opacity duration-500 ease-out"
-      ></span>
+      <span :class="hasGlassBackground ? 'opacity-100' : 'opacity-0'" aria-hidden="true" class="nav-liquid-glass-shine pointer-events-none absolute inset-0 z-2 rounded-[inherit] transition-opacity duration-500 ease-out"></span>
 
-      <a
-        aria-label="Southeast Code home"
-        class="relative z-10 flex max-w-43.75 items-center justify-self-start rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
-        href="#hero"
-      >
+      <a aria-label="Southeast Code home" class="relative z-10 flex max-w-43.75 items-center justify-self-start rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400" href="#hero">
         <AppLogo
           aria-hidden="true"
           :southeast-variant-class="hasGlassBackground ? 'fill-neutral-950 dark:fill-neutral-50' : 'fill-neutral-50 dark:fill-neutral-50'"
@@ -92,20 +70,12 @@
           :key="item.href"
           :href="item.href"
           :aria-current="activeSection === item.id ? 'true' : undefined"
-          :class="
-            activeSection === item.id
-              ? 'text-primary-700 dark:text-primary-100'
-              : hasGlassBackground
-                ? 'text-muted-700 hover:text-secondary-700 dark:text-neutral-200 dark:hover:text-secondary-200'
-                : 'text-neutral-100 hover:text-secondary-200'
-          "
+          :class="activeSection === item.id ? 'text-primary-700 dark:text-primary-100' : hasGlassBackground ? 'text-muted-700 hover:text-secondary-700 dark:text-neutral-200 dark:hover:text-secondary-200' : 'text-neutral-100 hover:text-secondary-200'"
           class="group relative isolate inline-flex h-10 items-center rounded-md px-1 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondary-400"
         >
           <span class="relative z-10">{{ item.label }}</span>
           <svg
-            :class="
-              activeSection === item.id ? 'scale-x-100 text-primary-400 opacity-100' : 'scale-x-0 text-secondary-300 opacity-0 group-hover:scale-x-100 group-hover:opacity-90'
-            "
+            :class="activeSection === item.id ? 'scale-x-100 text-primary-400 opacity-100' : 'scale-x-0 text-secondary-300 opacity-0 group-hover:scale-x-100 group-hover:opacity-90'"
             aria-hidden="true"
             class="pointer-events-none absolute -bottom-0.5 left-1/2 z-0 h-3 w-[calc(100%+0.85rem)] -translate-x-1/2 origin-left overflow-visible transition duration-300 ease-out"
             preserveAspectRatio="none"
@@ -154,23 +124,23 @@
 </template>
 
 <style scoped>
-  .nav-liquid-glass-effect {
-    backdrop-filter: blur(3px) saturate(160%);
-    filter: url("#nav-glass-distortion");
-    -webkit-backdrop-filter: blur(3px) saturate(160%);
-  }
+.nav-liquid-glass-effect {
+  backdrop-filter: blur(3px) saturate(160%);
+  filter: url("#nav-glass-distortion");
+  -webkit-backdrop-filter: blur(3px) saturate(160%);
+}
 
-  .nav-liquid-glass-shine {
-    box-shadow:
-      inset 0 0 0 1px color-mix(in oklab, var(--color-muted-100) 14%, transparent),
-      inset 0 1px 0 color-mix(in oklab, var(--color-muted-50) 18%, transparent),
-      inset 0 0 18px color-mix(in oklab, var(--color-muted-100) 8%, transparent);
-  }
+.nav-liquid-glass-shine {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--color-muted-100) 14%, transparent),
+    inset 0 1px 0 color-mix(in oklab, var(--color-muted-50) 18%, transparent),
+    inset 0 0 18px color-mix(in oklab, var(--color-muted-100) 8%, transparent);
+}
 
-  :global(.dark) .nav-liquid-glass-shine {
-    box-shadow:
-      inset 0 0 0 1px color-mix(in oklab, var(--color-muted-700) 22%, transparent),
-      inset 0 1px 0 color-mix(in oklab, var(--color-muted-300) 8%, transparent),
-      inset 0 0 18px color-mix(in oklab, var(--color-muted-700) 16%, transparent);
-  }
+:global(.dark) .nav-liquid-glass-shine {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--color-muted-700) 22%, transparent),
+    inset 0 1px 0 color-mix(in oklab, var(--color-muted-300) 8%, transparent),
+    inset 0 0 18px color-mix(in oklab, var(--color-muted-700) 16%, transparent);
+}
 </style>

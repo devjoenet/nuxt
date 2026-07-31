@@ -1,40 +1,40 @@
 <script setup lang="ts">
-  import AuthLayout from "@/layouts/AuthLayout.vue";
-  import FormInput from "@/components/FormInput.vue";
-  import { store } from "@/routes/two-factor/login";
-  import { Form, Head } from "@inertiajs/vue3";
-  import { computed, ref } from "vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
+import FormInput from "@/components/FormInput.vue";
+import { store } from "@/routes/two-factor/login";
+import { Form, Head } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 
-  const authConfigContent = computed<{
-    title: string;
-    description: string;
-    toggleText: string;
-  }>(() => {
-    if (showRecoveryInput.value) {
-      return {
-        title: "Recovery Code",
-        description: "Please confirm access to your account by entering one of your emergency recovery codes.",
-        toggleText: "login using an authentication code",
-      };
-    }
-
+const authConfigContent = computed<{
+  title: string;
+  description: string;
+  toggleText: string;
+}>(() => {
+  if (showRecoveryInput.value) {
     return {
-      title: "Authentication Code",
-      description: "Enter the authentication code provided by your authenticator application.",
-      toggleText: "login using a recovery code",
+      title: "Recovery Code",
+      description: "Please confirm access to your account by entering one of your emergency recovery codes.",
+      toggleText: "login using an authentication code",
     };
-  });
-
-  const showRecoveryInput = ref<boolean>(false);
-
-  function toggleRecoveryMode(clearErrors: () => void) {
-    showRecoveryInput.value = !showRecoveryInput.value;
-    clearErrors();
-    code.value = [];
   }
 
-  const code = ref<number[]>([]);
-  const codeValue = computed<string>(() => code.value.join(""));
+  return {
+    title: "Authentication Code",
+    description: "Enter the authentication code provided by your authenticator application.",
+    toggleText: "login using a recovery code",
+  };
+});
+
+const showRecoveryInput = ref<boolean>(false);
+
+function toggleRecoveryMode(clearErrors: () => void) {
+  showRecoveryInput.value = !showRecoveryInput.value;
+  clearErrors();
+  code.value = [];
+}
+
+const code = ref<number[]>([]);
+const codeValue = computed<string>(() => code.value.join(""));
 </script>
 
 <template>
@@ -54,11 +54,7 @@
 
           <div class="text-center text-sm text-muted">
             <span>or you can </span>
-            <button
-              type="button"
-              class="text-primary underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
-              @click="() => toggleRecoveryMode(clearErrors)"
-            >
+            <button type="button" class="text-primary underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary" @click="() => toggleRecoveryMode(clearErrors)">
               {{ authConfigContent.toggleText }}
             </button>
           </div>
@@ -73,11 +69,7 @@
 
           <div class="text-center text-sm text-muted">
             <span>or you can </span>
-            <button
-              type="button"
-              class="text-primary underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary"
-              @click="() => toggleRecoveryMode(clearErrors)"
-            >
+            <button type="button" class="text-primary underline decoration-[var(--ui-border-accented)] underline-offset-4 transition-colors duration-300 ease-out hover:text-default hover:decoration-current! focus-visible:outline-primary" @click="() => toggleRecoveryMode(clearErrors)">
               {{ authConfigContent.toggleText }}
             </button>
           </div>

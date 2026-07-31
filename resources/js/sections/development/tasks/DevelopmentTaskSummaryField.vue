@@ -1,26 +1,26 @@
 <script setup lang="ts">
-  import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-  const props = withDefaults(
-    defineProps<{
-      label: string;
-      editable?: boolean;
-      editing?: boolean;
-      editLabel?: string;
-      valueClass?: string;
-      class?: string;
-    }>(),
-    {
-      editable: false,
-      editing: false,
-      editLabel: "Edit value",
-      valueClass: "text-base/7 text-muted sm:text-sm/6",
-    },
-  );
+const props = withDefaults(
+  defineProps<{
+    label: string;
+    editable?: boolean;
+    editing?: boolean;
+    editLabel?: string;
+    valueClass?: string;
+    class?: string;
+  }>(),
+  {
+    editable: false,
+    editing: false,
+    editLabel: "Edit value",
+    valueClass: "text-base/7 text-muted sm:text-sm/6",
+  },
+);
 
-  const emit = defineEmits<{
-    edit: [];
-  }>();
+const emit = defineEmits<{
+  edit: [];
+}>();
 </script>
 
 <template>

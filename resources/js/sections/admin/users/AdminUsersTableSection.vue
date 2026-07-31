@@ -1,20 +1,20 @@
 <script setup lang="ts">
-  import { Form, Link } from "@inertiajs/vue3";
-  import FormSelect from "@/components/FormSelect.vue";
-  import { cn } from "@/lib/utils";
-  import { index, resendVerification, resetTwoFactor, update } from "@/routes/admin/users";
-  import type { AdminRoleOption, AdminUsersPage } from "@/sections/admin/users/types";
+import { Form, Link } from "@inertiajs/vue3";
+import FormSelect from "@/components/FormSelect.vue";
+import { cn } from "@/lib/utils";
+import { index, resendVerification, resetTwoFactor, update } from "@/routes/admin/users";
+import type { AdminRoleOption, AdminUsersPage } from "@/sections/admin/users/types";
 
-  const props = defineProps<{
-    users: AdminUsersPage;
-    roles: AdminRoleOption[];
-    class?: string;
-  }>();
+const props = defineProps<{
+  users: AdminUsersPage;
+  roles: AdminRoleOption[];
+  class?: string;
+}>();
 
-  const statuses = [
-    { label: "Active", value: "1" },
-    { label: "Inactive", value: "0" },
-  ];
+const statuses = [
+  { label: "Active", value: "1" },
+  { label: "Inactive", value: "0" },
+];
 </script>
 
 <template>
@@ -63,12 +63,7 @@
       </table>
     </div>
     <nav v-if="users.links.length > 3" aria-label="Pagination" class="mt-4 flex flex-wrap gap-1">
-      <Link
-        v-for="link in users.links"
-        :key="link.label"
-        :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']"
-        :href="link.url ?? index()"
-      >
+      <Link v-for="link in users.links" :key="link.label" :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']" :href="link.url ?? index()">
         <span v-html="link.label" />
       </Link>
     </nav>

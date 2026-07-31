@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import AuthenticatedSessionController from "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController";
-  import FormInput from "@/components/FormInput.vue";
-  import TextLink from "@/components/TextLink.vue";
-  import AuthBase from "@/layouts/AuthLayout.vue";
-  import { request } from "@/routes/password";
-  import { Form, Head } from "@inertiajs/vue3";
+import AuthenticatedSessionController from "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController";
+import FormInput from "@/components/FormInput.vue";
+import TextLink from "@/components/TextLink.vue";
+import AuthBase from "@/layouts/AuthLayout.vue";
+import { request } from "@/routes/password";
+import { Form, Head } from "@inertiajs/vue3";
 
-  defineProps<{
-    status?: string;
-    canResetPassword: boolean;
-  }>();
+defineProps<{
+  status?: string;
+  canResetPassword: boolean;
+}>();
 </script>
 
 <template>

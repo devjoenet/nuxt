@@ -1,27 +1,27 @@
 <script setup lang="ts">
-  import FeatureCard from "@/components/landing/FeatureCard.vue";
-  import SectionHeading from "@/components/landing/SectionHeading.vue";
-  import { cn } from "@/lib/utils";
-  import type { LandingCard, ServiceItem } from "@/sections/landing/landingContent";
+import FeatureCard from "@/components/landing/FeatureCard.vue";
+import SectionHeading from "@/components/landing/SectionHeading.vue";
+import { cn } from "@/lib/utils";
+import type { LandingCard, ServiceItem } from "@/sections/landing/landingContent";
 
-  const props = withDefaults(
-    defineProps<{
-      id: string;
-      kicker: string;
-      title: string;
-      tone: "primary" | "secondary" | "accent";
-      items: Array<LandingCard | ServiceItem>;
-      ordered?: boolean;
-      centered?: boolean;
-      gridClass?: string;
-      class?: string;
-    }>(),
-    {
-      ordered: false,
-      centered: false,
-      gridClass: "md:grid-cols-3",
-    },
-  );
+const props = withDefaults(
+  defineProps<{
+    id: string;
+    kicker: string;
+    title: string;
+    tone: "primary" | "secondary" | "accent";
+    items: Array<LandingCard | ServiceItem>;
+    ordered?: boolean;
+    centered?: boolean;
+    gridClass?: string;
+    class?: string;
+  }>(),
+  {
+    ordered: false,
+    centered: false,
+    gridClass: "md:grid-cols-3",
+  },
+);
 </script>
 
 <template>

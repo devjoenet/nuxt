@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import AppLogoIcon from "@/components/AppLogoIcon.vue";
-  import { home } from "@/routes";
-  import { Link } from "@inertiajs/vue3";
+import AppLogoIcon from "@/components/AppLogoIcon.vue";
+import { home } from "@/routes";
+import { Link } from "@inertiajs/vue3";
 
-  defineProps<{
-    title?: string;
-    description?: string;
-    variant?: "outline" | "solid" | "soft" | "subtle" | "naked" | "ghost";
-  }>();
+defineProps<{
+  title?: string;
+  description?: string;
+  variant?: "outline" | "solid" | "soft" | "subtle" | "naked" | "ghost";
+}>();
 </script>
 
 <template>

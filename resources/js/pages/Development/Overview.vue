@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-  import Layout from "@/layouts/Default.vue";
-  import { create as requestCreate, index as requestsIndex } from "@/routes/development/requests";
-  import { index as reviewIndex } from "@/routes/development/review";
-  import { show } from "@/routes/development/tasks";
-  import type { DevelopmentTask } from "@/types/development";
+import Layout from "@/layouts/Default.vue";
+import { create as requestCreate, index as requestsIndex } from "@/routes/development/requests";
+import { index as reviewIndex } from "@/routes/development/review";
+import { show } from "@/routes/development/tasks";
+import type { DevelopmentTask } from "@/types/development";
 
-  defineOptions({ layout: Layout });
-  defineProps<{
-    requests: DevelopmentTask[];
-    reviewQueueCount: number;
-    roadmapCount: number;
-    canCreate: boolean;
-    canReview: boolean;
-  }>();
+defineOptions({ layout: Layout });
+defineProps<{
+  requests: DevelopmentTask[];
+  reviewQueueCount: number;
+  roadmapCount: number;
+  canCreate: boolean;
+  canReview: boolean;
+}>();
 
-  const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
+const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
 </script>
 
 <template>
@@ -29,13 +29,7 @@
     <template #body>
       <div class="grid gap-6">
         <div class="grid gap-4 sm:grid-cols-2">
-          <UPageCard
-            v-if="canReview"
-            :description="`${reviewQueueCount} ${reviewQueueCount === 1 ? 'request' : 'requests'} awaiting a decision or clarification.`"
-            :to="reviewIndex().url"
-            icon="i-ph-magnifying-glass"
-            title="Review queue"
-          />
+          <UPageCard v-if="canReview" :description="`${reviewQueueCount} ${reviewQueueCount === 1 ? 'request' : 'requests'} awaiting a decision or clarification.`" :to="reviewIndex().url" icon="i-ph-magnifying-glass" title="Review queue" />
           <UPageCard :description="`${roadmapCount} ${roadmapCount === 1 ? 'task' : 'tasks'} currently planned or underway.`" icon="i-ph-map-trifold" title="Roadmap work" />
         </div>
 
@@ -58,12 +52,7 @@
             </li>
           </ul>
 
-          <UEmpty
-            v-else
-            description="Submit a bug, improvement, feature, or maintenance request when there is work to consider."
-            icon="i-ph-clipboard-text"
-            title="No active requests"
-          >
+          <UEmpty v-else description="Submit a bug, improvement, feature, or maintenance request when there is work to consider." icon="i-ph-clipboard-text" title="No active requests">
             <template #actions><UButton v-if="canCreate" :to="requestCreate().url" label="Submit request" /></template>
           </UEmpty>
         </section>

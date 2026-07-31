@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import { Motion } from "motion-v";
-  import OperationsShowcase from "@/components/landing/OperationsShowcase.vue";
-  import { cn } from "@/lib/utils";
+import { Motion } from "motion-v";
+import OperationsShowcase from "@/components/landing/OperationsShowcase.vue";
+import { cn } from "@/lib/utils";
 
-  const props = defineProps<{
-    heroImageSrc: string;
-    class?: string;
-  }>();
+const props = defineProps<{
+  heroImageSrc: string;
+  class?: string;
+}>();
 </script>
 
 <template>
@@ -17,13 +17,7 @@
     />
 
     <div class="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
-      <Motion
-        as="div"
-        :initial="{ opacity: 0, y: 24 }"
-        :transition="{ duration: 0.7, ease: 'easeOut' }"
-        :viewport="{ once: true, amount: 0.3 }"
-        :while-in-view="{ opacity: 1, y: 0 }"
-      >
+      <Motion as="div" :initial="{ opacity: 0, y: 24 }" :transition="{ duration: 0.7, ease: 'easeOut' }" :viewport="{ once: true, amount: 0.3 }" :while-in-view="{ opacity: 1, y: 0 }">
         <p class="text-xs font-bold tracking-[0.22em] text-secondary-400 uppercase">Built for operations</p>
         <h2 class="mt-4 max-w-lg text-3xl leading-tight font-semibold text-muted-950 sm:text-4xl dark:text-neutral-50">Interfaces your team can actually use.</h2>
         <p class="mt-4 max-w-md text-base leading-7 text-muted-700 dark:text-neutral-300">Clean, practical, and built for the way operations move.</p>
