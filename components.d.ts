@@ -26,6 +26,7 @@ declare module 'vue' {
     FormPhoneInput: typeof import('./resources/js/components/FormPhoneInput.vue')['default']
     FormSelect: typeof import('./resources/js/components/FormSelect.vue')['default']
     FormTextarea: typeof import('./resources/js/components/FormTextarea.vue')['default']
+    InlineEditActions: typeof import('./resources/js/components/InlineEditActions.vue')['default']
     LandingContactForm: typeof import('./resources/js/components/landing/LandingContactForm.vue')['default']
     LandingFooter: typeof import('./resources/js/components/landing/LandingFooter.vue')['default']
     LandingHeader: typeof import('./resources/js/components/landing/LandingHeader.vue')['default']
@@ -81,6 +82,7 @@ declare module 'vue' {
     UserTestingPageCard: typeof import('./resources/js/components/UserTestingPageCard.vue')['default']
     UTable: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Table.vue')['default']
     UTextarea: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Textarea.vue')['default']
+    UTheme: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Theme.vue')['default']
     UTooltip: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Tooltip.vue')['default']
   }
 }
