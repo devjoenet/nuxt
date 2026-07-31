@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\DevelopmentTaskTransitionData;
+use App\Enums\DevelopmentTaskStatus;
 use App\Models\DevelopmentTask;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,10 @@ use Spatie\Activitylog\Facades\Activity;
 
 class TransitionDevelopmentTask
 {
-    public function __construct(private ArchiveDevelopmentTask $archiveDevelopmentTask) {}
+    public function __construct(
+        private ArchiveDevelopmentTask $archiveDevelopmentTask,
+        private SetDevelopmentTaskRoadmapPosition $setDevelopmentTaskRoadmapPosition,
+    ) {}
 
     /** @param array<string, mixed> $attributes */
     public function handleRaw(DevelopmentTask $task, array $attributes, User $actor): DevelopmentTask
@@ -27,6 +31,10 @@ class TransitionDevelopmentTask
         User $actor,
     ): DevelopmentTask {
         return DB::transaction(function () use ($task, $data, $actor): DevelopmentTask {
+            if ($task->status === DevelopmentTaskStatus::Planned && $data->status !== DevelopmentTaskStatus::Planned) {
+                $task = $this->setDevelopmentTaskRoadmapPosition->handle($task, null, $actor);
+            }
+
             $task = DevelopmentTask::query()
                 ->withTrashed()
                 ->whereKey($task->getKey())
@@ -49,6 +57,12 @@ class TransitionDevelopmentTask
                 ]);
             }
 
+            if ($data->status === DevelopmentTaskStatus::InProgress && $task->assignee_id === null) {
+                throw ValidationException::withMessages([
+                    'assignee_id' => 'Assign this task before starting work.',
+                ]);
+            }
+
             $timestampColumn = $data->status->timestampColumn();
             $attributes = ['status' => $data->status];
 
@@ -65,6 +79,6 @@ class TransitionDevelopmentTask
             });
 
             return $task->refresh();
-        });
+        }, attempts: 5);
     }
 }

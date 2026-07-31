@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import type { FormDataConvertible } from "@inertiajs/core";
   import { Form, usePage } from "@inertiajs/vue3";
   import FormInput from "@/components/FormInput.vue";
   import FormSelect from "@/components/FormSelect.vue";
@@ -25,6 +26,7 @@
     priorities: DevelopmentOption[];
     linkTypes: DevelopmentOption[];
     testers: DevelopmentOption[];
+    plannedTaskCount: number;
   }>();
   const page = usePage<AppPageProps>();
   const toast = useToast();
@@ -41,6 +43,7 @@
   const canRequestInformation = computed(() => props.task.can.review && props.task.status === "submitted");
   const canDecide = computed(() => props.task.can.review && props.task.status === "under_review");
   const isRoadmapTask = computed(() => ["planned", "in_progress", "blocked", "changes_requested"].includes(props.task.status));
+  const canEditRoadmapSummary = computed(() => props.task.can.manage_roadmap && isRoadmapTask.value);
   const pageContextLabel = computed(() => (isRoadmapTask.value ? "Roadmap task" : "Development request"));
   const taskStatusBadgeClass = computed(() => {
     if (props.task.status === "completed") return "bg-success-50 text-success-800 ring-success-300/80 dark:bg-success-950/30 dark:text-success-300 dark:ring-success-800/80";
@@ -55,7 +58,73 @@
 
     return "bg-neutral-50 text-neutral-800 ring-neutral-300/80 dark:bg-neutral-900 dark:text-neutral-200 dark:ring-neutral-700/80";
   });
-  const assigneeOptions = computed(() => [{ label: "Unassigned", value: "" }, ...props.assignees]);
+  const unassignedAssigneeValue = "unassigned";
+  const assigneeOptions = computed(() => [{ label: "Unassigned", value: unassignedAssigneeValue }, ...props.assignees]);
+  type RoadmapSummaryField = "assignee" | "priority" | "roadmap_position";
+  const activeRoadmapEditor = ref<RoadmapSummaryField | null>(null);
+  const editRoadmapSummary = (field: RoadmapSummaryField): void => {
+    activeRoadmapEditor.value = field;
+  };
+  const closeRoadmapSummaryEditor = (): void => {
+    activeRoadmapEditor.value = null;
+  };
+  const transformRoadmapSummaryForm = (data: Record<string, FormDataConvertible>): Record<string, FormDataConvertible> => {
+    const destination = data.roadmap_destination;
+    const requestedPosition = destination === "start" ? 1 : destination === "end" ? props.plannedTaskCount : (data.roadmap_position ?? props.task.roadmap_position);
+    const requestedAssignee = data.assignee_id ?? props.task.assignee_id;
+
+    return {
+      priority: data.priority ?? props.task.priority,
+      assignee_id: requestedAssignee === unassignedAssigneeValue ? null : requestedAssignee,
+      roadmap_position: props.task.status === "planned" ? requestedPosition : null,
+    };
+  };
+  interface LifecycleStep {
+    label: string;
+    description: string;
+  }
+  const lifecycleSteps = computed<LifecycleStep[]>(() => {
+    if (props.task.status === "rejected") {
+      return [
+        { label: "Submitted", description: "Request received." },
+        { label: "Review", description: "Scope and outcome checked." },
+        { label: "Rejected", description: "Request closed during review." },
+      ];
+    }
+
+    if (props.task.status === "cancelled") {
+      return [
+        { label: "Submitted", description: "Request received." },
+        { label: "Cancelled", description: "Work closed before completion." },
+      ];
+    }
+
+    return [
+      { label: "Submitted", description: "Request received." },
+      { label: "Review", description: "Scope and outcome checked." },
+      { label: "Planned", description: "Ordered in the roadmap queue." },
+      { label: "Implementation", description: "Work is delivered." },
+      { label: "User testing", description: "The requested outcome is verified." },
+      { label: "Completed", description: "Accepted and archived." },
+    ];
+  });
+  const currentLifecycleStepIndex = computed(() => {
+    if (["rejected", "cancelled"].includes(props.task.status)) return lifecycleSteps.value.length - 1;
+
+    return (
+      {
+        submitted: 0,
+        needs_information: 1,
+        under_review: 1,
+        planned: 2,
+        in_progress: 3,
+        blocked: 3,
+        changes_requested: 3,
+        ready_for_testing: 4,
+        completed: 5,
+      }[props.task.status] ?? 0
+    );
+  });
   const progressAction = computed<{ color: "neutral" | "primary" | "warning"; label: string; status: string } | null>(() => {
     if (props.task.status === "planned") return { label: "Start work", status: "in_progress", color: "primary" };
     if (props.task.status === "in_progress") return { label: "Mark blocked", status: "blocked", color: "warning" };
@@ -66,12 +135,7 @@
   });
   const showActionSidebar = computed(
     () =>
-      canStartReview.value ||
-      canRequestInformation.value ||
-      canDecide.value ||
-      (props.task.can.manage_roadmap && isRoadmapTask.value) ||
-      (props.task.can.update_progress && Boolean(progressAction.value)) ||
-      props.task.can.request_testing,
+      canStartReview.value || canRequestInformation.value || canDecide.value || (props.task.can.update_progress && Boolean(progressAction.value)) || props.task.can.request_testing,
   );
   const noteAudiences = [
     { label: "Participants", value: "participants" },
@@ -152,24 +216,149 @@
                 <dd class="text-base/7 text-muted sm:text-sm/6">{{ task.reviewer ?? "Unassigned" }}</dd>
               </div>
               <div class="grid gap-1 rounded-xl border border-secondary-200/80 bg-secondary-50/70 p-4 dark:border-secondary-900/80 dark:bg-secondary-950/10">
-                <dt class="font-medium text-secondary-800 dark:text-secondary-300">Assignee</dt>
-                <dd class="text-base/7 text-muted sm:text-sm/6">{{ task.assignee ?? "Unassigned" }}</dd>
+                <dt class="flex min-w-0 items-start justify-between gap-3 font-medium text-secondary-800 dark:text-secondary-300">
+                  Assignee
+                  <UButton
+                    v-if="canEditRoadmapSummary"
+                    :aria-pressed="activeRoadmapEditor === 'assignee'"
+                    aria-label="Edit assignee"
+                    class="-m-2 min-h-12 min-w-12 shrink-0 justify-center sm:m-0 sm:min-h-7 sm:min-w-7"
+                    color="neutral"
+                    icon="i-ph-pencil-simple"
+                    size="xs"
+                    type="button"
+                    variant="ghost"
+                    @click="editRoadmapSummary('assignee')"
+                  />
+                </dt>
+                <dd v-if="activeRoadmapEditor !== 'assignee'" class="text-base/7 text-muted sm:text-sm/6">{{ task.assignee ?? "Unassigned" }}</dd>
+                <dd v-else>
+                  <Form
+                    #default="{ errors, processing }"
+                    :options="{ preserveScroll: true }"
+                    :transform="transformRoadmapSummaryForm"
+                    class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2"
+                    v-bind="updateRoadmap.form(task.id)"
+                    @success="closeRoadmapSummaryEditor"
+                  >
+                    <FormSelect
+                      :default-value="task.assignee_id ?? unassignedAssigneeValue"
+                      :error="errors.assignee_id"
+                      :items="assigneeOptions"
+                      aria-label="Assignee"
+                      class="min-w-0"
+                      name="assignee_id"
+                    />
+                    <UButton :loading="processing" color="neutral" label="Save" size="xs" type="submit" variant="soft" />
+                    <UButton aria-label="Cancel assignee edit" color="neutral" icon="i-ph-x" size="xs" type="button" variant="ghost" @click="closeRoadmapSummaryEditor" />
+                  </Form>
+                </dd>
               </div>
               <div class="grid gap-1 rounded-xl border border-warning-200/80 bg-warning-50/70 p-4 dark:border-warning-900/80 dark:bg-warning-950/10">
-                <dt class="font-medium text-warning-800 dark:text-warning-300">Priority</dt>
-                <dd class="text-base/7 text-muted sm:text-sm/6">{{ task.priority_label }}</dd>
+                <dt class="flex min-w-0 items-start justify-between gap-3 font-medium text-warning-800 dark:text-warning-300">
+                  Priority
+                  <UButton
+                    v-if="canEditRoadmapSummary"
+                    :aria-pressed="activeRoadmapEditor === 'priority'"
+                    aria-label="Edit priority"
+                    class="-m-2 min-h-12 min-w-12 shrink-0 justify-center sm:m-0 sm:min-h-7 sm:min-w-7"
+                    color="neutral"
+                    icon="i-ph-pencil-simple"
+                    size="xs"
+                    type="button"
+                    variant="ghost"
+                    @click="editRoadmapSummary('priority')"
+                  />
+                </dt>
+                <dd v-if="activeRoadmapEditor !== 'priority'" class="text-base/7 text-muted sm:text-sm/6">{{ task.priority_label }}</dd>
+                <dd v-else>
+                  <Form
+                    #default="{ errors, processing }"
+                    :options="{ preserveScroll: true }"
+                    :transform="transformRoadmapSummaryForm"
+                    class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2"
+                    v-bind="updateRoadmap.form(task.id)"
+                    @success="closeRoadmapSummaryEditor"
+                  >
+                    <FormSelect :default-value="task.priority" :error="errors.priority" :items="priorities" aria-label="Priority" class="min-w-0" name="priority" required />
+                    <UButton :loading="processing" color="neutral" label="Save" size="xs" type="submit" variant="soft" />
+                    <UButton aria-label="Cancel priority edit" color="neutral" icon="i-ph-x" size="xs" type="button" variant="ghost" @click="closeRoadmapSummaryEditor" />
+                  </Form>
+                </dd>
               </div>
               <div class="grid gap-1 rounded-xl border border-accent-200/80 bg-accent-50/70 p-4 dark:border-accent-900/80 dark:bg-accent-950/10">
-                <dt class="font-medium text-accent-800 dark:text-accent-300">Roadmap position</dt>
-                <dd class="tabular-nums text-base/7 text-muted sm:text-sm/6">
+                <dt class="flex min-w-0 items-start justify-between gap-3 font-medium text-accent-800 dark:text-accent-300">
+                  Roadmap position
+                  <UButton
+                    v-if="canEditRoadmapSummary && task.status === 'planned'"
+                    :aria-pressed="activeRoadmapEditor === 'roadmap_position'"
+                    aria-label="Edit roadmap position"
+                    class="-m-2 min-h-12 min-w-12 shrink-0 justify-center sm:m-0 sm:min-h-7 sm:min-w-7"
+                    color="neutral"
+                    icon="i-ph-pencil-simple"
+                    size="xs"
+                    type="button"
+                    variant="ghost"
+                    @click="editRoadmapSummary('roadmap_position')"
+                  />
+                </dt>
+                <dd v-if="activeRoadmapEditor !== 'roadmap_position'" class="tabular-nums text-base/7 text-muted sm:text-sm/6">
                   {{ task.roadmap_position ? `#${task.roadmap_position}` : "Not scheduled" }}
+                </dd>
+                <dd v-else>
+                  <Form
+                    #default="{ errors, processing }"
+                    :options="{ preserveScroll: true }"
+                    :transform="transformRoadmapSummaryForm"
+                    class="grid min-w-0 gap-3"
+                    v-bind="updateRoadmap.form(task.id)"
+                    @success="closeRoadmapSummaryEditor"
+                  >
+                    <div class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2">
+                      <FormInput
+                        :default-value="task.roadmap_position ?? plannedTaskCount"
+                        :error="errors.roadmap_position"
+                        :max="plannedTaskCount"
+                        aria-label="Roadmap position"
+                        class="min-w-0"
+                        min="1"
+                        name="roadmap_position"
+                        required
+                        type="number"
+                      />
+                      <UButton :loading="processing" color="neutral" label="Save" size="xs" type="submit" variant="soft" />
+                      <UButton aria-label="Cancel roadmap position edit" color="neutral" icon="i-ph-x" size="xs" type="button" variant="ghost" @click="closeRoadmapSummaryEditor" />
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                      <UButton
+                        :disabled="processing || task.roadmap_position === 1"
+                        color="neutral"
+                        label="Move to start"
+                        name="roadmap_destination"
+                        size="xs"
+                        type="submit"
+                        value="start"
+                        variant="outline"
+                      />
+                      <UButton
+                        :disabled="processing || task.roadmap_position === plannedTaskCount"
+                        color="neutral"
+                        label="Move to end"
+                        name="roadmap_destination"
+                        size="xs"
+                        type="submit"
+                        value="end"
+                        variant="outline"
+                      />
+                    </div>
+                  </Form>
                 </dd>
               </div>
             </dl>
           </div>
         </UCard>
 
-        <div :class="showActionSidebar ? 'xl:grid-cols-[minmax(0,1fr)_22rem]' : 'xl:grid-cols-1'" class="grid min-w-0 gap-10 xl:items-start" data-testid="development-task-layout">
+        <div class="grid min-w-0 gap-10 xl:grid-cols-[minmax(0,1fr)_22rem] xl:items-start" data-testid="development-task-layout">
           <main class="grid min-w-0 gap-10">
             <UCard
               :ui="{
@@ -414,7 +603,7 @@
             </UCard>
           </main>
 
-          <aside v-if="showActionSidebar" class="min-w-0 xl:sticky xl:top-4 xl:self-start" data-testid="development-task-workflow">
+          <aside class="min-w-0 xl:sticky xl:top-4 xl:self-start" data-testid="development-task-workflow">
             <UCard
               :ui="{
                 root: 'rounded-2xl border border-secondary-200/80 bg-default dark:border-secondary-900/80 dark:bg-default',
@@ -426,12 +615,65 @@
               <template #header>
                 <div class="grid gap-1">
                   <p class="font-mono text-base text-secondary-800 dark:text-secondary-300 sm:text-sm">Workflow</p>
-                  <h2 class="text-xl font-semibold text-balance text-highlighted">Move this work forward</h2>
-                  <p class="text-base/7 text-pretty text-muted sm:text-sm/6">Only the actions available at this stage are shown.</p>
+                  <h2 id="task-lifecycle-heading" class="text-xl font-semibold text-balance text-highlighted">Task lifecycle</h2>
+                  <p class="text-base/7 text-pretty text-muted sm:text-sm/6">The current phase is highlighted below.</p>
                 </div>
               </template>
 
-              <div class="divide-y divide-default">
+              <section aria-labelledby="task-lifecycle-heading" class="p-5">
+                <ol class="grid" role="list">
+                  <li
+                    v-for="(step, index) in lifecycleSteps"
+                    :key="step.label"
+                    :data-current="index === currentLifecycleStepIndex"
+                    class="grid grid-cols-[1rem_minmax(0,1fr)] gap-3 pb-5 last:pb-0"
+                  >
+                    <div class="relative flex justify-center">
+                      <span
+                        v-if="index < lifecycleSteps.length - 1"
+                        :class="index < currentLifecycleStepIndex ? 'bg-primary/50' : 'bg-neutral-200 dark:bg-neutral-800'"
+                        aria-hidden="true"
+                        class="absolute top-4 -bottom-5 w-px"
+                      />
+                      <span
+                        :class="
+                          index === currentLifecycleStepIndex
+                            ? 'bg-primary ring-4 ring-primary/15'
+                            : index < currentLifecycleStepIndex
+                              ? 'bg-primary/50'
+                              : 'bg-neutral-300 dark:bg-neutral-700'
+                        "
+                        aria-hidden="true"
+                        class="relative size-3 shrink-0 rounded-full"
+                      />
+                    </div>
+                    <div class="grid min-w-0 gap-1">
+                      <p
+                        :class="
+                          index === currentLifecycleStepIndex
+                            ? 'font-medium text-primary-800 dark:text-primary-300'
+                            : index < currentLifecycleStepIndex
+                              ? 'font-medium text-toned'
+                              : 'text-muted'
+                        "
+                      >
+                        {{ step.label }}
+                      </p>
+                      <p class="text-base/7 text-pretty text-muted sm:text-sm/6">{{ step.description }}</p>
+                      <UBadge
+                        v-if="index === currentLifecycleStepIndex"
+                        :label="task.status_label"
+                        class="w-fit bg-primary-50 text-sm text-primary-800 ring-primary-300/80 dark:bg-primary-950/30 dark:text-primary-300 dark:ring-primary-800/80 sm:text-xs"
+                        color="neutral"
+                        size="sm"
+                        variant="subtle"
+                      />
+                    </div>
+                  </li>
+                </ol>
+              </section>
+
+              <div v-if="showActionSidebar" class="divide-y divide-default border-t border-default">
                 <section v-if="canStartReview" aria-labelledby="start-review-heading" class="grid gap-4 border-s-2 border-primary bg-primary-50/40 p-5 dark:bg-primary-950/10">
                   <div class="grid gap-1">
                     <h3 id="start-review-heading" class="font-medium text-highlighted">Review this request</h3>
@@ -484,33 +726,6 @@
                   <Form #default="{ errors, processing }" class="grid gap-3" reset-on-success v-bind="requestInformation.form(task.id)">
                     <FormTextarea :error="errors.body" label="What needs clarification?" name="body" required />
                     <UButton :loading="processing" class="justify-self-end" color="neutral" label="Send request" size="sm" type="submit" variant="soft" />
-                  </Form>
-                </section>
-
-                <section
-                  v-if="task.can.manage_roadmap && isRoadmapTask"
-                  aria-labelledby="roadmap-details-heading"
-                  class="grid gap-4 border-s-2 border-accent bg-accent-50/40 p-5 dark:bg-accent-950/10"
-                >
-                  <div class="grid gap-1">
-                    <h3 id="roadmap-details-heading" class="font-medium text-highlighted">Roadmap details</h3>
-                    <p class="text-base/7 text-pretty text-muted sm:text-sm/6">Set ownership, priority, and the task’s delivery order.</p>
-                  </div>
-                  <Form #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" v-bind="updateRoadmap.form(task.id)">
-                    <FormSelect :default-value="task.priority" :error="errors.priority" :items="priorities" label="Priority" name="priority" required />
-                    <FormSelect :default-value="task.assignee_id ?? ''" :error="errors.assignee_id" :items="assigneeOptions" label="Assignee" name="assignee_id" />
-                    <FormInput
-                      :default-value="task.roadmap_position ?? 1"
-                      :error="errors.roadmap_position"
-                      label="Roadmap position"
-                      max="9999"
-                      min="1"
-                      name="roadmap_position"
-                      required
-                      type="number"
-                    />
-                    <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
-                    <UButton :loading="processing" class="justify-self-end" color="neutral" label="Save roadmap details" size="sm" type="submit" variant="soft" />
                   </Form>
                 </section>
 

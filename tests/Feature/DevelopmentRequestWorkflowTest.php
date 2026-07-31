@@ -213,6 +213,8 @@ test('reviewers can start review and promote a request to the roadmap', function
         DevelopmentPermission::DevelopmentRequestsReview,
         'Promotion Reviewer',
     );
+    DevelopmentTask::factory()->planned()->create(['roadmap_position' => 1]);
+    DevelopmentTask::factory()->planned()->create(['roadmap_position' => 2]);
     $task = DevelopmentTask::factory()->for($requester, 'submitter')->create();
     Notification::fake();
 
@@ -228,7 +230,8 @@ test('reviewers can start review and promote a request to the roadmap', function
         ->assertRedirect(route('development.tasks.show', $task));
 
     expect($task->refresh()->status)->toBe(DevelopmentTaskStatus::Planned)
-        ->and($task->planned_at)->not->toBeNull();
+        ->and($task->planned_at)->not->toBeNull()
+        ->and($task->roadmap_position)->toBe(3);
     Notification::assertSentTo($requester, DevelopmentTaskPromoted::class);
 });
 

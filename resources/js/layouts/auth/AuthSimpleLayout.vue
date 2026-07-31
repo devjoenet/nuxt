@@ -11,8 +11,8 @@
 </script>
 
 <template>
-  <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-default p-6 md:p-10">
-    <UPageCard :variant="variant ?? 'subtle'" class="w-full max-w-sm">
+  <div class="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+    <UPageCard :variant="variant ?? 'subtle'" class="w-full max-w-sm bg-neutral-800">
       <div class="flex flex-col gap-8">
         <div class="flex flex-col items-center gap-4">
           <Link :href="home()" class="flex flex-col items-center gap-2 font-medium">

@@ -45,9 +45,36 @@ final class DevelopmentTaskQuery
                 DevelopmentTaskStatus::ChangesRequested,
             ])
             ->with(['submitter', 'reviewer', 'assignee'])
-            ->orderByRaw('roadmap_position is null')
-            ->orderBy('roadmap_position')
-            ->oldest('planned_at')
+            ->orderByRaw(
+                'case
+                    when status = ? then 1
+                    when status in (?, ?) then 2
+                    when status = ? then 3
+                    else 4
+                end',
+                [
+                    DevelopmentTaskStatus::Planned->value,
+                    DevelopmentTaskStatus::InProgress->value,
+                    DevelopmentTaskStatus::ChangesRequested->value,
+                    DevelopmentTaskStatus::Blocked->value,
+                ],
+            )
+            ->orderByRaw(
+                'case when status = ? then roadmap_position end',
+                [DevelopmentTaskStatus::Planned->value],
+            )
+            ->orderByRaw(
+                'case
+                    when status = ? then started_at
+                    when status = ? then changes_requested_at
+                    when status = ? then blocked_at
+                end',
+                [
+                    DevelopmentTaskStatus::InProgress->value,
+                    DevelopmentTaskStatus::ChangesRequested->value,
+                    DevelopmentTaskStatus::Blocked->value,
+                ],
+            )
             ->orderBy('id');
     }
 }

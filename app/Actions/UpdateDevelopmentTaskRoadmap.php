@@ -14,6 +14,8 @@ use Spatie\Activitylog\Facades\Activity;
 
 class UpdateDevelopmentTaskRoadmap
 {
+    public function __construct(private SetDevelopmentTaskRoadmapPosition $setDevelopmentTaskRoadmapPosition) {}
+
     /** @param array<string, mixed> $attributes */
     public function handleRaw(DevelopmentTask $task, array $attributes, User $actor): DevelopmentTask
     {
@@ -26,10 +28,22 @@ class UpdateDevelopmentTaskRoadmap
         User $actor,
     ): DevelopmentTask {
         return DB::transaction(function () use ($task, $data, $actor): DevelopmentTask {
-            $task = DevelopmentTask::query()
-                ->whereKey($task->getKey())
-                ->lockForUpdate()
-                ->firstOrFail();
+            if ($task->status === DevelopmentTaskStatus::Planned && $data->roadmapPosition === null) {
+                throw ValidationException::withMessages([
+                    'roadmap_position' => 'Planned tasks require a queue position.',
+                ]);
+            }
+
+            $task = $task->status === DevelopmentTaskStatus::Planned
+                ? $this->setDevelopmentTaskRoadmapPosition->handle(
+                    $task,
+                    $data->roadmapPosition,
+                    $actor,
+                )
+                : DevelopmentTask::query()
+                    ->whereKey($task->getKey())
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
             if (! in_array($task->status, [
                 DevelopmentTaskStatus::Planned,
@@ -39,6 +53,12 @@ class UpdateDevelopmentTaskRoadmap
             ], true)) {
                 throw ValidationException::withMessages([
                     'status' => 'Only active roadmap tasks can be prioritized or assigned.',
+                ]);
+            }
+
+            if ($task->status !== DevelopmentTaskStatus::Planned && $data->roadmapPosition !== null) {
+                throw ValidationException::withMessages([
+                    'roadmap_position' => 'Only planned tasks have a queue position.',
                 ]);
             }
 
@@ -52,12 +72,14 @@ class UpdateDevelopmentTaskRoadmap
             Activity::defaultCauser($actor, function () use ($task, $data, $assignee): void {
                 $task->update([
                     'priority' => $data->priority,
-                    'roadmap_position' => $data->roadmapPosition,
+                    'roadmap_position' => $task->status === DevelopmentTaskStatus::Planned
+                        ? $task->roadmap_position
+                        : null,
                     'assignee_id' => $assignee?->getKey(),
                 ]);
             });
 
             return $task->refresh()->load(['submitter', 'reviewer', 'assignee']);
-        });
+        }, attempts: 5);
     }
 }

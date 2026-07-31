@@ -84,7 +84,9 @@
               <UPageCard :to="show(task.id).url" variant="subtle">
                 <div class="flex items-start justify-between gap-3">
                   <div class="min-w-0">
-                    <p v-if="task.roadmap_position" class="text-xs font-bold tracking-[0.14em] text-primary uppercase">Position {{ task.roadmap_position }}</p>
+                    <p v-if="column.key === 'planned' && task.roadmap_position" class="text-xs font-bold tracking-[0.14em] text-primary uppercase">
+                      Planned {{ task.roadmap_position }}
+                    </p>
                     <h3 class="mt-1 font-semibold text-highlighted">{{ task.title }}</h3>
                   </div>
                   <UBadge :color="priorityColor(task)" :label="task.priority_label" size="sm" variant="subtle" />

@@ -16,7 +16,7 @@ final class UpdateDevelopmentTaskRoadmapData extends Dto
     public function __construct(
         public readonly TaskPriority $priority,
         public readonly ?string $assigneeId,
-        public readonly int $roadmapPosition,
+        public readonly ?int $roadmapPosition,
     ) {}
 
     /** @param array<string, mixed> $attributes */
@@ -40,17 +40,18 @@ final class UpdateDevelopmentTaskRoadmapData extends Dto
             throw new UnexpectedValueException('Development task roadmap data requires a nullable string assignee value.');
         }
 
-        $roadmapPositionIsInteger = is_int($roadmapPosition)
+        $roadmapPositionIsInteger = $roadmapPosition === null
+            || is_int($roadmapPosition)
             || (is_string($roadmapPosition) && ctype_digit($roadmapPosition));
 
         if (! $roadmapPositionIsInteger) {
-            throw new UnexpectedValueException('Development task roadmap data requires an integer roadmap position value.');
+            throw new UnexpectedValueException('Development task roadmap data requires a nullable integer roadmap position value.');
         }
 
         return new self(
             priority: TaskPriority::from($priority),
             assigneeId: $assigneeId,
-            roadmapPosition: (int) $roadmapPosition,
+            roadmapPosition: $roadmapPosition === null ? null : (int) $roadmapPosition,
         );
     }
 
@@ -64,7 +65,7 @@ final class UpdateDevelopmentTaskRoadmapData extends Dto
                 'uuid',
                 Rule::exists(User::class, 'uuid')->where('is_active', true),
             ],
-            'roadmap_position' => ['required', 'integer', 'min:1', 'max:9999'],
+            'roadmap_position' => ['nullable', 'integer', 'min:1', 'max:9999'],
         ];
     }
 }

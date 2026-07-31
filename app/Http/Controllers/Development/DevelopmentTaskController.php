@@ -139,6 +139,12 @@ class DevelopmentTaskController extends Controller
                 'label' => $priority->label(),
                 'value' => $priority->value,
             ], TaskPriority::cases()),
+            'plannedTaskCount' => $developmentTask->status === DevelopmentTaskStatus::Planned
+                && $user->can('manageRoadmap', $developmentTask)
+                    ? DevelopmentTask::query()
+                        ->where('status', DevelopmentTaskStatus::Planned)
+                        ->count()
+                    : 0,
             'linkTypes' => array_map(fn (DevelopmentTaskLinkType $type): array => [
                 'label' => $type->label(),
                 'value' => $type->value,

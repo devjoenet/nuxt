@@ -122,6 +122,9 @@ test('the transition action enforces the complete lifecycle matrix', function (
     $actor = User::factory()->create();
     $task = DevelopmentTask::factory()->create([
         'status' => $source,
+        'assignee_id' => $target === DevelopmentTaskStatus::InProgress
+            ? User::factory()
+            : null,
         $source->timestampColumn() => now()->subDay(),
         'deleted_at' => $source->isTerminal() ? now()->subDay() : null,
     ]);
