@@ -49,6 +49,37 @@ test('admins can select, update, and keyboard-operate one role permission editor
         ->toBe(collect([$crmView->name, $jobsView->name])->sort()->values()->all());
 });
 
+test('admins can create a role with initial permissions', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole(RoleName::Admin->value);
+    $crmView = Permission::findByName('crm.view');
+    $jobsView = Permission::findByName('jobs.view');
+
+    $this->actingAs($admin);
+
+    $page = visit('/admin/roles')
+        ->assertSee('Create a role')
+        ->fill('input[name="name"]', 'Project Manager')
+        ->check('[data-testid="create-role-permission-list"] input[value="'.$crmView->getKey().'"]')
+        ->check('[data-testid="create-role-permission-list"] input[value="'.$jobsView->getKey().'"]')
+        ->click('Create role')
+        ->wait(0.5)
+        ->assertSee('Role created.')
+        ->click('#role-selector');
+
+    $page->page()->getByRole('option', ['name' => 'Project Manager', 'exact' => true])->click();
+
+    $page->wait(0.2)
+        ->assertScript('document.querySelectorAll("[data-testid=\\"role-permission-list\\"] input:checked").length', 2)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+
+    expect(Role::findByName('Project Manager')->permissions->pluck('name')->sort()->values()->all())
+        ->toBe(collect([$crmView->name, $jobsView->name])->sort()->values()->all());
+});
+
 test('super admins see a protected information state across narrow and dark layouts', function (): void {
     app(RolePermissionSeeder::class)->run();
 
@@ -67,7 +98,7 @@ test('super admins see a protected information state across narrow and dark layo
         ->wait(0.2)
         ->resize(320, 568)
         ->assertSee('All permissions are granted to Super Admin by the server-side Gate bypass. This role is not editable from the UI.')
-        ->assertMissing('button[type="submit"]')
+        ->assertMissing('form[action*="_method=PATCH"]')
         ->assertMissing('[data-testid="role-permission-list"]')
         ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
         ->assertNoJavaScriptErrors()
@@ -83,7 +114,7 @@ test('super admins see a protected information state across narrow and dark layo
     $page
         ->wait(0.2)
         ->assertSee('All permissions are granted to Super Admin by the server-side Gate bypass. This role is not editable from the UI.')
-        ->assertMissing('button[type="submit"]')
+        ->assertMissing('form[action*="_method=PATCH"]')
         ->assertMissing('[data-testid="role-permission-list"]')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
