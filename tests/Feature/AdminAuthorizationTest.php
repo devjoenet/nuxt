@@ -6,6 +6,8 @@ use App\Actions\CreateRole;
 use App\Actions\UpdateRolePermissions;
 use App\Data\CreateRoleData;
 use App\Data\RolePermissionsData;
+use App\Enums\Permission as PermissionName;
+use App\Enums\PermissionGroup;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
 use App\Models\Contact;
@@ -84,8 +86,39 @@ test('role management exposes the role and permission payload for a focused edit
                 && is_array(data_get($role, 'permission_ids'))))
             ->where('roles', fn (mixed $roles): bool => collect($roles)->contains(fn (mixed $role): bool => data_get($role, 'name') === RoleName::SuperAdmin->value
                 && data_get($role, 'protected') === true))
-            ->where('permissions', fn (mixed $permissions): bool => collect($permissions)->contains(fn (mixed $permission): bool => data_get($permission, 'name') === 'admin.roles.manage'
-                && data_get($permission, 'label') === 'Admin Roles Manage')));
+            ->where('permissionGroups', fn (mixed $groups): bool => collect($groups)->contains(fn (mixed $group): bool => data_get($group, 'key') === PermissionGroup::Admin->value
+                && data_get($group, 'label') === PermissionGroup::Admin->label()
+                && collect(data_get($group, 'permissions'))->contains(fn (mixed $permission): bool => data_get($permission, 'name') === 'admin.roles.manage'
+                    && data_get($permission, 'label') === 'Roles Manage'))));
+});
+
+test('role permission catalog groups web permissions and preserves uncatalogued entries', function (): void {
+    $admin = adminUser();
+    $uncataloguedPermission = Permission::findOrCreate('reports.exports.create', 'web');
+    $apiPermission = Permission::findOrCreate('reports.exports.create', 'api');
+
+    $this->actingAs($admin)
+        ->get(route('admin.roles.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('permissionGroups', function (mixed $groups) use ($apiPermission, $uncataloguedPermission): bool {
+                $permissionGroups = collect($groups);
+                $permissions = $permissionGroups->flatMap(fn (mixed $group): array => data_get($group, 'permissions', []));
+                $adminGroup = $permissionGroups->firstWhere('key', PermissionGroup::Admin->value);
+                $otherGroup = $permissionGroups->firstWhere('key', PermissionGroup::Other->value);
+
+                return $permissionGroups->pluck('key')->all() === collect(PermissionGroup::cases())->pluck('value')->all()
+                    && collect(data_get($adminGroup, 'permissions'))->pluck('name')->all() === [
+                        PermissionName::AdminDashboardView->value,
+                        PermissionName::AdminUsersManage->value,
+                        PermissionName::AdminRolesManage->value,
+                    ]
+                    && data_get($otherGroup, 'label') === PermissionGroup::Other->label()
+                    && collect(data_get($otherGroup, 'permissions'))->contains(fn (mixed $permission): bool => data_get($permission, 'id') === $uncataloguedPermission->getKey()
+                        && data_get($permission, 'label') === 'Reports Exports Create')
+                    && $permissions->contains(fn (mixed $permission): bool => data_get($permission, 'id') === $uncataloguedPermission->getKey())
+                    && ! $permissions->contains(fn (mixed $permission): bool => data_get($permission, 'id') === $apiPermission->getKey());
+            }));
 });
 
 test('admins can replace and clear ordinary role permissions with an audit record', function (): void {

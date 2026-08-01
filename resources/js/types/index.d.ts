@@ -57,6 +57,12 @@ export interface AdminPermission {
   label: string;
 }
 
+export interface AdminPermissionGroup {
+  key: string;
+  label: string;
+  permissions: AdminPermission[];
+}
+
 export interface Mail {
   id: number;
   unread?: boolean;

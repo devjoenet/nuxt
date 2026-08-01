@@ -4,12 +4,13 @@ import FormSelect from "@/components/FormSelect.vue";
 import Layout from "@/layouts/Default.vue";
 import { update } from "@/routes/admin/roles";
 import CreateAdminRoleSection from "@/sections/admin/roles/CreateAdminRoleSection.vue";
-import type { AdminPermission, AdminRole } from "@/types";
+import RolePermissionGroupList from "@/sections/admin/roles/RolePermissionGroupList.vue";
+import type { AdminPermissionGroup, AdminRole } from "@/types";
 import { computed, ref } from "vue";
 
 defineOptions({ layout: Layout });
 
-const props = defineProps<{ roles: AdminRole[]; permissions: AdminPermission[] }>();
+const props = defineProps<{ roles: AdminRole[]; permissionGroups: AdminPermissionGroup[] }>();
 const selectedRoleId = ref<number | null>(props.roles[0]?.id ?? null);
 const selectedRole = computed(() => props.roles.find((role) => role.id === selectedRoleId.value));
 const roleOptions = computed(() => props.roles.map((role) => ({ label: role.name, value: role.id })));
@@ -47,14 +48,8 @@ function permissionError(errors: Record<string, string>): string | undefined {
 
           <UPageCard v-if="selectedRole" :key="selectedRole.id" :description="selectedRole.protected ? 'Protected system role' : 'Choose the capabilities this role can use.'" :title="selectedRole.name" class="w-full max-w-3xl" variant="subtle">
             <Form v-if="!selectedRole.protected" #default="{ errors, processing, recentlySuccessful }" class="grid gap-4" v-bind="update.form(selectedRole.id)" @finish="finishSaving" @start="beginSaving">
-              <UFormField :error="permissionError(errors)" label="Permissions">
-                <div v-if="props.permissions.length" class="grid grid-cols-1 gap-2 sm:grid-cols-2" data-testid="role-permission-list">
-                  <label v-for="permission in props.permissions" :key="permission.id" class="flex items-center gap-3 rounded-md px-2 py-1.5 hover:bg-elevated focus-within:bg-elevated">
-                    <input :checked="selectedRole.permission_ids.includes(permission.id)" :value="permission.id" class="rounded border-default text-primary focus:ring-primary" name="permission_ids[]" type="checkbox" />
-                    <span class="text-sm text-highlighted">{{ permission.label }}</span>
-                  </label>
-                </div>
-                <UAlert v-else class="w-fit max-w-full" color="neutral" description="No permissions are available in the current permission catalog." icon="i-ph-info" title="No permissions available" variant="subtle" />
+              <UFormField :error="permissionError(errors)" label="Permissions" name="permission_ids">
+                <RolePermissionGroupList :groups="permissionGroups" :selected-permission-ids="selectedRole.permission_ids" test-id="role-permission-list" />
               </UFormField>
               <UButton :disabled="processing" :loading="processing" class="w-fit" label="Save permissions" type="submit" />
               <p v-if="recentlySuccessful" aria-live="polite" class="text-sm text-success" role="status">Role permissions updated.</p>
@@ -71,7 +66,7 @@ function permissionError(errors: Record<string, string>): string | undefined {
           </UPageCard>
         </div>
 
-        <CreateAdminRoleSection :permissions="permissions" />
+        <CreateAdminRoleSection :permission-groups="permissionGroups" />
       </div>
     </template>
   </UDashboardPanel>

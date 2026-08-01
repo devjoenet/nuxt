@@ -30,4 +30,32 @@ enum Permission: string
     {
         return str($this->value)->replace('.', ' ')->title()->toString();
     }
+
+    public function group(): PermissionGroup
+    {
+        return match ($this) {
+            self::AdminDashboardView,
+            self::AdminUsersManage,
+            self::AdminRolesManage => PermissionGroup::Admin,
+            self::AuditView => PermissionGroup::Audit,
+            self::CrmView,
+            self::CrmManage => PermissionGroup::Crm,
+            self::DevelopmentRequestsCreate,
+            self::DevelopmentRequestsReview,
+            self::DevelopmentRoadmapManage,
+            self::DevelopmentUserTestingManage => PermissionGroup::Development,
+            self::JobsView,
+            self::JobsManage => PermissionGroup::Jobs,
+            self::SettingsManage => PermissionGroup::BusinessSettings,
+        };
+    }
+
+    public function groupedLabel(): string
+    {
+        return str($this->value)
+            ->after('.')
+            ->replace(['.', '_'], ' ')
+            ->title()
+            ->toString();
+    }
 }

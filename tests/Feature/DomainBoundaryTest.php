@@ -16,6 +16,7 @@ use App\Data\LeadData;
 use App\Data\LeadNoteData;
 use App\Enums\FollowUpTaskStatus;
 use App\Enums\Permission;
+use App\Enums\PermissionGroup;
 use App\Enums\RoleName;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
@@ -116,6 +117,9 @@ test('validated data objects reject values outside their typed contracts', funct
         ->and($filters->subjects)->toBe([])
         ->and(Permission::values())->toContain(Permission::CrmView->value)
         ->and(Permission::CrmView->label())->toBe('Crm View')
+        ->and(Permission::CrmView->group())->toBe(PermissionGroup::Crm)
+        ->and(Permission::DevelopmentUserTestingManage->groupedLabel())->toBe('User Testing Manage')
+        ->and(PermissionGroup::Jobs->label())->toBe('Jobs & queues')
         ->and(StorePublicIntakeRequest::normalize(['budget_range' => 25000]))->toBe(['budget_range' => 25000]);
 });
 

@@ -26,6 +26,8 @@ test('admins can select, update, and keyboard-operate one role permission editor
         ->assertSee('Roles and permissions')
         ->assertScript('document.querySelectorAll("#role-selector").length', 1)
         ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"]").length', 1)
+        ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] fieldset").length', 6)
+        ->assertScript('Array.from(document.querySelectorAll("[data-testid=\"role-permission-list\"] legend")).map((legend) => legend.textContent?.trim()).join("|")', 'Admin|Audit log|CRM|Development|Jobs & queues|Business settings')
         ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] input:checked").length', $adminPermissionCount)
         ->click('#role-selector')
         ->assertAttribute('#role-selector', 'aria-expanded', 'true')
@@ -42,8 +44,11 @@ test('admins can select, update, and keyboard-operate one role permission editor
         ->click('Save permissions')
         ->wait(0.5)
         ->assertSee('Role permissions updated.')
+        ->resize(320, 568)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
         ->assertNoJavaScriptErrors()
-        ->assertNoConsoleLogs();
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
 
     expect($salesRole->refresh()->permissions->pluck('name')->sort()->values()->all())
         ->toBe(collect([$crmView->name, $jobsView->name])->sort()->values()->all());
@@ -61,6 +66,8 @@ test('admins can create a role with initial permissions', function (): void {
 
     $page = visit('/admin/roles')
         ->assertSee('Create a role')
+        ->assertScript('document.querySelectorAll("[data-testid=\"create-role-permission-list\"] fieldset").length', 6)
+        ->assertScript('Array.from(document.querySelectorAll("[data-testid=\"create-role-permission-list\"] legend")).map((legend) => legend.textContent?.trim()).join("|")', 'Admin|Audit log|CRM|Development|Jobs & queues|Business settings')
         ->fill('input[name="name"]', 'Project Manager')
         ->check('[data-testid="create-role-permission-list"] input[value="'.$crmView->getKey().'"]')
         ->check('[data-testid="create-role-permission-list"] input[value="'.$jobsView->getKey().'"]')
