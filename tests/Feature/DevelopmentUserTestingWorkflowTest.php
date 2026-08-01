@@ -26,6 +26,7 @@ test('roadmap managers request task-specific testing rounds', function (): void 
 
     $this->actingAs($manager)
         ->post(route('development.tasks.testRuns.store', $task), [
+            'development_task_id' => $task->uuid,
             'tester_id' => $tester->uuid,
             'instructions' => 'Verify the acceptance criteria on desktop and mobile.',
             'build_reference' => 'https://staging.example.com/build/42',
@@ -88,6 +89,7 @@ test('requesting changes preserves the round and returns the task to implementat
         ->create(['assignee_id' => $assignee->getKey()]);
 
     $this->actingAs($manager)->post(route('development.tasks.testRuns.store', $task), [
+        'development_task_id' => $task->uuid,
         'tester_id' => $tester->uuid,
         'instructions' => 'Check the responsive task controls.',
     ]);
@@ -95,12 +97,14 @@ test('requesting changes preserves the round and returns the task to implementat
 
     $this->actingAs($tester)
         ->patch(route('development.testRuns.update', $testRun), [
+            'development_task_id' => $task->uuid,
             'status' => DevelopmentTestRunStatus::ChangesRequested->value,
         ])
         ->assertSessionHasErrors('feedback');
 
     $this->actingAs($tester)
         ->patch(route('development.testRuns.update', $testRun), [
+            'development_task_id' => $task->uuid,
             'status' => DevelopmentTestRunStatus::ChangesRequested->value,
             'feedback' => 'The accept control overflows at the small breakpoint.',
         ])
@@ -132,6 +136,7 @@ test('accepted testing completes and soft-archives the task atomically', functio
 
     $this->actingAs($tester)
         ->patch(route('development.testRuns.update', $testRun), [
+            'development_task_id' => $task->uuid,
             'status' => DevelopmentTestRunStatus::Accepted->value,
             'feedback' => 'Acceptance criteria pass on the requested build.',
         ])
@@ -156,6 +161,7 @@ test('testing routes reject duplicate rounds and unrelated result actors', funct
     $task = DevelopmentTask::factory()->inProgress()->create();
 
     $this->actingAs($manager)->post(route('development.tasks.testRuns.store', $task), [
+        'development_task_id' => $task->uuid,
         'tester_id' => $tester->uuid,
         'instructions' => 'Verify the requested behavior.',
     ]);
@@ -163,6 +169,7 @@ test('testing routes reject duplicate rounds and unrelated result actors', funct
 
     $this->actingAs($unrelatedUser)
         ->patch(route('development.testRuns.update', $testRun), [
+            'development_task_id' => $task->uuid,
             'status' => DevelopmentTestRunStatus::Accepted->value,
         ])
         ->assertForbidden();
@@ -171,6 +178,7 @@ test('testing routes reject duplicate rounds and unrelated result actors', funct
 
     $this->actingAs($manager)
         ->post(route('development.tasks.testRuns.store', $task), [
+            'development_task_id' => $task->uuid,
             'tester_id' => $tester->uuid,
             'instructions' => 'Create an accidental duplicate.',
         ])
@@ -178,4 +186,50 @@ test('testing routes reject duplicate rounds and unrelated result actors', funct
 
     expect($task->testRuns()->count())->toBe(1)
         ->and($testRun->refresh()->status)->toBe(DevelopmentTestRunStatus::Pending);
+});
+
+test('stale testing forms cannot transition a different task', function (): void {
+    $manager = User::factory()->create();
+    $manager->givePermissionTo(DevelopmentPermission::DevelopmentRoadmapManage->value);
+    $tester = User::factory()->create();
+    $displayedTask = DevelopmentTask::factory()->inProgress()->create([
+        'title' => "Group permission list on a role's page",
+    ]);
+    $routeTask = DevelopmentTask::factory()->inProgress()->create([
+        'title' => 'Expand admin search results',
+    ]);
+
+    $this->actingAs($manager)
+        ->post(route('development.tasks.testRuns.store', $routeTask), [
+            'development_task_id' => $displayedTask->uuid,
+            'tester_id' => $tester->uuid,
+            'instructions' => 'Verify the task shown in the workspace.',
+        ])
+        ->assertSessionHasErrors('development_task_id');
+
+    expect($displayedTask->refresh()->status)->toBe(DevelopmentTaskStatus::InProgress)
+        ->and($routeTask->refresh()->status)->toBe(DevelopmentTaskStatus::InProgress)
+        ->and(DevelopmentTestRun::query()->exists())->toBeFalse();
+
+    $this->actingAs($manager)
+        ->post(route('development.tasks.testRuns.store', $routeTask), [
+            'development_task_id' => $routeTask->uuid,
+            'tester_id' => $tester->uuid,
+            'instructions' => 'Verify the correct route task.',
+        ])
+        ->assertRedirect();
+
+    $testRun = DevelopmentTestRun::query()->sole();
+
+    $this->actingAs($tester)
+        ->patch(route('development.testRuns.update', $testRun), [
+            'development_task_id' => $displayedTask->uuid,
+            'status' => DevelopmentTestRunStatus::Accepted->value,
+        ])
+        ->assertSessionHasErrors('development_task_id');
+
+    expect($displayedTask->refresh()->status)->toBe(DevelopmentTaskStatus::InProgress)
+        ->and($routeTask->refresh()->status)->toBe(DevelopmentTaskStatus::ReadyForTesting)
+        ->and($testRun->refresh()->status)->toBe(DevelopmentTestRunStatus::Pending)
+        ->and($routeTask->trashed())->toBeFalse();
 });

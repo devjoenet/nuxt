@@ -64,7 +64,7 @@ const pageContextLabel = computed(() => (isRoadmapTask.value ? "Roadmap task" : 
         <div class="relative min-h-full bg-default" data-testid="development-task-scroll-content">
           <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-primary/10 via-secondary/5 to-transparent dark:from-primary/5 dark:via-secondary/5" />
 
-          <UContainer class="relative grid gap-8 px-4 py-8 sm:px-6 lg:gap-10 lg:px-8 lg:py-10">
+          <UContainer :key="task.id" class="relative grid gap-8 px-4 py-8 sm:px-6 lg:gap-10 lg:px-8 lg:py-10">
             <DevelopmentTaskSummarySection :assignees="assignees" :page-context-label="pageContextLabel" :planned-task-count="plannedTaskCount" :priorities="priorities" :task="task" />
 
             <div class="grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_22rem] xl:items-start" data-testid="development-task-layout">

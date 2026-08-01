@@ -87,10 +87,11 @@ const showActions = computed(() => canStartReview.value || canRequestInformation
         <p class="text-base/7 text-pretty text-muted sm:text-sm/6">Assign a tester and describe the exact build and behavior they should verify.</p>
       </div>
       <Form #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" v-bind="requestTesting.form(task.id)">
+        <input :value="task.id" name="development_task_id" type="hidden" />
         <FormSelect :default-value="task.assignee_id ?? ''" :error="errors.tester_id" :items="testers" label="Tester" name="tester_id" required />
         <FormTextarea :error="errors.instructions" label="Testing instructions" name="instructions" required />
         <FormInput :error="errors.build_reference" label="Build or deployment reference" name="build_reference" placeholder="Deployment URL, commit, or build identifier" />
-        <UAlert v-if="errors.status" :description="errors.status" color="error" variant="subtle" />
+        <UAlert v-if="errors.development_task_id || errors.status" :description="errors.development_task_id || errors.status" color="error" variant="subtle" />
         <UButton :loading="processing" class="justify-self-end" color="neutral" icon="i-ph-test-tube" label="Send to testing" size="sm" type="submit" variant="soft" />
       </Form>
     </section>
