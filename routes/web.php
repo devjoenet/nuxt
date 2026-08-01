@@ -82,6 +82,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
             ->name('users.resetTwoFactor');
 
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
         Route::patch('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
 
         Route::get('audit', [ActivityLogController::class, 'index'])->name('audit.index');

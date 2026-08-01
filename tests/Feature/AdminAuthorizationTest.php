@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Actions\CreateRole;
 use App\Actions\UpdateRolePermissions;
+use App\Data\CreateRoleData;
 use App\Data\RolePermissionsData;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
@@ -106,6 +108,77 @@ test('admins can replace and clear ordinary role permissions with an audit recor
         ->assertRedirect();
 
     expect($role->refresh()->permissions)->toBeEmpty();
+});
+
+test('admins can create a role with permissions and an attributed audit record', function (): void {
+    $admin = adminUser();
+    $permissionIds = Permission::query()->where('guard_name', 'web')->orderBy('id')->limit(2)->pluck('id')->all();
+
+    $this->actingAs($admin)
+        ->post(route('admin.roles.store'), [
+            'name' => '  Project   Manager  ',
+            'permission_ids' => $permissionIds,
+        ])
+        ->assertRedirect(route('admin.roles.index'))
+        ->assertSessionHas('success', 'Role created.');
+
+    $role = Role::findByName('Project Manager');
+
+    expect($role->guard_name)->toBe('web')
+        ->and($role->permissions->pluck('id')->sort()->values()->all())->toBe(collect($permissionIds)->sort()->values()->all());
+
+    $activity = Activity::query()->where('description', 'Role created.')->latest('id')->sole();
+
+    expect($activity->causer?->is($admin))->toBeTrue()
+        ->and($activity->subject?->is($role))->toBeTrue()
+        ->and($activity->properties->get('permission_ids'))->toBe($permissionIds);
+});
+
+test('role creation rejects duplicate names and invalid permission ids', function (): void {
+    $admin = adminUser();
+    $existingRole = Role::findByName(RoleName::Admin->value);
+    $webPermission = Permission::query()->where('guard_name', 'web')->firstOrFail();
+    $apiPermission = Permission::findOrCreate('api-role-create-only', 'api');
+
+    $this->actingAs($admin)
+        ->post(route('admin.roles.store'), ['name' => $existingRole->name])
+        ->assertSessionHasErrors('name');
+
+    foreach ([
+        [$webPermission->getKey(), $webPermission->getKey()],
+        [$apiPermission->getKey()],
+        [99999999],
+    ] as $permissionIds) {
+        $this->actingAs($admin)
+            ->post(route('admin.roles.store'), [
+                'name' => 'Rejected Role',
+                'permission_ids' => $permissionIds,
+            ])
+            ->assertSessionHasErrors('permission_ids.0');
+    }
+
+    expect(Role::query()->where('name', 'Rejected Role')->exists())->toBeFalse();
+});
+
+test('users without role management cannot create roles', function (): void {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('admin.roles.store'), ['name' => 'Unauthorized Role'])
+        ->assertForbidden();
+
+    expect(Role::query()->where('name', 'Unauthorized Role')->exists())->toBeFalse();
+});
+
+test('create role action rejects invalid permission ids outside the HTTP boundary', function (): void {
+    $admin = adminUser();
+
+    expect(fn (): Role => app(CreateRole::class)->handle(
+        new CreateRoleData(name: 'Invalid Action Role', permissionIds: [99999999]),
+        $admin,
+    ))->toThrow(ValidationException::class);
+
+    expect(Role::query()->where('name', 'Invalid Action Role')->exists())->toBeFalse();
 });
 
 test('role permission updates reject duplicate, missing, and other-guard permission ids', function (): void {
