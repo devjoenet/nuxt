@@ -13,7 +13,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <UPageCard :class="cn(props.class)" description="They will receive a secure password setup link." title="Invite a user" variant="subtle">
+  <UPageCard :class="cn('dark:bg-elevated dark:ring-accented dark:shadow-none', props.class)" description="They will receive a secure password setup link." title="Invite a user" variant="outline">
     <Form #default="{ errors, processing }" class="grid gap-4" reset-on-success v-bind="store.form()">
       <FormInput :error="errors.name" label="Name" name="name" />
       <FormInput :error="errors.email" label="Email" name="email" type="email" />

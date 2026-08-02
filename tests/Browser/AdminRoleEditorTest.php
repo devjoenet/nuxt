@@ -26,6 +26,9 @@ test('admins can select, update, and keyboard-operate one role permission editor
         ->assertSee('Roles and permissions')
         ->assertScript('document.querySelectorAll("#role-selector").length', 1)
         ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"]").length', 1)
+        ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] fieldset").length', 6)
+        ->assertScript('document.querySelectorAll("[data-testid^=\"role-permission-list-\"][data-testid$=\"-trigger\"]").length', 6)
+        ->assertScript('Array.from(document.querySelectorAll("[data-testid=\"role-permission-list\"] legend")).map((legend) => legend.textContent?.trim()).join("|")', 'Admin|Audit log|CRM|Development|Jobs & queues|Business settings')
         ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] input:checked").length', $adminPermissionCount)
         ->click('#role-selector')
         ->assertAttribute('#role-selector', 'aria-expanded', 'true')
@@ -39,11 +42,17 @@ test('admins can select, update, and keyboard-operate one role permission editor
         ->assertSee(RoleName::SalesOps->value)
         ->assertScript('document.querySelectorAll("[data-testid=\"role-permission-list\"] input:checked").length', 1)
         ->check('[data-testid="role-permission-list"] input[value="'.$jobsView->getKey().'"]')
+        ->assertAttribute('[data-testid="role-permission-list-crm-trigger"]', 'aria-expanded', 'true')
+        ->click('[data-testid="role-permission-list-crm-trigger"]')
+        ->assertAttribute('[data-testid="role-permission-list-crm-trigger"]', 'aria-expanded', 'false')
         ->click('Save permissions')
         ->wait(0.5)
         ->assertSee('Role permissions updated.')
+        ->resize(320, 568)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
         ->assertNoJavaScriptErrors()
-        ->assertNoConsoleLogs();
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
 
     expect($salesRole->refresh()->permissions->pluck('name')->sort()->values()->all())
         ->toBe(collect([$crmView->name, $jobsView->name])->sort()->values()->all());
@@ -60,13 +69,21 @@ test('admins can create a role with initial permissions', function (): void {
     $this->actingAs($admin);
 
     $page = visit('/admin/roles')
+        ->assertSee('New role')
+        ->click('New role')
         ->assertSee('Create a role')
+        ->resize(320, 568)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertScript('document.querySelectorAll("[data-testid=\"create-role-permission-list\"] fieldset").length', 6)
+        ->assertScript('Array.from(document.querySelectorAll("[data-testid=\"create-role-permission-list\"] legend")).map((legend) => legend.textContent?.trim()).join("|")', 'Admin|Audit log|CRM|Development|Jobs & queues|Business settings')
+        ->assertNoAccessibilityIssues()
         ->fill('input[name="name"]', 'Project Manager')
         ->check('[data-testid="create-role-permission-list"] input[value="'.$crmView->getKey().'"]')
         ->check('[data-testid="create-role-permission-list"] input[value="'.$jobsView->getKey().'"]')
         ->click('Create role')
         ->wait(0.5)
         ->assertSee('Role created.')
+        ->click('Close')
         ->click('#role-selector');
 
     $page->page()->getByRole('option', ['name' => 'Project Manager', 'exact' => true])->click();
@@ -78,6 +95,23 @@ test('admins can create a role with initial permissions', function (): void {
 
     expect(Role::findByName('Project Manager')->permissions->pluck('name')->sort()->values()->all())
         ->toBe(collect([$crmView->name, $jobsView->name])->sort()->values()->all());
+});
+
+test('admin role cards retain visible hierarchy in dark mode', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole(RoleName::Admin->value);
+
+    $this->actingAs($admin);
+
+    visit('/admin/roles')
+        ->inDarkMode()
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).backgroundColor !== getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).backgroundColor', true)
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).boxShadow !== "none"', true)
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).boxShadow !== "none"', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
 });
 
 test('super admins see a protected information state across narrow and dark layouts', function (): void {

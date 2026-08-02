@@ -19,7 +19,7 @@ defineProps<{ setting: { company_name: string; notification_email: string; defau
     </template>
 
     <template #body>
-      <UPageCard class="mx-auto w-full max-w-2xl" description="These changes are permission-protected and audit-logged." title="Workspace defaults" variant="subtle">
+      <UPageCard class="mx-auto w-full max-w-2xl dark:bg-elevated dark:ring-accented dark:shadow-none" description="These changes are permission-protected and audit-logged." title="Workspace defaults" variant="outline">
         <Form #default="{ errors, processing }" class="grid gap-5" v-bind="update.form()">
           <FormInput :default-value="setting.company_name" :error="errors.company_name" label="Company name" name="company_name" />
           <FormInput :default-value="setting.notification_email" :error="errors.notification_email" label="Notification email" name="notification_email" type="email" />

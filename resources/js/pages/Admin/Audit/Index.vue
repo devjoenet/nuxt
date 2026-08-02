@@ -51,7 +51,7 @@ defineProps<{
     </template>
 
     <template #body>
-      <UPageCard :ui="{ container: 'p-0 sm:p-0' }" variant="subtle">
+      <UPageCard :ui="{ container: 'p-0 sm:p-0' }" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
         <div class="overflow-x-auto">
           <table class="min-w-full text-sm">
             <thead class="text-left text-xs text-muted">

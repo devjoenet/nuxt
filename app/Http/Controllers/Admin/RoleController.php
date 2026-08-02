@@ -12,15 +12,15 @@ use App\Enums\RoleName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreRoleRequest;
 use App\Http\Requests\Admin\UpdateRoleRequest;
+use App\Queries\RolePermissionCatalogQuery;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function index(): Response
+    public function index(RolePermissionCatalogQuery $rolePermissionCatalogQuery): Response
     {
         $this->authorize('viewAny', Role::class);
 
@@ -31,11 +31,7 @@ class RoleController extends Controller
                 'protected' => $role->name === RoleName::SuperAdmin->value,
                 'permission_ids' => $role->permissions->pluck('id')->values(),
             ]),
-            'permissions' => Permission::query()->orderBy('name')->get(['id', 'name'])->map(fn (Permission $permission): array => [
-                'id' => $permission->id,
-                'name' => $permission->name,
-                'label' => str($permission->name)->replace('.', ' ')->title()->toString(),
-            ]),
+            'permissionGroups' => $rolePermissionCatalogQuery->grouped(),
         ]);
     }
 
