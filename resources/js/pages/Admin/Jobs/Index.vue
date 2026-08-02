@@ -23,7 +23,7 @@ defineProps<{
 
     <template #body>
       <div class="grid gap-4 sm:grid-cols-3">
-        <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" variant="subtle">
+        <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
           <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
         </UPageCard>
       </div>
@@ -48,7 +48,7 @@ defineProps<{
       />
 
       <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <UPageCard v-for="link in links" :key="link.label" :description="link.description" :title="link.label" variant="subtle">
+        <UPageCard v-for="link in links" :key="link.label" :description="link.description" :title="link.label" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
           <template #footer>
             <a :href="link.url" class="text-sm font-medium text-primary hover:underline" rel="noreferrer" target="_blank">Open in Horizon <span aria-hidden="true">↗</span></a>
           </template>

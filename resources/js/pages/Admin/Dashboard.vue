@@ -23,13 +23,13 @@ defineProps<{
 
     <template #body>
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" variant="subtle">
+        <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
           <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
         </UPageCard>
       </div>
 
       <div class="mt-6 grid gap-6 xl:grid-cols-2">
-        <UPageCard description="The latest auditable workspace changes." title="Recent activity" variant="subtle">
+        <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="The latest auditable workspace changes." title="Recent activity" variant="outline">
           <ul v-if="recentActivities.length" class="divide-y divide-default">
             <li v-for="activity in recentActivities" :key="activity.id" class="py-3 first:pt-0 last:pb-0">
               <p class="text-sm text-highlighted">{{ activity.description }}</p>
@@ -39,7 +39,7 @@ defineProps<{
           <p v-else class="text-sm text-muted">No activity has been recorded yet.</p>
         </UPageCard>
 
-        <UPageCard description="Access status for the newest workspace members." title="Recent users" variant="subtle">
+        <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="Access status for the newest workspace members." title="Recent users" variant="outline">
           <ul class="divide-y divide-default">
             <li v-for="user in recentUsers" :key="user.id" class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
               <div>

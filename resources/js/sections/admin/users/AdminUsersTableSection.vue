@@ -18,7 +18,7 @@ const statuses = [
 </script>
 
 <template>
-  <UPageCard :class="cn(props.class)" description="Role and account status changes are recorded in the audit log." title="Workspace users" variant="subtle">
+  <UPageCard :class="cn('dark:bg-elevated dark:ring-accented dark:shadow-none', props.class)" description="Role and account status changes are recorded in the audit log." title="Workspace users" variant="outline">
     <div class="overflow-x-auto">
       <table class="min-w-full text-sm">
         <thead class="text-left text-xs text-muted">
