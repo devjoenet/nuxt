@@ -63,7 +63,7 @@ defineProps<{
                 <th class="px-4 py-3 font-medium">When</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-default">
+            <tbody class="striped-table-body divide-y divide-default">
               <tr v-for="activity in activities.data" :key="activity.id">
                 <td class="px-4 py-3">
                   <p class="font-medium text-highlighted">{{ activity.description }}</p>

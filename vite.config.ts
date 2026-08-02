@@ -33,6 +33,11 @@ export default defineConfig({
         colors: ["primary", "secondary", "success", "info", "warning", "error"],
       },
       ui: {
+        table: {
+          slots: {
+            tbody: "striped-table-body",
+          },
+        },
         icons: {
           arrowDown: "i-ph-arrow-down",
           arrowLeft: "i-ph-arrow-left",
