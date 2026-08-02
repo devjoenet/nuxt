@@ -29,7 +29,7 @@ const statuses = [
             <th class="px-3 py-2 text-right font-medium">Action</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-default">
+        <tbody class="striped-table-body divide-y divide-default">
           <tr v-for="user in users.data" :key="user.id">
             <td class="px-3 py-3">
               <p class="font-medium text-highlighted">{{ user.name }}</p>

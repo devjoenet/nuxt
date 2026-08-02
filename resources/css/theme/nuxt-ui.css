@@ -52,3 +52,31 @@
   --ui-border-accented: var(--color-slate-700);
   --ui-border-inverted: var(--color-grey-50);
 }
+
+@layer components {
+  .striped-table-body {
+    --table-row-stripe: var(--ui-bg-muted);
+    --table-row-hover: color-mix(in oklab, var(--ui-bg-accented) 75%, transparent);
+  }
+
+  .dark .striped-table-body {
+    --table-row-stripe: var(--ui-bg-accented);
+    --table-row-hover: var(--color-slate-700);
+  }
+
+  .striped-table-body > tr {
+    @apply transition-colors;
+  }
+
+  .striped-table-body > tr:nth-child(even) {
+    background-color: var(--table-row-stripe);
+  }
+
+  .striped-table-body > tr:hover {
+    background-color: var(--table-row-hover);
+  }
+
+  .striped-table-body > tr[data-selected="true"] {
+    @apply bg-accented;
+  }
+}
