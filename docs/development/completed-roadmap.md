@@ -1,6 +1,12 @@
+# Archived Development Roadmap
+
+This file preserves tasks and decisions completed before the database-backed Development workflow became the sole
+source of truth. It is historical context, not an active queue, and must not receive new tasks. Use
+`docs/development/workflow.md` for the current request-to-user-testing procedure.
+
 ## Resolved Decision Points
 
-These items are already resolved by the roadmap once removed from `./active-decision-points.md`
+These items were resolved under the previous roadmap process.
 
 - Southeast Code internal operating app first; reusable starter-kit polish second.
 - Single Southeast Code workspace for v1; multi-company tenancy is later.
@@ -69,10 +75,10 @@ These items are already resolved by the roadmap once removed from `./active-deci
 - [x] Shared expressive form controls cover the shipped auth, settings, marketing, CRM, admin, audit, account, and
   2FA forms with outlined/filled variants, floating labels, validation states, light/dark themes, and custom selects.
 
-## Open Decisions To Ratify
+## Historical Decisions Ratified
 
-`docs/development/active-decision-points.md` tracks the unresolved choices that can still change implementation details. The roadmap
-defaults above remain the executable path until those decisions are made.
+These decisions were ratified before the database-backed Development workflow replaced Markdown planning. Any future
+change to one of them must begin as a Development request.
 
 - [x] DP-01: choose the v1 success metric and launch gate. Task 8 ratifies operational CRM readiness: inbound
   opportunities become first-party records that authorized staff can locate, assign, manage, and advance.

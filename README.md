@@ -74,7 +74,8 @@ php artisan schedule:run
 See [docs/queues-and-horizon.md](docs/queues-and-horizon.md) and [docs/deployment-and-backups.md](docs/deployment-and-backups.md)
 for worker, failed-job, scheduler, deployment, backup, ownership, and incident expectations. The [admin and user guide](docs/admin-and-user-guide.md)
 covers the CRM lifecycle, access management, roles, jobs, and audit review. Architecture decisions are recorded in
-[docs/development/adr](docs/development/adr/).
+[docs/development/adr](docs/development/adr/). New development work follows the database-backed
+[Development work procedure](docs/development/workflow.md).
 
 ## Verification
 

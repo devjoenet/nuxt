@@ -4,33 +4,45 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
-test('every listed active task link resolves to a local markdown file', function (): void {
-    $roadmapPath = base_path('docs/development/active-roadmap.md');
-    $roadmap = File::get($roadmapPath);
-    expect($roadmap)->toContain('## Active Development Tasks');
+test('the database workflow replaces markdown task queues', function (): void {
+    $workflow = File::get(base_path('docs/development/workflow.md'));
+    $skill = File::get(base_path('.agents/skills/user-testing-roadmap/SKILL.md'));
 
-    preg_match_all('/\]\(([^)]+)\)/', $roadmap, $matches);
+    expect($workflow)
+        ->toContain('sole source of truth')
+        ->toContain('/development/requests/create')
+        ->toContain('/development/review')
+        ->toContain('/development/roadmap')
+        ->toContain('/development/user-testing')
+        ->and($skill)
+        ->toContain('development_tasks')
+        ->toContain('RequestDevelopmentTaskTesting')
+        ->toContain('RecordDevelopmentTestResult');
 
-    $links = collect($matches[1])
-        ->filter(fn (string $link): bool => str_contains($link, 'active-tasks/'))
-        ->map(fn (string $link): string => Str::before($link, '#'))
-        ->unique()
-        ->values();
+    foreach ([
+        'docs/development/active-roadmap.md',
+        'docs/development/active-decision-points.md',
+        'docs/development/active-tasks',
+    ] as $legacyPath) {
+        expect(File::exists(base_path($legacyPath)))->toBeFalse("Legacy workflow path still exists: {$legacyPath}");
+    }
 
-    foreach ($links as $link) {
-        $path = realpath(dirname($roadmapPath).'/'.$link);
+    $maintainedDocumentation = collect(File::allFiles(base_path('docs')))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'md')
+        ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
+        ->push($skill)
+        ->push(File::get(base_path('README.md')))
+        ->implode("\n");
 
-        expect($path)->not->toBeFalse("Missing active task link: {$link}");
-        expect(File::extension((string) $path))->toBe('md');
+    foreach (['active-roadmap.md', 'active-decision-points.md', 'docs/development/active-tasks'] as $legacyReference) {
+        expect($maintainedDocumentation)->not->toContain($legacyReference);
     }
 });
 
 test('maintained deployment documentation only names registered artisan commands', function (): void {
     $commands = collect(File::allFiles(base_path('docs')))
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'md')
-        ->reject(fn (SplFileInfo $file): bool => str_contains($file->getPathname(), DIRECTORY_SEPARATOR.'active-tasks'.DIRECTORY_SEPARATOR))
         ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
         ->implode("\n");
     preg_match_all('/php artisan ([a-z0-9:_-]+)/', $commands, $matches);
