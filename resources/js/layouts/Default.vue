@@ -10,6 +10,11 @@ import { index as developmentReviewIndex } from "@/routes/development/review";
 import { index as roadmapIndex } from "@/routes/development/roadmap";
 import { index as userTestingIndex } from "@/routes/development/userTesting";
 
+type SearchableNavigationItem = Omit<NavigationMenuItem, "children"> & {
+  children?: SearchableNavigationItem[];
+  searchDescription?: string;
+};
+
 const auth = useAuth();
 
 const open = ref(false);
@@ -18,12 +23,13 @@ function closeNavigation(): void {
   open.value = false;
 }
 
-const links = computed<NavigationMenuItem[][]>(() => [
+const links = computed<SearchableNavigationItem[][]>(() => [
   [
     {
       label: "Home",
       icon: "i-ph-house",
       to: "/dashboard",
+      searchDescription: "Workspace · Recent leads · Follow-ups",
       onSelect: closeNavigation,
     },
     ...(auth.value.user?.can?.["crm.view"]
@@ -35,9 +41,9 @@ const links = computed<NavigationMenuItem[][]>(() => [
             type: "trigger" as const,
             defaultOpen: true,
             children: [
-              { label: "Leads", to: leadsIndex.url() },
-              { label: "Organizations", to: organizationsIndex.url() },
-              { label: "Contacts", to: contactsIndex.url() },
+              { label: "Leads", to: leadsIndex.url(), searchDescription: "CRM leads" },
+              { label: "Organizations", to: organizationsIndex.url(), searchDescription: "CRM organizations" },
+              { label: "Contacts", to: contactsIndex.url(), searchDescription: "CRM contacts" },
             ],
             onSelect: closeNavigation,
           },
@@ -52,16 +58,16 @@ const links = computed<NavigationMenuItem[][]>(() => [
             type: "trigger" as const,
             defaultOpen: true,
             children: [
-              { label: "Overview", to: developmentIndex.url(), exact: true },
+              { label: "Overview", to: developmentIndex.url(), exact: true, searchDescription: "Development workspace · Roadmap work" },
               ...(auth.value.user?.can?.["development.requests.create"]
                 ? [
-                    { label: "My requests", to: developmentRequestsIndex.url(), exact: true },
-                    { label: "Submit request", to: developmentRequestCreate.url() },
+                    { label: "My requests", to: developmentRequestsIndex.url(), exact: true, searchDescription: "Development requests · Active requests" },
+                    { label: "Submit request", to: developmentRequestCreate.url(), searchDescription: "Submit a development request · Describe the problem" },
                   ]
                 : []),
-              ...(auth.value.user?.can?.["development.requests.review"] ? [{ label: "Review queue", to: developmentReviewIndex.url() }] : []),
-              ...(auth.value.user?.can?.["development.roadmap.manage"] ? [{ label: "Roadmap", to: roadmapIndex.url() }] : []),
-              ...(auth.value.user?.can?.["development.user_testing.manage"] || auth.value.user?.has_pending_development_tests ? [{ label: "User testing", to: userTestingIndex.url() }] : []),
+              ...(auth.value.user?.can?.["development.requests.review"] ? [{ label: "Review queue", to: developmentReviewIndex.url(), searchDescription: "Development review queue" }] : []),
+              ...(auth.value.user?.can?.["development.roadmap.manage"] ? [{ label: "Roadmap", to: roadmapIndex.url(), searchDescription: "Development roadmap · Planned active and blocked work" }] : []),
+              ...(auth.value.user?.can?.["development.user_testing.manage"] || auth.value.user?.has_pending_development_tests ? [{ label: "User testing", to: userTestingIndex.url(), searchDescription: "Task-specific testing · Testing queue" }] : []),
             ],
             onSelect: closeNavigation,
           },
@@ -77,12 +83,12 @@ const links = computed<NavigationMenuItem[][]>(() => [
             type: "trigger" as const,
             defaultOpen: true,
             children: [
-              { label: "Overview", to: "/admin", exact: true },
-              ...(auth.value.user?.can?.["admin.users.manage"] ? [{ label: "Users", to: "/admin/users" }] : []),
-              ...(auth.value.user?.can?.["admin.roles.manage"] ? [{ label: "Roles", to: "/admin/roles" }] : []),
-              ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit" }] : []),
-              ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings" }] : []),
-              ...(auth.value.user?.can?.["jobs.view"] ? [{ label: "Jobs & queues", to: jobsIndex.url() }] : []),
+              { label: "Overview", to: "/admin", exact: true, searchDescription: "Admin dashboard · Recent activity · Recent users" },
+              ...(auth.value.user?.can?.["admin.users.manage"] ? [{ label: "Users", to: "/admin/users", searchDescription: "Admin users · Invite a user" }] : []),
+              ...(auth.value.user?.can?.["admin.roles.manage"] ? [{ label: "Roles", to: "/admin/roles", searchDescription: "Roles and permissions · Choose a role" }] : []),
+              ...(auth.value.user?.can?.["audit.view"] ? [{ label: "Audit log", to: "/admin/audit", searchDescription: "Activity history · Sensitive workspace changes" }] : []),
+              ...(auth.value.user?.can?.["settings.manage"] ? [{ label: "Business settings", to: "/admin/settings", searchDescription: "Workspace defaults" }] : []),
+              ...(auth.value.user?.can?.["jobs.view"] ? [{ label: "Jobs & queues", to: jobsIndex.url(), searchDescription: "Jobs and queues · Queue health · Horizon monitoring" }] : []),
             ],
             onSelect: closeNavigation,
           },
@@ -99,11 +105,13 @@ const links = computed<NavigationMenuItem[][]>(() => [
           label: "Profile",
           to: "/settings/profile",
           exact: true,
+          searchDescription: "Profile settings",
           onSelect: closeNavigation,
         },
         {
           label: "Security",
           to: "/settings/security",
+          searchDescription: "Security settings · Password · Two-factor authentication · Account",
           onSelect: () => {
             open.value = false;
           },
@@ -113,11 +121,40 @@ const links = computed<NavigationMenuItem[][]>(() => [
   ],
 ]);
 
+function navigationSearchItems(items: SearchableNavigationItem[], parentLabels: string[] = [], parentIcon?: string): CommandPaletteItem[] {
+  return items.flatMap((item): CommandPaletteItem[] => {
+    const label = typeof item.label === "string" ? item.label : undefined;
+    const labels = label ? [...parentLabels, label] : parentLabels;
+    const icon = typeof item.icon === "string" ? item.icon : parentIcon;
+    const children = Array.isArray(item.children) ? navigationSearchItems(item.children, labels, icon) : [];
+
+    if (children.length > 0) {
+      return children;
+    }
+
+    if (!label || typeof item.to !== "string") {
+      return [];
+    }
+
+    const { chip: _chip, ui: _ui, children: _children, defaultOpen: _defaultOpen, searchDescription, type: _type, ...searchItem } = item;
+
+    return [
+      {
+        ...searchItem,
+        label,
+        icon,
+        suffix: parentLabels.at(-1),
+        description: searchDescription,
+      },
+    ];
+  });
+}
+
 const groups = computed(() => [
   {
     id: "links",
     label: "Go to",
-    items: links.value.flat().map(({ chip: _chip, ui: _ui, ...item }): CommandPaletteItem => item),
+    items: links.value.flatMap((group) => navigationSearchItems(group)),
   },
 ]);
 </script>
