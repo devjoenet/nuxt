@@ -64,8 +64,8 @@ function navigationSearchItems(items: SearchableNavigationItem[], parentLabels: 
 export function useWorkspaceNavigation(options: WorkspaceNavigationOptions = {}): WorkspaceNavigation {
   const auth = useAuth();
   const closeNavigation = (): void => options.onNavigate?.();
-  const can = (permission: string): boolean => auth.value.user?.can?.[permission] === true;
-  const canAccessDevelopment = (): boolean => can("development.requests.create") || can("development.requests.review") || can("development.roadmap.manage") || can("development.user_testing.manage") || auth.value.user?.has_pending_development_tests === true;
+  const can = (permission: string): boolean => auth.value.user?.can?.[permission];
+  const canAccessDevelopment = (): boolean => can("development.requests.create") || can("development.requests.review") || can("development.roadmap.manage") || can("development.user_testing.manage") || auth.value.user?.has_pending_development_tests;
 
   const navigationGroups = computed<SearchableNavigationItem[][]>(() => [
     [
