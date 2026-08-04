@@ -3,12 +3,10 @@ import { Form } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
 import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
 import FormSelect from "@/components/FormSelect.vue";
-import Layout from "@/layouts/Default.vue";
 import { index, show, store, update } from "@/routes/crm/contacts";
 import { create as createOrganization } from "@/routes/crm/organizations";
 import type { Contact, Option, Owner } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{ contact: Contact | null; owners: Owner[]; canAssign: boolean }>();
 const action = computed(() => (props.contact ? update(props.contact.id) : store()));
 const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));

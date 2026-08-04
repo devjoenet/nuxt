@@ -1,8 +1,5 @@
 <script lang="ts" setup>
 import { Head } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
-
-defineOptions({ layout: Layout });
 
 defineProps<{
   stats: { label: string; value: number }[];

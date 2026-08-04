@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { Form, Head } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
-import Layout from "@/layouts/Default.vue";
 import { update } from "@/routes/admin/settings";
 
-defineOptions({ layout: Layout });
 defineProps<{ setting: { company_name: string; notification_email: string; default_task_due_days: number } }>();
 </script>
 

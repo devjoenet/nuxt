@@ -85,5 +85,7 @@ declare module 'vue' {
     UTextarea: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Textarea.vue')['default']
     UTheme: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Theme.vue')['default']
     UTooltip: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Tooltip.vue')['default']
+    WorkspaceSearch: typeof import('./resources/js/components/WorkspaceSearch.vue')['default']
+    WorkspaceSidebar: typeof import('./resources/js/components/WorkspaceSidebar.vue')['default']
   }
 }

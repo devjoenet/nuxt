@@ -1,12 +1,9 @@
 <script lang="ts" setup>
 import { Head } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
 import { index as userTestingIndex } from "@/routes/development/userTesting";
 import RoadmapColumnSection from "@/sections/development/roadmap/RoadmapColumnSection.vue";
 import type { RoadmapColumn } from "@/sections/development/roadmap/types";
 import type { DevelopmentRoadmapTasks } from "@/types/development";
-
-defineOptions({ layout: Layout });
 
 const auth = useAuth();
 const props = defineProps<{ tasks: DevelopmentRoadmapTasks }>();

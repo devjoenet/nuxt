@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Symfony\Component\Finder\SplFileInfo;
 
 test('the frontend architecture defines the complete composition boundary', function (): void {
     $architecture = File::get(base_path('docs/development/frontend-ui-architecture.md'));
@@ -72,4 +74,43 @@ test('the current product primitives and Nuxt UI foundation remain explicit', fu
         ->toContain('dirs: ["resources/js/components"]')
         ->toContain('theme: {')
         ->toContain('ui: {');
+});
+
+test('the authenticated workspace uses one client and server layout boundary', function (): void {
+    $appEntry = File::get(resource_path('js/app.ts'));
+    $serverEntry = File::get(resource_path('js/ssr.ts'));
+    $layoutResolver = File::get(resource_path('js/layouts/resolveAppLayout.ts'));
+    $defaultLayout = File::get(resource_path('js/layouts/Default.vue'));
+    $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
+    $workspaceSearch = File::get(resource_path('js/components/WorkspaceSearch.vue'));
+
+    $pagesDeclaringDefaultLayout = collect(File::allFiles(resource_path('js/pages')))
+        ->filter(fn (SplFileInfo $page): bool => Str::contains(
+            File::get($page->getPathname()),
+            '@/layouts/Default.vue',
+        ))
+        ->map(fn (SplFileInfo $page): string => $page->getRelativePathname())
+        ->values()
+        ->all();
+
+    expect($appEntry)
+        ->toContain('import { resolveAppLayout } from "@/layouts/resolveAppLayout";')
+        ->toContain('layout: resolveAppLayout,')
+        ->and($serverEntry)
+        ->toContain('import { resolveAppLayout } from "@/layouts/resolveAppLayout";')
+        ->toContain('layout: resolveAppLayout,')
+        ->and($layoutResolver)
+        ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | null')
+        ->toContain('name.startsWith("auth/")')
+        ->and($pagesDeclaringDefaultLayout)->toBe([])
+        ->and($defaultLayout)
+        ->toContain('<WorkspaceSidebar')
+        ->toContain('useWorkspaceNavigation')
+        ->not->toContain('@/routes/')
+        ->and($workspaceSidebar)
+        ->toContain('aria-label="Primary workspace navigation"')
+        ->toContain('aria-label="Account navigation"')
+        ->toContain('<UserMenu :collapsed="collapsed" />')
+        ->and($workspaceSearch)
+        ->toContain('aria-label", "Workspace navigation search results"');
 });

@@ -4,12 +4,10 @@ import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
 import type { TableColumn } from "@nuxt/ui";
 import { h, resolveComponent, watch } from "vue";
-import Layout from "@/layouts/Default.vue";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
 import { create, index, show } from "@/routes/crm/leads";
 import type { Lead, Option, Owner, Paginated } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{ leads: Paginated<Lead>; filters: Record<string, string>; statuses: Option[]; sources: Option[]; owners: Owner[]; canManage: boolean }>();
 const UButton = resolveComponent("UButton");
 const search = ref(props.filters.search ?? "");

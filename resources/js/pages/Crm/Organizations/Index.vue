@@ -4,11 +4,9 @@ import type { TableColumn } from "@nuxt/ui";
 import { h, resolveComponent, watch } from "vue";
 import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
-import Layout from "@/layouts/Default.vue";
 import { create, index, show } from "@/routes/crm/organizations";
 import type { Option, Organization, Owner, Paginated } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{ organizations: Paginated<Organization>; filters: Record<string, string>; owners: Owner[]; canManage: boolean; canAssign: boolean }>();
 const UButton = resolveComponent("UButton");
 const search = ref(props.filters.search ?? "");

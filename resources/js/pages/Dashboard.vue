@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
 import { index as leadsIndex, show as leadShow } from "@/routes/crm/leads";
-
-defineOptions({ layout: Layout });
 
 defineProps<{
   canViewCrm: boolean;

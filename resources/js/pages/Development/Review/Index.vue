@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import { router } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
 import { index } from "@/routes/development/review";
 import { show } from "@/routes/development/tasks";
 import type { PaginatedDevelopmentTasks } from "@/types/development";
 
-defineOptions({ layout: Layout });
 defineProps<{ requests: PaginatedDevelopmentTasks }>();
 
 const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));

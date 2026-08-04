@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
 import FormInput from "@/components/FormInput.vue";
-import Layout from "@/layouts/Default.vue";
 import SettingsLayout from "@/layouts/SettingsLayout.vue";
 import { Form, Head } from "@inertiajs/vue3";
-
-defineOptions({ layout: Layout });
 
 interface Props {
   requiresConfirmation: boolean;

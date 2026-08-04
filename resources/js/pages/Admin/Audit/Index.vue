@@ -2,10 +2,8 @@
 import { Form, Head, Link } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
 import FormMultiSelect from "@/components/FormMultiSelect.vue";
-import Layout from "@/layouts/Default.vue";
 import { index } from "@/routes/admin/audit";
 
-defineOptions({ layout: Layout });
 type FilterOption = { label: string; value: string };
 
 defineProps<{
