@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import { cn } from "@/lib/utils";
 import { show } from "@/routes/development/tasks";
 import type { RoadmapColumn } from "@/sections/Development/Roadmap/types";
@@ -56,6 +57,6 @@ const priorityColor = (task: DevelopmentTask): "error" | "neutral" | "warning" =
       </li>
     </ul>
 
-    <UEmpty v-else :description="column.empty" :icon="column.icon" :title="`No ${column.title.toLowerCase()} tasks`" />
+    <IndexEmptyState v-else :description="column.empty" :icon="column.icon" :title="`No ${column.title.toLowerCase()} tasks`" />
   </section>
 </template>

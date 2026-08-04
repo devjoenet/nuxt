@@ -89,16 +89,5 @@ export interface DevelopmentRoadmapTasks {
   blocked: DevelopmentTask[];
 }
 
-export interface PaginatedDevelopmentTasks {
-  data: DevelopmentTask[];
-  meta: {
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-  };
-  links: {
-    prev: string | null;
-    next: string | null;
-  };
-}
+export type PaginatedDevelopmentTasks = Paginated<DevelopmentTask>;
+import type { Paginated } from "@/types/pagination";

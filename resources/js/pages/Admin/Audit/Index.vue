@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import { Form, Link } from "@inertiajs/vue3";
+import { Form, router } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
 import FormMultiSelect from "@/components/FormMultiSelect.vue";
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
+import IndexPagination from "@/components/IndexPagination.vue";
+import IndexTableFrame from "@/components/IndexTableFrame.vue";
 import { index } from "@/routes/admin/audit";
+import type { PaginationMeta } from "@/types/pagination";
 
 type FilterOption = { label: string; value: string };
 
-defineProps<{
+const props = defineProps<{
   activities: {
     data: {
       id: number;
@@ -18,13 +22,27 @@ defineProps<{
       changes: Record<string, unknown> | null;
       created_at: string | null;
     }[];
-    links: { url: string | null; label: string; active: boolean }[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
   };
   filters: { search: string | null; event: string[]; causer: string[]; subject: string[]; from: string | null; to: string | null };
   eventOptions: FilterOption[];
   causerOptions: FilterOption[];
   subjectOptions: FilterOption[];
 }>();
+
+const activityMeta = computed<PaginationMeta>(() => ({
+  current_page: props.activities.current_page,
+  last_page: props.activities.last_page,
+  per_page: props.activities.per_page,
+  total: props.activities.total,
+}));
+
+const visitPage = (page: number): void => {
+  router.get(index().url, { ...props.filters, page }, { preserveScroll: true, preserveState: true });
+};
 </script>
 
 <template>
@@ -42,7 +60,7 @@ defineProps<{
     </template>
 
     <UPageCard :ui="{ container: 'p-0 sm:p-0' }" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
-      <div class="overflow-x-auto">
+      <IndexTableFrame v-if="activities.data.length" contained>
         <table class="min-w-full text-sm">
           <thead class="text-left text-xs text-muted">
             <tr>
@@ -69,13 +87,10 @@ defineProps<{
             </tr>
           </tbody>
         </table>
-      </div>
-      <p v-if="!activities.data.length" class="p-6 text-sm text-muted">No activity matches these filters.</p>
-      <nav v-if="activities.links.length > 3" aria-label="Pagination" class="flex flex-wrap gap-1 border-t border-default p-4">
-        <Link v-for="link in activities.links" :key="link.label" :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']" :href="link.url ?? index()">
-          <span v-html="link.label" />
-        </Link>
-      </nav>
+      </IndexTableFrame>
+      <IndexEmptyState v-else class="p-6" description="No activity matches these filters." icon="i-ph-magnifying-glass" title="No audit activity found" />
+
+      <IndexPagination :meta="activityMeta" class="p-4" item-label="activities" @page="visitPage" />
     </UPageCard>
   </WorkspacePage>
 </template>

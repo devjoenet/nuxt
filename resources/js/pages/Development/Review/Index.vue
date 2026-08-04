@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { router } from "@inertiajs/vue3";
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
+import IndexPagination from "@/components/IndexPagination.vue";
 import { index } from "@/routes/development/review";
 import { show } from "@/routes/development/tasks";
 import type { PaginatedDevelopmentTasks } from "@/types/development";
@@ -7,6 +9,9 @@ import type { PaginatedDevelopmentTasks } from "@/types/development";
 defineProps<{ requests: PaginatedDevelopmentTasks }>();
 
 const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
+const visitPage = (page: number): void => {
+  router.get(index({ query: { page } }).url, {}, { preserveScroll: true, preserveState: true });
+};
 </script>
 
 <template>
@@ -27,12 +32,9 @@ const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", {
         </li>
       </ul>
 
-      <UEmpty v-else description="There are no submitted, clarification, or under-review requests." icon="i-ph-check-circle" title="Review queue is clear" />
+      <IndexEmptyState v-else description="There are no submitted, clarification, or under-review requests." icon="i-ph-check-circle" title="Review queue is clear" />
 
-      <div v-if="requests.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
-        <p class="text-sm text-muted">{{ requests.meta.total }} requests</p>
-        <UPagination :items-per-page="requests.meta.per_page" :page="requests.meta.current_page" :total="requests.meta.total" @update:page="router.get(index({ query: { page: $event } }).url)" />
-      </div>
+      <IndexPagination :meta="requests.meta" item-label="requests" @page="visitPage" />
     </div>
   </WorkspacePage>
 </template>

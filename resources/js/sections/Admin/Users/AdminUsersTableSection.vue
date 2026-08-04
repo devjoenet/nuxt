@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { Form, Link } from "@inertiajs/vue3";
+import { Form, router } from "@inertiajs/vue3";
 import FormSelect from "@/components/FormSelect.vue";
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
+import IndexPagination from "@/components/IndexPagination.vue";
+import IndexTableFrame from "@/components/IndexTableFrame.vue";
 import { cn } from "@/lib/utils";
 import { index, resendVerification, resetTwoFactor, update } from "@/routes/admin/users";
 import type { AdminRoleOption, AdminUsersPage } from "@/sections/Admin/Users/types";
@@ -15,11 +18,15 @@ const statuses = [
   { label: "Active", value: "1" },
   { label: "Inactive", value: "0" },
 ];
+
+const visitPage = (page: number): void => {
+  router.get(index({ query: { page } }).url, {}, { preserveScroll: true, preserveState: true });
+};
 </script>
 
 <template>
   <UPageCard :class="cn('dark:bg-elevated dark:ring-accented dark:shadow-none', props.class)" description="Role and account status changes are recorded in the audit log." title="Workspace users" variant="outline">
-    <div class="overflow-x-auto">
+    <IndexTableFrame v-if="users.data.length" contained>
       <table class="min-w-full text-sm">
         <thead class="text-left text-xs text-muted">
           <tr>
@@ -61,11 +68,9 @@ const statuses = [
           </tr>
         </tbody>
       </table>
-    </div>
-    <nav v-if="users.links.length > 3" aria-label="Pagination" class="mt-4 flex flex-wrap gap-1">
-      <Link v-for="link in users.links" :key="link.label" :class="['rounded-md px-3 py-1 text-sm', link.active ? 'bg-primary text-inverted' : 'text-muted hover:bg-elevated', !link.url && 'pointer-events-none opacity-50']" :href="link.url ?? index()">
-        <span v-html="link.label" />
-      </Link>
-    </nav>
+    </IndexTableFrame>
+    <IndexEmptyState v-else description="Invited workspace users will appear here." icon="i-ph-users" title="No workspace users" />
+
+    <IndexPagination :meta="users.meta" class="mt-4" item-label="users" @page="visitPage" />
   </UPageCard>
 </template>

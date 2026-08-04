@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { router } from "@inertiajs/vue3";
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
+import IndexPagination from "@/components/IndexPagination.vue";
 import { create, index } from "@/routes/development/requests";
 import { show } from "@/routes/development/tasks";
 import type { PaginatedDevelopmentTasks } from "@/types/development";
@@ -7,6 +9,9 @@ import type { PaginatedDevelopmentTasks } from "@/types/development";
 defineProps<{ requests: PaginatedDevelopmentTasks; canCreate: boolean }>();
 
 const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
+const visitPage = (page: number): void => {
+  router.get(index({ query: { page } }).url, {}, { preserveScroll: true, preserveState: true });
+};
 </script>
 
 <template>
@@ -31,14 +36,11 @@ const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", {
         </li>
       </ul>
 
-      <UEmpty v-else description="Your active development requests will appear here." icon="i-ph-clipboard-text" title="No active requests">
+      <IndexEmptyState v-else description="Your active development requests will appear here." icon="i-ph-clipboard-text" title="No active requests">
         <template #actions><UButton v-if="canCreate" :to="create().url" label="Submit request" /></template>
-      </UEmpty>
+      </IndexEmptyState>
 
-      <div v-if="requests.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
-        <p class="text-sm text-muted">{{ requests.meta.total }} requests</p>
-        <UPagination :items-per-page="requests.meta.per_page" :page="requests.meta.current_page" :total="requests.meta.total" @update:page="router.get(index({ query: { page: $event } }).url)" />
-      </div>
+      <IndexPagination :meta="requests.meta" item-label="requests" @page="visitPage" />
     </div>
   </WorkspacePage>
 </template>

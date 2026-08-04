@@ -1,3 +1,5 @@
+export type { Paginated } from "@/types/pagination";
+
 export type Option = { label: string; value: string };
 export type CrmOption = Option;
 export type Owner = { id: number; name: string };
@@ -46,10 +48,4 @@ export interface Contact {
   archived_at: string | null;
   created_at: string;
   leads_count?: number;
-}
-
-export interface Paginated<T> {
-  data: T[];
-  meta: { current_page: number; last_page: number; per_page: number; total: number };
-  links: { prev: string | null; next: string | null };
 }
