@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import { Head, usePage } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
 import UserTestingRoundSection from "@/sections/development/user-testing/UserTestingRoundSection.vue";
 import type { AppPageProps } from "@/types";
 import type { DevelopmentTestRun } from "@/types/development";
 
-defineOptions({ layout: Layout });
 defineProps<{ testRuns: DevelopmentTestRun[] }>();
 
 const page = usePage<AppPageProps>();

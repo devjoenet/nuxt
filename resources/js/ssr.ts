@@ -4,6 +4,7 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import createServer from "@inertiajs/vue3/server";
 import UApp from "@nuxt/ui/components/App.vue";
 import ui from "@nuxt/ui/vue-plugin";
+import { resolveAppLayout } from "@/layouts/resolveAppLayout";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import type { DefineComponent } from "vue";
 import { createSSRApp, h } from "vue";
@@ -17,6 +18,7 @@ createServer(
       page,
       render: renderToString,
       title: (title) => (title ? `${title} - ${appName}` : appName),
+      layout: resolveAppLayout,
       resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>("./pages/**/*.vue")),
       setup: ({ App, props, plugin }) =>
         createSSRApp({ render: () => h(UApp, null, { default: () => h(App, props) }) })

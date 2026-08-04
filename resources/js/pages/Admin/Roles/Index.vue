@@ -1,14 +1,11 @@
 <script lang="ts" setup>
 import { Form, Head } from "@inertiajs/vue3";
 import FormSelect from "@/components/FormSelect.vue";
-import Layout from "@/layouts/Default.vue";
 import { update } from "@/routes/admin/roles";
 import CreateAdminRoleSection from "@/sections/admin/roles/CreateAdminRoleSection.vue";
 import RolePermissionGroupList from "@/sections/admin/roles/RolePermissionGroupList.vue";
 import type { AdminPermissionGroup, AdminRole } from "@/types";
 import { computed, ref } from "vue";
-
-defineOptions({ layout: Layout });
 
 const props = defineProps<{ roles: AdminRole[]; permissionGroups: AdminPermissionGroup[] }>();
 const selectedRoleId = ref<number | null>(props.roles[0]?.id ?? null);

@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import { Head } from "@inertiajs/vue3";
 import UserTestingPageCard from "@/components/UserTestingPageCard.vue";
-import Layout from "@/layouts/Default.vue";
-
-defineOptions({ layout: Layout });
 
 interface UserTestingPage {
   id: number;

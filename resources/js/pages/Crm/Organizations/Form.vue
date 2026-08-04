@@ -2,11 +2,9 @@
 import { Form } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
-import Layout from "@/layouts/Default.vue";
 import { index, show, store, update } from "@/routes/crm/organizations";
 import type { Option, Organization, Owner } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{ organization: Organization | null; owners: Owner[]; canAssign: boolean }>();
 const action = computed(() => (props.organization ? update(props.organization.id) : store()));
 const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));

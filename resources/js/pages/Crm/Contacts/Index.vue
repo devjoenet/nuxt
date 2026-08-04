@@ -5,11 +5,9 @@ import { h, resolveComponent, watch } from "vue";
 import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
 import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
-import Layout from "@/layouts/Default.vue";
 import { create, index, show } from "@/routes/crm/contacts";
 import type { Contact, Option, Owner, Paginated } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{
   contacts: Paginated<Contact>;
   filters: Record<string, string>;

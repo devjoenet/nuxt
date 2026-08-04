@@ -5,13 +5,11 @@ import FormInput from "@/components/FormInput.vue";
 import FormMultiSelect from "@/components/FormMultiSelect.vue";
 import FormSelect from "@/components/FormSelect.vue";
 import FormTextarea from "@/components/FormTextarea.vue";
-import Layout from "@/layouts/Default.vue";
 import { create as createContact } from "@/routes/crm/contacts";
 import { create as createOrganization } from "@/routes/crm/organizations";
 import { index, show, store, update } from "@/routes/crm/leads";
 import type { Lead, Option, Owner } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: Owner[]; canAssign: boolean }>();
 const action = computed(() => (props.lead ? update(props.lead.id) : store()));
 const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));

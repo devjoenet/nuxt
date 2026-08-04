@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
 import FormInput from "@/components/FormInput.vue";
-import Layout from "@/layouts/Default.vue";
 import SettingsLayout from "@/layouts/SettingsLayout.vue";
 import { send } from "@/routes/verification";
 import { Head } from "@inertiajs/vue3";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
-
-defineOptions({ layout: Layout });
 
 defineProps<{
   mustVerifyEmail: boolean;

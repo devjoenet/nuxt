@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { usePage } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
 import { index as requestsIndex } from "@/routes/development/requests";
 import { index as roadmapIndex } from "@/routes/development/roadmap";
 import DevelopmentTaskBriefSection from "@/sections/development/tasks/DevelopmentTaskBriefSection.vue";
@@ -12,7 +11,6 @@ import DevelopmentTaskWorkflowSection from "@/sections/development/tasks/Develop
 import type { AppPageProps } from "@/types";
 import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{
   task: DevelopmentTask;
   assignees: DevelopmentOption[];

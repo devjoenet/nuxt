@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { logout } from "@/routes";
+import { edit as profileEdit } from "@/routes/profile";
 import { router } from "@inertiajs/vue3";
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { useColorMode } from "@vueuse/core";
@@ -31,12 +32,12 @@ const items = computed<DropdownMenuItem[][]>(() => [
     {
       label: "Profile",
       icon: "i-ph-user",
-      to: "/settings/profile",
+      to: profileEdit.url(),
     },
     {
       label: "Settings",
       icon: "i-ph-gear-six",
-      to: "/settings/profile",
+      to: profileEdit.url(),
     },
   ],
   [
@@ -109,6 +110,8 @@ function handleLogout() {
       color="neutral"
       variant="ghost"
       block
+      :aria-label="`Open account menu for ${auth.user.name}`"
+      data-testid="account-menu-trigger"
       :square="collapsed"
       class="data-[state=open]:bg-elevated"
       :ui="{

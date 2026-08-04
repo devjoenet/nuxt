@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { Link, router } from "@inertiajs/vue3";
 import CrmDetailLayout from "@/components/crm/CrmDetailLayout.vue";
-import Layout from "@/layouts/Default.vue";
 import { archive, destroy, edit, index, restore } from "@/routes/crm/organizations";
 import { show as contactShow } from "@/routes/crm/contacts";
 import type { Organization } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 const props = defineProps<{ organization: Organization; canManage: boolean }>();
 const confirmArchive = () => {
   if (window.confirm("Archive this organization?")) router.post(archive(props.organization.id).url);

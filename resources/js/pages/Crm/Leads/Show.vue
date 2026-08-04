@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { usePage } from "@inertiajs/vue3";
-import Layout from "@/layouts/Default.vue";
 import { edit, index } from "@/routes/crm/leads";
 import LeadFollowUpsSection from "@/sections/crm/leads/LeadFollowUpsSection.vue";
 import LeadNotesSection from "@/sections/crm/leads/LeadNotesSection.vue";
@@ -9,7 +8,6 @@ import LeadTimelineSection from "@/sections/crm/leads/LeadTimelineSection.vue";
 import type { AppPageProps } from "@/types";
 import type { Lead } from "@/types/crm";
 
-defineOptions({ layout: Layout });
 defineProps<{ lead: Lead; canManage: boolean }>();
 const page = usePage<AppPageProps>();
 const toast = useToast();

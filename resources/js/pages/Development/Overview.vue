@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import Layout from "@/layouts/Default.vue";
 import { create as requestCreate, index as requestsIndex } from "@/routes/development/requests";
 import { index as reviewIndex } from "@/routes/development/review";
 import { show } from "@/routes/development/tasks";
 import type { DevelopmentTask } from "@/types/development";
 
-defineOptions({ layout: Layout });
 defineProps<{
   requests: DevelopmentTask[];
   reviewQueueCount: number;
