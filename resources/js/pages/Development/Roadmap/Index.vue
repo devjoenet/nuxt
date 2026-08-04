@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { Head } from "@inertiajs/vue3";
 import { index as userTestingIndex } from "@/routes/development/userTesting";
-import RoadmapColumnSection from "@/sections/development/roadmap/RoadmapColumnSection.vue";
-import type { RoadmapColumn } from "@/sections/development/roadmap/types";
+import RoadmapColumnSection from "@/sections/Development/Roadmap/RoadmapColumnSection.vue";
+import type { RoadmapColumn } from "@/sections/Development/Roadmap/types";
 import type { DevelopmentRoadmapTasks } from "@/types/development";
 
 const auth = useAuth();
@@ -36,24 +35,15 @@ const totalTasks = computed(() => Object.values(props.tasks).reduce((total, task
 </script>
 
 <template>
-  <Head title="Development roadmap" />
-
-  <UDashboardPanel id="development-roadmap">
-    <template #header>
-      <UDashboardNavbar description="Planned, active, and blocked work from the Development workspace." title="Development roadmap">
-        <template #leading><UDashboardSidebarCollapse /></template>
-        <template #right>
-          <UButton v-if="auth.user?.can?.['development.user_testing.manage']" :to="userTestingIndex().url" color="neutral" label="User testing" variant="ghost" />
-        </template>
-      </UDashboardNavbar>
+  <WorkspacePage id="development-roadmap" description="Planned, active, and blocked work from the Development workspace." title="Development roadmap">
+    <template #actions>
+      <UButton v-if="auth.user?.can?.['development.user_testing.manage']" :to="userTestingIndex().url" color="neutral" label="User testing" variant="ghost" />
     </template>
 
-    <template #body>
-      <UEmpty v-if="totalTasks === 0" description="Promoted requests will appear here as database-backed roadmap tasks." icon="i-ph-map-trifold" title="The roadmap is clear" />
+    <UEmpty v-if="totalTasks === 0" description="Promoted requests will appear here as database-backed roadmap tasks." icon="i-ph-map-trifold" title="The roadmap is clear" />
 
-      <div v-else class="grid items-start gap-5 xl:grid-cols-3">
-        <RoadmapColumnSection v-for="column in columns" :key="column.key" :column="column" :tasks="tasks[column.key]" />
-      </div>
-    </template>
-  </UDashboardPanel>
+    <div v-else class="grid items-start gap-5 xl:grid-cols-3">
+      <RoadmapColumnSection v-for="column in columns" :key="column.key" :column="column" :tasks="tasks[column.key]" />
+    </div>
+  </WorkspacePage>
 </template>

@@ -5,7 +5,7 @@ import type { Component } from "vue";
 const pagesWithoutWorkspaceLayout = new Set(["ErrorPage", "Privacy", "Welcome"]);
 
 export function resolveAppLayout(name: string, _page: Page): Component | null {
-  if (pagesWithoutWorkspaceLayout.has(name) || name.startsWith("auth/")) {
+  if (pagesWithoutWorkspaceLayout.has(name) || name.startsWith("Auth/")) {
     return null;
   }
 

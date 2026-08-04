@@ -24,6 +24,9 @@ test('the frontend architecture defines the complete composition boundary', func
         ->toContain('## State ownership and event boundaries')
         ->toContain('## Props, events, slots, and styling')
         ->toContain('## Naming and typing')
+        ->toContain('Nested Vue feature directories')
+        ->toContain('Authored TypeScript module')
+        ->toContain('Static asset directories and filenames')
         ->toContain('## Testing and enforcement')
         ->toContain('Responsibility beats line count.')
         ->toContain('New dependencies and new top-level folders under `resources/js` require separate approval.')
@@ -53,6 +56,67 @@ test('the frontend source uses only approved top-level homes', function (): void
     ])->and(File::isDirectory(resource_path('js/components/ui')))->toBeFalse();
 });
 
+test('the frontend source follows the documented naming convention', function (): void {
+    $vueArchitectureRoots = ['components', 'layouts', 'pages', 'sections'];
+    $generatedRoots = ['actions/', 'routes/', 'wayfinder/'];
+
+    $invalidVueDirectories = collect($vueArchitectureRoots)
+        ->flatMap(function (string $root): array {
+            return collect(File::allFiles(resource_path("js/{$root}")))
+                ->flatMap(function (SplFileInfo $file) use ($root): array {
+                    if ($file->getRelativePath() === '') {
+                        return [];
+                    }
+
+                    $segments = explode(DIRECTORY_SEPARATOR, $file->getRelativePath());
+
+                    return collect(array_keys($segments))
+                        ->map(fn (int $index): string => $root.'/'.implode('/', array_slice($segments, 0, $index + 1)))
+                        ->all();
+                })
+                ->all();
+        })
+        ->unique()
+        ->reject(fn (string $directory): bool => preg_match('/^[A-Z][A-Za-z0-9]*$/', Str::afterLast($directory, '/')) === 1)
+        ->sort()
+        ->values()
+        ->all();
+
+    $frontendFiles = collect(File::allFiles(resource_path('js')));
+
+    $invalidVueFiles = $frontendFiles
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->reject(fn (SplFileInfo $file): bool => preg_match('/^[A-Z][A-Za-z0-9]*\.vue$/', $file->getFilename()) === 1)
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->sort()
+        ->values()
+        ->all();
+
+    $invalidTypeScriptFiles = $frontendFiles
+        ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['ts', 'tsx'], true))
+        ->reject(fn (SplFileInfo $file): bool => Str::startsWith($file->getRelativePathname(), $generatedRoots))
+        ->reject(fn (SplFileInfo $file): bool => preg_match('/^[a-z][A-Za-z0-9]*(?:\.d)?\.(?:ts|tsx)$/', $file->getFilename()) === 1)
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->sort()
+        ->values()
+        ->all();
+
+    $invalidAssetPaths = collect(File::allFiles(resource_path('js/assets')))
+        ->reject(fn (SplFileInfo $file): bool => preg_match(
+            '/^(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)*[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+)+$/',
+            $file->getRelativePathname(),
+        ) === 1)
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->sort()
+        ->values()
+        ->all();
+
+    expect($invalidVueDirectories)->toBe([])
+        ->and($invalidVueFiles)->toBe([])
+        ->and($invalidTypeScriptFiles)->toBe([])
+        ->and($invalidAssetPaths)->toBe([]);
+});
+
 test('the current product primitives and Nuxt UI foundation remain explicit', function (): void {
     foreach ([
         'resources/js/components/FormField.vue',
@@ -61,7 +125,8 @@ test('the current product primitives and Nuxt UI foundation remain explicit', fu
         'resources/js/components/FormMultiSelect.vue',
         'resources/js/components/FormTextarea.vue',
         'resources/js/components/AsyncCrmSelect.vue',
-        'resources/js/components/crm/CrmDetailLayout.vue',
+        'resources/js/components/WorkspacePage.vue',
+        'resources/js/components/Crm/CrmDetailLayout.vue',
         'resources/js/lib/utils.ts',
     ] as $foundationPath) {
         expect(File::exists(base_path($foundationPath)))->toBeTrue("Missing frontend foundation: {$foundationPath}");
@@ -74,6 +139,33 @@ test('the current product primitives and Nuxt UI foundation remain explicit', fu
         ->toContain('dirs: ["resources/js/components"]')
         ->toContain('theme: {')
         ->toContain('ui: {');
+});
+
+test('authenticated pages compose the product workspace shell', function (): void {
+    $workspacePage = File::get(resource_path('js/components/WorkspacePage.vue'));
+    $crmDetailLayout = File::get(resource_path('js/components/Crm/CrmDetailLayout.vue'));
+    $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
+    $workspaceShellOptOuts = [];
+
+    $rawDashboardPanels = collect(File::allFiles(resource_path('js')))
+        ->reject(fn (SplFileInfo $file): bool => $file->getRelativePathname() === 'components/WorkspacePage.vue')
+        ->filter(fn (SplFileInfo $file): bool => Str::contains(File::get($file->getPathname()), '<UDashboardPanel'))
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->values()
+        ->all();
+
+    expect($workspacePage)
+        ->toContain('<Head :title="documentTitle ?? title" />')
+        ->toContain('<UDashboardPanel')
+        ->toContain('<UDashboardNavbar')
+        ->toContain('<UDashboardSidebarCollapse />')
+        ->toContain('<UDashboardToolbar v-if="$slots.toolbar"')
+        ->toContain('<slot name="actions" />')
+        ->toContain('data-workspace-page-content')
+        ->toContain('type ContentWidth = "narrow" | "medium" | "wide" | "full";')
+        ->and($crmDetailLayout)->toContain('<WorkspacePage')
+        ->and($settingsLayout)->toContain('<WorkspacePage')
+        ->and($rawDashboardPanels)->toBe($workspaceShellOptOuts);
 });
 
 test('the authenticated workspace uses one client and server layout boundary', function (): void {
@@ -101,7 +193,7 @@ test('the authenticated workspace uses one client and server layout boundary', f
         ->toContain('layout: resolveAppLayout,')
         ->and($layoutResolver)
         ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | null')
-        ->toContain('name.startsWith("auth/")')
+        ->toContain('name.startsWith("Auth/")')
         ->and($pagesDeclaringDefaultLayout)->toBe([])
         ->and($defaultLayout)
         ->toContain('<WorkspaceSidebar')

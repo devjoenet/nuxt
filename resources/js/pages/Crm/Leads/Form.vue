@@ -18,56 +18,50 @@ const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
 </script>
 
 <template>
-  <UDashboardPanel id="crm-lead-form">
-    <template #header
-      ><UDashboardNavbar :title="lead ? 'Edit lead' : 'New lead'"
-        ><template #leading><UDashboardSidebarCollapse /></template></UDashboardNavbar
-    ></template>
-    <template #body>
-      <Form #default="{ errors, processing }" :action="action" class="mx-auto grid w-full max-w-3xl gap-6">
-        <div>
-          <h1 class="text-balance text-xl font-semibold text-highlighted">Contact and opportunity</h1>
-          <p class="text-pretty text-base text-muted sm:text-sm">Keep the useful facts here. Archaeological records can wait.</p>
-        </div>
-        <div class="grid gap-4 sm:grid-cols-2">
-          <AsyncCrmSelect
-            id="lead-contact"
-            v-model="contactId"
-            :error="errors.contact_id"
-            :initial-option="lead?.contact ? { label: `${lead.contact.name} — ${lead.contact.email}`, value: lead.contact.id } : null"
-            label="Contact"
-            name="contact_id"
-            placeholder="Search contacts"
-            required
-            type="contact"
-          />
-          <AsyncCrmSelect
-            id="lead-organization"
-            v-model="organizationId"
-            :error="errors.organization_id"
-            :initial-option="lead?.organization ? { label: lead.organization.name, value: lead.organization.id } : null"
-            clearable
-            label="Organization"
-            name="organization_id"
-            placeholder="Search organizations"
-            type="organization"
-          />
-          <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
-          <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
-          <FormSelect v-if="canAssign" :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" placeholder="Unassigned" />
-          <FormMultiSelect :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])" :error="errors.service_interest" :items="serviceInterests" label="Service interests" name="service_interest" />
-          <FormInput :default-value="lead?.budget_range ?? undefined" :error="errors.budget_range" inputmode="decimal" label="Estimated budget" min="0" name="budget_range" step="1000" type="number">
-            <template #leading><span class="text-muted">$</span></template>
-          </FormInput>
-          <FormInput :default-value="lead?.timeline ?? undefined" :error="errors.timeline" label="Timeline" name="timeline" />
-        </div>
-        <div class="flex flex-wrap gap-3 text-sm">
-          <UButton :to="createContact().url" color="neutral" icon="i-ph-user-plus" label="Create a new contact" variant="link" />
-          <UButton :to="createOrganization().url" color="neutral" icon="i-ph-buildings" label="Create a new organization" variant="link" />
-        </div>
-        <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />
-        <div class="flex justify-end gap-3"><UButton :to="lead ? show(lead.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton :label="lead ? 'Save changes' : 'Create lead'" :loading="processing" type="submit" /></div>
-      </Form>
-    </template>
-  </UDashboardPanel>
+  <WorkspacePage id="crm-lead-form" :title="lead ? 'Edit lead' : 'New lead'" content-width="medium">
+    <Form #default="{ errors, processing }" :action="action" class="grid w-full gap-6">
+      <div>
+        <h1 class="text-balance text-xl font-semibold text-highlighted">Contact and opportunity</h1>
+        <p class="text-pretty text-base text-muted sm:text-sm">Keep the useful facts here. Archaeological records can wait.</p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <AsyncCrmSelect
+          id="lead-contact"
+          v-model="contactId"
+          :error="errors.contact_id"
+          :initial-option="lead?.contact ? { label: `${lead.contact.name} — ${lead.contact.email}`, value: lead.contact.id } : null"
+          label="Contact"
+          name="contact_id"
+          placeholder="Search contacts"
+          required
+          type="contact"
+        />
+        <AsyncCrmSelect
+          id="lead-organization"
+          v-model="organizationId"
+          :error="errors.organization_id"
+          :initial-option="lead?.organization ? { label: lead.organization.name, value: lead.organization.id } : null"
+          clearable
+          label="Organization"
+          name="organization_id"
+          placeholder="Search organizations"
+          type="organization"
+        />
+        <FormSelect :default-value="lead?.status ?? 'new'" :error="errors.status" :items="statuses" label="Status" name="status" required />
+        <FormSelect :default-value="lead?.source ?? 'direct'" :error="errors.source" :items="sources" label="Source" name="source" required />
+        <FormSelect v-if="canAssign" :default-value="lead?.owner ? String(lead.owner.id) : ''" :error="errors.owner_id" :items="ownerOptions" label="Owner" name="owner_id" placeholder="Unassigned" />
+        <FormMultiSelect :default-value="lead?.service_interests ?? (lead?.service_interest ? [lead.service_interest] : [])" :error="errors.service_interest" :items="serviceInterests" label="Service interests" name="service_interest" />
+        <FormInput :default-value="lead?.budget_range ?? undefined" :error="errors.budget_range" inputmode="decimal" label="Estimated budget" min="0" name="budget_range" step="1000" type="number">
+          <template #leading><span class="text-muted">$</span></template>
+        </FormInput>
+        <FormInput :default-value="lead?.timeline ?? undefined" :error="errors.timeline" label="Timeline" name="timeline" />
+      </div>
+      <div class="flex flex-wrap gap-3 text-sm">
+        <UButton :to="createContact().url" color="neutral" icon="i-ph-user-plus" label="Create a new contact" variant="link" />
+        <UButton :to="createOrganization().url" color="neutral" icon="i-ph-buildings" label="Create a new organization" variant="link" />
+      </div>
+      <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />
+      <div class="flex justify-end gap-3"><UButton :to="lead ? show(lead.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton :label="lead ? 'Save changes' : 'Create lead'" :loading="processing" type="submit" /></div>
+    </Form>
+  </WorkspacePage>
 </template>

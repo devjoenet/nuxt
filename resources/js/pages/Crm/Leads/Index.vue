@@ -4,7 +4,7 @@ import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
 import type { TableColumn } from "@nuxt/ui";
 import { h, resolveComponent, watch } from "vue";
-import LeadStatusBadge from "@/components/crm/LeadStatusBadge.vue";
+import LeadStatusBadge from "@/components/Crm/LeadStatusBadge.vue";
 import { create, index, show } from "@/routes/crm/leads";
 import type { Lead, Option, Owner, Paginated } from "@/types/crm";
 
@@ -41,31 +41,27 @@ const columns: TableColumn<Lead>[] = [
 </script>
 
 <template>
-  <UDashboardPanel id="crm-leads">
-    <template #header>
-      <UDashboardNavbar title="CRM leads">
-        <template #leading><UDashboardSidebarCollapse /></template>
-        <template #right><UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New lead" /></template>
-      </UDashboardNavbar>
+  <WorkspacePage id="crm-leads" title="CRM leads">
+    <template #actions>
+      <UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New lead" />
     </template>
-    <template #body>
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts or organizations" />
-        <FormSelect v-model="status" :items="statuses" class="w-full sm:w-44" label="Status" placeholder="All statuses" />
-        <FormSelect v-model="source" :items="sources" class="w-full sm:w-44" label="Source" placeholder="All sources" />
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts or organizations" />
+      <FormSelect v-model="status" :items="statuses" class="w-full sm:w-44" label="Status" placeholder="All statuses" />
+      <FormSelect v-model="source" :items="sources" class="w-full sm:w-44" label="Source" placeholder="All sources" />
+    </div>
+    <div v-if="leads.data.length" class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8">
+        <UTable :columns="columns" :data="leads.data" class="w-full" />
       </div>
-      <div v-if="leads.data.length" class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8">
-          <UTable :columns="columns" :data="leads.data" class="w-full" />
-        </div>
-      </div>
-      <UEmpty v-else description="Try changing the filters or create the first lead." icon="i-ph-address-book" title="No leads found">
-        <template #actions><UButton v-if="canManage" :to="create().url" label="Create lead" /></template>
-      </UEmpty>
-      <div v-if="leads.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
-        <p class="text-base text-muted sm:text-sm">{{ leads.meta.total }} leads</p>
-        <UPagination :items-per-page="leads.meta.per_page" :page="leads.meta.current_page" :total="leads.meta.total" @update:page="router.get(index({ query: { ...filters, page: $event } }).url)" />
-      </div>
-    </template>
-  </UDashboardPanel>
+    </div>
+    <UEmpty v-else description="Try changing the filters or create the first lead." icon="i-ph-address-book" title="No leads found">
+      <template #actions><UButton v-if="canManage" :to="create().url" label="Create lead" /></template>
+    </UEmpty>
+    <div v-if="leads.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
+      <p class="text-base text-muted sm:text-sm">{{ leads.meta.total }} leads</p>
+      <UPagination :items-per-page="leads.meta.per_page" :page="leads.meta.current_page" :total="leads.meta.total" @update:page="router.get(index({ query: { ...filters, page: $event } }).url)" />
+    </div>
+  </WorkspacePage>
 </template>

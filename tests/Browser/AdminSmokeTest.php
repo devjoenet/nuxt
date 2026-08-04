@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 
-test('admin, jobs, settings, and audit screens smoke cleanly', function (): void {
+test('the workspace shell preserves CRM, admin, settings, and Development screens', function (): void {
     app(RolePermissionSeeder::class)->run();
 
     $user = User::factory()->create();
@@ -14,6 +14,9 @@ test('admin, jobs, settings, and audit screens smoke cleanly', function (): void
     $this->actingAs($user);
 
     $page = visit('/admin')
+        ->assertTitle('Admin dashboard - Southeast Code')
+        ->assertCount('main[data-workspace-page-content]', 1)
+        ->assertDataAttribute('main[data-workspace-page-content]', 'content-width', 'full')
         ->assertSee('Admin')
         ->assertSee('Development')
         ->assertSee('Recent activity')
@@ -35,16 +38,30 @@ test('admin, jobs, settings, and audit screens smoke cleanly', function (): void
         ->assertSee('Business settings')
         ->assertNoJavaScriptErrors()
         ->navigate('/admin/audit')
+        ->assertTitle('Audit log - Southeast Code')
         ->assertSee('Audit log')
+        ->assertPresent('.audit-toolbar')
+        ->assertNoJavaScriptErrors()
+        ->navigate('/crm/organizations')
+        ->assertTitle('Organizations - Southeast Code')
+        ->assertCount('main[data-workspace-page-content]', 1)
+        ->assertSee('Organizations')
+        ->assertSee('New organization')
         ->assertNoJavaScriptErrors()
         ->navigate('/development/roadmap')
+        ->assertTitle('Development roadmap - Southeast Code')
         ->assertSee('Development roadmap')
+        ->assertCount('main[data-workspace-page-content]', 1)
         ->assertNoJavaScriptErrors()
         ->navigate('/development/user-testing')
         ->assertSee('User testing')
         ->assertNoJavaScriptErrors()
         ->navigate('/settings/profile')
+        ->assertTitle('Profile settings - Southeast Code')
         ->assertSee('Profile')
+        ->assertDataAttribute('main[data-workspace-page-content]', 'content-width', 'narrow')
+        ->resize(390, 844)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
         ->assertNoJavaScriptErrors()
         ->navigate('/settings/security')
         ->assertSee('Confirm your password')

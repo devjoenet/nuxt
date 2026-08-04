@@ -14,7 +14,7 @@ component that mixes route coordination, reusable behavior, and domain rendering
 | Vendor foundation | Nuxt UI, Vue, Inertia, VueUse, and `vite.config.ts` | Accessible UI primitives, reactivity, routing, and centralized theme/component defaults. Use Nuxt UI directly when no product contract exists. |
 | Product primitives | `resources/js/components` | Repeated Southeast Code controls or display contracts. Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` are the starting point. |
 | Workflow shells | `resources/js/layouts` | Persistent application, authentication, settings, or workspace frames that own navigation and stable page chrome. |
-| Domain sections | `resources/js/sections/<domain>/<workflow>` | A meaningful domain or workflow responsibility within a page, including its local interaction state and supporting types. |
+| Domain sections | `resources/js/sections/<Domain>/<Workflow>` | A meaningful domain or workflow responsibility within a page, including its local interaction state and supporting types. |
 | Pages | `resources/js/pages` | Inertia route entries that accept typed server props, select a layout, set route-level metadata, and declaratively compose sections. |
 | Composables | `resources/js/composables` | Reusable reactive behavior, lifecycle integration, or stateful browser concerns. Check VueUse before adding one. |
 | Pure utilities | `resources/js/lib` | Deterministic, side-effect-free functions with no Vue lifecycle or Inertia dependency. `cn` is the current class-merging utility. |
@@ -93,6 +93,12 @@ hide route changes or server mutations.
 Names describe the product responsibility: `FormInput`, `CrmDetailLayout`, and `LeadNotesSection` are useful examples.
 Domain page regions end in `Section`; persistent frames end in `Layout`; composables start with `use`. Avoid generic
 names such as `BaseWrapper`, `UiButton`, or `CardComponent` that conceal whether the code owns a real product contract.
+
+The architectural roots directly under `resources/js` remain lowercase. Nested Vue feature directories under
+`components`, `layouts`, `pages`, and `sections` use PascalCase, as do all `.vue` filenames. Authored TypeScript module
+and composable filenames use camelCase. Static asset directories and filenames use lowercase kebab-case. The generated
+`actions`, `routes`, and `wayfinder` trees retain their generator-owned names and are excluded from authored naming
+rules.
 
 Vue code remains strict TypeScript. Avoid `any`, type page props at the route boundary, import Wayfinder route helpers
 instead of hard-coding application URLs, and keep transport-specific response shapes out of product primitives.

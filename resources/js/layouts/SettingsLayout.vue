@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
 
+defineProps<{ documentTitle: string }>();
+
 const links = [
   [
     {
@@ -19,24 +21,11 @@ const links = [
 </script>
 
 <template>
-  <UDashboardPanel id="settings" :ui="{ body: 'lg:py-12' }">
-    <template #header>
-      <UDashboardNavbar title="Settings">
-        <template #leading>
-          <UDashboardSidebarCollapse as="button" :disabled="false" />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <!-- NOTE: The `-mx-1` class is used to align with the `DashboardSidebarCollapse` button here. -->
-        <UNavigationMenu :items="links" highlight class="-mx-1 flex-1" />
-      </UDashboardToolbar>
+  <WorkspacePage id="settings" :document-title="documentTitle" :ui="{ body: 'lg:py-12' }" content-class="lg:gap-12" content-width="narrow" title="Settings">
+    <template #toolbar>
+      <UNavigationMenu :items="links" class="-mx-1 flex-1" highlight />
     </template>
 
-    <template #body>
-      <div class="mx-auto flex w-full flex-col gap-4 sm:gap-6 lg:max-w-2xl lg:gap-12">
-        <slot />
-      </div>
-    </template>
-  </UDashboardPanel>
+    <slot />
+  </WorkspacePage>
 </template>
