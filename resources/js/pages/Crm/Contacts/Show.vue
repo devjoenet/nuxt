@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Link, router } from "@inertiajs/vue3";
-import CrmDetailLayout from "@/components/crm/CrmDetailLayout.vue";
+import CrmDetailLayout from "@/components/Crm/CrmDetailLayout.vue";
 import { archive, destroy, edit, index, restore } from "@/routes/crm/contacts";
 import { show as organizationShow } from "@/routes/crm/organizations";
 import type { Contact } from "@/types/crm";
@@ -19,7 +19,7 @@ const formatDate = (value: string | null): string => (value ? new Intl.DateTimeF
 </script>
 
 <template>
-  <CrmDetailLayout :edit-url="canManage ? edit(contact.id).url : undefined" :index-url="index().url" index-label="All contacts" navbar-title="Contact details" panel-id="crm-contact-detail">
+  <CrmDetailLayout :document-title="contact.name" :edit-url="canManage ? edit(contact.id).url : undefined" :index-url="index().url" index-label="All contacts" navbar-title="Contact details" panel-id="crm-contact-detail">
     <template #summary>
       <div class="min-w-0" data-testid="contact-summary">
         <div class="flex flex-wrap items-start gap-3">

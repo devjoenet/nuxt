@@ -23,8 +23,8 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/TwoFactorChallenge'));
-        Fortify::confirmPasswordView(fn () => Inertia::render('auth/ConfirmPassword'));
+        Fortify::twoFactorChallengeView(fn () => Inertia::render('Auth/TwoFactorChallenge'));
+        Fortify::confirmPasswordView(fn () => Inertia::render('Auth/ConfirmPassword'));
 
         RateLimiter::for('login', fn (Request $request): Limit => Limit::perMinute(5)->by(
             Str::lower((string) $request->input('email')).'|'.$request->ip(),

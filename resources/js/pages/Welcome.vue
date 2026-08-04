@@ -16,14 +16,14 @@ import lightHero960Webp from "../../img/landing/hero/savannah-river-light-960.we
 import lightHero1264Avif from "../../img/landing/hero/savannah-river-light-1264.avif";
 import lightHero1264Webp from "../../img/landing/hero/savannah-river-light-1264.webp";
 import socialImageAsset from "../../img/landing/social/southeast-code-social-card.avif";
-import LandingFooter from "@/components/landing/LandingFooter.vue";
-import LandingHeader from "@/components/landing/LandingHeader.vue";
-import LandingHero from "@/components/landing/LandingHero.vue";
-import LandingCardGridSection from "@/sections/landing/LandingCardGridSection.vue";
-import LandingContactSection from "@/sections/landing/LandingContactSection.vue";
-import LandingOperationsSection from "@/sections/landing/LandingOperationsSection.vue";
-import LandingProcessSection from "@/sections/landing/LandingProcessSection.vue";
-import { footerColumns, processSteps, realityCards, services, transformationCards } from "@/sections/landing/landingContent";
+import LandingFooter from "@/components/Landing/LandingFooter.vue";
+import LandingHeader from "@/components/Landing/LandingHeader.vue";
+import LandingHero from "@/components/Landing/LandingHero.vue";
+import LandingCardGridSection from "@/sections/Landing/LandingCardGridSection.vue";
+import LandingContactSection from "@/sections/Landing/LandingContactSection.vue";
+import LandingOperationsSection from "@/sections/Landing/LandingOperationsSection.vue";
+import LandingProcessSection from "@/sections/Landing/LandingProcessSection.vue";
+import { footerColumns, processSteps, realityCards, services, transformationCards } from "@/sections/Landing/landingContent";
 import type { Option } from "@/types/crm";
 
 const props = defineProps<{ canonicalUrl: string; serviceInterestOptions: Option[] }>();

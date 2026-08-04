@@ -26,7 +26,7 @@ class SecurityController extends Controller implements HasMiddleware
         $user = $this->authenticatedUser($request);
         $request->ensureStateIsValid();
 
-        return Inertia::render('settings/Security', [
+        return Inertia::render('Settings/Security', [
             'twoFactorEnabled' => $user->hasEnabledTwoFactorAuthentication(),
             'requiresConfirmation' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
         ]);

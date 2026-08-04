@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import LandingFooter from "@/components/landing/LandingFooter.vue";
-import LandingHeader from "@/components/landing/LandingHeader.vue";
-import PrivacyPolicyContent from "@/components/privacy/PrivacyPolicyContent.vue";
+import LandingFooter from "@/components/Landing/LandingFooter.vue";
+import LandingHeader from "@/components/Landing/LandingHeader.vue";
+import PrivacyPolicyContent from "@/components/Privacy/PrivacyPolicyContent.vue";
 import { Head } from "@inertiajs/vue3";
 
 defineProps<{ canonicalUrl: string }>();

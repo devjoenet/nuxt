@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { Head } from "@inertiajs/vue3";
-
 defineProps<{
   stats: { label: string; value: number }[];
   recentActivities: { id: number; description: string; causer: string | null; created_at: string | null }[];
@@ -9,45 +7,35 @@ defineProps<{
 </script>
 
 <template>
-  <Head title="Admin dashboard" />
+  <WorkspacePage id="admin-dashboard" description="Business health and access control" document-title="Admin dashboard" title="Admin">
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
+        <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
+      </UPageCard>
+    </div>
 
-  <UDashboardPanel id="admin-dashboard">
-    <template #header>
-      <UDashboardNavbar description="Business health and access control" title="Admin">
-        <template #leading><UDashboardSidebarCollapse /></template>
-      </UDashboardNavbar>
-    </template>
+    <div class="mt-6 grid gap-6 xl:grid-cols-2">
+      <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="The latest auditable workspace changes." title="Recent activity" variant="outline">
+        <ul v-if="recentActivities.length" class="divide-y divide-default">
+          <li v-for="activity in recentActivities" :key="activity.id" class="py-3 first:pt-0 last:pb-0">
+            <p class="text-sm text-highlighted">{{ activity.description }}</p>
+            <p class="text-xs text-muted">{{ activity.causer ?? "System" }}</p>
+          </li>
+        </ul>
+        <p v-else class="text-sm text-muted">No activity has been recorded yet.</p>
+      </UPageCard>
 
-    <template #body>
-      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
-          <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
-        </UPageCard>
-      </div>
-
-      <div class="mt-6 grid gap-6 xl:grid-cols-2">
-        <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="The latest auditable workspace changes." title="Recent activity" variant="outline">
-          <ul v-if="recentActivities.length" class="divide-y divide-default">
-            <li v-for="activity in recentActivities" :key="activity.id" class="py-3 first:pt-0 last:pb-0">
-              <p class="text-sm text-highlighted">{{ activity.description }}</p>
-              <p class="text-xs text-muted">{{ activity.causer ?? "System" }}</p>
-            </li>
-          </ul>
-          <p v-else class="text-sm text-muted">No activity has been recorded yet.</p>
-        </UPageCard>
-
-        <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="Access status for the newest workspace members." title="Recent users" variant="outline">
-          <ul class="divide-y divide-default">
-            <li v-for="user in recentUsers" :key="user.id" class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
-              <div>
-                <p class="text-sm font-medium text-highlighted">{{ user.name }}</p>
-                <p class="text-xs text-muted">{{ user.email }}</p>
-              </div>
-              <UBadge :color="user.is_active ? 'success' : 'neutral'" variant="subtle">{{ user.is_active ? "Active" : "Inactive" }}</UBadge>
-            </li>
-          </ul>
-        </UPageCard>
-      </div>
-    </template>
-  </UDashboardPanel>
+      <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="Access status for the newest workspace members." title="Recent users" variant="outline">
+        <ul class="divide-y divide-default">
+          <li v-for="user in recentUsers" :key="user.id" class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+            <div>
+              <p class="text-sm font-medium text-highlighted">{{ user.name }}</p>
+              <p class="text-xs text-muted">{{ user.email }}</p>
+            </div>
+            <UBadge :color="user.is_active ? 'success' : 'neutral'" variant="subtle">{{ user.is_active ? "Active" : "Inactive" }}</UBadge>
+          </li>
+        </ul>
+      </UPageCard>
+    </div>
+  </WorkspacePage>
 </template>

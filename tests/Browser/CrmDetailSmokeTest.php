@@ -29,7 +29,10 @@ test('organization detail presents its summary, contacts, and responsive lifecyc
     $this->actingAs($admin);
 
     visit($path)
+        ->assertTitle('Task 21 Direct Organization - Southeast Code')
         ->assertPathIs($path)
+        ->assertCount('main[data-workspace-page-content]', 1)
+        ->assertDataAttribute('main[data-workspace-page-content]', 'content-width', 'wide')
         ->assertSee($organization->name)
         ->assertPresent('[data-testid="organization-summary"] h1')
         ->assertPresent('a[href="https://task-21.example"]')
