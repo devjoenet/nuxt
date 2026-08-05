@@ -1,43 +1,37 @@
 <script lang="ts" setup>
-import { router } from "@inertiajs/vue3";
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
+import IndexPagination from "@/components/IndexPagination.vue";
+import IndexTableFrame from "@/components/IndexTableFrame.vue";
 import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
-import type { TableColumn } from "@nuxt/ui";
-import { h, resolveComponent, watch } from "vue";
-import LeadStatusBadge from "@/components/Crm/LeadStatusBadge.vue";
-import { create, index, show } from "@/routes/crm/leads";
+import { useInertiaFilters } from "@/composables/useInertiaFilters";
+import { create, index } from "@/routes/crm/leads";
+import { createLeadIndexColumns } from "@/sections/Crm/Leads/leadIndexColumns";
 import type { Lead, Option, Owner, Paginated } from "@/types/crm";
 
-const props = defineProps<{ leads: Paginated<Lead>; filters: Record<string, string>; statuses: Option[]; sources: Option[]; owners: Owner[]; canManage: boolean }>();
-const UButton = resolveComponent("UButton");
-const search = ref(props.filters.search ?? "");
-const status = ref(props.filters.status ?? "");
-const source = ref(props.filters.source ?? "");
-let timer: ReturnType<typeof setTimeout>;
-
-const visit = () => router.get(index().url, { search: search.value || undefined, status: status.value || undefined, source: source.value || undefined }, { preserveState: true, replace: true });
-watch([search, status, source], () => {
-  clearTimeout(timer);
-  timer = setTimeout(visit, 250);
+const props = defineProps<{
+  leads: Paginated<Lead>;
+  filters: Record<string, string | number>;
+  statuses: Option[];
+  sources: Option[];
+  owners: Owner[];
+  canManage: boolean;
+  canAssign: boolean;
+}>();
+const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+const { filters, hasActiveFilters, isLoading, reset, visitPage } = useInertiaFilters({
+  url: () => index().url,
+  initialFilters: () => ({
+    search: String(props.filters.search ?? ""),
+    status: String(props.filters.status ?? ""),
+    source: String(props.filters.source ?? ""),
+    owner: String(props.filters.owner ?? ""),
+  }),
+  resetFilters: { search: "", status: "", source: "", owner: "" },
+  preservedQuery: () => props.filters,
+  only: ["leads", "filters"],
 });
-
-const columns: TableColumn<Lead>[] = [
-  {
-    accessorKey: "contact.name",
-    header: "Contact",
-    cell: ({ row }) =>
-      h("div", { class: "min-w-48" }, [
-        h("p", { class: "font-medium text-highlighted" }, row.original.contact?.name ?? "Contact unavailable"),
-        h("p", { class: "text-muted" }, row.original.contact?.email ?? "Unavailable"),
-        row.original.contact?.deleted_at ? h("p", { class: "text-warning" }, "Deleted contact") : null,
-      ]),
-  },
-  { accessorKey: "organization.name", header: "Organization", cell: ({ row }) => row.original.organization?.name ?? "Independent" },
-  { accessorKey: "status", header: "Status", cell: ({ row }) => h(LeadStatusBadge, { status: row.original.status }) },
-  { accessorKey: "source", header: "Source", cell: ({ row }) => h("span", { class: "capitalize" }, row.original.source) },
-  { accessorKey: "owner.name", header: "Owner", cell: ({ row }) => row.original.owner?.name ?? "Unassigned" },
-  { id: "actions", cell: ({ row }) => h(UButton, { to: show(row.original.id).url, label: "View", color: "neutral", variant: "ghost", size: "sm" }) },
-];
+const columns = createLeadIndexColumns();
 </script>
 
 <template>
@@ -47,21 +41,19 @@ const columns: TableColumn<Lead>[] = [
     </template>
 
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <FormInput v-model="search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts or organizations" />
-      <FormSelect v-model="status" :items="statuses" class="w-full sm:w-44" label="Status" placeholder="All statuses" />
-      <FormSelect v-model="source" :items="sources" class="w-full sm:w-44" label="Source" placeholder="All sources" />
+      <FormInput id="lead-search" v-model="filters.search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts or organizations" />
+      <FormSelect v-model="filters.status" :items="statuses" class="w-full sm:w-44" label="Status" placeholder="All statuses" />
+      <FormSelect v-model="filters.source" :items="sources" class="w-full sm:w-44" label="Source" placeholder="All sources" />
+      <FormSelect v-if="canAssign" v-model="filters.owner" :items="ownerOptions" class="w-full sm:w-48" label="Owner" placeholder="All owners" />
     </div>
-    <div v-if="leads.data.length" class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8">
-        <UTable :columns="columns" :data="leads.data" class="w-full" />
-      </div>
-    </div>
-    <UEmpty v-else description="Try changing the filters or create the first lead." icon="i-ph-address-book" title="No leads found">
+
+    <IndexTableFrame v-if="leads.data.length" :loading="isLoading">
+      <UTable :columns="columns" :data="leads.data" :loading="isLoading" class="w-full" />
+    </IndexTableFrame>
+    <IndexEmptyState v-else :loading="isLoading" :show-reset="hasActiveFilters" description="Try changing the filters or create the first lead." icon="i-ph-address-book" title="No leads found" @reset="reset">
       <template #actions><UButton v-if="canManage" :to="create().url" label="Create lead" /></template>
-    </UEmpty>
-    <div v-if="leads.meta.last_page > 1" class="flex items-center justify-between border-t border-default pt-4">
-      <p class="text-base text-muted sm:text-sm">{{ leads.meta.total }} leads</p>
-      <UPagination :items-per-page="leads.meta.per_page" :page="leads.meta.current_page" :total="leads.meta.total" @update:page="router.get(index({ query: { ...filters, page: $event } }).url)" />
-    </div>
+    </IndexEmptyState>
+
+    <IndexPagination :meta="leads.meta" item-label="leads" @page="visitPage" />
   </WorkspacePage>
 </template>

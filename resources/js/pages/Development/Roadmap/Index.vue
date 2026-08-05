@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import { index as userTestingIndex } from "@/routes/development/userTesting";
 import RoadmapColumnSection from "@/sections/Development/Roadmap/RoadmapColumnSection.vue";
 import type { RoadmapColumn } from "@/sections/Development/Roadmap/types";
@@ -40,7 +41,7 @@ const totalTasks = computed(() => Object.values(props.tasks).reduce((total, task
       <UButton v-if="auth.user?.can?.['development.user_testing.manage']" :to="userTestingIndex().url" color="neutral" label="User testing" variant="ghost" />
     </template>
 
-    <UEmpty v-if="totalTasks === 0" description="Promoted requests will appear here as database-backed roadmap tasks." icon="i-ph-map-trifold" title="The roadmap is clear" />
+    <IndexEmptyState v-if="totalTasks === 0" description="Promoted requests will appear here as database-backed roadmap tasks." icon="i-ph-map-trifold" title="The roadmap is clear" />
 
     <div v-else class="grid items-start gap-5 xl:grid-cols-3">
       <RoadmapColumnSection v-for="column in columns" :key="column.key" :column="column" :tasks="tasks[column.key]" />

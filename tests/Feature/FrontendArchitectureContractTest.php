@@ -141,6 +141,61 @@ test('the current product primitives and Nuxt UI foundation remain explicit', fu
         ->toContain('ui: {');
 });
 
+test('index workflows share navigation and framing without hiding domain columns', function (): void {
+    $filterComposable = File::get(resource_path('js/composables/useInertiaFilters.ts'));
+    $asyncCrmSelect = File::get(resource_path('js/components/AsyncCrmSelect.vue'));
+
+    expect($filterComposable)
+        ->toContain('watchDebounced(filters, visitFilters')
+        ->toContain('onCancelToken: (token) =>')
+        ->toContain('preservedQuery?: () => FilterState;')
+        ->toContain('const reset = (): void =>')
+        ->toContain('const visitPage = (page: number): void =>')
+        ->not->toContain('setTimeout')
+        ->and($asyncCrmSelect)
+        ->toContain('useDebounceFn')
+        ->not->toContain('setTimeout');
+
+    foreach ([
+        'IndexTableFrame.vue',
+        'IndexEmptyState.vue',
+        'IndexPagination.vue',
+    ] as $component) {
+        expect(File::exists(resource_path("js/components/{$component}")))
+            ->toBeTrue("Missing index product component: {$component}");
+    }
+
+    foreach ([
+        'Leads' => 'leadIndexColumns.ts',
+        'Contacts' => 'contactIndexColumns.ts',
+        'Organizations' => 'organizationIndexColumns.ts',
+    ] as $domain => $columnFile) {
+        $page = File::get(resource_path("js/pages/Crm/{$domain}/Index.vue"));
+        $columns = File::get(resource_path("js/sections/Crm/{$domain}/{$columnFile}"));
+
+        expect($page)
+            ->toContain('useInertiaFilters({')
+            ->toContain('<IndexTableFrame')
+            ->toContain('<IndexEmptyState')
+            ->toContain('<IndexPagination')
+            ->toContain(':loading="isLoading"')
+            ->not->toContain('setTimeout')
+            ->and($columns)
+            ->toContain('TableColumn<')
+            ->toContain('id: "actions"');
+    }
+
+    foreach ([
+        'pages/Admin/Audit/Index.vue',
+        'sections/Admin/Users/AdminUsersTableSection.vue',
+        'pages/Development/Requests/Index.vue',
+        'pages/Development/Review/Index.vue',
+    ] as $indexSurface) {
+        expect(File::get(resource_path("js/{$indexSurface}")))
+            ->toContain('<IndexPagination');
+    }
+});
+
 test('authenticated pages compose the product workspace shell', function (): void {
     $workspacePage = File::get(resource_path('js/components/WorkspacePage.vue'));
     $crmDetailLayout = File::get(resource_path('js/components/Crm/CrmDetailLayout.vue'));

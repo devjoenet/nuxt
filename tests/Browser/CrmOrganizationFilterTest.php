@@ -53,7 +53,58 @@ test('admins can clear the organization owner filter on a narrow viewport', func
         ->assertSee($secondOrganization->name)
         ->assertSee('All owners')
         ->assertMissing('button[aria-label="Clear owner filter"]')
+        ->clear('#organization-search')
+        ->type('#organization-search', 'No matching organization should exist')
+        ->wait(0.5)
+        ->assertQueryStringHas('search', 'No matching organization should exist')
+        ->assertSee('No organizations found')
+        ->assertSee('Reset filters')
+        ->click('Reset filters')
+        ->assertQueryStringMissing('search')
+        ->assertSee($firstOrganization->name)
+        ->assertSee($secondOrganization->name)
         ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
+test('organization pagination preserves filters across browser history', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole(RoleName::Admin->value);
+    $search = 'Index history account';
+
+    Organization::factory()->count(17)->create([
+        'name' => $search,
+        'owner_id' => $admin->id,
+    ]);
+
+    $this->actingAs($admin);
+
+    $page = visit(route('crm.organizations.index', ['search' => $search], false))
+        ->assertSee('17 organizations')
+        ->assertQueryStringHas('search', $search)
+        ->assertQueryStringMissing('page');
+
+    $page->page()->locator('[data-testid="index-pagination"] [data-slot="item"]')->nth(1)->click();
+
+    $page->wait(0.5)
+        ->assertQueryStringHas('search', $search)
+        ->assertQueryStringHas('page', '2');
+
+    $page->page()->back();
+
+    $page->wait(0.5)
+        ->assertQueryStringHas('search', $search)
+        ->assertQueryStringMissing('page')
+        ->assertSee('17 organizations');
+
+    $page->page()->forward();
+
+    $page->wait(0.5)
+        ->assertQueryStringHas('search', $search)
+        ->assertQueryStringHas('page', '2')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });

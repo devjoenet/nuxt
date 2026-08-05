@@ -224,6 +224,7 @@ declare global {
   const useId: typeof import("vue").useId;
   const useIdle: typeof import("@vueuse/core").useIdle;
   const useImage: typeof import("@vueuse/core").useImage;
+  const useInertiaFilters: typeof import("./resources/js/composables/useInertiaFilters").useInertiaFilters;
   const useInfiniteScroll: typeof import("@vueuse/core").useInfiniteScroll;
   const useInitials: typeof import("./resources/js/composables/useInitials").useInitials;
   const useIntersectionObserver: typeof import("@vueuse/core").useIntersectionObserver;
@@ -355,6 +356,9 @@ declare global {
   // @ts-ignore
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from "vue";
   import("vue");
+  // @ts-ignore
+  export type { InertiaFilterValue } from "./resources/js/composables/useInertiaFilters";
+  import("./resources/js/composables/useInertiaFilters");
   // @ts-ignore
   export type { SearchableNavigationItem } from "./resources/js/composables/useWorkspaceNavigation";
   import("./resources/js/composables/useWorkspaceNavigation");
@@ -557,6 +561,7 @@ declare module "vue" {
     readonly useId: UnwrapRef<(typeof import("vue"))["useId"]>;
     readonly useIdle: UnwrapRef<(typeof import("@vueuse/core"))["useIdle"]>;
     readonly useImage: UnwrapRef<(typeof import("@vueuse/core"))["useImage"]>;
+    readonly useInertiaFilters: UnwrapRef<(typeof import("./resources/js/composables/useInertiaFilters"))["useInertiaFilters"]>;
     readonly useInfiniteScroll: UnwrapRef<(typeof import("@vueuse/core"))["useInfiniteScroll"]>;
     readonly useInitials: UnwrapRef<(typeof import("./resources/js/composables/useInitials"))["useInitials"]>;
     readonly useIntersectionObserver: UnwrapRef<(typeof import("@vueuse/core"))["useIntersectionObserver"]>;
