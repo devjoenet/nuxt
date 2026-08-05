@@ -60,7 +60,8 @@ Nuxt UI. New dependencies and new top-level folders under `resources/js` require
 ## State ownership and event boundaries
 
 - Pages own route-level coordination and receive server state through typed Inertia props. They choose sections and
-  pass only the data each section needs.
+  pass only the data each section needs. Route pages use `<script setup>` so component state remains instance-scoped;
+  mutable page state must not be created in a module-level `<script>` block.
 - Sections own workflow-specific form, filter, selection, loading, and feedback state when that state is not shared
   across routes.
 - Product primitives own only the internal interaction state required by their public control contract. Persistent
@@ -112,7 +113,7 @@ instead of hard-coding application URLs, and keep transport-specific response sh
   Laravel feature tests; critical client interaction receives browser coverage.
 - Pages receive route-level feature coverage and browser smoke coverage in proportion to risk.
 - `tests/Feature/FrontendArchitectureContractTest.php` protects the approved source homes, existing frontend
-  foundations, and centralized Nuxt UI configuration.
+  foundations, retired frontend files, instance-scoped page state, and centralized Nuxt UI configuration.
 - ESLint enforces dependency direction. The normal typecheck, build, formatting, and focused Pest checks still apply.
 
 No line-count rule is part of this standard. Review responsibility, state ownership, API clarity, reuse, and testability

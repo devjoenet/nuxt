@@ -1,11 +1,10 @@
 import type { TableColumn } from "@nuxt/ui";
-import { h, resolveComponent } from "vue";
+import UButton from "@nuxt/ui/components/Button.vue";
+import { h } from "vue";
 import { show } from "@/routes/crm/contacts";
 import type { Contact } from "@/types/crm";
 
 export function createContactIndexColumns(): TableColumn<Contact>[] {
-  const UButton = resolveComponent("UButton");
-
   return [
     {
       accessorKey: "name",

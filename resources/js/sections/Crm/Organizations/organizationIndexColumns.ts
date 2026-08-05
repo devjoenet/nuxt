@@ -1,11 +1,10 @@
 import type { TableColumn } from "@nuxt/ui";
-import { h, resolveComponent } from "vue";
+import UButton from "@nuxt/ui/components/Button.vue";
+import { h } from "vue";
 import { show } from "@/routes/crm/organizations";
 import type { Organization } from "@/types/crm";
 
 export function createOrganizationIndexColumns(): TableColumn<Organization>[] {
-  const UButton = resolveComponent("UButton");
-
   return [
     {
       accessorKey: "name",

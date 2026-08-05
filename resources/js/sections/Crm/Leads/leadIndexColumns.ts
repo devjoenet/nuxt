@@ -1,12 +1,11 @@
 import type { TableColumn } from "@nuxt/ui";
-import { h, resolveComponent } from "vue";
+import UButton from "@nuxt/ui/components/Button.vue";
+import { h } from "vue";
 import LeadStatusBadge from "@/components/Crm/LeadStatusBadge.vue";
 import { show } from "@/routes/crm/leads";
 import type { Lead } from "@/types/crm";
 
 export function createLeadIndexColumns(): TableColumn<Lead>[] {
-  const UButton = resolveComponent("UButton");
-
   return [
     {
       accessorKey: "contact.name",

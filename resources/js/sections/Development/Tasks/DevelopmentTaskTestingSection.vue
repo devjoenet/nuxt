@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Form } from "@inertiajs/vue3";
 import FormTextarea from "@/components/FormTextarea.vue";
+import { formatDateTime } from "@/lib/dateFormatters";
+import { isWebUrl } from "@/lib/webUrl";
 import { update as updateTestRun } from "@/routes/development/testRuns";
 import DevelopmentTaskSectionCard from "@/sections/Development/Tasks/DevelopmentTaskSectionCard.vue";
 import type { DevelopmentTask } from "@/types/development";
@@ -10,8 +12,6 @@ defineProps<{
   class?: string;
 }>();
 
-const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-const isWebReference = (value: string | null): boolean => value?.startsWith("https://") === true || value?.startsWith("http://") === true;
 const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
   if (status === "accepted") return "success";
   if (status === "changes_requested") return "warning";
@@ -42,7 +42,7 @@ const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
             </div>
             <div v-if="testRun.build_reference" class="grid content-start gap-1">
               <h3 class="font-medium text-highlighted">Build reference</h3>
-              <a v-if="isWebReference(testRun.build_reference)" :href="testRun.build_reference" class="break-all hover:underline" rel="noreferrer" target="_blank">
+              <a v-if="isWebUrl(testRun.build_reference)" :href="testRun.build_reference" class="break-all hover:underline" rel="noreferrer" target="_blank">
                 <p class="text-base/7 text-highlighted underline decoration-primary/50 underline-offset-4 sm:text-sm/6">
                   {{ testRun.build_reference }}
                 </p>

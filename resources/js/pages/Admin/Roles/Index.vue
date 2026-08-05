@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Form } from "@inertiajs/vue3";
 import FormSelect from "@/components/FormSelect.vue";
+import { getNestedFieldError } from "@/lib/formErrors";
 import { update } from "@/routes/admin/roles";
 import CreateAdminRoleSection from "@/sections/Admin/Roles/CreateAdminRoleSection.vue";
 import RolePermissionGroupList from "@/sections/Admin/Roles/RolePermissionGroupList.vue";
@@ -19,10 +20,6 @@ function beginSaving(): void {
 
 function finishSaving(): void {
   isSaving.value = false;
-}
-
-function permissionError(errors: Record<string, string>): string | undefined {
-  return errors.permission_ids ?? Object.entries(errors).find(([key]) => key.startsWith("permission_ids."))?.[1];
 }
 </script>
 
@@ -56,7 +53,13 @@ function permissionError(errors: Record<string, string>): string | undefined {
           variant="outline"
         >
           <Form v-if="!selectedRole.protected" #default="{ errors, processing, recentlySuccessful }" class="grid gap-6" v-bind="update.form(selectedRole.id)" @finish="finishSaving" @start="beginSaving">
-            <UFormField :error="permissionError(errors)" :ui="{ description: 'text-sm mb-4 italic', label: 'text-lg mb-4 font-bold' }" description="Permissions are grouped by the part of the application they control." label="Permission catalog" name="permission_ids">
+            <UFormField
+              :error="getNestedFieldError(errors, 'permission_ids')"
+              :ui="{ description: 'text-sm mb-4 italic', label: 'text-lg mb-4 font-bold' }"
+              description="Permissions are grouped by the part of the application they control."
+              label="Permission catalog"
+              name="permission_ids"
+            >
               <RolePermissionGroupList :groups="permissionGroups" :selected-permission-ids="selectedRole.permission_ids" id-prefix="role-permission" test-id="role-permission-list" />
             </UFormField>
 
