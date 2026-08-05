@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
 import FormInput from "@/components/FormInput.vue";
+import { provideTwoFactorAuth } from "@/composables/useTwoFactorAuth";
 import SettingsLayout from "@/layouts/SettingsLayout.vue";
 import { Form } from "@inertiajs/vue3";
 
@@ -13,6 +14,8 @@ withDefaults(defineProps<Props>(), {
   requiresConfirmation: false,
   twoFactorEnabled: false,
 });
+
+provideTwoFactorAuth();
 
 const toast = useToast();
 

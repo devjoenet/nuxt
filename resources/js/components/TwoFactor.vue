@@ -11,12 +11,6 @@ withDefaults(defineProps<Props>(), {
   requiresConfirmation: false,
   twoFactorEnabled: false,
 });
-
-const { clearTwoFactorAuthData } = useTwoFactorAuth();
-
-onUnmounted(() => {
-  clearTwoFactorAuthData();
-});
 </script>
 
 <template>

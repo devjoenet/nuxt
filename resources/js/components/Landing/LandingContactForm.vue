@@ -6,9 +6,10 @@ import FormPhoneInput from "@/components/FormPhoneInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
 import FormTextarea from "@/components/FormTextarea.vue";
 import PrivacyDialogLink from "@/components/Privacy/PrivacyDialogLink.vue";
+import { useLandingAttribution } from "@/composables/useLandingAttribution";
 import { store } from "@/routes/contact";
 import { Form, usePage } from "@inertiajs/vue3";
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, ref } from "vue";
 import { Motion } from "motion-v";
 import type { AppPageProps } from "@/types";
 import type { Option } from "@/types/crm";
@@ -17,15 +18,7 @@ defineProps<{ serviceInterestOptions: Option[] }>();
 
 const page = usePage<AppPageProps>();
 
-const attribution = reactive({
-  landingPage: "",
-  referrer: "",
-  utmSource: "",
-  utmMedium: "",
-  utmCampaign: "",
-  utmTerm: "",
-  utmContent: "",
-});
+const attribution = useLandingAttribution();
 
 const budgetRange = ref<number | null>(null);
 const budgetOptions = { valueRange: { min: 0 } };
@@ -42,18 +35,6 @@ const handleSuccess = async (): Promise<void> => {
   await nextTick();
   successMessage.value?.focus();
 };
-
-onMounted(() => {
-  const search = new URLSearchParams(window.location.search);
-
-  attribution.landingPage = window.location.pathname;
-  attribution.referrer = document.referrer;
-  attribution.utmSource = search.get("utm_source") ?? "";
-  attribution.utmMedium = search.get("utm_medium") ?? "";
-  attribution.utmCampaign = search.get("utm_campaign") ?? "";
-  attribution.utmTerm = search.get("utm_term") ?? "";
-  attribution.utmContent = search.get("utm_content") ?? "";
-});
 </script>
 
 <template>

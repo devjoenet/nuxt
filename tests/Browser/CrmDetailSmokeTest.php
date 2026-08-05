@@ -143,23 +143,27 @@ test('archived detail records restore with DELETE requests', function (): void {
 
     $this->actingAs($admin);
 
-    $organizationPage = visit(route('crm.organizations.show', $organization, false));
-    $organizationPage->script('() => { window.confirm = () => true; }');
-
-    $organizationPage
+    $organizationPage = visit(route('crm.organizations.show', $organization, false))
         ->assertPresent('[data-testid="organization-archived-status"]')
         ->click('Restore')
+        ->assertSee('Restore this organization?')
+        ->click('Cancel')
+        ->assertPresent('[data-testid="organization-archived-status"]')
+        ->assertScript('document.activeElement?.textContent?.trim()', 'Restore')
+        ->click('Restore')
+        ->pressAndWaitFor('Restore organization')
         ->assertMissing('[data-testid="organization-archived-status"]')
+        ->assertSee('Organization restored.')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 
-    $contactPage = visit(route('crm.contacts.show', $contact, false));
-    $contactPage->script('() => { window.confirm = () => true; }');
-
-    $contactPage
+    visit(route('crm.contacts.show', $contact, false))
         ->assertPresent('[data-testid="contact-archived-status"]')
         ->click('Restore')
+        ->assertSee('Restore this contact?')
+        ->pressAndWaitFor('Restore contact')
         ->assertMissing('[data-testid="contact-archived-status"]')
+        ->assertSee('Contact restored.')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 

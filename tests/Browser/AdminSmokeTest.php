@@ -93,6 +93,53 @@ test('admin user controls only show two-factor reset for configured users', func
         ->assertNoConsoleLogs();
 });
 
+test('two-factor setup and recovery steps keep their state inside the security page', function (): void {
+    $user = User::factory()->withoutTwoFactor()->create();
+
+    $this->actingAs($user);
+
+    $page = visit('/settings/security')
+        ->fill('password', 'password')
+        ->click('Confirm Password')
+        ->assertPathIs('/settings/security')
+        ->click('Enable 2FA')
+        ->wait(0.8)
+        ->assertSee('Enable Two-Factor Authentication')
+        ->assertSee('or, enter the code manually')
+        ->assertPresent('[role="dialog"]')
+        ->click('Continue')
+        ->assertSee('Verify Authentication Code')
+        ->click('Back')
+        ->assertSee('or, enter the code manually')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+
+    expect($user->refresh()->two_factor_secret)->not->toBeNull();
+});
+
+test('two factor recovery codes regenerate inside the security page', function (): void {
+    $configuredUser = User::factory()->withTwoFactorAuthentication()->create();
+    $originalRecoveryCodes = $configuredUser->two_factor_recovery_codes;
+
+    $this->actingAs($configuredUser);
+
+    visit('/settings/security')
+        ->fill('password', 'password')
+        ->click('Confirm Password')
+        ->assertPathIs('/settings/security')
+        ->assertSee('Enabled')
+        ->click('View Recovery Codes')
+        ->wait(0.5)
+        ->assertSee('Regenerate Codes')
+        ->click('Regenerate Codes')
+        ->wait(0.5)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+
+    expect($configuredUser->refresh()->two_factor_recovery_codes)
+        ->not->toBe($originalRecoveryCodes);
+});
+
 test('client viewers do not see CRM navigation', function (): void {
     app(RolePermissionSeeder::class)->run();
 

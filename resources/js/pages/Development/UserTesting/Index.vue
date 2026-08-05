@@ -1,22 +1,9 @@
 <script lang="ts" setup>
-import { usePage } from "@inertiajs/vue3";
 import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import UserTestingRoundSection from "@/sections/Development/UserTesting/UserTestingRoundSection.vue";
-import type { AppPageProps } from "@/types";
 import type { DevelopmentTestRun } from "@/types/development";
 
 defineProps<{ testRuns: DevelopmentTestRun[] }>();
-
-const page = usePage<AppPageProps>();
-const toast = useToast();
-
-watch(
-  () => page.props.flash.success,
-  (value) => {
-    if (value) toast.add({ title: value, color: "success" });
-  },
-  { immediate: true },
-);
 </script>
 
 <template>

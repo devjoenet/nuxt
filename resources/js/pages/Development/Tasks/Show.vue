@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { usePage } from "@inertiajs/vue3";
 import { index as requestsIndex } from "@/routes/development/requests";
 import { index as roadmapIndex } from "@/routes/development/roadmap";
 import DevelopmentTaskBriefSection from "@/sections/Development/Tasks/DevelopmentTaskBriefSection.vue";
@@ -8,7 +7,6 @@ import DevelopmentTaskLinksSection from "@/sections/Development/Tasks/Developmen
 import DevelopmentTaskSummarySection from "@/sections/Development/Tasks/DevelopmentTaskSummarySection.vue";
 import DevelopmentTaskTestingSection from "@/sections/Development/Tasks/DevelopmentTaskTestingSection.vue";
 import DevelopmentTaskWorkflowSection from "@/sections/Development/Tasks/DevelopmentTaskWorkflowSection.vue";
-import type { AppPageProps } from "@/types";
 import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
 const props = defineProps<{
@@ -19,17 +17,6 @@ const props = defineProps<{
   testers: DevelopmentOption[];
   plannedTaskCount: number;
 }>();
-const page = usePage<AppPageProps>();
-const toast = useToast();
-
-watch(
-  () => page.props.flash.success,
-  (value) => {
-    if (value) toast.add({ title: value, color: "success" });
-  },
-  { immediate: true },
-);
-
 const isRoadmapTask = computed(() => ["planned", "in_progress", "blocked", "changes_requested"].includes(props.task.status));
 const pageContextLabel = computed(() => (isRoadmapTask.value ? "Roadmap task" : "Development request"));
 </script>

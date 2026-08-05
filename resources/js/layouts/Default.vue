@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import WorkspaceSidebar from "@/components/WorkspaceSidebar.vue";
 import WorkspaceSearch from "@/components/WorkspaceSearch.vue";
+import { useFlashToasts } from "@/composables/useFlashToasts";
 import { useWorkspaceNavigation } from "@/composables/useWorkspaceNavigation";
 import { ref } from "vue";
 
 const navigationOpen = ref(false);
+useFlashToasts();
 const { navigationGroups, searchGroups } = useWorkspaceNavigation({
   onNavigate: () => {
     navigationOpen.value = false;

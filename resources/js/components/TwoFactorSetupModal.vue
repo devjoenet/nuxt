@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import FormInput from "@/components/FormInput.vue";
-import { confirm, enable } from "@/routes/two-factor";
 import { Form } from "@inertiajs/vue3";
+import TwoFactorConfirmationStep from "@/components/TwoFactorConfirmationStep.vue";
+import TwoFactorSetupStep from "@/components/TwoFactorSetupStep.vue";
+import { useTwoFactorAuth } from "@/composables/useTwoFactorAuth";
+import { enable } from "@/routes/two-factor";
 
 const props = defineProps<{
   requiresConfirmation: boolean;
@@ -9,42 +11,31 @@ const props = defineProps<{
 }>();
 
 const open = ref(false);
-const { copy, copied } = useClipboard();
-const { hasSetupData, qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } = useTwoFactorAuth();
-
 const showVerificationStep = ref(false);
-const code = ref<number[]>([]);
-const codeValue = computed<string>(() => code.value.join(""));
+const { clearSetupData, fetchSetupData, hasSetupData } = useTwoFactorAuth();
 
-const modalConfig = computed<{
-  title: string;
-  description: string;
-  buttonText: string;
-}>(() => {
+const modalConfig = computed(() => {
   if (props.twoFactorEnabled) {
     return {
       title: "Two-Factor Authentication Enabled",
       description: "Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.",
-      buttonText: "Close",
     };
   }
 
   if (showVerificationStep.value) {
     return {
       title: "Verify Authentication Code",
-      description: "Enter the 6-digit code from your authenticator app",
-      buttonText: "Continue",
+      description: "Enter the 6-digit code from your authenticator app.",
     };
   }
 
   return {
     title: "Enable Two-Factor Authentication",
-    description: "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app",
-    buttonText: "Continue",
+    description: "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app.",
   };
 });
 
-function handleModalNextStep() {
+const handleNextStep = (): void => {
   if (props.requiresConfirmation) {
     showVerificationStep.value = true;
 
@@ -53,34 +44,29 @@ function handleModalNextStep() {
 
   clearSetupData();
   open.value = false;
-}
+};
 
-function resetModalState() {
+const resetModalState = (): void => {
   if (props.twoFactorEnabled) {
     clearSetupData();
   }
 
   showVerificationStep.value = false;
-  code.value = [];
-}
+};
 
-async function handleUpdateOpen() {
-  if (!qrCodeSvg.value) {
+const handleUpdateOpen = async (isOpen: boolean): Promise<void> => {
+  if (isOpen && props.twoFactorEnabled && !hasSetupData.value) {
     await fetchSetupData();
   }
-}
-
-function closeVerificationStep(): void {
-  showVerificationStep.value = false;
-}
+};
 </script>
 
 <template>
-  <UModal v-model:open="open" @after:leave="resetModalState" @update:open="handleUpdateOpen" :ui="{ content: 'sm:max-w-md divide-none', title: 'font-normal', header: 'block!' }">
-    <UButton v-if="hasSetupData" icon="i-ph-shield-check"> Continue Setup </UButton>
+  <UModal v-model:open="open" :ui="{ content: 'sm:max-w-md divide-none', title: 'font-normal', header: 'block!' }" @after:leave="resetModalState" @update:open="handleUpdateOpen">
+    <UButton v-if="hasSetupData" icon="i-ph-shield-check" label="Continue Setup" />
 
-    <Form v-else v-bind="enable.form()" #default="{ processing }">
-      <UButton :disabled="processing" icon="i-ph-shield-check" type="submit"> Enable 2FA </UButton>
+    <Form v-else v-slot="{ processing }" v-bind="enable.form()" @success="fetchSetupData">
+      <UButton :disabled="processing" icon="i-ph-shield-check" label="Enable 2FA" type="submit" />
     </Form>
 
     <template #title>
@@ -92,67 +78,8 @@ function closeVerificationStep(): void {
     </template>
 
     <template #body>
-      <div class="relative flex w-auto flex-col items-center justify-center space-y-5">
-        <template v-if="!showVerificationStep">
-          <AlertError v-if="errors?.length" :errors="errors" />
-          <template v-else>
-            <div class="relative mx-auto flex max-w-md items-center overflow-hidden">
-              <div class="relative mx-auto aspect-square w-64 overflow-hidden rounded-lg border border-muted">
-                <div v-if="!qrCodeSvg" class="absolute inset-0 z-10 flex aspect-square h-auto w-full animate-pulse items-center justify-center bg-default">
-                  <UIcon class="size-6 animate-spin" name="i-ph-spinner-gap" />
-                </div>
-                <div v-else class="relative z-10 overflow-hidden border border-muted p-5">
-                  <div v-html="qrCodeSvg" class="flex aspect-square size-full items-center justify-center" />
-                </div>
-              </div>
-            </div>
-
-            <div class="flex w-full items-center space-x-5">
-              <UButton @click="handleModalNextStep" block>
-                {{ modalConfig.buttonText }}
-              </UButton>
-            </div>
-
-            <div class="relative flex w-full items-center justify-center">
-              <div class="absolute inset-0 top-1/2 h-px w-full bg-muted" />
-              <span class="relative bg-elevated px-2 py-1">or, enter the code manually</span>
-            </div>
-
-            <div class="flex w-full items-center justify-center space-x-2">
-              <div class="flex w-full items-stretch">
-                <div v-if="!manualSetupKey" class="flex h-full w-full items-center justify-center bg-default p-3">
-                  <UIcon class="size-4 animate-spin" name="i-ph-spinner-gap" />
-                </div>
-                <template v-else>
-                  <FormInput v-model="manualSetupKey" :ui="{ trailing: 'pr-0.5' }" class="w-full" label="Manual setup key" size="lg">
-                    <template v-if="manualSetupKey?.length" #trailing>
-                      <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
-                        <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm" :icon="copied ? 'i-ph-checks' : 'i-ph-copy'" aria-label="Copy to clipboard" @click="copy(manualSetupKey)" />
-                      </UTooltip>
-                    </template>
-                  </FormInput>
-                </template>
-              </div>
-            </div>
-          </template>
-        </template>
-
-        <template v-else>
-          <Form v-bind="confirm.form()" reset-on-error @finish="code = []" @success="open = false" v-slot="{ errors, processing }">
-            <input type="hidden" name="code" :value="codeValue" />
-            <div class="relative w-full space-y-8">
-              <UFormField :error="errors.code" :ui="{ root: 'text-center' }" name="code">
-                <UPinInput v-model="code" type="number" placeholder="○" size="xl" length="6" otp autofocus />
-              </UFormField>
-
-              <div class="flex w-full items-center space-x-5">
-                <UButton :disabled="processing" block class="w-auto flex-1" color="neutral" label="Back" variant="subtle" @click="closeVerificationStep" />
-                <UButton label="Confirm" color="primary" variant="solid" type="submit" class="w-auto flex-1" :loading="processing" :disabled="processing || codeValue.length < 6" block />
-              </div>
-            </div>
-          </Form>
-        </template>
-      </div>
+      <TwoFactorSetupStep v-if="!showVerificationStep" @continue="handleNextStep" />
+      <TwoFactorConfirmationStep v-else @back="showVerificationStep = false" @confirmed="open = false" />
     </template>
   </UModal>
 </template>
