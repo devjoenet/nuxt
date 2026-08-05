@@ -1,21 +1,27 @@
 <script lang="ts" setup>
 import { Link, router } from "@inertiajs/vue3";
+import ConfirmActionButton from "@/components/ConfirmActionButton.vue";
 import CrmDetailLayout from "@/components/Crm/CrmDetailLayout.vue";
-import { archive, destroy, edit, index, restore } from "@/routes/crm/organizations";
+import CrmDetailMetadata from "@/components/Crm/CrmDetailMetadata.vue";
+import CrmRecordStatusBadge from "@/components/Crm/CrmRecordStatusBadge.vue";
+import { formatDate } from "@/lib/dateFormatters";
 import { show as contactShow } from "@/routes/crm/contacts";
-import type { Organization } from "@/types/crm";
+import { archive, destroy, edit, index, restore } from "@/routes/crm/organizations";
+import type { CrmDetailMetadataItem, Organization } from "@/types/crm";
 
 const props = defineProps<{ organization: Organization; canManage: boolean }>();
-const confirmArchive = () => {
-  if (window.confirm("Archive this organization?")) router.post(archive(props.organization.id).url);
-};
-const confirmRestore = () => {
-  if (window.confirm("Restore this organization?")) router.delete(restore(props.organization.id).url);
-};
-const confirmDelete = () => {
-  if (window.confirm("Delete this organization? This removes it from active CRM results.")) router.delete(destroy(props.organization.id).url);
-};
-const formatDate = (value: string | null): string => (value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded");
+
+const accountDetails = computed<CrmDetailMetadataItem[]>(() => [
+  { label: "Owner", value: props.organization.owner?.name ?? "Unassigned" },
+  { label: "Contacts", value: props.organization.contacts_count ?? props.organization.contacts?.length ?? 0 },
+  { label: "Leads", value: props.organization.leads_count ?? 0 },
+  { label: "Client since", value: formatDate(props.organization.client_since_at) },
+  { label: "Added", value: formatDate(props.organization.created_at) },
+]);
+
+const archiveOrganization = (): void => router.post(archive(props.organization.id).url);
+const restoreOrganization = (): void => router.delete(restore(props.organization.id).url);
+const deleteOrganization = (): void => router.delete(destroy(props.organization.id).url);
 </script>
 
 <template>
@@ -24,7 +30,7 @@ const formatDate = (value: string | null): string => (value ? new Intl.DateTimeF
       <div class="min-w-0" data-testid="organization-summary">
         <div class="flex flex-wrap items-start gap-3">
           <h1 class="break-words text-2xl font-semibold tracking-tight text-highlighted">{{ organization.name }}</h1>
-          <UBadge v-if="organization.archived_at" color="warning" data-testid="organization-archived-status" label="Archived" variant="subtle" />
+          <CrmRecordStatusBadge v-if="organization.archived_at" data-testid="organization-archived-status" status="archived" />
         </div>
         <a v-if="organization.website" :href="organization.website" class="mt-2 block break-all text-base text-muted hover:text-highlighted hover:underline sm:text-sm" rel="noreferrer" target="_blank">
           {{ organization.website }}
@@ -58,33 +64,19 @@ const formatDate = (value: string | null): string => (value ? new Intl.DateTimeF
       <div class="space-y-8">
         <section aria-labelledby="organization-account-details-heading">
           <h2 id="organization-account-details-heading" class="text-lg font-semibold text-highlighted">Account details</h2>
-          <dl class="mt-4 space-y-4">
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Owner</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ organization.owner?.name ?? "Unassigned" }}</dd>
-            </div>
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Contacts</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ organization.contacts_count ?? organization.contacts?.length ?? 0 }}</dd>
-            </div>
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Leads</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ organization.leads_count ?? 0 }}</dd>
-            </div>
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Client since</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ formatDate(organization.client_since_at) }}</dd>
-            </div>
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Added</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ formatDate(organization.created_at) }}</dd>
-            </div>
-          </dl>
+          <CrmDetailMetadata :items="accountDetails" class="mt-4" />
         </section>
         <div v-if="canManage" class="flex flex-wrap gap-2 border-t border-default pt-6">
-          <UButton v-if="!organization.archived_at" color="error" label="Archive" variant="soft" @click="confirmArchive" />
-          <UButton v-else color="neutral" label="Restore" variant="outline" @click="confirmRestore" />
-          <UButton color="error" label="Delete" variant="ghost" @click="confirmDelete" />
+          <ConfirmActionButton v-if="!organization.archived_at" confirm-label="Archive organization" description="The organization will leave active CRM results and can be restored later." label="Archive" title="Archive this organization?" @confirm="archiveOrganization" />
+          <ConfirmActionButton v-else color="neutral" confirm-color="primary" confirm-label="Restore organization" description="The organization will return to active CRM results." label="Restore" title="Restore this organization?" variant="outline" @confirm="restoreOrganization" />
+          <ConfirmActionButton
+            confirm-label="Delete organization"
+            description="The organization will be removed from active CRM results. Related history remains available where required."
+            label="Delete"
+            title="Delete this organization?"
+            variant="ghost"
+            @confirm="deleteOrganization"
+          />
         </div>
       </div>
     </template>

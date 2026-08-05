@@ -1,24 +1,12 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import { useColorMode } from "@vueuse/core";
 import { MotionConfig } from "motion-v";
 import { computed } from "vue";
-import darkHero640Avif from "../../img/landing/hero/savannah-river-dark-640.avif";
-import darkHero640Webp from "../../img/landing/hero/savannah-river-dark-640.webp";
-import darkHero960Avif from "../../img/landing/hero/savannah-river-dark-960.avif";
-import darkHero960Webp from "../../img/landing/hero/savannah-river-dark-960.webp";
-import darkHero1536Avif from "../../img/landing/hero/savannah-river-dark-1536.avif";
-import darkHero1536Webp from "../../img/landing/hero/savannah-river-dark-1536.webp";
-import lightHero640Avif from "../../img/landing/hero/savannah-river-light-640.avif";
-import lightHero640Webp from "../../img/landing/hero/savannah-river-light-640.webp";
-import lightHero960Avif from "../../img/landing/hero/savannah-river-light-960.avif";
-import lightHero960Webp from "../../img/landing/hero/savannah-river-light-960.webp";
-import lightHero1264Avif from "../../img/landing/hero/savannah-river-light-1264.avif";
-import lightHero1264Webp from "../../img/landing/hero/savannah-river-light-1264.webp";
 import socialImageAsset from "../../img/landing/social/southeast-code-social-card.avif";
 import LandingFooter from "@/components/Landing/LandingFooter.vue";
 import LandingHeader from "@/components/Landing/LandingHeader.vue";
 import LandingHero from "@/components/Landing/LandingHero.vue";
+import { useLandingHeroAssets } from "@/composables/useLandingHeroAssets";
 import LandingCardGridSection from "@/sections/Landing/LandingCardGridSection.vue";
 import LandingContactSection from "@/sections/Landing/LandingContactSection.vue";
 import LandingOperationsSection from "@/sections/Landing/LandingOperationsSection.vue";
@@ -29,51 +17,7 @@ import type { Option } from "@/types/crm";
 const props = defineProps<{ canonicalUrl: string; serviceInterestOptions: Option[] }>();
 const socialImage = computed(() => new URL(socialImageAsset, props.canonicalUrl).href);
 
-interface HeroAsset {
-  src: string;
-  width: number;
-  height: number;
-}
-
-interface HeroAssetSet {
-  avif: HeroAsset[];
-  webp: HeroAsset[];
-  fallback: HeroAsset;
-}
-
-const lightHero: HeroAssetSet = {
-  avif: [
-    { src: lightHero640Avif, width: 640, height: 426 },
-    { src: lightHero960Avif, width: 960, height: 640 },
-    { src: lightHero1264Avif, width: 1264, height: 842 },
-  ],
-  webp: [
-    { src: lightHero640Webp, width: 640, height: 427 },
-    { src: lightHero960Webp, width: 960, height: 640 },
-    { src: lightHero1264Webp, width: 1264, height: 842 },
-  ],
-  fallback: { src: lightHero1264Webp, width: 1264, height: 842 },
-};
-
-const darkHero: HeroAssetSet = {
-  avif: [
-    { src: darkHero640Avif, width: 640, height: 426 },
-    { src: darkHero960Avif, width: 960, height: 640 },
-    { src: darkHero1536Avif, width: 1536, height: 1024 },
-  ],
-  webp: [
-    { src: darkHero640Webp, width: 640, height: 427 },
-    { src: darkHero960Webp, width: 960, height: 640 },
-    { src: darkHero1536Webp, width: 1536, height: 1024 },
-  ],
-  fallback: { src: darkHero1536Webp, width: 1536, height: 1024 },
-};
-
-const colorMode = useColorMode();
-const hero = computed(() => (colorMode.state.value === "dark" ? darkHero : lightHero));
-const heroImage = computed(() => hero.value.fallback.src);
-const heroImageAvifSrcset = computed(() => hero.value.avif.map((asset) => `${asset.src} ${asset.width}w`).join(", "));
-const heroImageWebpSrcset = computed(() => hero.value.webp.map((asset) => `${asset.src} ${asset.width}w`).join(", "));
+const { hero, heroImage, heroImageAvifSrcset, heroImageWebpSrcset } = useLandingHeroAssets();
 </script>
 
 <template>

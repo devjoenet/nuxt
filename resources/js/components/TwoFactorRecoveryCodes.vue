@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import AlertError from "@/components/AlertError.vue";
+import TwoFactorRegenerateRecoveryCodesForm from "@/components/TwoFactorRegenerateRecoveryCodesForm.vue";
 import { useTwoFactorAuth } from "@/composables/useTwoFactorAuth";
-import { regenerateRecoveryCodes } from "@/routes/two-factor";
-import { Form } from "@inertiajs/vue3";
 import { nextTick, onMounted, ref } from "vue";
 
-const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth();
-const isRecoveryCodesVisible = ref<boolean>(false);
+const { errors, fetchRecoveryCodes, recoveryCodesList, recoveryCodesProcessing } = useTwoFactorAuth();
+const isRecoveryCodesVisible = ref(false);
 const recoveryCodeSectionRef = ref<HTMLDivElement | null>(null);
 
-async function toggleRecoveryCodesVisibility() {
+async function toggleRecoveryCodesVisibility(): Promise<void> {
   if (!isRecoveryCodesVisible.value && !recoveryCodesList.value.length) {
     await fetchRecoveryCodes();
   }
@@ -30,29 +29,27 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UPageCard title="2FA Recovery Codes" description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager." icon="i-ph-lock-key">
+  <UPageCard description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager." icon="i-ph-lock-key" title="2FA Recovery Codes">
     <div class="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
-      <UButton :icon="isRecoveryCodesVisible ? 'i-ph-eye-slash' : 'i-ph-eye'" @click="toggleRecoveryCodesVisibility"> {{ isRecoveryCodesVisible ? "Hide" : "View" }} Recovery Codes </UButton>
+      <UButton :disabled="recoveryCodesProcessing" :icon="isRecoveryCodesVisible ? 'i-ph-eye-slash' : 'i-ph-eye'" :label="`${isRecoveryCodesVisible ? 'Hide' : 'View'} Recovery Codes`" @click="toggleRecoveryCodesVisibility" />
 
-      <Form v-if="isRecoveryCodesVisible && recoveryCodesList.length" v-bind="regenerateRecoveryCodes.form()" method="post" :options="{ preserveScroll: true }" @success="fetchRecoveryCodes" #default="{ processing }">
-        <UButton :disabled="processing" color="secondary" icon="i-ph-arrow-clockwise" type="submit"> Regenerate Codes </UButton>
-      </Form>
+      <TwoFactorRegenerateRecoveryCodesForm v-if="isRecoveryCodesVisible && recoveryCodesList.length" />
     </div>
     <div :class="['relative overflow-hidden transition-all duration-300', isRecoveryCodesVisible ? 'h-auto opacity-100' : 'h-0 opacity-0']">
-      <div v-if="errors?.length" class="mt-6">
+      <div v-if="errors.length" class="mt-6">
         <AlertError :errors="errors" />
       </div>
       <div v-else class="mt-3 space-y-3">
         <div ref="recoveryCodeSectionRef" class="grid gap-1 rounded-lg bg-muted p-4 font-mono text-sm">
-          <div v-if="!recoveryCodesList.length" class="space-y-2">
-            <div v-for="n in 8" :key="n" class="h-4 animate-pulse rounded bg-muted/20" />
+          <div v-if="recoveryCodesProcessing && !recoveryCodesList.length" class="space-y-2">
+            <div v-for="number in 8" :key="number" class="h-4 animate-pulse rounded bg-muted/20" />
           </div>
-          <div v-else v-for="(code, index) in recoveryCodesList" :key="index">
+          <div v-for="(code, index) in recoveryCodesList" v-else :key="index">
             {{ code }}
           </div>
         </div>
         <p class="text-xs text-muted select-none">
-          Each recovery code can be used once to access your account and will be removed after use. If you need more, click
+          Each recovery code can be used once to access your account and will be removed after use. If you need more, select
           <span class="font-bold">Regenerate Codes</span> above.
         </p>
       </div>

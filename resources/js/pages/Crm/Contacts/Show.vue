@@ -1,21 +1,30 @@
 <script lang="ts" setup>
-import { Link, router } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
+import ConfirmActionButton from "@/components/ConfirmActionButton.vue";
 import CrmDetailLayout from "@/components/Crm/CrmDetailLayout.vue";
+import CrmDetailMetadata from "@/components/Crm/CrmDetailMetadata.vue";
+import CrmRecordStatusBadge from "@/components/Crm/CrmRecordStatusBadge.vue";
+import { formatDate } from "@/lib/dateFormatters";
 import { archive, destroy, edit, index, restore } from "@/routes/crm/contacts";
 import { show as organizationShow } from "@/routes/crm/organizations";
-import type { Contact } from "@/types/crm";
+import type { Contact, CrmDetailMetadataItem } from "@/types/crm";
 
 const props = defineProps<{ contact: Contact; canManage: boolean }>();
-const confirmArchive = () => {
-  if (window.confirm("Archive this contact?")) router.post(archive(props.contact.id).url);
-};
-const confirmRestore = () => {
-  if (window.confirm("Restore this contact?")) router.delete(restore(props.contact.id).url);
-};
-const confirmDelete = () => {
-  if (window.confirm("Delete this contact? This removes it from active CRM results.")) router.delete(destroy(props.contact.id).url);
-};
-const formatDate = (value: string | null): string => (value ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value)) : "Not recorded");
+
+const contactInformation = computed<CrmDetailMetadataItem[]>(() => [
+  { label: "Email", value: props.contact.email, href: `mailto:${props.contact.email}` },
+  props.contact.phone ? { label: "Phone", value: props.contact.phone, href: `tel:${props.contact.phone}` } : { label: "Phone", value: "No phone recorded" },
+  props.contact.organization ? { label: "Organization", value: props.contact.organization.name, to: organizationShow(props.contact.organization.id).url } : { label: "Organization", value: "Independent contact" },
+]);
+const relationshipDetails = computed<CrmDetailMetadataItem[]>(() => [
+  { label: "Owner", value: props.contact.owner?.name ?? "Unassigned" },
+  { label: "Related leads", value: props.contact.leads_count ?? 0 },
+  { label: "Added", value: formatDate(props.contact.created_at) },
+]);
+
+const archiveContact = (): void => router.post(archive(props.contact.id).url);
+const restoreContact = (): void => router.delete(restore(props.contact.id).url);
+const deleteContact = (): void => router.delete(destroy(props.contact.id).url);
 </script>
 
 <template>
@@ -24,60 +33,26 @@ const formatDate = (value: string | null): string => (value ? new Intl.DateTimeF
       <div class="min-w-0" data-testid="contact-summary">
         <div class="flex flex-wrap items-start gap-3">
           <h1 class="break-words text-2xl font-semibold tracking-tight text-highlighted">{{ contact.name }}</h1>
-          <UBadge v-if="contact.archived_at" color="warning" data-testid="contact-archived-status" label="Archived" variant="subtle" />
+          <CrmRecordStatusBadge v-if="contact.archived_at" data-testid="contact-archived-status" status="archived" />
         </div>
       </div>
     </template>
 
     <section aria-labelledby="contact-information-heading">
       <h2 id="contact-information-heading" class="text-xl font-semibold text-highlighted">Contact information</h2>
-      <dl class="mt-4 divide-y divide-default border-y border-default">
-        <div class="grid gap-1 py-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-4">
-          <dt class="text-base text-muted sm:text-sm">Email</dt>
-          <dd>
-            <a :href="`mailto:${contact.email}`" class="break-all font-medium text-highlighted hover:underline">{{ contact.email }}</a>
-          </dd>
-        </div>
-        <div class="grid gap-1 py-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-4">
-          <dt class="text-base text-muted sm:text-sm">Phone</dt>
-          <dd>
-            <a v-if="contact.phone" :href="`tel:${contact.phone}`" class="font-medium text-highlighted hover:underline">{{ contact.phone }}</a
-            ><span v-else class="font-medium text-highlighted">No phone recorded</span>
-          </dd>
-        </div>
-        <div class="grid gap-1 py-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-4">
-          <dt class="text-base text-muted sm:text-sm">Organization</dt>
-          <dd>
-            <Link v-if="contact.organization" :href="organizationShow(contact.organization.id).url" class="font-medium text-highlighted hover:underline">{{ contact.organization.name }}</Link
-            ><span v-else class="font-medium text-highlighted">Independent contact</span>
-          </dd>
-        </div>
-      </dl>
+      <CrmDetailMetadata :items="contactInformation" class="mt-4" layout="rows" />
     </section>
 
     <template #aside>
       <div class="space-y-8">
         <section aria-labelledby="contact-relationship-details-heading">
           <h2 id="contact-relationship-details-heading" class="text-lg font-semibold text-highlighted">Relationship details</h2>
-          <dl class="mt-4 space-y-4">
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Owner</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ contact.owner?.name ?? "Unassigned" }}</dd>
-            </div>
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Related leads</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ contact.leads_count ?? 0 }}</dd>
-            </div>
-            <div>
-              <dt class="text-base text-muted sm:text-sm">Added</dt>
-              <dd class="mt-1 font-medium text-highlighted">{{ formatDate(contact.created_at) }}</dd>
-            </div>
-          </dl>
+          <CrmDetailMetadata :items="relationshipDetails" class="mt-4" />
         </section>
         <div v-if="canManage" class="flex flex-wrap gap-2 border-t border-default pt-6">
-          <UButton v-if="!contact.archived_at" color="error" label="Archive" variant="soft" @click="confirmArchive" />
-          <UButton v-else color="neutral" label="Restore" variant="outline" @click="confirmRestore" />
-          <UButton color="error" label="Delete" variant="ghost" @click="confirmDelete" />
+          <ConfirmActionButton v-if="!contact.archived_at" confirm-label="Archive contact" description="The contact will leave active CRM results and can be restored later." label="Archive" title="Archive this contact?" @confirm="archiveContact" />
+          <ConfirmActionButton v-else color="neutral" confirm-color="primary" confirm-label="Restore contact" description="The contact will return to active CRM results." label="Restore" title="Restore this contact?" variant="outline" @confirm="restoreContact" />
+          <ConfirmActionButton confirm-label="Delete contact" description="The contact will be removed from active CRM results. Related history remains available where required." label="Delete" title="Delete this contact?" variant="ghost" @confirm="deleteContact" />
         </div>
       </div>
     </template>

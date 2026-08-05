@@ -44,13 +44,15 @@ async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
   form.name = event.data.name;
   form.email = event.data.email;
   form.avatar = event.data.avatar;
-  form.submit(update());
-
-  toast.add({
-    title: "Success",
-    description: "Your settings have been updated.",
-    icon: "i-ph-check",
-    color: "success",
+  form.submit(update(), {
+    onSuccess: () => {
+      toast.add({
+        title: "Success",
+        description: "Your settings have been updated.",
+        icon: "i-ph-check",
+        color: "success",
+      });
+    },
   });
 }
 

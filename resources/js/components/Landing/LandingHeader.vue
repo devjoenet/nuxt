@@ -1,38 +1,11 @@
 <script setup lang="ts">
 import AppLogo from "@/components/AppLogo.vue";
+import { useLandingSectionNavigation } from "@/composables/useLandingSectionNavigation";
 import { dashboard } from "@/routes";
 import { Link } from "@inertiajs/vue3";
-import { useWindowScroll } from "@vueuse/core";
-import { computed } from "vue";
 import { Motion } from "motion-v";
 
-const navigation = [
-  { id: "reality", label: "Why custom", href: "#reality" },
-  { id: "services", label: "Services", href: "#services" },
-  { id: "process", label: "Process", href: "#process" },
-  { id: "operations", label: "Workflows", href: "#operations" },
-];
-
-const { y } = useWindowScroll();
-
-const hasGlassBackground = computed(() => y.value > 28);
-
-const activeSection = computed(() => {
-  if (typeof document === "undefined") {
-    return "";
-  }
-
-  const activationLine = y.value + 160;
-  const activeItem = navigation
-    .map((item) => ({
-      id: item.id,
-      top: document.getElementById(item.id)?.offsetTop ?? Number.POSITIVE_INFINITY,
-    }))
-    .filter((section) => section.top <= activationLine)
-    .at(-1);
-
-  return activeItem?.id ?? "";
-});
+const { navigation, activeSection, hasGlassBackground } = useLandingSectionNavigation();
 </script>
 
 <template>

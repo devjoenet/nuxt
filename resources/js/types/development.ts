@@ -3,6 +3,12 @@ export type DevelopmentOption = {
   value: string;
 };
 
+export interface DevelopmentProgressAction {
+  color: "neutral" | "primary" | "warning";
+  label: string;
+  status: "in_progress" | "blocked";
+}
+
 export interface DevelopmentTaskNote {
   id: string;
   body: string;

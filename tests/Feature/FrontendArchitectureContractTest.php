@@ -223,6 +223,107 @@ test('authenticated pages compose the product workspace shell', function (): voi
         ->and($rawDashboardPanels)->toBe($workspaceShellOptOuts);
 });
 
+test('authenticated editors share form composition without replacing typed fields', function (): void {
+    foreach (['WorkspaceFormPage.vue', 'FormSectionHeading.vue', 'FormActions.vue'] as $component) {
+        expect(File::exists(resource_path("js/components/{$component}")))
+            ->toBeTrue("Missing form composition component: {$component}");
+    }
+
+    foreach ([
+        'pages/Crm/Contacts/Form.vue',
+        'pages/Crm/Leads/Form.vue',
+        'pages/Crm/Organizations/Form.vue',
+        'pages/Development/Requests/Create.vue',
+    ] as $formPage) {
+        expect(File::get(resource_path("js/{$formPage}")))
+            ->toContain('<WorkspaceFormPage')
+            ->not->toContain('<Form ');
+    }
+
+    $workspaceFormPage = File::get(resource_path('js/components/WorkspaceFormPage.vue'));
+    $profilePage = File::get(resource_path('js/pages/Settings/Profile.vue'));
+
+    expect($workspaceFormPage)
+        ->toContain('disable-while-processing')
+        ->toContain('data-testid="form-error-summary"')
+        ->toContain('<FormSectionHeading')
+        ->toContain('<FormActions')
+        ->and(preg_match_all('/<UForm(?:\s|>)/', $profilePage))
+        ->toBe(1)
+        ->and($profilePage)
+        ->toContain('onSuccess: () =>');
+});
+
+test('crm details share typed lifecycle presentation and accessible confirmation', function (): void {
+    $defaultLayout = File::get(resource_path('js/layouts/Default.vue'));
+    $flashToasts = File::get(resource_path('js/composables/useFlashToasts.ts'));
+    $confirmation = File::get(resource_path('js/components/ConfirmActionButton.vue'));
+
+    expect($defaultLayout)
+        ->toContain('useFlashToasts();')
+        ->and($flashToasts)
+        ->toContain('lastToast')
+        ->toContain('watch(() => page.props.flash.success')
+        ->and($confirmation)
+        ->toContain('<UModal')
+        ->toContain('<UButton color="neutral" label="Cancel"');
+
+    foreach (['Contacts', 'Organizations', 'Leads'] as $domain) {
+        expect(File::get(resource_path("js/pages/Crm/{$domain}/Show.vue")))
+            ->toContain('<CrmDetailLayout')
+            ->not->toContain('window.confirm');
+    }
+
+    expect(File::get(resource_path('js/sections/Crm/Leads/LeadOverviewSection.vue')))
+        ->toContain('<CrmDetailMetadata')
+        ->toContain('<ConfirmActionButton')
+        ->not->toContain('window.confirm');
+});
+
+test('complex workflows keep state inside focused page scoped boundaries', function (): void {
+    $twoFactorState = File::get(resource_path('js/composables/useTwoFactorAuth.ts'));
+    $securityPage = File::get(resource_path('js/pages/Settings/Security.vue'));
+    $landingPage = File::get(resource_path('js/pages/Welcome.vue'));
+    $landingHeader = File::get(resource_path('js/components/Landing/LandingHeader.vue'));
+    $landingContact = File::get(resource_path('js/components/Landing/LandingContactForm.vue'));
+
+    expect($twoFactorState)
+        ->toContain('provideTwoFactorAuth')
+        ->toContain('inject(twoFactorAuthKey)')
+        ->toContain('useHttp<Record<string, never>')
+        ->not->toContain('fetch(')
+        ->and($securityPage)
+        ->toContain('provideTwoFactorAuth();');
+
+    foreach ([
+        'TwoFactorSetupStep.vue',
+        'TwoFactorConfirmationStep.vue',
+        'TwoFactorRecoveryCodes.vue',
+        'TwoFactorRegenerateRecoveryCodesForm.vue',
+    ] as $twoFactorStep) {
+        expect(File::exists(resource_path("js/components/{$twoFactorStep}")))
+            ->toBeTrue("Missing two-factor step: {$twoFactorStep}");
+    }
+
+    expect($landingPage)
+        ->toContain('useLandingHeroAssets()')
+        ->not->toContain('HeroAssetSet')
+        ->and($landingHeader)
+        ->toContain('useLandingSectionNavigation()')
+        ->and($landingContact)
+        ->toContain('useLandingAttribution()');
+
+    foreach ([
+        'DevelopmentTaskRoadmapSummaryFields.vue',
+        'DevelopmentTaskReviewActions.vue',
+        'DevelopmentTaskProgressAction.vue',
+        'DevelopmentTaskTestingRequestForm.vue',
+    ] as $taskSection) {
+        expect(File::exists(resource_path("js/sections/Development/Tasks/{$taskSection}")))
+            ->toBeTrue("Missing Development task section: {$taskSection}");
+    }
+});
+
 test('the authenticated workspace uses one client and server layout boundary', function (): void {
     $appEntry = File::get(resource_path('js/app.ts'));
     $serverEntry = File::get(resource_path('js/ssr.ts'));

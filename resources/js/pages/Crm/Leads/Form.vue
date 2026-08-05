@@ -1,29 +1,33 @@
 <script lang="ts" setup>
-import { Form } from "@inertiajs/vue3";
 import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
 import FormInput from "@/components/FormInput.vue";
 import FormMultiSelect from "@/components/FormMultiSelect.vue";
 import FormSelect from "@/components/FormSelect.vue";
 import FormTextarea from "@/components/FormTextarea.vue";
 import { create as createContact } from "@/routes/crm/contacts";
-import { create as createOrganization } from "@/routes/crm/organizations";
 import { index, show, store, update } from "@/routes/crm/leads";
+import { create as createOrganization } from "@/routes/crm/organizations";
 import type { Lead, Option, Owner } from "@/types/crm";
 
 const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: Owner[]; canAssign: boolean }>();
 const action = computed(() => (props.lead ? update(props.lead.id) : store()));
+const cancelTo = computed(() => (props.lead ? show(props.lead.id).url : index().url));
 const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
 const contactId = ref<string | null>(props.lead?.contact?.id ?? null);
 const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
 </script>
 
 <template>
-  <WorkspacePage id="crm-lead-form" :title="lead ? 'Edit lead' : 'New lead'" content-width="medium">
-    <Form #default="{ errors, processing }" :action="action" class="grid w-full gap-6">
-      <div>
-        <h1 class="text-balance text-xl font-semibold text-highlighted">Contact and opportunity</h1>
-        <p class="text-pretty text-base text-muted sm:text-sm">Keep the useful facts here. Archaeological records can wait.</p>
-      </div>
+  <WorkspaceFormPage
+    id="crm-lead-form"
+    :action="action"
+    :cancel-to="cancelTo"
+    :submit-label="lead ? 'Save changes' : 'Create lead'"
+    :title="lead ? 'Edit lead' : 'New lead'"
+    section-description="Keep the useful facts here. Archaeological records can wait."
+    section-title="Contact and opportunity"
+  >
+    <template #default="{ errors }">
       <div class="grid gap-4 sm:grid-cols-2">
         <AsyncCrmSelect
           id="lead-contact"
@@ -61,7 +65,6 @@ const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
         <UButton :to="createOrganization().url" color="neutral" icon="i-ph-buildings" label="Create a new organization" variant="link" />
       </div>
       <FormTextarea :default-value="lead?.project_details" :error="errors.project_details" :rows="6" label="Project details" name="project_details" required />
-      <div class="flex justify-end gap-3"><UButton :to="lead ? show(lead.id).url : index().url" color="neutral" label="Cancel" variant="ghost" /><UButton :label="lead ? 'Save changes' : 'Create lead'" :loading="processing" type="submit" /></div>
-    </Form>
-  </WorkspacePage>
+    </template>
+  </WorkspaceFormPage>
 </template>

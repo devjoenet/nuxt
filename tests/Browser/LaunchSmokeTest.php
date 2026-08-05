@@ -78,6 +78,21 @@ test('landing anchors and logo naming stay connected to real sections', function
         ->assertNoConsoleLogs();
 });
 
+test('landing navigation and attribution stay page scoped', function (): void {
+    $page = visit('/?utm_source=newsletter&utm_medium=email&utm_campaign=operations#contact')
+        ->assertAttribute('input[name="landing_page"]', 'value', '/')
+        ->assertAttribute('input[name="utm_source"]', 'value', 'newsletter')
+        ->assertAttribute('input[name="utm_medium"]', 'value', 'email')
+        ->assertAttribute('input[name="utm_campaign"]', 'value', 'operations');
+
+    $page->script('() => document.getElementById("services")?.scrollIntoView()');
+
+    $page->wait(0.3)
+        ->assertAttribute('header nav a[href="#services"]', 'aria-current', 'true')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
 test('landing hero serves responsive assets in both color modes without overflow', function (): void {
     visit('/')
         ->inLightMode()

@@ -4,6 +4,14 @@ export type Option = { label: string; value: string };
 export type CrmOption = Option;
 export type Owner = { id: number; name: string };
 
+export interface CrmDetailMetadataItem {
+  label: string;
+  value: string | number;
+  href?: string;
+  to?: string;
+  external?: boolean;
+}
+
 export interface Lead {
   id: string;
   status: string;
