@@ -2,6 +2,7 @@
 import { Form } from "@inertiajs/vue3";
 import FormSelect from "@/components/FormSelect.vue";
 import FormTextarea from "@/components/FormTextarea.vue";
+import { formatDateTime } from "@/lib/dateFormatters";
 import { store as storeNote } from "@/routes/development/tasks/notes";
 import DevelopmentTaskSectionCard from "@/sections/Development/Tasks/DevelopmentTaskSectionCard.vue";
 import type { DevelopmentTask } from "@/types/development";
@@ -15,7 +16,6 @@ const noteAudiences = [
   { label: "Participants", value: "participants" },
   { label: "Development team only", value: "development_team" },
 ];
-const formatDateTime = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 </script>
 
 <template>

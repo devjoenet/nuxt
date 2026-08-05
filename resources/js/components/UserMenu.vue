@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getInitials } from "@/lib/nameFormatters";
 import { logout } from "@/routes";
 import { edit as profileEdit } from "@/routes/profile";
 import { router } from "@inertiajs/vue3";
@@ -11,7 +12,6 @@ defineProps<{
 
 const colorMode = useColorMode();
 const auth = useAuth();
-const { getInitials } = useInitials();
 
 const user = computed(() => ({
   name: auth.value.user.name,

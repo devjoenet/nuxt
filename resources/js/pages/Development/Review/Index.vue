@@ -2,13 +2,13 @@
 import { router } from "@inertiajs/vue3";
 import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import IndexPagination from "@/components/IndexPagination.vue";
+import { formatDate } from "@/lib/dateFormatters";
 import { index } from "@/routes/development/review";
 import { show } from "@/routes/development/tasks";
 import type { PaginatedDevelopmentTasks } from "@/types/development";
 
 defineProps<{ requests: PaginatedDevelopmentTasks }>();
 
-const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
 const visitPage = (page: number): void => {
   router.get(index({ query: { page } }).url, {}, { preserveScroll: true, preserveState: true });
 };

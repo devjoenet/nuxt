@@ -68,6 +68,15 @@ test('users can sign in through the browser and reach the workspace', function (
         ->assertNoJavaScriptErrors();
 });
 
+test('visitors can reach the active password reset request page', function (): void {
+    visit('/forgot-password')
+        ->assertTitle('Forgot password - Southeast Code')
+        ->assertSee('Enter your email to receive a password reset link')
+        ->assertPresent('input[name="email"]')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
 test('landing anchors and logo naming stay connected to real sections', function (): void {
     visit('/')
         ->assertAttribute('a[aria-label="Southeast Code home"]', 'href', '#hero')

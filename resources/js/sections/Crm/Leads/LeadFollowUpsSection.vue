@@ -2,6 +2,7 @@
 import { Form, router } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
+import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { complete as completeTask, store as storeTask } from "@/routes/crm/leads/tasks";
 import type { Lead } from "@/types/crm";
@@ -12,7 +13,6 @@ const props = defineProps<{
   class?: string;
 }>();
 
-const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 const priorities = [
   { label: "Low", value: "low" },
   { label: "Normal", value: "normal" },
@@ -35,7 +35,7 @@ const priorities = [
       <li v-for="task in lead.tasks" :key="task.id" class="flex items-start justify-between gap-3 rounded-lg bg-elevated p-3">
         <div>
           <p class="font-medium text-highlighted">{{ task.title }}</p>
-          <p class="text-base text-muted sm:text-sm">Due {{ formatDate(task.due_at) }}</p>
+          <p class="text-base text-muted sm:text-sm">Due {{ formatDateTime(task.due_at) }}</p>
         </div>
         <UButton v-if="canManage && task.status === 'open'" aria-label="Complete follow-up" color="neutral" icon="i-ph-check" variant="ghost" @click="router.post(completeTask([lead.id, task.id]).url)" />
       </li>

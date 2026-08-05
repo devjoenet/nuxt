@@ -20,7 +20,7 @@ createInertiaApp({
       .use(ui)
       .mount(el);
   },
-  dev: import.meta.env.VITE_APP_ENV !== 'production',
+  dev: import.meta.env.VITE_APP_ENV !== "production",
   progress: {
     color: "#31dbcb",
   },

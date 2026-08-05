@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { formatDate } from "@/lib/dateFormatters";
 import { create as requestCreate, index as requestsIndex } from "@/routes/development/requests";
 import { index as reviewIndex } from "@/routes/development/review";
 import { show } from "@/routes/development/tasks";
@@ -11,8 +12,6 @@ defineProps<{
   canCreate: boolean;
   canReview: boolean;
 }>();
-
-const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(value));
 </script>
 
 <template>

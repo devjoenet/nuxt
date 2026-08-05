@@ -22,6 +22,7 @@ test('the frontend architecture defines the complete composition boundary', func
         ->toContain('pass-through')
         ->toContain('wrappers that mirror Nuxt UI props and slots')
         ->toContain('## State ownership and event boundaries')
+        ->toContain('Route pages use `<script setup>` so component state remains instance-scoped')
         ->toContain('## Props, events, slots, and styling')
         ->toContain('## Naming and typing')
         ->toContain('Nested Vue feature directories')
@@ -32,6 +33,58 @@ test('the frontend architecture defines the complete composition boundary', func
         ->toContain('New dependencies and new top-level folders under `resources/js` require separate approval.')
         ->and($readme)
         ->toContain('[frontend UI architecture](docs/development/frontend-ui-architecture.md)');
+});
+
+test('retired frontend files and duplicated pure helpers cannot return', function (): void {
+    foreach ([
+        'resources/js/layouts/AuthBasic.vue',
+        'resources/js/layouts/Auth/AuthSplitLayout.vue',
+        'resources/js/pages/Auth/ForgotPasswordNuxt.vue',
+        'resources/js/composables/getErrors.ts',
+        'resources/js/composables/useInitials.ts',
+    ] as $retiredPath) {
+        expect(File::exists(base_path($retiredPath)))->toBeFalse("Retired frontend file returned: {$retiredPath}");
+    }
+
+    $vueFilesWithInlineDateFormatters = collect(File::allFiles(resource_path('js')))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->filter(fn (SplFileInfo $file): bool => Str::contains(File::get($file->getPathname()), 'new Intl.DateTimeFormat'))
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->values()
+        ->all();
+
+    expect($vueFilesWithInlineDateFormatters)->toBe([])
+        ->and(File::exists(resource_path('js/lib/dateFormatters.ts')))->toBeTrue()
+        ->and(File::exists(resource_path('js/lib/nameFormatters.ts')))->toBeTrue()
+        ->and(File::exists(resource_path('js/lib/formErrors.ts')))->toBeTrue()
+        ->and(File::exists(resource_path('js/lib/webUrl.ts')))->toBeTrue();
+});
+
+test('route pages keep mutable state instance scoped', function (): void {
+    $pageFilesWithModuleScripts = collect(File::allFiles(resource_path('js/pages')))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->filter(fn (SplFileInfo $file): bool => preg_match(
+            '/<script(?=[\s>])(?![^>]*\bsetup\b)[^>]*>/',
+            File::get($file->getPathname()),
+        ) === 1)
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->values()
+        ->all();
+
+    expect($pageFilesWithModuleScripts)->toBe([]);
+});
+
+test('eslint enforces frontend dependency direction without banning direct Nuxt UI composition', function (): void {
+    $eslintConfig = File::get(base_path('eslint.config.ts'));
+
+    expect($eslintConfig)
+        ->toContain('"no-restricted-imports"')
+        ->toContain('Product primitives and composables cannot depend on workflow or route rendering layers.')
+        ->toContain('Pure utilities cannot depend on frontend rendering layers.')
+        ->toContain('Pure utilities cannot depend on Vue lifecycle, VueUse, or Inertia.')
+        ->toContain('Domain sections cannot depend on layouts or route pages.')
+        ->toContain('Workflow shells cannot depend on route pages or domain sections.')
+        ->not->toContain('Direct Nuxt UI imports are forbidden');
 });
 
 test('the frontend source uses only approved top-level homes', function (): void {
@@ -182,6 +235,8 @@ test('index workflows share navigation and framing without hiding domain columns
             ->not->toContain('setTimeout')
             ->and($columns)
             ->toContain('TableColumn<')
+            ->toContain('@nuxt/ui/components/Button.vue')
+            ->not->toContain('resolveComponent')
             ->toContain('id: "actions"');
     }
 

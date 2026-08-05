@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Form } from "@inertiajs/vue3";
 import FormTextarea from "@/components/FormTextarea.vue";
+import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { store as storeNote } from "@/routes/crm/leads/notes";
 import type { Lead } from "@/types/crm";
@@ -10,8 +11,6 @@ const props = defineProps<{
   canManage: boolean;
   class?: string;
 }>();
-
-const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 </script>
 
 <template>
@@ -24,7 +23,7 @@ const formatDate = (value: string): string => new Intl.DateTimeFormat("en-US", {
     <ul class="grid gap-4" role="list">
       <li v-for="note in lead.notes" :key="note.id" class="border-t border-default pt-4">
         <p class="whitespace-pre-wrap text-pretty text-base text-highlighted sm:text-sm">{{ note.body }}</p>
-        <p class="mt-2 text-base text-muted sm:text-sm">{{ note.author }} · {{ formatDate(note.created_at) }}</p>
+        <p class="mt-2 text-base text-muted sm:text-sm">{{ note.author }} · {{ formatDateTime(note.created_at) }}</p>
       </li>
       <li v-if="!lead.notes?.length" class="text-base text-muted sm:text-sm">No notes yet.</li>
     </ul>

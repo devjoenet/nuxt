@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Form } from "@inertiajs/vue3";
 import FormInput from "@/components/FormInput.vue";
+import { getNestedFieldError } from "@/lib/formErrors";
 import { store } from "@/routes/admin/roles";
 import RolePermissionGroupList from "@/sections/Admin/Roles/RolePermissionGroupList.vue";
 import type { AdminPermissionGroup } from "@/types";
@@ -11,10 +12,6 @@ defineProps<{
 }>();
 
 const open = ref(false);
-
-function permissionError(errors: Record<string, string>): string | undefined {
-  return errors.permission_ids ?? Object.entries(errors).find(([key]) => key.startsWith("permission_ids."))?.[1];
-}
 </script>
 
 <template>
@@ -35,7 +32,7 @@ function permissionError(errors: Record<string, string>): string | undefined {
       <Form #default="{ errors, processing, recentlySuccessful }" class="grid gap-6" reset-on-success v-bind="store.form()">
         <FormInput :error="errors.name" label="Role name" name="name" required />
 
-        <UFormField :error="permissionError(errors)" :ui="{ description: 'text-base sm:text-sm', label: 'text-base sm:text-sm' }" description="Select access by application area. You can change it later." label="Permission catalog" name="permission_ids">
+        <UFormField :error="getNestedFieldError(errors, 'permission_ids')" :ui="{ description: 'text-base sm:text-sm', label: 'text-base sm:text-sm' }" description="Select access by application area. You can change it later." label="Permission catalog" name="permission_ids">
           <RolePermissionGroupList :groups="permissionGroups" id-prefix="create-role-permission" test-id="create-role-permission-list" />
         </UFormField>
 
