@@ -70,7 +70,7 @@ const isWebReference = (value: string | null): boolean => value?.startsWith("htt
           <h3 class="font-semibold text-highlighted">Record this round</h3>
           <p class="mt-1 text-sm leading-6 text-muted">Feedback is optional when accepting and required when requesting changes.</p>
         </div>
-        <FormTextarea :error="errors.feedback" label="Feedback" name="feedback" placeholder="What passed, or what needs another pass?" />
+        <FormTextarea :error="errors.feedback" label="Feedback" name="feedback" placeholder="" />
         <UAlert v-if="errors.development_task_id || errors.status" :description="errors.development_task_id || errors.status" color="error" variant="subtle" />
         <div class="flex flex-wrap justify-end gap-3">
           <UButton :disabled="processing" color="warning" label="Request changes" name="status" type="submit" value="changes_requested" variant="soft" />
