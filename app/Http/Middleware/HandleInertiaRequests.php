@@ -29,6 +29,11 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => mb_trim((string) $message), 'author' => mb_trim((string) $author)],
+            'appearance' => match ($request->cookie('appearance')) {
+                'dark' => 'dark',
+                'light' => 'light',
+                default => 'system',
+            },
             'auth' => [
                 'user' => $request->user() ? new UserResource($request->user())->resolve() : null,
             ],

@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { Motion } from "motion-v";
 import OperationsShowcase from "@/components/Landing/OperationsShowcase.vue";
+import type { HeroAssetSet } from "@/composables/useLandingHeroAssets";
 import { cn } from "@/lib/utils";
+import type { Appearance } from "@/types";
 
 const props = defineProps<{
-  heroImageSrc: string;
+  appearance: Appearance;
+  darkHero: HeroAssetSet;
+  lightHero: HeroAssetSet;
   class?: string;
 }>();
 </script>
@@ -30,7 +34,7 @@ const props = defineProps<{
         </a>
       </Motion>
 
-      <OperationsShowcase :hero-image-src="heroImageSrc" />
+      <OperationsShowcase :appearance="appearance" :dark-hero="darkHero" :light-hero="lightHero" />
     </div>
   </section>
 </template>

@@ -12,12 +12,13 @@ import LandingContactSection from "@/sections/Landing/LandingContactSection.vue"
 import LandingOperationsSection from "@/sections/Landing/LandingOperationsSection.vue";
 import LandingProcessSection from "@/sections/Landing/LandingProcessSection.vue";
 import { footerColumns, processSteps, realityCards, services, transformationCards } from "@/sections/Landing/landingContent";
+import type { Appearance } from "@/types";
 import type { Option } from "@/types/crm";
 
-const props = defineProps<{ canonicalUrl: string; serviceInterestOptions: Option[] }>();
+const props = defineProps<{ appearance: Appearance; canonicalUrl: string; serviceInterestOptions: Option[] }>();
 const socialImage = computed(() => new URL(socialImageAsset, props.canonicalUrl).href);
 
-const { hero, heroImage, heroImageAvifSrcset, heroImageWebpSrcset } = useLandingHeroAssets();
+const { darkHero, lightHero } = useLandingHeroAssets();
 </script>
 
 <template>
@@ -39,7 +40,7 @@ const { hero, heroImage, heroImageAvifSrcset, heroImageWebpSrcset } = useLanding
     <div class="min-h-screen overflow-hidden bg-muted-50 text-muted-800 selection:bg-primary-500 selection:text-primary-950 dark:bg-muted-950 dark:text-neutral-100">
       <LandingHeader />
       <main>
-        <LandingHero :hero-image-avif-srcset="heroImageAvifSrcset" :hero-image-height="hero.fallback.height" :hero-image-src="heroImage" :hero-image-width="hero.fallback.width" :hero-image-webp-srcset="heroImageWebpSrcset" />
+        <LandingHero :appearance="appearance" :dark-hero="darkHero" :light-hero="lightHero" />
         <LandingCardGridSection centered class="border-y border-accent-500/15 bg-muted-100/90 dark:bg-muted-950/95" id="reality" :items="realityCards" kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
         <LandingCardGridSection
           class="bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.12),transparent_34rem)] dark:bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.14),transparent_34rem)]"
@@ -53,7 +54,7 @@ const { hero, heroImage, heroImageAvifSrcset, heroImageWebpSrcset } = useLanding
         />
         <LandingCardGridSection grid-class="lg:grid-cols-3" id="services" :items="services" kicker="Our services" title="Software shaped around the operation." tone="primary" />
         <LandingProcessSection :steps="processSteps" />
-        <LandingOperationsSection :hero-image-src="heroImage" />
+        <LandingOperationsSection :appearance="appearance" :dark-hero="darkHero" :light-hero="lightHero" />
         <LandingContactSection :service-interest-options="serviceInterestOptions" />
       </main>
       <LandingFooter :columns="footerColumns" />

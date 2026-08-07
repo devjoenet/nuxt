@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function (): void {
@@ -12,10 +13,11 @@ beforeEach(function (): void {
     config([
         'inertia.ssr.enabled' => true,
         'inertia.ssr.ensure_bundle_exists' => false,
+        'inertia.ssr.hot_url' => 'http://127.0.0.1:13714',
     ]);
 
     Http::fake([
-        'http://127.0.0.1:13714/render' => Http::response([
+        'http://127.0.0.1:13714/*' => Http::response([
             'head' => ['<meta name="ssr-marker" content="public">'],
             'body' => '<div id="app" data-server-rendered="true">Server-rendered page</div>',
         ]),
@@ -33,6 +35,16 @@ test('public marketing routes use server-side rendering', function (string $rout
     'home' => 'home',
     'privacy' => 'privacy',
 ]);
+
+test('the appearance preference is included in server-rendered page props', function (): void {
+    $this->withUnencryptedCookie('appearance', 'dark')
+        ->get(route('home'))
+        ->assertOk();
+
+    Http::assertSent(function (Request $request): bool {
+        return data_get($request->data(), 'props.appearance') === 'dark';
+    });
+});
 
 test('authentication and workspace routes skip server-side rendering', function (): void {
     $this->get(route('login'))

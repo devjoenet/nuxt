@@ -1,5 +1,3 @@
-import { useColorMode } from "@vueuse/core";
-import { computed } from "vue";
 import darkHero640Avif from "../../img/landing/hero/savannah-river-dark-640.avif";
 import darkHero640Webp from "../../img/landing/hero/savannah-river-dark-640.webp";
 import darkHero960Avif from "../../img/landing/hero/savannah-river-dark-960.avif";
@@ -13,13 +11,13 @@ import lightHero960Webp from "../../img/landing/hero/savannah-river-light-960.we
 import lightHero1264Avif from "../../img/landing/hero/savannah-river-light-1264.avif";
 import lightHero1264Webp from "../../img/landing/hero/savannah-river-light-1264.webp";
 
-interface HeroAsset {
+export interface HeroAsset {
   src: string;
   width: number;
   height: number;
 }
 
-interface HeroAssetSet {
+export interface HeroAssetSet {
   avif: HeroAsset[];
   webp: HeroAsset[];
   fallback: HeroAsset;
@@ -53,16 +51,9 @@ const darkHero: HeroAssetSet = {
   fallback: { src: darkHero1536Webp, width: 1536, height: 1024 },
 };
 
-const srcset = (assets: HeroAsset[]): string => assets.map((asset) => `${asset.src} ${asset.width}w`).join(", ");
-
 export function useLandingHeroAssets() {
-  const colorMode = useColorMode();
-  const hero = computed(() => (colorMode.state.value === "dark" ? darkHero : lightHero));
-
   return {
-    hero,
-    heroImage: computed(() => hero.value.fallback.src),
-    heroImageAvifSrcset: computed(() => srcset(hero.value.avif)),
-    heroImageWebpSrcset: computed(() => srcset(hero.value.webp)),
+    darkHero,
+    lightHero,
   };
 }

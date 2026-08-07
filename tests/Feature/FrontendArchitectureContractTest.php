@@ -337,6 +337,7 @@ test('crm details share typed lifecycle presentation and accessible confirmation
 
 test('complex workflows keep state inside focused page scoped boundaries', function (): void {
     $twoFactorState = File::get(resource_path('js/composables/useTwoFactorAuth.ts'));
+    $landingHeroAssets = File::get(resource_path('js/composables/useLandingHeroAssets.ts'));
     $securityPage = File::get(resource_path('js/pages/Settings/Security.vue'));
     $landingPage = File::get(resource_path('js/pages/Welcome.vue'));
     $landingHeader = File::get(resource_path('js/components/Landing/LandingHeader.vue'));
@@ -363,6 +364,9 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
     expect($landingPage)
         ->toContain('useLandingHeroAssets()')
         ->not->toContain('HeroAssetSet')
+        ->and($landingHeroAssets)
+        ->not->toContain('useColorMode')
+        ->not->toContain('useMounted')
         ->and($landingHeader)
         ->toContain('useLandingSectionNavigation()')
         ->and($landingContact)
@@ -377,6 +381,28 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
         expect(File::exists(resource_path("js/sections/Development/Tasks/{$taskSection}")))
             ->toBeTrue("Missing Development task section: {$taskSection}");
     }
+});
+
+test('landing appearance stays stable across server rendering and first paint', function (): void {
+    $blade = File::get(resource_path('views/app.blade.php'));
+    $bootstrap = File::get(public_path('theme-bootstrap.js'));
+    $picture = File::get(resource_path('js/components/Landing/LandingHeroPicture.vue'));
+    $userMenu = File::get(resource_path('js/components/UserMenu.vue'));
+
+    expect($blade)
+        ->toContain('data-appearance=')
+        ->toContain('<script src="/theme-bootstrap.js"></script>')
+        ->and($bootstrap)
+        ->toContain('vueuse-color-scheme')
+        ->toContain('prefers-color-scheme: dark')
+        ->toContain('classList.toggle("dark", isDark)')
+        ->and($picture)
+        ->toContain('(prefers-color-scheme: dark)')
+        ->toContain('(prefers-color-scheme: light)')
+        ->toContain('"not all"')
+        ->and($userMenu)
+        ->toContain('document.cookie = `appearance=${appearance}')
+        ->toContain('preference === "auto" ? "system" : preference');
 });
 
 test('the authenticated workspace uses one client and server layout boundary', function (): void {

@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import MobileCheckInPreview from "@/components/Landing/Previews/MobileCheckInPreview.vue";
 import PermissionsPreview from "@/components/Landing/Previews/PermissionsPreview.vue";
+import LandingHeroPicture from "@/components/Landing/LandingHeroPicture.vue";
+import type { HeroAssetSet } from "@/composables/useLandingHeroAssets";
+import type { Appearance } from "@/types";
 import { Motion } from "motion-v";
 
 defineProps<{
-  heroImageSrc: string;
+  appearance: Appearance;
+  darkHero: HeroAssetSet;
+  lightHero: HeroAssetSet;
 }>();
 </script>
 
@@ -15,7 +20,15 @@ defineProps<{
     </Motion>
 
     <Motion as="div" :initial="{ opacity: 0, x: 24, rotate: 2 }" :transition="{ duration: 0.8, delay: 0.12, ease: 'easeOut' }" :viewport="{ once: true, amount: 0.25 }" :while-in-view="{ opacity: 1, x: 0, rotate: 0 }" class="relative mx-auto w-full max-w-sm">
-      <img :src="heroImageSrc" alt="" class="absolute inset-y-10 right-0 hidden h-[72%] w-56 rounded-lg border border-secondary-500/20 object-cover opacity-55 xl:block" />
+      <LandingHeroPicture
+        :appearance="appearance"
+        :dark-hero="darkHero"
+        image-class="size-full rounded-lg border border-secondary-500/20 object-cover"
+        :light-hero="lightHero"
+        loading="lazy"
+        picture-class="absolute inset-y-10 right-0 hidden h-[72%] w-56 opacity-55 xl:block"
+        sizes="14rem"
+      />
       <MobileCheckInPreview />
     </Motion>
   </div>

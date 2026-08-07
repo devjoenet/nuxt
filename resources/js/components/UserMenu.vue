@@ -13,6 +13,8 @@ defineProps<{
 const colorMode = useColorMode();
 const auth = useAuth();
 
+type ColorModePreference = "auto" | "light" | "dark";
+
 const user = computed(() => ({
   name: auth.value.user.name,
   avatar: {
@@ -53,7 +55,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
           onSelect(e: Event) {
             e.preventDefault();
 
-            colorMode.store.value = "auto";
+            setColorMode("auto");
           },
         },
         {
@@ -64,7 +66,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
           onSelect(e: Event) {
             e.preventDefault();
 
-            colorMode.store.value = "light";
+            setColorMode("light");
           },
         },
         {
@@ -74,7 +76,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
           checked: colorMode.store.value === "dark",
           onUpdateChecked(checked: boolean) {
             if (checked) {
-              colorMode.store.value = "dark";
+              setColorMode("dark");
             }
           },
           onSelect(e: Event) {
@@ -96,6 +98,14 @@ const items = computed<DropdownMenuItem[][]>(() => [
 
 function handleLogout() {
   router.flushAll();
+}
+
+function setColorMode(preference: ColorModePreference): void {
+  const appearance = preference === "auto" ? "system" : preference;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+
+  document.cookie = `appearance=${appearance}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
+  colorMode.store.value = preference;
 }
 </script>
 

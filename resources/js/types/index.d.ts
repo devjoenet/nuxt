@@ -4,9 +4,12 @@ export interface Auth {
   user: User;
 }
 
+export type Appearance = "system" | "light" | "dark";
+
 export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
   name: string;
   quote: { message: string; author: string };
+  appearance: Appearance;
   auth: Auth;
   flash: { intakeSuccess: boolean; success?: string };
   sidebarOpen: boolean;

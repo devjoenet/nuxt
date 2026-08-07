@@ -39,6 +39,7 @@ declare module 'vue' {
     LandingFooter: typeof import('./resources/js/components/Landing/LandingFooter.vue')['default']
     LandingHeader: typeof import('./resources/js/components/Landing/LandingHeader.vue')['default']
     LandingHero: typeof import('./resources/js/components/Landing/LandingHero.vue')['default']
+    LandingHeroPicture: typeof import('./resources/js/components/Landing/LandingHeroPicture.vue')['default']
     LeadStatusBadge: typeof import('./resources/js/components/Crm/LeadStatusBadge.vue')['default']
     MetricCard: typeof import('./resources/js/components/Landing/MetricCard.vue')['default']
     MobileCheckInPreview: typeof import('./resources/js/components/Landing/Previews/MobileCheckInPreview.vue')['default']

@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import DashboardPreview from "@/components/Landing/Previews/DashboardPreview.vue";
+import LandingHeroPicture from "@/components/Landing/LandingHeroPicture.vue";
+import type { HeroAssetSet } from "@/composables/useLandingHeroAssets";
+import type { Appearance } from "@/types";
 import { Motion } from "motion-v";
 
 defineProps<{
-  heroImageSrc: string;
-  heroImageAvifSrcset: string;
-  heroImageWebpSrcset: string;
-  heroImageWidth: number;
-  heroImageHeight: number;
+  appearance: Appearance;
+  darkHero: HeroAssetSet;
+  lightHero: HeroAssetSet;
 }>();
 </script>
 
 <template>
   <section id="hero" class="relative min-h-screen scroll-mt-28 overflow-hidden px-5 pt-32 pb-16 sm:px-8 lg:pt-36">
-    <picture class="absolute inset-0 block size-full">
-      <source :sizes="'100vw'" :srcset="heroImageAvifSrcset" type="image/avif" />
-      <source :sizes="'100vw'" :srcset="heroImageWebpSrcset" type="image/webp" />
-      <img :height="heroImageHeight" :src="heroImageSrc" :width="heroImageWidth" alt="" class="absolute inset-0 size-full object-cover object-center" decoding="async" fetchpriority="high" sizes="100vw" />
-    </picture>
+    <LandingHeroPicture :appearance="appearance" :dark-hero="darkHero" fetch-priority="high" image-class="absolute inset-0 size-full object-cover object-center" :light-hero="lightHero" picture-class="absolute inset-0 block size-full" />
     <div
       aria-hidden="true"
       class="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,11,16,0.86)_0%,rgba(1,11,16,0.54)_38%,rgba(1,11,16,0.14)_72%,rgba(1,11,16,0.3)_100%)] dark:bg-[linear-gradient(90deg,rgba(1,11,16,0.94)_0%,rgba(1,11,16,0.66)_38%,rgba(1,11,16,0.22)_72%,rgba(1,11,16,0.42)_100%)]"
