@@ -25,5 +25,5 @@ createServer(
           .use(plugin)
           .use(ui),
     }),
-  { cluster: true },
+  { cluster: true, host: "127.0.0.1" },
 );

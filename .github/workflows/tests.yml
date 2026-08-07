@@ -28,11 +28,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "yarn"
 
       - name: Install Node Dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -40,15 +40,15 @@ jobs:
       - name: Audit Composer dependencies
         run: composer audit --locked --no-interaction
 
-      - name: Audit production npm dependencies
-        run: npm audit --omit=dev --audit-level=high
+      - name: Audit production Node dependencies
+        run: yarn audit:production
 
-      - name: Audit full npm dependency tree
-        run: npm audit --audit-level=high
+      - name: Audit full Node dependency tree
+        run: yarn audit:full
         continue-on-error: true
 
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        run: yarn playwright install --with-deps chromium
 
       - name: Copy Environment File
         run: cp .env.example .env
@@ -62,13 +62,13 @@ jobs:
           php artisan migrate --force
 
       - name: Build Assets
-        run: npm run build
+        run: yarn build
 
       - name: Lint Frontend
-        run: npm run lint:check
+        run: yarn lint:check
 
       - name: Type Check Frontend
-        run: npm run typecheck
+        run: yarn typecheck
 
       - name: Rector Cache
         uses: actions/cache@v4

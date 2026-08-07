@@ -45,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Inertia::disableSsr(fn (Request $request): bool => ! $request->routeIs('home', 'privacy'));
+
         Inertia::handleExceptionsUsing(function (ExceptionResponse $response): ?ExceptionResponse {
             if (! in_array($response->statusCode(), [403, 404, 419, 429, 500, 503], true)) {
                 return null;

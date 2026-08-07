@@ -29,14 +29,14 @@ Staging and production must use `APP_ENV=staging` or `production`, `APP_DEBUG=fa
 fixture process.
 
 Before deployment, retain current CI/release evidence for `composer audit --locked` and
-`npm audit --omit=dev --audit-level=high`. The full development dependency audit remains tracked separately until
+`yarn audit:production`. The full development dependency audit remains tracked separately until
 the dependency-audit task resolves its upstream advisory; do not treat it as a clean release gate yet.
 
 ## Deployment contract
 
-The Forge server/site provides PHP 8.5, MySQL, Redis, zero-downtime releases, Supervisor process supervision, scheduled
-jobs, logs, and a deploy script. Inject secrets through Forge environment variables rather than committing environment
-files.
+The Forge server/site provides PHP 8.5, Node.js 22 or newer, Yarn Classic, MySQL, Redis, zero-downtime releases,
+Supervisor process supervision, scheduled jobs, logs, and a deploy script. Inject secrets through Forge environment
+variables rather than committing environment files.
 
 For new Forge sites, enable zero-downtime deployments and keep the generated release macros in the deploy script.
 Configure the Forge deploy script to install dependencies, build the Vite assets, and optimize the application:
@@ -45,8 +45,8 @@ Configure the Forge deploy script to install dependencies, build the Vite assets
 $CREATE_RELEASE()
 cd $FORGE_RELEASE_DIRECTORY
 composer install --no-dev --optimize-autoloader
-npm ci
-npm run build
+yarn install --frozen-lockfile
+yarn build
 php artisan optimize
 php artisan migrate --force
 ```
@@ -63,8 +63,13 @@ Forge activates the new release only after the deploy script completes successfu
 use zero-downtime deployments, use the standard deployment strategy and manually restart Horizon through Supervisor
 after the release.
 
-After deployment, confirm `php artisan schedule:list`, `/up`, and the Horizon dashboard respond successfully. Check
-public intake, login, CRM, admin, and jobs routes using the smoke checklist before declaring the release complete.
+Enable Forge's Inertia SSR daemon so `php artisan inertia:start-ssr` is supervised, and keep the SSR restart hook Forge
+adds to the deployment script. Configure `INERTIA_SSR_ENABLED=true`, `INERTIA_SSR_RUNTIME=node`,
+`INERTIA_SSR_ENSURE_RUNTIME_EXISTS=true`, and `INERTIA_SSR_URL=http://127.0.0.1:13714` in staging and production.
+
+After deployment, confirm `php artisan inertia:check-ssr`, `php artisan schedule:list`, `/up`, and the Horizon dashboard
+respond successfully. Check public intake, login, CRM, admin, and jobs routes using the smoke checklist before declaring
+the release complete.
 
 Keep `REDIS_QUEUE_RETRY_AFTER` greater than the 120-second Horizon worker timeout. Queued jobs should be written to
 stable, version-tolerant contracts. A non-Forge fallback host must gracefully restart workers after every code release.
@@ -73,6 +78,7 @@ stable, version-tolerant contracts. A non-Forge fallback host must gracefully re
 
 - Web server or Laravel-compatible application runtime
 - `php artisan horizon` as a Forge Supervisor-managed background process
+- `php artisan inertia:start-ssr` as a Forge-managed daemon; only the public home and privacy routes dispatch to it
 - A Forge site-level scheduled job invoking `php artisan schedule:run` every minute
 - A queue failure alert recipient configured through `HORIZON_NOTIFICATION_EMAIL`
 

@@ -18,7 +18,7 @@ operations, queues, and audit visibility. It is built for a single Southeast Cod
 
 ## Local setup
 
-Requirements: PHP 8.5, Composer, Node.js/npm, and either SQLite or MySQL. Laravel Herd can serve the project at the
+Requirements: PHP 8.5, Composer, Node.js 22 or newer, Yarn Classic, and either SQLite or MySQL. Laravel Herd can serve the project at the
 configured local site URL.
 
 ```bash
@@ -26,13 +26,14 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
-npm install
-npx playwright install chromium
-npm run build
+yarn install --frozen-lockfile
+yarn playwright install chromium
+yarn build
 ```
 
 Use `composer run dev` for the normal local development processes. Local defaults use the database queue, database
-cache, and log mailer, so Redis and an SMTP provider are not required for the first run.
+cache, and log mailer, so Redis and an SMTP provider are not required for the first run. Inertia SSR for the public
+home and privacy pages runs through the Vite development server; it does not need a separate local SSR process.
 
 ## Application areas
 
@@ -70,6 +71,7 @@ Required long-running processes in staging/production:
 ```bash
 php artisan horizon
 php artisan schedule:run
+php artisan inertia:start-ssr
 ```
 
 See [docs/queues-and-horizon.md](docs/queues-and-horizon.md) and [docs/deployment-and-backups.md](docs/deployment-and-backups.md)
@@ -86,7 +88,7 @@ Run the focused checks while developing and the complete quality contract before
 php artisan test --compact
 composer test:types
 composer test:lint
-npm run build
+yarn build
 ```
 
 Useful targeted checks include:
@@ -100,7 +102,7 @@ php artisan test --compact tests/Feature/JobsOperationsTest.php
 
 `composer test` also runs the repository's type-coverage, feature/unit coverage, browser smoke suite, formatting,
 Rector, and static analysis checks. Run `composer test:browser` when iterating on browser coverage alone. Frontend
-checks are available through `npm run lint:check`, `npm run format:check`, and `npm run typecheck`.
+checks are available through `yarn lint:check`, `yarn format:check`, and `yarn typecheck`.
 
 ## Project conventions
 

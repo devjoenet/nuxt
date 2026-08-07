@@ -70,8 +70,8 @@
       "@php artisan key:generate --ansi",
       "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
       "@php artisan migrate --graceful --ansi",
-      "npm install",
-      "npm run build"
+      "yarn install --frozen-lockfile",
+      "yarn build"
     ],
     "update:requirements": [
       "composer bump",
@@ -82,27 +82,22 @@
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
       "@php artisan key:generate",
       "@php artisan migrate --force",
-      "npm install",
-      "npm run build"
+      "yarn install --frozen-lockfile",
+      "yarn build"
     ],
     "dev": [
       "Composer\\Config::disableProcessTimeout",
-      "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
-    ],
-    "dev:ssr": [
-      "npm run build:ssr",
-      "Composer\\Config::disableProcessTimeout",
-      "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=server,queue,logs,ssr --kill-others"
+      "yarn concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"yarn dev\" --names=server,queue,logs,vite --kill-others"
     ],
     "format": [
       "./vendor/bin/rector",
       "./vendor/bin/pint",
-      "npm run format"
+      "yarn format"
     ],
     "lint": [
       "rector",
       "pint --parallel",
-      "npm run lint"
+      "yarn lint"
     ],
     "test:type-coverage": "pest --type-coverage --min=100",
     "coverage": "herd coverage ./vendor/bin/pest",
@@ -110,7 +105,7 @@
     "test:lint": [
       "pint --parallel --test",
       "rector --dry-run",
-      "npm run format:check"
+      "yarn format:check"
     ],
     "test:browser": "pest --testsuite=Browser",
     "test:unit": [
