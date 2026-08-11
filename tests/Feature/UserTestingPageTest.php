@@ -26,7 +26,7 @@ it('keeps the legacy checklist available to authorized users until cleanup', fun
     $this->actingAs($user)
         ->get(route('development.userTesting.legacy'))
         ->assertSuccessful()
-        ->assertInertia(fn ($page) => $page->component('Development/UserTesting/Legacy/Page')->has('pages', 30));
+        ->assertInertia(fn ($page) => $page->component('Development/UserTesting/Legacy')->has('pages', 30));
 });
 
 it('resolves database-backed checklist links to the first visible records', function (): void {
@@ -307,7 +307,7 @@ it('shows the development roadmap to authorized users', function (): void {
         ->get(route('development.roadmap.index'))
         ->assertSuccessful()
         ->assertInertia(fn ($page) => $page
-            ->component('Development/Roadmap/Index/Page')
+            ->component('Development/Roadmap/Index')
             ->has('tasks.planned', 1)
             ->where('tasks.planned.0.id', $planned->uuid)
             ->has('tasks.in_progress', 1)

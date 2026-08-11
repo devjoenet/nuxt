@@ -67,8 +67,8 @@ test('inactive users cannot log in or use an existing session', function (): voi
 test('admins can view the dashboard and protected admin screens', function (): void {
     $user = adminUser();
 
-    $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Dashboard/Page'));
-    $this->actingAs($user)->get(route('admin.users.index'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Users/Index/Page'));
+    $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Dashboard'));
+    $this->actingAs($user)->get(route('admin.users.index'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Users/Index'));
     $this->actingAs($user)->get(route('admin.roles.index'))->assertOk();
     $this->actingAs($user)->get(route('admin.audit.index'))->assertOk();
 });
@@ -80,7 +80,7 @@ test('role management exposes the role and permission payload for a focused edit
         ->get(route('admin.roles.index'))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Admin/Roles/Index/Page')
+            ->component('Admin/Roles/Index')
             ->where('roles', fn (mixed $roles): bool => collect($roles)->contains(fn (mixed $role): bool => data_get($role, 'name') === RoleName::Admin->value
                 && data_get($role, 'protected') === false
                 && is_array(data_get($role, 'permission_ids'))))
@@ -380,7 +380,7 @@ test('admins can update business settings', function (): void {
         ->get(route('admin.settings.edit'))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Admin/Settings/Index/Page')
+            ->component('Admin/Settings/Index')
             ->has('setting'));
 
     $this->actingAs($admin)->patch(route('admin.settings.update'), [

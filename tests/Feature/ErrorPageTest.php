@@ -45,7 +45,7 @@ test('inertia requests preserve supported status codes and expose only the statu
 
     $response
         ->assertStatus($status)
-        ->assertJsonPath('component', 'ErrorPage/Page')
+        ->assertJsonPath('component', 'ErrorPage')
         ->assertJsonPath('props.status', $status)
         ->assertJsonPath('props.auth.user', null);
 })->with('supported error statuses');
@@ -57,7 +57,7 @@ test('shared authentication data is available to authenticated error pages', fun
         ->withHeaders(['X-Inertia' => 'true', 'X-Requested-With' => 'XMLHttpRequest', 'X-Inertia-Version' => currentTask16InertiaVersion()])
         ->get('/__task-16/errors/403')
         ->assertForbidden()
-        ->assertJsonPath('component', 'ErrorPage/Page')
+        ->assertJsonPath('component', 'ErrorPage')
         ->assertJsonPath('props.auth.user.id', $user->uuid);
 });
 
@@ -69,7 +69,7 @@ test('exception details are not exposed in document or inertia responses', funct
     $this->withHeaders(['X-Inertia' => 'true', 'X-Requested-With' => 'XMLHttpRequest', 'X-Inertia-Version' => currentTask16InertiaVersion()])
         ->get('/__task-16/sensitive-error')
         ->assertServerError()
-        ->assertJsonPath('component', 'ErrorPage/Page')
+        ->assertJsonPath('component', 'ErrorPage')
         ->assertJsonPath('props.status', 500)
         ->assertJsonMissing(['sensitive exception details must never reach the response']);
 });

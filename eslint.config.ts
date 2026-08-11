@@ -30,7 +30,7 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages)/",
+              regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages|sections)/",
               message: "Product primitives and composables cannot depend on workflow or route rendering layers.",
             },
           ],
@@ -46,7 +46,7 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages)/",
+              regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages|sections)/",
               message: "Pure utilities cannot depend on frontend rendering layers.",
             },
             {
@@ -59,15 +59,15 @@ export default defineConfigWithVueTs(
     },
   },
   {
-    files: ["resources/js/pages/**/*.{ts,vue}"],
+    files: ["resources/js/sections/**/*.{ts,vue}"],
     rules: {
       "no-restricted-imports": [
         "error",
         {
           patterns: [
             {
-              regex: "^@/pages/",
-              message: "Page modules cannot depend on another page module; promote shared contracts instead.",
+              regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages)/",
+              message: "Domain sections cannot depend on layouts or route pages.",
             },
           ],
         },
@@ -82,8 +82,8 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              regex: "^(?:@/|(?:\\.\\.?/)+)pages/",
-              message: "Workflow shells cannot depend on route pages.",
+              regex: "^(?:@/|(?:\\.\\.?/)+)(?:pages|sections)/",
+              message: "Workflow shells cannot depend on route pages or domain sections.",
             },
           ],
         },

@@ -45,7 +45,7 @@ test('users with jobs view permission can open the operations page', function ()
         ->get(route('admin.jobs.index'))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Admin/Jobs/Index/Page')
+            ->component('Admin/Jobs/Index')
             ->has('stats', 3)
             ->has('links', 6));
 });

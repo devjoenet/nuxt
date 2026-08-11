@@ -14,65 +14,66 @@ component that mixes route coordination, reusable behavior, and domain rendering
 | Vendor foundation | Nuxt UI, Vue, Inertia, VueUse, and `vite.config.ts` | Accessible UI primitives, reactivity, routing, and centralized theme/component defaults. Use Nuxt UI directly when no product contract exists. |
 | Product primitives | `resources/js/components` | Repeated Southeast Code controls or display contracts. Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` are the starting point. |
 | Workflow shells | `resources/js/layouts` | Persistent application, authentication, settings, or workspace frames that own navigation and stable page chrome. |
-| Page modules | `resources/js/pages/<LogicalPage>` | A `Page.vue` Inertia route entry colocated with every component, section, composable, type, and helper owned exclusively by that page. |
+| Domain sections | `resources/js/sections/<Domain>/<Workflow>` | A meaningful domain or workflow responsibility within a page, including its local interaction state and supporting types. |
+| Pages | `resources/js/pages` | Inertia route entries that accept typed server props, select a layout, set route-level metadata, and declaratively compose sections. |
 | Composables | `resources/js/composables` | Reusable reactive behavior, lifecycle integration, or stateful browser concerns. Check VueUse before adding one. |
 | Pure utilities | `resources/js/lib` | Deterministic, side-effect-free functions with no Vue lifecycle or Inertia dependency. `cn` is the current class-merging utility. |
 
-`resources/js/types` holds contracts shared across domains. Types used by only one page stay beside that page's
-`Page.vue` entry. `resources/js/actions`, `resources/js/routes`, and `resources/js/wayfinder` are generated Wayfinder
-transport code and must not be edited as composition layers. `resources/js/assets`, `app.ts`, and `ssr.ts` remain
-supporting infrastructure rather than composition layers.
+`resources/js/types` holds contracts shared across domains. Types used by only one section family stay beside that
+family. `resources/js/actions`, `resources/js/routes`, and `resources/js/wayfinder` are generated Wayfinder transport
+code and must not be edited as composition layers. `resources/js/assets`, `app.ts`, and `ssr.ts` remain supporting
+infrastructure rather than composition layers.
 
 ## Dependency direction
 
-Dependencies point toward more general layers, never back toward route owners:
+Dependencies point toward more general layers, never back toward route or workflow owners:
 
-- Page entries and their colocated modules may compose files owned by the same page, product primitives, composables,
-  and pure utilities. They do not import files owned by another page.
-- Layouts may compose other layouts, product primitives, composables, and pure utilities; they do not import page
-  modules.
+- Pages may compose layouts, sections, product primitives, composables, and pure utilities.
+- Layouts may compose other layouts, product primitives, composables, and pure utilities; they do not import pages or
+  domain sections.
+- Domain sections may compose sections in the same workflow, product primitives, composables, and pure utilities; they
+  do not import pages or layouts.
 - Product primitives may compose other product primitives, composables, and pure utilities; they do not import
-  layouts or page modules.
+  sections, layouts, or pages.
 - Composables may depend on other composables and pure utilities, but not rendering layers.
 - Pure utilities do not depend on Vue, VueUse, Inertia, or any rendering layer.
 
-Nuxt UI primitives may be used directly in page modules, layouts, and product primitives. A local component earns
+Nuxt UI primitives may be used directly in pages, layouts, sections, and product primitives. A local component earns
 its place by owning a product or workflow contract, not by changing the name of a `UButton`, `UCard`, or other vendor
 primitive. The ESLint configuration rejects imports that reverse these layer boundaries.
 
 ## Extraction rules
 
 Extract a product primitive when the same product-level contract is repeated, or when a stable interaction contract
-needs focused behavior and tests. Extract a page-owned component or section beside `Page.vue` when a page contains a
-meaningful workflow responsibility that can own a clear input/output API. Page-only composables, types, and helpers
-stay in that same module directory. Promote them to `resources/js/components`, `resources/js/composables`, or
-`resources/js/types` only when they become shared contracts. Extract a pure utility when the logic is stateless and
-useful outside a component lifecycle.
+needs focused behavior and tests. Extract a domain section when a page contains a meaningful workflow responsibility
+that can own a clear input/output API, even if that section is currently used by only one page. Extract a composable
+when reactive behavior is shared or obscures the rendering responsibility. Extract a pure utility when the logic is
+stateless and useful outside a component lifecycle.
 
 Keep one-off markup at its call site when extraction would only move template lines. Do not create pass-through
 wrappers that mirror Nuxt UI props and slots without adding a Southeast Code contract. Do not combine unrelated
 controls into a configurable mega-component merely to reduce file count.
 
-Before extracting, check the existing form controls, `AsyncCrmSelect`, `CrmDetailLayout`, the current page module,
-VueUse, and Nuxt UI. New dependencies and new top-level folders under `resources/js` require separate approval.
+Before extracting, check the existing form controls, `AsyncCrmSelect`, `CrmDetailLayout`, domain sections, VueUse, and
+Nuxt UI. New dependencies and new top-level folders under `resources/js` require separate approval.
 
 ## State ownership and event boundaries
 
-- `Page.vue` entries own route-level coordination and receive server state through typed Inertia props. They choose
-  page-owned sections and pass only the data each section needs. Route entries use `<script setup>` so component state
-  remains instance-scoped; mutable page state must not be created in a module-level `<script>` block.
-- Colocated components, sections, and composables own workflow-specific form, filter, selection, loading, and feedback
-  state when that state is not shared across routes.
+- Pages own route-level coordination and receive server state through typed Inertia props. They choose sections and
+  pass only the data each section needs. Route pages use `<script setup>` so component state remains instance-scoped;
+  mutable page state must not be created in a module-level `<script>` block.
+- Sections own workflow-specific form, filter, selection, loading, and feedback state when that state is not shared
+  across routes.
 - Product primitives own only the internal interaction state required by their public control contract. Persistent
-  business state remains in the page module that invokes the route.
+  business state remains in the page or section that invokes the route.
 - Composables expose named reactive state and commands. They must make lifecycle effects and cleanup visible in their
   API rather than performing surprising work on import.
 - Pure utilities own no reactive or persistent state.
 
 Children emit user intent such as `save`, `cancel`, or `update:modelValue`; parents decide what domain mutation or
 navigation follows. Use `v-model` only for a genuine controlled-value contract. Backend calls use Wayfinder-generated
-routes at the nearest page-module boundary that understands the operation. Product primitives must not hide route
-changes or server mutations.
+routes at the nearest page or domain-section boundary that understands the operation. Product primitives must not
+hide route changes or server mutations.
 
 ## Props, events, slots, and styling
 
@@ -91,17 +92,14 @@ changes or server mutations.
 ## Naming and typing
 
 Names describe the product responsibility: `FormInput`, `CrmDetailLayout`, and `LeadNotesSection` are useful examples.
-Page-owned regions end in `Section`; persistent frames end in `Layout`; composables start with `use`. Avoid generic
+Domain page regions end in `Section`; persistent frames end in `Layout`; composables start with `use`. Avoid generic
 names such as `BaseWrapper`, `UiButton`, or `CardComponent` that conceal whether the code owns a real product contract.
 
 The architectural roots directly under `resources/js` remain lowercase. Nested Vue feature directories under
-`components`, `layouts`, and `pages` use PascalCase, as do all `.vue` filenames. Every logical Inertia page resolves to
-a `Page.vue` entry inside its own directory. Authored TypeScript module and composable filenames use camelCase. Static
-asset directories and filenames use lowercase kebab-case. The generated `actions`, `routes`, and `wayfinder` trees
-retain their generator-owned names and are excluded from authored naming rules.
-
-Laravel controllers keep rendering logical names such as `Crm/Leads/Show`; `AppServiceProvider` appends `/Page` before
-the component name is sent to the browser and checked against the filesystem.
+`components`, `layouts`, `pages`, and `sections` use PascalCase, as do all `.vue` filenames. Authored TypeScript module
+and composable filenames use camelCase. Static asset directories and filenames use lowercase kebab-case. The generated
+`actions`, `routes`, and `wayfinder` trees retain their generator-owned names and are excluded from authored naming
+rules.
 
 Vue code remains strict TypeScript. Avoid `any`, type page props at the route boundary, import Wayfinder route helpers
 instead of hard-coding application URLs, and keep transport-specific response shapes out of product primitives.
@@ -111,9 +109,9 @@ instead of hard-coding application URLs, and keep transport-specific response sh
 - Pure utilities receive focused unit coverage for input/output behavior.
 - Product primitives receive component or browser coverage when they own validation, accessibility, or interaction
   behavior; simple presentational composition does not need a snapshot for its own sake.
-- Page-owned sections receive focused workflow coverage. Route responses, authorization, and mutations remain covered
-  by Laravel feature tests; critical client interaction receives browser coverage.
-- Page entries receive route-level feature coverage and browser smoke coverage in proportion to risk.
+- Domain sections receive focused workflow coverage. Route responses, authorization, and mutations remain covered by
+  Laravel feature tests; critical client interaction receives browser coverage.
+- Pages receive route-level feature coverage and browser smoke coverage in proportion to risk.
 - `tests/Feature/FrontendArchitectureContractTest.php` protects the approved source homes, existing frontend
   foundations, retired frontend files, instance-scoped page state, and centralized Nuxt UI configuration.
 - ESLint enforces dependency direction. The normal typecheck, build, formatting, and focused Pest checks still apply.
