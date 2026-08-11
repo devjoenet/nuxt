@@ -14,7 +14,7 @@ test('public launch surfaces remain available without authentication', function 
     $this->get(route('privacy'))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Privacy')
+            ->component('Privacy/Page')
             ->where('canonicalUrl', config('app.url').'/privacy'));
     expect(app('router')->getRoutes()->getByName('privacy')->uri())->toBe('privacy');
     $this->get('/inbox')->assertNotFound();
@@ -25,7 +25,7 @@ test('authenticated launch surfaces have useful first-party page payloads', func
 
     $this->actingAs($user)->get(route('dashboard'))
         ->assertOk()
-        ->assertInertia(fn (Assert $page): Assert => $page->component('Dashboard')->has('canViewCrm'));
+        ->assertInertia(fn (Assert $page): Assert => $page->component('Dashboard/Page')->has('canViewCrm'));
 });
 
 test('protected workspace routes reject guests', function (): void {
@@ -42,7 +42,7 @@ test('inertia failures render the application error page', function (): void {
         'X-Requested-With' => 'XMLHttpRequest',
     ])->get('/missing-page')
         ->assertNotFound()
-        ->assertJsonPath('component', 'ErrorPage')
+        ->assertJsonPath('component', 'ErrorPage/Page')
         ->assertJsonPath('props.status', 404);
 });
 

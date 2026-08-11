@@ -26,7 +26,7 @@ test('authenticated users can visit the dashboard', function (): void {
     $this->get('/dashboard')
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Dashboard')
+            ->component('Dashboard/Page')
             ->where('canViewCrm', false)
             ->has('stats', 0));
 });
@@ -47,7 +47,7 @@ test('CRM users see first-party workspace metrics and next actions', function ()
     $this->actingAs($user)->get('/dashboard')
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Dashboard')
+            ->component('Dashboard/Page')
             ->where('canViewCrm', true)
             ->has('stats', 4)
             ->where('recentLeads.0.uuid', $lead->uuid)

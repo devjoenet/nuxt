@@ -49,7 +49,7 @@ test('roadmap managers request task-specific testing rounds', function (): void 
         ->get(route('development.userTesting.index'))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/UserTesting/Index')
+            ->component('Development/UserTesting/Index/Page')
             ->has('testRuns', 1)
             ->where('testRuns.0.id', $testRun->uuid)
             ->where('testRuns.0.task.id', $task->uuid)

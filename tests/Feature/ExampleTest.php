@@ -12,6 +12,6 @@ test('returns a successful response', function (): void {
     $response
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Welcome')
+            ->component('Welcome/Page')
             ->etc());
 });

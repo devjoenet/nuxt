@@ -45,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Inertia::transformComponentUsing(fn (string $name): string => "{$name}/Page");
+
         Inertia::disableSsr(fn (Request $request): bool => ! $request->routeIs('home', 'privacy'));
 
         Inertia::handleExceptionsUsing(function (ExceptionResponse $response): ?ExceptionResponse {

@@ -14,20 +14,20 @@ test('the frontend architecture defines the complete composition boundary', func
         ->toContain('Vendor foundation')
         ->toContain('Product primitives')
         ->toContain('Workflow shells')
-        ->toContain('Domain sections')
-        ->toContain('Pages')
+        ->toContain('Page modules')
+        ->toContain('Page.vue')
         ->toContain('Composables')
         ->toContain('Pure utilities')
         ->toContain('Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` are the starting point.')
         ->toContain('pass-through')
         ->toContain('wrappers that mirror Nuxt UI props and slots')
         ->toContain('## State ownership and event boundaries')
-        ->toContain('Route pages use `<script setup>` so component state remains instance-scoped')
+        ->toContain('Route entries use `<script setup>` so component state')
         ->toContain('## Props, events, slots, and styling')
         ->toContain('## Naming and typing')
         ->toContain('Nested Vue feature directories')
         ->toContain('Authored TypeScript module')
-        ->toContain('Static asset directories and filenames')
+        ->toContain('asset directories and filenames')
         ->toContain('## Testing and enforcement')
         ->toContain('Responsibility beats line count.')
         ->toContain('New dependencies and new top-level folders under `resources/js` require separate approval.')
@@ -40,6 +40,7 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
         'resources/js/layouts/AuthBasic.vue',
         'resources/js/layouts/Auth/AuthSplitLayout.vue',
         'resources/js/pages/Auth/ForgotPasswordNuxt.vue',
+        'resources/js/components/Landing/MetricCard.vue',
         'resources/js/composables/getErrors.ts',
         'resources/js/composables/useInitials.ts',
     ] as $retiredPath) {
@@ -62,7 +63,7 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
 
 test('route pages keep mutable state instance scoped', function (): void {
     $pageFilesWithModuleScripts = collect(File::allFiles(resource_path('js/pages')))
-        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->filter(fn (SplFileInfo $file): bool => $file->getFilename() === 'Page.vue')
         ->filter(fn (SplFileInfo $file): bool => preg_match(
             '/<script(?=[\s>])(?![^>]*\bsetup\b)[^>]*>/',
             File::get($file->getPathname()),
@@ -82,8 +83,8 @@ test('eslint enforces frontend dependency direction without banning direct Nuxt 
         ->toContain('Product primitives and composables cannot depend on workflow or route rendering layers.')
         ->toContain('Pure utilities cannot depend on frontend rendering layers.')
         ->toContain('Pure utilities cannot depend on Vue lifecycle, VueUse, or Inertia.')
-        ->toContain('Domain sections cannot depend on layouts or route pages.')
-        ->toContain('Workflow shells cannot depend on route pages or domain sections.')
+        ->toContain('Page modules cannot depend on another page module; promote shared contracts instead.')
+        ->toContain('Workflow shells cannot depend on route pages.')
         ->not->toContain('Direct Nuxt UI imports are forbidden');
 });
 
@@ -103,14 +104,14 @@ test('the frontend source uses only approved top-level homes', function (): void
         'lib',
         'pages',
         'routes',
-        'sections',
         'types',
         'wayfinder',
-    ])->and(File::isDirectory(resource_path('js/components/ui')))->toBeFalse();
+    ])->and(File::isDirectory(resource_path('js/components/ui')))->toBeFalse()
+        ->and(File::isDirectory(resource_path('js/sections')))->toBeFalse();
 });
 
 test('the frontend source follows the documented naming convention', function (): void {
-    $vueArchitectureRoots = ['components', 'layouts', 'pages', 'sections'];
+    $vueArchitectureRoots = ['components', 'layouts', 'pages'];
     $generatedRoots = ['actions/', 'routes/', 'wayfinder/'];
 
     $invalidVueDirectories = collect($vueArchitectureRoots)
@@ -223,8 +224,8 @@ test('index workflows share navigation and framing without hiding domain columns
         'Contacts' => 'contactIndexColumns.ts',
         'Organizations' => 'organizationIndexColumns.ts',
     ] as $domain => $columnFile) {
-        $page = File::get(resource_path("js/pages/Crm/{$domain}/Index.vue"));
-        $columns = File::get(resource_path("js/sections/Crm/{$domain}/{$columnFile}"));
+        $page = File::get(resource_path("js/pages/Crm/{$domain}/Index/Page.vue"));
+        $columns = File::get(resource_path("js/pages/Crm/{$domain}/Index/{$columnFile}"));
 
         expect($page)
             ->toContain('useInertiaFilters({')
@@ -241,10 +242,10 @@ test('index workflows share navigation and framing without hiding domain columns
     }
 
     foreach ([
-        'pages/Admin/Audit/Index.vue',
-        'sections/Admin/Users/AdminUsersTableSection.vue',
-        'pages/Development/Requests/Index.vue',
-        'pages/Development/Review/Index.vue',
+        'pages/Admin/Audit/Index/Page.vue',
+        'pages/Admin/Users/Index/AdminUsersTableSection.vue',
+        'pages/Development/Requests/Index/Page.vue',
+        'pages/Development/Review/Index/Page.vue',
     ] as $indexSurface) {
         expect(File::get(resource_path("js/{$indexSurface}")))
             ->toContain('<IndexPagination');
@@ -285,10 +286,10 @@ test('authenticated editors share form composition without replacing typed field
     }
 
     foreach ([
-        'pages/Crm/Contacts/Form.vue',
-        'pages/Crm/Leads/Form.vue',
-        'pages/Crm/Organizations/Form.vue',
-        'pages/Development/Requests/Create.vue',
+        'pages/Crm/Contacts/Form/Page.vue',
+        'pages/Crm/Leads/Form/Page.vue',
+        'pages/Crm/Organizations/Form/Page.vue',
+        'pages/Development/Requests/Create/Page.vue',
     ] as $formPage) {
         expect(File::get(resource_path("js/{$formPage}")))
             ->toContain('<WorkspaceFormPage')
@@ -296,7 +297,7 @@ test('authenticated editors share form composition without replacing typed field
     }
 
     $workspaceFormPage = File::get(resource_path('js/components/WorkspaceFormPage.vue'));
-    $profilePage = File::get(resource_path('js/pages/Settings/Profile.vue'));
+    $profilePage = File::get(resource_path('js/pages/Settings/Profile/Page.vue'));
 
     expect($workspaceFormPage)
         ->toContain('disable-while-processing')
@@ -324,24 +325,24 @@ test('crm details share typed lifecycle presentation and accessible confirmation
         ->toContain('<UButton color="neutral" label="Cancel"');
 
     foreach (['Contacts', 'Organizations', 'Leads'] as $domain) {
-        expect(File::get(resource_path("js/pages/Crm/{$domain}/Show.vue")))
+        expect(File::get(resource_path("js/pages/Crm/{$domain}/Show/Page.vue")))
             ->toContain('<CrmDetailLayout')
             ->not->toContain('window.confirm');
     }
 
-    expect(File::get(resource_path('js/sections/Crm/Leads/LeadOverviewSection.vue')))
+    expect(File::get(resource_path('js/pages/Crm/Leads/Show/LeadOverviewSection.vue')))
         ->toContain('<CrmDetailMetadata')
         ->toContain('<ConfirmActionButton')
         ->not->toContain('window.confirm');
 });
 
 test('complex workflows keep state inside focused page scoped boundaries', function (): void {
-    $twoFactorState = File::get(resource_path('js/composables/useTwoFactorAuth.ts'));
-    $landingHeroAssets = File::get(resource_path('js/composables/useLandingHeroAssets.ts'));
-    $securityPage = File::get(resource_path('js/pages/Settings/Security.vue'));
-    $landingPage = File::get(resource_path('js/pages/Welcome.vue'));
+    $twoFactorState = File::get(resource_path('js/pages/Settings/Security/useTwoFactorAuth.ts'));
+    $landingHeroAssets = File::get(resource_path('js/pages/Welcome/useLandingHeroAssets.ts'));
+    $securityPage = File::get(resource_path('js/pages/Settings/Security/Page.vue'));
+    $landingPage = File::get(resource_path('js/pages/Welcome/Page.vue'));
     $landingHeader = File::get(resource_path('js/components/Landing/LandingHeader.vue'));
-    $landingContact = File::get(resource_path('js/components/Landing/LandingContactForm.vue'));
+    $landingContact = File::get(resource_path('js/pages/Welcome/LandingContactForm.vue'));
 
     expect($twoFactorState)
         ->toContain('provideTwoFactorAuth')
@@ -352,13 +353,18 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
         ->toContain('provideTwoFactorAuth();');
 
     foreach ([
+        'AlertError.vue',
+        'DeleteAccount.vue',
+        'TwoFactor.vue',
         'TwoFactorSetupStep.vue',
         'TwoFactorConfirmationStep.vue',
         'TwoFactorRecoveryCodes.vue',
         'TwoFactorRegenerateRecoveryCodesForm.vue',
+        'TwoFactorSetupModal.vue',
+        'useTwoFactorAuth.ts',
     ] as $twoFactorStep) {
-        expect(File::exists(resource_path("js/components/{$twoFactorStep}")))
-            ->toBeTrue("Missing two-factor step: {$twoFactorStep}");
+        expect(File::exists(resource_path("js/pages/Settings/Security/{$twoFactorStep}")))
+            ->toBeTrue("Missing page-owned security module: {$twoFactorStep}");
     }
 
     expect($landingPage)
@@ -373,12 +379,51 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
         ->toContain('useLandingAttribution()');
 
     foreach ([
+        'DashboardPreview.vue',
+        'FeatureCard.vue',
+        'LandingCardGridSection.vue',
+        'LandingContactForm.vue',
+        'LandingContactSection.vue',
+        'LandingHero.vue',
+        'LandingHeroPicture.vue',
+        'LandingOperationsSection.vue',
+        'LandingProcessSection.vue',
+        'MobileCheckInPreview.vue',
+        'OperationsShowcase.vue',
+        'PermissionsPreview.vue',
+        'ProcessTimeline.vue',
+        'SectionHeading.vue',
+        'landingContent.ts',
+        'useLandingAttribution.ts',
+        'useLandingHeroAssets.ts',
+    ] as $landingModule) {
+        expect(File::exists(resource_path("js/pages/Welcome/{$landingModule}")))
+            ->toBeTrue("Missing page-owned landing module: {$landingModule}");
+    }
+
+    foreach ([
+        'js/components/AlertError.vue',
+        'js/components/DeleteAccount.vue',
+        'js/components/TwoFactor.vue',
+        'js/components/UserTestingPageCard.vue',
+        'js/composables/useLandingAttribution.ts',
+        'js/composables/useLandingHeroAssets.ts',
+        'js/composables/useTwoFactorAuth.ts',
+    ] as $formerSharedPath) {
+        expect(File::exists(resource_path($formerSharedPath)))
+            ->toBeFalse("Page-owned code returned to a shared home: {$formerSharedPath}");
+    }
+
+    expect(File::exists(resource_path('js/pages/Development/UserTesting/Legacy/UserTestingPageCard.vue')))
+        ->toBeTrue();
+
+    foreach ([
         'DevelopmentTaskRoadmapSummaryFields.vue',
         'DevelopmentTaskReviewActions.vue',
         'DevelopmentTaskProgressAction.vue',
         'DevelopmentTaskTestingRequestForm.vue',
     ] as $taskSection) {
-        expect(File::exists(resource_path("js/sections/Development/Tasks/{$taskSection}")))
+        expect(File::exists(resource_path("js/pages/Development/Tasks/Show/{$taskSection}")))
             ->toBeTrue("Missing Development task section: {$taskSection}");
     }
 });
@@ -386,7 +431,7 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
 test('landing appearance stays stable across server rendering and first paint', function (): void {
     $blade = File::get(resource_path('views/app.blade.php'));
     $bootstrap = File::get(public_path('theme-bootstrap.js'));
-    $picture = File::get(resource_path('js/components/Landing/LandingHeroPicture.vue'));
+    $picture = File::get(resource_path('js/pages/Welcome/LandingHeroPicture.vue'));
     $userMenu = File::get(resource_path('js/components/UserMenu.vue'));
 
     expect($blade)
@@ -408,6 +453,7 @@ test('landing appearance stays stable across server rendering and first paint', 
 test('the authenticated workspace uses one client and server layout boundary', function (): void {
     $appEntry = File::get(resource_path('js/app.ts'));
     $serverEntry = File::get(resource_path('js/ssr.ts'));
+    $appServiceProvider = File::get(app_path('Providers/AppServiceProvider.php'));
     $layoutResolver = File::get(resource_path('js/layouts/resolveAppLayout.ts'));
     $defaultLayout = File::get(resource_path('js/layouts/Default.vue'));
     $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
@@ -430,7 +476,9 @@ test('the authenticated workspace uses one client and server layout boundary', f
         ->toContain('layout: resolveAppLayout,')
         ->and($layoutResolver)
         ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | null')
-        ->toContain('name.startsWith("Auth/")')
+        ->toContain('logicalPageName.startsWith("Auth/")')
+        ->and($appServiceProvider)
+        ->toContain('Inertia::transformComponentUsing(fn (string $name): string => "{$name}/Page");')
         ->and($pagesDeclaringDefaultLayout)->toBe([])
         ->and($defaultLayout)
         ->toContain('<WorkspaceSidebar')

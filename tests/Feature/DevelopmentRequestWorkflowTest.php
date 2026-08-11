@@ -55,7 +55,7 @@ test('requesters can submit and view only their own active requests', function (
         ->get(route('development.requests.create'))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/Requests/Create')
+            ->component('Development/Requests/Create/Page')
             ->has('requestTypes', count(DevelopmentRequestType::cases()))
             ->has('affectedAreas', count(DevelopmentTaskArea::cases())));
 
@@ -72,7 +72,7 @@ test('requesters can submit and view only their own active requests', function (
         ->get(route('development.requests.index'))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/Requests/Index')
+            ->component('Development/Requests/Index/Page')
             ->has('requests.data', 1)
             ->where('requests.data.0.id', $task->uuid));
 
@@ -112,7 +112,7 @@ test('review queue contains only requests in review-stage statuses', function ()
         ->get(route('development.review.index'))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/Review/Index')
+            ->component('Development/Review/Index/Page')
             ->has('requests.data', 3)
             ->where('requests.data.0.id', $submitted->uuid)
             ->where('requests.data.1.id', $needsInformation->uuid)
