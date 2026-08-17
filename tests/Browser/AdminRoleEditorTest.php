@@ -108,8 +108,8 @@ test('admin role cards retain visible hierarchy in dark mode', function (): void
     visit('/admin/roles')
         ->inDarkMode()
         ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).backgroundColor !== getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).backgroundColor', true)
-        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).boxShadow !== "none"', true)
-        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).boxShadow !== "none"', true)
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).borderColor', 'rgb(60, 70, 83)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).borderColor', 'rgb(60, 70, 83)')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });

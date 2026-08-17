@@ -9,13 +9,13 @@ defineProps<{
 <template>
   <WorkspacePage id="admin-dashboard" description="Business health and access control" document-title="Admin dashboard" title="Admin">
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-      <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
+      <AppPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" :style="'outline'" class="dark:bg-elevated dark:shadow-none">
         <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
-      </UPageCard>
+      </AppPageCard>
     </div>
 
     <div class="mt-6 grid gap-6 xl:grid-cols-2">
-      <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="The latest auditable workspace changes." title="Recent activity" variant="outline">
+      <AppPageCard :style="'outline'" class="dark:bg-elevated dark:shadow-none" description="The latest auditable workspace changes." title="Recent activity">
         <ul v-if="recentActivities.length" class="divide-y divide-default">
           <li v-for="activity in recentActivities" :key="activity.id" class="py-3 first:pt-0 last:pb-0">
             <p class="text-sm text-highlighted">{{ activity.description }}</p>
@@ -23,9 +23,9 @@ defineProps<{
           </li>
         </ul>
         <p v-else class="text-sm text-muted">No activity has been recorded yet.</p>
-      </UPageCard>
+      </AppPageCard>
 
-      <UPageCard class="dark:bg-elevated dark:ring-accented dark:shadow-none" description="Access status for the newest workspace members." title="Recent users" variant="outline">
+      <AppPageCard :style="'outline'" class="dark:bg-elevated dark:shadow-none" description="Access status for the newest workspace members." title="Recent users">
         <ul class="divide-y divide-default">
           <li v-for="user in recentUsers" :key="user.id" class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
             <div>
@@ -35,7 +35,7 @@ defineProps<{
             <UBadge :color="user.is_active ? 'success' : 'neutral'" variant="subtle">{{ user.is_active ? "Active" : "Inactive" }}</UBadge>
           </li>
         </ul>
-      </UPageCard>
+      </AppPageCard>
     </div>
   </WorkspacePage>
 </template>

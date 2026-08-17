@@ -74,11 +74,11 @@ function onFileClick() {
 <template>
   <SettingsLayout document-title="Profile settings">
     <UForm id="settings" #default="{ errors }" :schema="profileSchema" :state="profile" @submit="onSubmit">
-      <UPageCard title="Profile" description="These informations will be displayed publicly." variant="naked" orientation="horizontal" class="mb-4">
+      <AppPageCard :style="'naked'" class="mb-4" description="This information will be displayed publicly." orientation="horizontal" title="Profile">
         <UButton form="settings" label="Save changes" color="neutral" type="submit" class="w-fit lg:ms-auto" />
-      </UPageCard>
+      </AppPageCard>
 
-      <UPageCard variant="subtle">
+      <AppPageCard>
         <FormInput v-model="profile.name" :error="fieldError(errors, 'name')" autocomplete="off" description="Will appear on receipts, invoices, and other communication." label="Name" name="name" required />
         <USeparator />
         <FormInput v-model="profile.email" :error="fieldError(errors, 'email')" autocomplete="off" description="Used to sign in, for email receipts and product updates." label="Email" name="email" required type="email" />
@@ -95,7 +95,7 @@ function onFileClick() {
             <input ref="fileRef" type="file" class="hidden" accept=".jpg, .jpeg, .png, .gif" @change="onFileChange" />
           </div>
         </UFormField>
-      </UPageCard>
+      </AppPageCard>
     </UForm>
   </SettingsLayout>
 </template>

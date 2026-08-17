@@ -31,7 +31,7 @@ function handleSuccess() {
 
 <template>
   <SettingsLayout document-title="Security settings">
-    <UPageCard title="Password" description="Confirm your current password before setting a new one." variant="subtle">
+    <AppPageCard description="Confirm your current password before setting a new one." title="Password">
       <Form
         v-bind="PasswordController.update.form()"
         :options="{
@@ -51,14 +51,14 @@ function handleSuccess() {
 
         <UButton label="Update" class="w-fit" type="submit" :disabled="processing" />
       </Form>
-    </UPageCard>
+    </AppPageCard>
 
     <TwoFactor :requiresConfirmation="requiresConfirmation" :twoFactorEnabled="twoFactorEnabled" />
 
-    <UPageCard title="Account" description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently." class="bg-gradient-to-tl from-error/10 from-5% to-default">
+    <AppPageCard description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently." title="Account" variant="error">
       <template #footer>
         <DeleteAccount />
       </template>
-    </UPageCard>
+    </AppPageCard>
   </SettingsLayout>
 </template>

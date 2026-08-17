@@ -9,11 +9,11 @@ defineProps<{ testRuns: DevelopmentTestRun[] }>();
 <template>
   <WorkspacePage id="development-user-testing" description="Run task-specific test rounds and preserve every feedback cycle." title="User testing">
     <div class="grid gap-6">
-      <UPageCard variant="subtle">
+      <AppPageCard>
         <p class="text-xs font-bold tracking-[0.22em] text-highlighted uppercase">Release gate</p>
         <h1 class="mt-3 text-3xl font-semibold tracking-tight text-highlighted">Test the requested outcome, not a generic page checklist.</h1>
         <p class="mt-3 max-w-3xl leading-7 text-muted">Each round keeps its instructions, build reference, tester, and result. Accepted work is completed and archived; requested changes return to implementation without erasing the previous round.</p>
-      </UPageCard>
+      </AppPageCard>
 
       <IndexEmptyState v-if="testRuns.length === 0" description="There are no task rounds waiting for your result." icon="i-ph-check-circle" title="The testing queue is clear" />
 

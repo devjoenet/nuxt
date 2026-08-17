@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import AppLogoIcon from "@/components/AppLogoIcon.vue";
+import type { CardVariant, PageCardStyle } from "@/lib/cardAppearance";
 import { home } from "@/routes";
 import { Link } from "@inertiajs/vue3";
 
 defineProps<{
   title?: string;
   description?: string;
-  variant?: "outline" | "solid" | "soft" | "subtle" | "naked" | "ghost";
+  style?: PageCardStyle;
+  variant?: CardVariant;
 }>();
 </script>
 
 <template>
   <div class="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-    <UPageCard :variant="variant ?? 'subtle'" class="w-full max-w-sm bg-neutral-800">
+    <AppPageCard :style="style" :variant="variant" class="w-full max-w-sm">
       <div class="flex flex-col gap-8">
         <div class="flex flex-col items-center gap-4">
           <Link :href="home()" class="flex flex-col items-center gap-2 font-medium">
@@ -28,6 +30,6 @@ defineProps<{
         </div>
         <slot />
       </div>
-    </UPageCard>
+    </AppPageCard>
   </div>
 </template>

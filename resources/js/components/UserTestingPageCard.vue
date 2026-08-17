@@ -25,7 +25,6 @@ interface UserTestingPage {
 
 const props = defineProps<{ page: UserTestingPage }>();
 
-const surfaceClasses = ["bg-elevated/90 ring-default", "bg-muted/85 ring-default", "bg-accented/35 ring-default", "bg-elevated/70 ring-primary/20"] as const;
 const statusColors: Record<ReviewStatus, "warning" | "info" | "success" | "primary"> = {
   "Needs eyes": "warning",
   "In Development": "info",
@@ -34,12 +33,11 @@ const statusColors: Record<ReviewStatus, "warning" | "info" | "success" | "prima
   "Needs Approval": "primary",
 };
 
-const surfaceClass = computed(() => surfaceClasses[(props.page.id - 1) % surfaceClasses.length]);
 const statusColor = computed(() => statusColors[props.page.status]);
 </script>
 
 <template>
-  <UPageCard :class="['h-full', surfaceClass]" variant="subtle">
+  <AppPageCard :variant="statusColor" class="h-full">
     <Form #default="{ errors, processing }" class="flex h-full flex-col gap-4" v-bind="update.form(page.id)">
       <div class="flex items-start justify-between gap-4">
         <div>
@@ -80,5 +78,5 @@ const statusColor = computed(() => statusColors[props.page.status]);
       <p v-if="page.tested_by && page.tested_at" class="text-xs text-muted">Last reviewed by {{ page.tested_by }} · {{ page.tested_at }}</p>
       <p v-if="page.roadmap_task_at" class="text-xs text-muted">Roadmap task recorded · {{ page.roadmap_task_at }}</p>
     </Form>
-  </UPageCard>
+  </AppPageCard>
 </template>

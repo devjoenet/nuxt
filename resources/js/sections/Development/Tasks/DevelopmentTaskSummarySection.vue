@@ -27,17 +27,17 @@ const taskStatusColor = computed<StatusColor>(() => {
 </script>
 
 <template>
-  <UCard
+  <AppCard
     id="development-task-summary"
     as="section"
     :class="cn('shadow-lg dark:shadow-none', props.class)"
     data-testid="development-task-summary"
+    variant="primary"
     :ui="{
       root: 'relative overflow-hidden rounded-2xl',
       header: 'border-b border-default p-0 sm:p-0',
       body: 'p-5 sm:p-6 lg:p-8',
     }"
-    variant="subtle"
   >
     <template #header>
       <div class="relative overflow-hidden p-5 sm:p-7 lg:p-8">
@@ -66,5 +66,5 @@ const taskStatusColor = computed<StatusColor>(() => {
     <div class="@container">
       <DevelopmentTaskRoadmapSummaryFields :assignees="assignees" :editable="canEditRoadmapSummary" :planned-task-count="plannedTaskCount" :priorities="priorities" :task="task" />
     </div>
-  </UCard>
+  </AppCard>
 </template>

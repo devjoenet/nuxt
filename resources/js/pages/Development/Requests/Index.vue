@@ -23,7 +23,7 @@ const visitPage = (page: number): void => {
     <div class="grid gap-4">
       <ul v-if="requests.data.length" class="grid gap-3" role="list">
         <li v-for="request in requests.data" :key="request.id">
-          <UPageCard :to="show(request.id).url" variant="subtle">
+          <AppPageCard :to="show(request.id).url">
             <div class="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <h2 class="font-semibold text-highlighted">{{ request.title }}</h2>
@@ -32,7 +32,7 @@ const visitPage = (page: number): void => {
               <UBadge :label="request.status_label" color="neutral" variant="subtle" />
             </div>
             <p class="mt-3 line-clamp-2 text-sm leading-6 text-muted">{{ request.description }}</p>
-          </UPageCard>
+          </AppPageCard>
         </li>
       </ul>
 

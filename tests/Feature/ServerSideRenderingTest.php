@@ -24,6 +24,17 @@ beforeEach(function (): void {
     ]);
 });
 
+test('Inertia uses the version three page discovery configuration', function (): void {
+    expect(config('inertia.pages'))
+        ->toBe([
+            'ensure_pages_exist' => false,
+            'paths' => [resource_path('js/pages')],
+            'extensions' => ['js', 'jsx', 'svelte', 'ts', 'tsx', 'vue'],
+        ])
+        ->and(config('inertia.testing'))
+        ->toBe(['ensure_pages_exist' => true]);
+});
+
 test('public marketing routes use server-side rendering', function (string $routeName): void {
     $this->get(route($routeName))
         ->assertOk()

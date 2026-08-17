@@ -1,6 +1,6 @@
 {
   "$schema": "https://getcomposer.org/schema.json",
-  "name": "devjoeney/nuxt",
+  "name": "devjoenet/nuxt",
   "type": "project",
   "description": "Southeast Code's Laravel 13 and Inertia operating workspace for practical CRM and operations workflows.",
   "keywords": [
@@ -29,6 +29,7 @@
     "driftingly/rector-laravel": "^2.0",
     "fakerphp/faker": "^1.24",
     "larastan/larastan": "^3.10",
+    "laravel-egypt/datalens": "@dev",
     "laravel/boost": "^2.0",
     "laravel/pail": "^1.2.5",
     "laravel/pao": "^1.1",
@@ -124,9 +125,7 @@
   },
   "extra": {
     "laravel": {
-      "dont-discover": [
-        "negoziator/horizon-ui"
-      ]
+      "dont-discover": []
     }
   },
   "config": {

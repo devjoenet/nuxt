@@ -409,6 +409,7 @@ test('the authenticated workspace uses one client and server layout boundary', f
     $appEntry = File::get(resource_path('js/app.ts'));
     $serverEntry = File::get(resource_path('js/ssr.ts'));
     $layoutResolver = File::get(resource_path('js/layouts/resolveAppLayout.ts'));
+    $viteConfig = File::get(base_path('vite.config.ts'));
     $defaultLayout = File::get(resource_path('js/layouts/Default.vue'));
     $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
     $workspaceSearch = File::get(resource_path('js/components/WorkspaceSearch.vue'));
@@ -425,12 +426,20 @@ test('the authenticated workspace uses one client and server layout boundary', f
     expect($appEntry)
         ->toContain('import { resolveAppLayout } from "@/layouts/resolveAppLayout";')
         ->toContain('layout: resolveAppLayout,')
+        ->toContain('createSSRApp({ render: () => h(UApp')
+        ->not->toContain('VITE_APP_ENV')
         ->and($serverEntry)
         ->toContain('import { resolveAppLayout } from "@/layouts/resolveAppLayout";')
         ->toContain('layout: resolveAppLayout,')
+        ->toContain('createSSRApp({ render: () => h(UApp')
+        ->not->toContain('VITE_APP_ENV')
         ->and($layoutResolver)
         ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | null')
         ->toContain('name.startsWith("Auth/")')
+        ->and($viteConfig)
+        ->toContain('defineConfig(({ isSsrBuild }) => ({')
+        ->toContain('entry: "resources/js/ssr.ts"')
+        ->toContain('sourcemap: !isSsrBuild')
         ->and($pagesDeclaringDefaultLayout)->toBe([])
         ->and($defaultLayout)
         ->toContain('<WorkspaceSidebar')

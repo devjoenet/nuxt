@@ -22,8 +22,8 @@ defineProps<{
 
     <div class="grid gap-6">
       <div class="grid gap-4 sm:grid-cols-2">
-        <UPageCard v-if="canReview" :description="`${reviewQueueCount} ${reviewQueueCount === 1 ? 'request' : 'requests'} awaiting a decision or clarification.`" :to="reviewIndex().url" icon="i-ph-magnifying-glass" title="Review queue" />
-        <UPageCard :description="`${roadmapCount} ${roadmapCount === 1 ? 'task' : 'tasks'} currently planned or underway.`" icon="i-ph-map-trifold" title="Roadmap work" />
+        <AppPageCard v-if="canReview" :description="`${reviewQueueCount} ${reviewQueueCount === 1 ? 'request' : 'requests'} awaiting a decision or clarification.`" :to="reviewIndex().url" icon="i-ph-magnifying-glass" title="Review queue" variant="info" />
+        <AppPageCard :description="`${roadmapCount} ${roadmapCount === 1 ? 'task' : 'tasks'} currently planned or underway.`" icon="i-ph-map-trifold" title="Roadmap work" variant="primary" />
       </div>
 
       <section class="grid gap-4">

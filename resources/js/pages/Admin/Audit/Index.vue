@@ -59,7 +59,7 @@ const visitPage = (page: number): void => {
       </Form>
     </template>
 
-    <UPageCard :ui="{ container: 'p-0 sm:p-0' }" class="dark:bg-elevated dark:ring-accented dark:shadow-none" variant="outline">
+    <AppPageCard :style="'outline'" :ui="{ container: 'p-0 sm:p-0' }" class="dark:bg-elevated dark:shadow-none">
       <IndexTableFrame v-if="activities.data.length" contained>
         <table class="min-w-full text-sm">
           <thead class="text-left text-xs text-muted">
@@ -91,6 +91,6 @@ const visitPage = (page: number): void => {
       <IndexEmptyState v-else class="p-6" description="No activity matches these filters." icon="i-ph-magnifying-glass" title="No audit activity found" />
 
       <IndexPagination :meta="activityMeta" class="p-4" item-label="activities" @page="visitPage" />
-    </UPageCard>
+    </AppPageCard>
   </WorkspacePage>
 </template>

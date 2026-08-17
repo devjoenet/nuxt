@@ -12,25 +12,25 @@ defineProps<{
   <DevelopmentTaskSectionCard :class="$props.class" :description="task.description" eyebrow="01 / Request brief" heading-id="task-brief-heading" title="Summary" tone="primary" data-testid="development-task-brief">
     <article class="@container grid gap-6">
       <div class="grid gap-4 @2xl:grid-cols-2">
-        <UPageCard
+        <AppPageCard
           :description="task.desired_outcome"
           title="Desired outcome"
           :ui="{
-            root: 'rounded-lg bg-default/70 ring-accented',
+            root: 'rounded-lg',
             container: 'p-4 sm:p-5',
             description: 'whitespace-pre-wrap text-base/7 sm:text-sm/6',
           }"
-          variant="subtle"
+          variant="primary"
         />
-        <UPageCard
+        <AppPageCard
           :description="task.acceptance_criteria"
           title="Acceptance criteria"
           :ui="{
-            root: 'rounded-lg bg-default/70 ring-accented',
+            root: 'rounded-lg',
             container: 'p-4 sm:p-5',
             description: 'whitespace-pre-wrap text-base/7 sm:text-sm/6',
           }"
-          variant="subtle"
+          variant="success"
         />
       </div>
     </article>

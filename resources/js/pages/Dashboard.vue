@@ -14,14 +14,14 @@ defineProps<{
   <WorkspacePage id="workspace-dashboard" description="A practical view of the work that needs attention." title="Workspace">
     <template v-if="canViewCrm">
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <UPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" variant="subtle">
+        <AppPageCard v-for="stat in stats" :key="stat.label" :description="stat.label">
           <template #leading><UIcon :name="stat.icon" class="size-5 text-primary" /></template>
           <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
-        </UPageCard>
+        </AppPageCard>
       </div>
 
       <div class="mt-6 grid gap-6 xl:grid-cols-2">
-        <UPageCard description="The latest records entering the CRM." title="Recent leads" variant="subtle">
+        <AppPageCard description="The latest records entering the CRM." title="Recent leads">
           <div v-if="recentLeads.length" class="divide-y divide-default">
             <Link v-for="lead in recentLeads" :key="lead.uuid" :href="leadShow.url(lead.uuid)" class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 hover:text-primary">
               <div class="min-w-0">
@@ -33,9 +33,9 @@ defineProps<{
           </div>
           <div v-else class="py-4 text-sm text-muted">No leads have been captured yet.</div>
           <template #footer><Link :href="leadsIndex.url()" class="text-sm font-semibold text-primary hover:underline">Open CRM</Link></template>
-        </UPageCard>
+        </AppPageCard>
 
-        <UPageCard description="Open tasks ordered by the next action date." title="Follow-ups" variant="subtle">
+        <AppPageCard description="Open tasks ordered by the next action date." title="Follow-ups">
           <div v-if="upcomingTasks.length" class="divide-y divide-default">
             <Link v-for="task in upcomingTasks" :key="task.uuid" :href="leadShow.url(task.lead_uuid)" class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 hover:text-primary">
               <div class="min-w-0">
@@ -46,10 +46,10 @@ defineProps<{
             </Link>
           </div>
           <div v-else class="py-4 text-sm text-muted">No open follow-ups need attention.</div>
-        </UPageCard>
+        </AppPageCard>
       </div>
     </template>
 
-    <UPageCard v-else description="Your account is active, but no CRM permission has been assigned yet. Ask an administrator to update your role." icon="i-ph-shield-check" title="Workspace access is being prepared" variant="subtle" />
+    <AppPageCard v-else description="Your account is active, but no CRM permission has been assigned yet. Ask an administrator to update your role." icon="i-ph-shield-check" title="Workspace access is being prepared" variant="info" />
   </WorkspacePage>
 </template>

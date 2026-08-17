@@ -34,7 +34,7 @@ const priorityColor = (task: DevelopmentTask): "error" | "neutral" | "warning" =
 
     <ul v-if="tasks.length" class="grid gap-3" role="list">
       <li v-for="task in tasks" :key="task.id">
-        <UPageCard :to="show(task.id).url" variant="subtle">
+        <AppPageCard :to="show(task.id).url" :variant="priorityColor(task)">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
               <p v-if="column.key === 'planned' && task.roadmap_position" class="text-xs font-bold tracking-[0.14em] text-primary uppercase">Planned {{ task.roadmap_position }}</p>
@@ -53,7 +53,7 @@ const priorityColor = (task: DevelopmentTask): "error" | "neutral" | "warning" =
               <dd class="truncate font-medium text-highlighted">{{ task.affected_area_label }}</dd>
             </div>
           </dl>
-        </UPageCard>
+        </AppPageCard>
       </li>
     </ul>
 

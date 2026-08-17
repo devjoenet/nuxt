@@ -29,7 +29,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UPageCard description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager." icon="i-ph-lock-key" title="2FA Recovery Codes">
+  <AppPageCard description="Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager." icon="i-ph-lock-key" title="2FA Recovery Codes" variant="info">
     <div class="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
       <UButton :disabled="recoveryCodesProcessing" :icon="isRecoveryCodesVisible ? 'i-ph-eye-slash' : 'i-ph-eye'" :label="`${isRecoveryCodesVisible ? 'Hide' : 'View'} Recovery Codes`" @click="toggleRecoveryCodesVisibility" />
 
@@ -54,5 +54,5 @@ onMounted(async () => {
         </p>
       </div>
     </div>
-  </UPageCard>
+  </AppPageCard>
 </template>

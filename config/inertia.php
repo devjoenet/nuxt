@@ -30,23 +30,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Testing
+    | Page Discovery
     |--------------------------------------------------------------------------
     |
-    | The values described here are used to locate Inertia components on the
-    | filesystem. For instance, when using `assertInertia`, the assertion
-    | attempts to locate the component as a file relative to the paths.
+    | These values locate Inertia components on the filesystem. Runtime page
+    | existence checks stay disabled while test assertions keep their stricter
+    | page existence validation below.
     |
     */
 
-    'testing' => [
-        'ensure_pages_exist' => true,
-
-        'page_paths' => [
+    'pages' => [
+        'ensure_pages_exist' => false,
+        'paths' => [
             resource_path('js/pages'),
         ],
-
-        'page_extensions' => [
+        'extensions' => [
             'js',
             'jsx',
             'svelte',
@@ -54,6 +52,10 @@ return [
             'tsx',
             'vue',
         ],
+    ],
+
+    'testing' => [
+        'ensure_pages_exist' => true,
     ],
 
 ];

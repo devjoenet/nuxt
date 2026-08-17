@@ -12,8 +12,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AlertError: typeof import('./resources/js/components/AlertError.vue')['default']
+    AppCard: typeof import('./resources/js/components/AppCard.vue')['default']
     AppLogo: typeof import('./resources/js/components/AppLogo.vue')['default']
     AppLogoIcon: typeof import('./resources/js/components/AppLogoIcon.vue')['default']
+    AppPageCard: typeof import('./resources/js/components/AppPageCard.vue')['default']
     AsyncCrmSelect: typeof import('./resources/js/components/AsyncCrmSelect.vue')['default']
     ConfirmActionButton: typeof import('./resources/js/components/ConfirmActionButton.vue')['default']
     CrmDetailLayout: typeof import('./resources/js/components/Crm/CrmDetailLayout.vue')['default']

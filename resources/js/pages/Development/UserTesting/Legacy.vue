@@ -37,7 +37,7 @@ const categories = computed(() => {
     <div class="grid gap-6">
       <UAlert color="warning" description="This checklist is retained only until the Development workspace cleanup task removes the old records." title="Legacy workflow" variant="subtle" />
 
-      <UPageCard class="overflow-hidden" variant="subtle">
+      <AppPageCard class="overflow-hidden">
         <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end">
           <div>
             <p class="text-xs font-bold tracking-[0.22em] text-highlighted uppercase">Legacy release gate</p>
@@ -52,12 +52,12 @@ const categories = computed(() => {
             <UProgress :model-value="pages.length ? (testedCount / pages.length) * 100 : 0" class="mt-3" color="primary" />
           </div>
         </div>
-      </UPageCard>
+      </AppPageCard>
 
-      <UPageCard v-if="pages.length === 0" class="p-8 text-center" variant="subtle">
+      <AppPageCard v-if="pages.length === 0" class="p-8 text-center">
         <UIcon class="mx-auto size-10 text-success" name="i-ph-check-circle" />
         <h2 class="mt-4 text-xl font-semibold text-highlighted">The legacy queue is clear.</h2>
-      </UPageCard>
+      </AppPageCard>
 
       <section v-for="category in categories" :key="category.name" class="grid gap-4">
         <div class="flex items-end justify-between gap-4">

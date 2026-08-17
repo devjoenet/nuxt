@@ -9,17 +9,21 @@
     "packages": [
         "spatie/laravel-activitylog",
         "spatie/boost-spatie-guidelines",
-        "spatie/laravel-permission"
+        "spatie/laravel-permission",
+        "laravel-egypt/datalens"
     ],
     "sail": false,
     "skills": [
+        "infer-conventions",
         "fortify-development",
         "laravel-best-practices",
         "configuring-horizon",
         "wayfinder-development",
         "pest-testing",
         "inertia-vue-development",
+        "tailwindcss-development",
         "laravel-permission-development",
+        "datalens-development",
         "spatie-laravel-php-standards",
         "audit-laravel-application",
         "automate-review-findings",

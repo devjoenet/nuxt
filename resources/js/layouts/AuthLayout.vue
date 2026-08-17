@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import AuthLayout from "@/layouts/Auth/AuthSimpleLayout.vue";
+import type { CardVariant, PageCardStyle } from "@/lib/cardAppearance";
 
 defineProps<{
   title?: string;
   description?: string;
-  variant?: "outline" | "solid" | "soft" | "subtle" | "naked" | "ghost";
+  style?: PageCardStyle;
+  variant?: CardVariant;
 }>();
 </script>
 
 <template>
-  <AuthLayout :title :description :variant>
+  <AuthLayout :description :style :title :variant>
     <slot />
   </AuthLayout>
 </template>

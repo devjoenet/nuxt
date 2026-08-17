@@ -7,7 +7,7 @@ import ui from "@nuxt/ui/vite";
 import path from "path";
 import vueDevTools from "vite-plugin-vue-devtools";
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     laravel({
       input: ["resources/js/app.ts"],
@@ -113,20 +113,8 @@ export default defineConfig({
     }),
     vueDevTools(),
   ],
-  resolve: {
-    alias: {
-      "@": path.resolve(import.meta.dirname, "./resources/js"),
-    },
-  },
-  server: {
-    watch: {
-      ignored: ["**/storage/time-machine/**"],
-    },
-  },
-  ssr: {
-    noExternal: ["@nuxt/ui"],
-  },
   build: {
+    sourcemap: !isSsrBuild,
     rolldownOptions: {
       onLog(level, log, handler) {
         const isDependencyAnnotationWarning = typeof log === "object" && log.code === "INVALID_ANNOTATION" && typeof log.id === "string" && log.id.includes("/node_modules/");
@@ -139,4 +127,15 @@ export default defineConfig({
       },
     },
   },
-});
+  css: {
+    devSourcemap: true,
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "./resources/js"),
+    },
+  },
+  ssr: {
+    noExternal: ["@nuxt/ui"],
+  },
+}));

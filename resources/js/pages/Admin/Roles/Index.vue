@@ -8,6 +8,7 @@ import RolePermissionGroupList from "@/sections/Admin/Roles/RolePermissionGroupL
 import type { AdminPermissionGroup, AdminRole } from "@/types";
 import { computed, ref } from "vue";
 
+
 const props = defineProps<{ roles: AdminRole[]; permissionGroups: AdminPermissionGroup[] }>();
 const selectedRoleId = ref<number | null>(props.roles[0]?.id ?? null);
 const selectedRole = computed(() => props.roles.find((role) => role.id === selectedRoleId.value));
@@ -42,15 +43,16 @@ function finishSaving(): void {
           <FormSelect id="role-selector" v-model="selectedRoleId" :disabled="isSaving" :items="roleOptions" class="role-selector w-full" label="Role" size="lg" />
         </section>
 
-        <UPageCard
+        <AppPageCard
           v-if="selectedRole"
           :key="selectedRole.id"
           :description="selectedRole.protected ? 'Protected system role' : 'Review access by area, then save your changes.'"
           :title="selectedRole.name"
           :ui="{ description: 'text-base sm:text-sm mb-4 ', title: 'text-xl  font-bold mb-4' }"
-          class="w-full dark:bg-elevated dark:ring-accented dark:shadow-none"
+          :style="'subtle'"
           data-testid="role-editor-card"
-          variant="outline"
+          class="w-full"
+          variant="neutral"
         >
           <Form v-if="!selectedRole.protected" #default="{ errors, processing, recentlySuccessful }" class="grid gap-6" v-bind="update.form(selectedRole.id)" @finish="finishSaving" @start="beginSaving">
             <UFormField
@@ -69,7 +71,7 @@ function finishSaving(): void {
             </div>
           </Form>
           <UAlert v-else :ui="{ description: 'text-cyan-900 dark:text-cyan-100' }" class="w-fit max-w-full" color="info" description="All permissions are granted to Super Admin by the server-side Gate bypass. This role is not editable from the UI." icon="i-ph-info" variant="subtle" />
-        </UPageCard>
+        </AppPageCard>
       </template>
     </div>
   </WorkspacePage>

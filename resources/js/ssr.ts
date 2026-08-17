@@ -19,7 +19,6 @@ createServer(
       render: renderToString,
       title: (title) => (title ? `${title} - ${appName}` : appName),
       layout: resolveAppLayout,
-      dev: import.meta.env.VITE_APP_ENV !== "production",
       resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>("./pages/**/*.vue")),
       setup: ({ App, props, plugin }) =>
         createSSRApp({ render: () => h(UApp, null, { default: () => h(App, props) }) })

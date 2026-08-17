@@ -10,15 +10,15 @@ const props = defineProps<{
 </script>
 
 <template>
-  <UCard
+  <AppCard
     :aria-labelledby="headingId"
     :class="props.class"
+    :variant="tone"
     :ui="{
       root: 'overflow-hidden rounded-xl',
       header: 'border-b border-default p-5 sm:p-6',
       body: 'grid gap-6 p-5 sm:p-6',
     }"
-    variant="subtle"
   >
     <template #header>
       <div class="grid gap-3">
@@ -31,5 +31,5 @@ const props = defineProps<{
     </template>
 
     <slot />
-  </UCard>
+  </AppCard>
 </template>

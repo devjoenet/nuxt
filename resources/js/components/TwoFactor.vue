@@ -14,7 +14,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <UPageCard title="Two-Factor Authentication" variant="subtle" description="Manage your two-factor authentication settings">
+  <AppPageCard description="Manage your two-factor authentication settings" title="Two-Factor Authentication">
     <div v-if="!twoFactorEnabled" class="flex flex-col items-start justify-start space-y-4">
       <UBadge color="error">Disabled</UBadge>
       <p class="text-muted">When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.</p>
@@ -36,5 +36,5 @@ withDefaults(defineProps<Props>(), {
         </Form>
       </div>
     </div>
-  </UPageCard>
+  </AppPageCard>
 </template>

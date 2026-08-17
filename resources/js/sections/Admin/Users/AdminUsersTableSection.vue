@@ -25,7 +25,7 @@ const visitPage = (page: number): void => {
 </script>
 
 <template>
-  <UPageCard :class="cn('dark:bg-elevated dark:ring-accented dark:shadow-none', props.class)" description="Role and account status changes are recorded in the audit log." title="Workspace users" variant="outline">
+  <AppPageCard :class="cn('dark:bg-elevated dark:shadow-none', props.class)" :style="'outline'" description="Role and account status changes are recorded in the audit log." title="Workspace users">
     <IndexTableFrame v-if="users.data.length" contained>
       <table class="min-w-full text-sm">
         <thead class="text-left text-xs text-muted">
@@ -72,5 +72,5 @@ const visitPage = (page: number): void => {
     <IndexEmptyState v-else description="Invited workspace users will appear here." icon="i-ph-users" title="No workspace users" />
 
     <IndexPagination :meta="users.meta" class="mt-4" item-label="users" @page="visitPage" />
-  </UPageCard>
+  </AppPageCard>
 </template>

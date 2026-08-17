@@ -13,13 +13,13 @@ const props = defineProps<{
 
 <template>
   <aside :class="cn('min-w-0 xl:sticky xl:top-4 xl:self-start', props.class)" data-testid="development-task-workflow">
-    <UCard
+    <AppCard
+      variant="secondary"
       :ui="{
         root: 'relative overflow-hidden rounded-xl',
         header: 'border-b border-default p-5 sm:p-6',
         body: 'p-0 sm:p-0',
       }"
-      variant="subtle"
     >
       <template #header>
         <div class="grid gap-3">
@@ -33,6 +33,6 @@ const props = defineProps<{
 
       <DevelopmentTaskLifecycleTimeline :task="task" />
       <DevelopmentTaskWorkflowActions :task="task" :testers="testers" />
-    </UCard>
+    </AppCard>
   </aside>
 </template>

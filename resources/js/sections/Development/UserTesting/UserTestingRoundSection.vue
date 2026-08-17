@@ -15,7 +15,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <UPageCard :class="cn(props.class)" variant="subtle">
+  <AppPageCard :class="cn(props.class)" variant="info">
     <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(22rem,0.8fr)]">
       <div class="grid content-start gap-5">
         <div class="flex flex-wrap items-start justify-between gap-3">
@@ -77,5 +77,5 @@ const props = defineProps<{
         </div>
       </Form>
     </div>
-  </UPageCard>
+  </AppPageCard>
 </template>
