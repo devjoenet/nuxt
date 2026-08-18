@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'enabled' => env('DATALENS_ENABLED', true),
     'path' => env('DATALENS_PATH', 'dev/datalens'),
     'middleware' => [
         'web',
-        \LaravelEgypt\DataLens\Http\Middleware\EnsureLocalEnvironment::class,
+        LaravelEgypt\DataLens\Http\Middleware\EnsureLocalEnvironment::class,
     ],
     // Auto-detected connections will be merged with these custom/additional connections
     'additional_connections' => [
