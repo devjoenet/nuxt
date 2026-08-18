@@ -82,8 +82,11 @@ The 69 licensed HTML examples are distributed as follows:
 | Team | 5 |
 | Total | 69 |
 
-Task 2 must create a machine-readable manifest of those source files, their assets, their plugins, and their planned
-Vue destinations. The manifest—not a remembered list—will drive gallery completeness checks.
+The metadata-only [`source-manifest.json`](../../resources/argon/source-manifest.json) records those source files, their
+assets, plugins, behaviors, provenance, distribution decisions, and planned Vue destinations. The manifest—not a
+remembered list—drives gallery completeness checks. Its separate
+[licensing and distribution review](argon-source-licensing.md) records the unresolved questions that must be answered
+before any public starter-kit extraction.
 
 ### Task 1 baseline results
 

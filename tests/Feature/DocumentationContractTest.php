@@ -56,6 +56,7 @@ test('the database workflow replaces markdown task queues', function (): void {
 
 test('the Argon frontend overhaul remains a reference blueprint instead of a task queue', function (): void {
     $blueprint = File::get(base_path('docs/development/argon-frontend-overhaul.md'));
+    $licensingReview = File::get(base_path('docs/development/argon-source-licensing.md'));
     $readme = File::get(base_path('README.md'));
 
     expect($blueprint)
@@ -65,7 +66,13 @@ test('the Argon frontend overhaul remains a reference blueprint instead of a tas
         ->toContain('resources/js/components/Ui')
         ->toContain('The existing `resources/js/sections` root will be removed progressively')
         ->toContain('Licensed Argon HTML examples | 69')
+        ->toContain('[`source-manifest.json`](../../resources/argon/source-manifest.json)')
+        ->toContain('[licensing and distribution review](argon-source-licensing.md)')
         ->toContain('Each numbered item is represented by one live Development task and one pull request')
+        ->and($licensingReview)
+        ->toContain('The local licensed checkout remains outside this repository')
+        ->toContain('Questions that must be resolved before starter-kit extraction')
+        ->toContain('argon:generate-source-manifest')
         ->and($readme)
         ->toContain('[Argon frontend overhaul blueprint](docs/development/argon-frontend-overhaul.md)');
 });

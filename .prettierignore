@@ -1,2 +1,3 @@
 resources/views/mail/*
+resources/argon/source-manifest.json
 **/*.md
