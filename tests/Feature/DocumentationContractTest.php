@@ -54,6 +54,22 @@ test('the database workflow replaces markdown task queues', function (): void {
     }
 });
 
+test('the Argon frontend overhaul remains a reference blueprint instead of a task queue', function (): void {
+    $blueprint = File::get(base_path('docs/development/argon-frontend-overhaul.md'));
+    $readme = File::get(base_path('README.md'));
+
+    expect($blueprint)
+        ->toContain('durable reference blueprint,')
+        ->toContain('not an active task queue')
+        ->toContain('database-backed Development workspace remains the sole source of truth')
+        ->toContain('resources/js/components/Ui')
+        ->toContain('The existing `resources/js/sections` root will be removed progressively')
+        ->toContain('Licensed Argon HTML examples | 69')
+        ->toContain('Each numbered item is represented by one live Development task and one pull request')
+        ->and($readme)
+        ->toContain('[Argon frontend overhaul blueprint](docs/development/argon-frontend-overhaul.md)');
+});
+
 test('maintained deployment documentation only names registered artisan commands', function (): void {
     $commands = collect(File::allFiles(base_path('docs')))
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'md')

@@ -8,7 +8,6 @@ import RolePermissionGroupList from "@/sections/Admin/Roles/RolePermissionGroupL
 import type { AdminPermissionGroup, AdminRole } from "@/types";
 import { computed, ref } from "vue";
 
-
 const props = defineProps<{ roles: AdminRole[]; permissionGroups: AdminPermissionGroup[] }>();
 const selectedRoleId = ref<number | null>(props.roles[0]?.id ?? null);
 const selectedRole = computed(() => props.roles.find((role) => role.id === selectedRoleId.value));
