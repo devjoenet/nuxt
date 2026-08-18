@@ -19,7 +19,7 @@ distribution review.
 
 The reference sources have different jobs and should be consulted in this order:
 
-1. `/Users/joey/code/argon-dashboard-3-pro` is the canonical visual and behavioral implementation reference. Its HTML,
+1. `~/code/argon-dashboard-3-pro` is the canonical visual and behavioral implementation reference. Its HTML,
    Sass, JavaScript, assets, plugins, and page examples define the closest available source of truth.
 2. [The Argon Dashboard 3 Pro landing dashboard](https://demos.creative-tim.com/argon-dashboard-pro/pages/dashboards/landing)
    is the rendered comparison target for responsive behavior, spacing, states, motion, and browser-specific details.
