@@ -719,6 +719,15 @@
     es-toolkit "^1.33.0"
     laravel-precognition "^2.0.0"
 
+"@inertiajs/core@3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@inertiajs/core/-/core-3.7.0.tgz#c7404efb30a7a29d0d8ed39d05c8a21d4caa9d1a"
+  integrity sha512-JzysXTPsOpKcnR7ohwpgKE+UWBrKwW7z23DydWHSxjfQ02tJAKmNnZJAxnX7zH3zUSTqbtPge6QC8XhvfjNXmw==
+  dependencies:
+    "@jridgewell/trace-mapping" "^0.3.31"
+    es-toolkit "^1.33.0"
+    laravel-precognition "^2.0.0"
+
 "@inertiajs/vite@^3.6.1":
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/@inertiajs/vite/-/vite-3.6.1.tgz#9055005fba6f2d1fbaaa95d07420d98c4dcdb455"
@@ -727,12 +736,12 @@
     "@inertiajs/core" "3.6.1"
     tinyglobby "^0.2.15"
 
-"@inertiajs/vue3@^3.4.0":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@inertiajs/vue3/-/vue3-3.6.1.tgz#a96502f20141d830e19a3e4b302885a68570c51b"
-  integrity sha512-7M76W7uw1DqxWR5O+OV7Yg23yITTDcRxuO7KCdQhI58rp9+OTv2BZId7ePSBmqahYOeXUZbTfZfVoS2O6/hijA==
+"@inertiajs/vue3@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@inertiajs/vue3/-/vue3-3.7.0.tgz#40f2b0474df6f07ba35aff36c4c97439e6810cd4"
+  integrity sha512-RB3RPz0srHnsfo2CBXWF1Ox/l/ArKUIkVpwXwEZJ+U0xzlGfDTy+fFfocwLFsPoWSYfG+MHssTBMPZx82STkyw==
   dependencies:
-    "@inertiajs/core" "3.6.1"
+    "@inertiajs/core" "3.7.0"
     es-toolkit "^1.33.0"
     laravel-precognition "^2.0.0"
 

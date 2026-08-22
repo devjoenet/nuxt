@@ -39,7 +39,7 @@
     "vue-tsc": "^3.3.5"
   },
   "dependencies": {
-    "@inertiajs/vue3": "^3.4.0",
+    "@inertiajs/vue3": "^3.7.0",
     "@nuxt/ui": "^4.8.2",
     "@phosphor-icons/vue": "^2.2.1",
     "@unovis/vue": "^1.6.0",
