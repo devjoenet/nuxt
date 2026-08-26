@@ -8,8 +8,9 @@
     "audit:full": "audit-ci --package-manager yarn --high --report-type summary",
     "format": "prettier --write resources/",
     "format:check": "prettier --check resources/",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
+    "lint": "eslint . --fix && yarn test:frontend-architecture",
+    "lint:check": "eslint . && yarn test:frontend-architecture",
+    "test:frontend-architecture": "node --test tests/Frontend/eslint-architecture.test.mjs",
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {

@@ -12,25 +12,24 @@ test('the frontend architecture defines the complete composition boundary', func
 
     expect($architecture)
         ->toContain('Vendor foundation')
-        ->toContain('Product primitives')
-        ->toContain('Workflow shells')
-        ->toContain('Domain sections')
+        ->toContain('UI primitives')
+        ->toContain('Application components')
+        ->toContain('Page-family components')
         ->toContain('Pages')
         ->toContain('Composables')
-        ->toContain('Pure utilities')
-        ->toContain('Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` are the starting point.')
-        ->toContain('pass-through')
-        ->toContain('wrappers that mirror Nuxt UI props and slots')
-        ->toContain('## State ownership and event boundaries')
-        ->toContain('Route pages use `<script setup>` so component state remains instance-scoped')
-        ->toContain('## Props, events, slots, and styling')
-        ->toContain('## Naming and typing')
-        ->toContain('Nested Vue feature directories')
-        ->toContain('Authored TypeScript module')
-        ->toContain('Static asset directories and filenames')
+        ->toContain('Pure helpers')
+        ->toContain('Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` remain the starting point')
+        ->toContain('## Component directories and public APIs')
+        ->toContain('## Page colocation and legacy retirement')
+        ->toContain('## State, props, events, slots, and styling')
+        ->toContain('Route pages use `<script setup>` so mutable page state remains instance-scoped')
+        ->toContain('## Naming, typing, and generated code')
+        ->toContain('## SFC responsibility budgets')
+        ->toContain('UI primitive: 40 lines.')
+        ->toContain('Reusable application component, layout, or page-family component: 60 lines.')
+        ->toContain('Inertia page: 40 lines.')
         ->toContain('## Testing and enforcement')
-        ->toContain('Responsibility beats line count.')
-        ->toContain('New dependencies and new top-level folders under `resources/js` require separate approval.')
+        ->toContain('New dependencies or new top-level folders under `resources/js` still require separate approval.')
         ->and($readme)
         ->toContain('[frontend UI architecture](docs/development/frontend-ui-architecture.md)');
 });
@@ -74,13 +73,17 @@ test('route pages keep mutable state instance scoped', function (): void {
     expect($pageFilesWithModuleScripts)->toBe([]);
 });
 
-test('eslint enforces frontend dependency direction without banning direct Nuxt UI composition', function (): void {
+test('eslint enforces frontend dependency direction and component public APIs', function (): void {
     $eslintConfig = File::get(base_path('eslint.config.ts'));
 
     expect($eslintConfig)
         ->toContain('"no-restricted-imports"')
-        ->toContain('Product primitives and composables cannot depend on workflow or route rendering layers.')
-        ->toContain('Pure utilities cannot depend on frontend rendering layers.')
+        ->toContain('Import UI primitives through their component-directory index.ts public API.')
+        ->toContain('Import application components through their component-directory index.ts public API.')
+        ->toContain('UI primitives cannot depend on application, route, or generated transport layers.')
+        ->toContain('Application components cannot depend on workflow or route rendering layers.')
+        ->toContain('Composables cannot depend on frontend rendering layers.')
+        ->toContain('Pure utilities cannot depend on rendering or generated transport layers.')
         ->toContain('Pure utilities cannot depend on Vue lifecycle, VueUse, or Inertia.')
         ->toContain('Domain sections cannot depend on layouts or route pages.')
         ->toContain('Workflow shells cannot depend on route pages or domain sections.')
@@ -106,7 +109,214 @@ test('the frontend source uses only approved top-level homes', function (): void
         'sections',
         'types',
         'wayfinder',
-    ])->and(File::isDirectory(resource_path('js/components/ui')))->toBeFalse();
+    ])->and(File::isDirectory(resource_path('js/components/Ui')))->toBeTrue()
+        ->and(collect(File::directories(resource_path('js/components')))
+            ->map(fn (string $directory): string => File::name($directory))
+            ->contains('ui'))
+        ->toBeFalse()
+        ->and(File::exists(resource_path('js/components/Ui/README.md')))->toBeTrue();
+});
+
+test('new reusable components use PascalCase directories and public index exports', function (): void {
+    $legacyComponentGroups = ['Crm', 'Landing', 'Privacy'];
+    $componentRoot = resource_path('js/components');
+    $uiRoot = resource_path('js/components/Ui');
+
+    $componentDirectories = collect(File::directories($uiRoot))
+        ->merge(
+            collect(File::directories($componentRoot))
+                ->reject(fn (string $directory): bool => in_array(File::name($directory), [
+                    ...$legacyComponentGroups,
+                    'Ui',
+                ], true)),
+        );
+
+    foreach ($componentDirectories as $componentDirectory) {
+        $componentName = File::name($componentDirectory);
+        $componentFile = "{$componentDirectory}/{$componentName}.vue";
+        $indexFile = "{$componentDirectory}/index.ts";
+
+        expect($componentName)->toMatch('/^[A-Z][A-Za-z0-9]*$/')
+            ->and(File::exists($componentFile))
+            ->toBeTrue("Missing component entry: {$componentFile}")
+            ->and(File::exists($indexFile))
+            ->toBeTrue("Missing component public API: {$indexFile}");
+
+        $componentExport = sprintf(
+            '/export\s+\{\s*default(?:\s+as\s+[A-Za-z][A-Za-z0-9]*)?\s*}\s+from\s+["\']\.\/%s\.vue["\']/',
+            preg_quote($componentName, '/'),
+        );
+
+        expect(File::get($indexFile))->toMatch($componentExport);
+    }
+
+    $expectedLegacyComponentPaths = preg_split('/\R/', <<<'PATHS'
+components/AlertError.vue
+components/AppCard.vue
+components/AppLogo.vue
+components/AppLogoIcon.vue
+components/AppPageCard.vue
+components/AsyncCrmSelect.vue
+components/ConfirmActionButton.vue
+components/Crm/CrmDetailLayout.vue
+components/Crm/CrmDetailMetadata.vue
+components/Crm/CrmRecordStatusBadge.vue
+components/Crm/LeadStatusBadge.vue
+components/DeleteAccount.vue
+components/FormActions.vue
+components/FormCurrencyInput.vue
+components/FormField.vue
+components/FormInput.vue
+components/FormMultiSelect.vue
+components/FormPhoneInput.vue
+components/FormSectionHeading.vue
+components/FormSelect.vue
+components/FormTextarea.vue
+components/IndexEmptyState.vue
+components/IndexPagination.vue
+components/IndexTableFrame.vue
+components/InlineEditActions.vue
+components/Landing/FeatureCard.vue
+components/Landing/LandingContactForm.vue
+components/Landing/LandingFooter.vue
+components/Landing/LandingHeader.vue
+components/Landing/LandingHero.vue
+components/Landing/LandingHeroPicture.vue
+components/Landing/MetricCard.vue
+components/Landing/OperationsShowcase.vue
+components/Landing/Previews/DashboardPreview.vue
+components/Landing/Previews/MobileCheckInPreview.vue
+components/Landing/Previews/PermissionsPreview.vue
+components/Landing/ProcessTimeline.vue
+components/Landing/SectionHeading.vue
+components/Privacy/PrivacyDialog.vue
+components/Privacy/PrivacyDialogLink.vue
+components/Privacy/PrivacyPolicyContent.vue
+components/TeamsMenu.vue
+components/TextLink.vue
+components/TwoFactor.vue
+components/TwoFactorConfirmationStep.vue
+components/TwoFactorRecoveryCodes.vue
+components/TwoFactorRegenerateRecoveryCodesForm.vue
+components/TwoFactorSetupModal.vue
+components/TwoFactorSetupStep.vue
+components/UserMenu.vue
+components/UserTestingPageCard.vue
+components/WorkspaceFormPage.vue
+components/WorkspacePage.vue
+components/WorkspaceSearch.vue
+components/WorkspaceSidebar.vue
+PATHS);
+
+    $currentLegacyComponentPaths = collect(File::allFiles($componentRoot))
+        ->map(fn (SplFileInfo $file): string => 'components/'.$file->getRelativePathname())
+        ->reject(fn (string $path): bool => Str::startsWith($path, 'components/Ui/'))
+        ->reject(function (string $path) use ($legacyComponentGroups): bool {
+            $segments = explode('/', $path);
+
+            return count($segments) > 2 && ! in_array($segments[1], $legacyComponentGroups, true);
+        })
+        ->sort()
+        ->values()
+        ->all();
+
+    expect($currentLegacyComponentPaths)->toBe($expectedLegacyComponentPaths);
+});
+
+test('callers cannot deep import component-directory internals', function (): void {
+    $applicationComponentDirectories = collect(File::directories(resource_path('js/components')))
+        ->map(fn (string $directory): string => File::name($directory))
+        ->reject(fn (string $directory): bool => in_array($directory, ['Crm', 'Landing', 'Privacy', 'Ui'], true))
+        ->values();
+
+    $deepImports = collect(File::allFiles(resource_path('js')))
+        ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['ts', 'tsx', 'vue'], true))
+        ->reject(fn (SplFileInfo $file): bool => Str::startsWith($file->getRelativePathname(), [
+            'actions/',
+            'routes/',
+            'wayfinder/',
+        ]))
+        ->flatMap(function (SplFileInfo $file) use ($applicationComponentDirectories): array {
+            preg_match_all('/(?:from\s+|import\()\s*["\']([^"\']+)["\']/', File::get($file->getPathname()), $matches);
+
+            return collect($matches[1])
+                ->filter(function (string $import) use ($applicationComponentDirectories): bool {
+                    if (preg_match('#^@/components/Ui/[^/]+/.+#', $import) === 1) {
+                        return true;
+                    }
+
+                    return $applicationComponentDirectories->contains(
+                        fn (string $component): bool => preg_match(
+                            '#^@/components/'.preg_quote($component, '#').'/'.preg_quote($component, '#').'(?:\.vue|/)#',
+                            $import,
+                        ) === 1,
+                    );
+                })
+                ->map(fn (string $import): string => $file->getRelativePathname().': '.$import)
+                ->all();
+        })
+        ->values()
+        ->all();
+
+    expect($deepImports)->toBe([]);
+});
+
+test('legacy sections are frozen until page-family migrations retire them', function (): void {
+    $expectedLegacySections = preg_split('/\R/', <<<'PATHS'
+sections/Admin/Roles/CreateAdminRoleSection.vue
+sections/Admin/Roles/RolePermissionGroupList.vue
+sections/Admin/Users/AdminUsersTableSection.vue
+sections/Admin/Users/InviteAdminUserSection.vue
+sections/Admin/Users/types.ts
+sections/Crm/Contacts/contactIndexColumns.ts
+sections/Crm/Leads/LeadFollowUpsSection.vue
+sections/Crm/Leads/LeadNotesSection.vue
+sections/Crm/Leads/LeadOverviewSection.vue
+sections/Crm/Leads/LeadTimelineSection.vue
+sections/Crm/Leads/leadIndexColumns.ts
+sections/Crm/Organizations/organizationIndexColumns.ts
+sections/Development/Roadmap/RoadmapColumnSection.vue
+sections/Development/Roadmap/types.ts
+sections/Development/Tasks/DevelopmentTaskBriefSection.vue
+sections/Development/Tasks/DevelopmentTaskDiscussionSection.vue
+sections/Development/Tasks/DevelopmentTaskLifecycleTimeline.vue
+sections/Development/Tasks/DevelopmentTaskLinksSection.vue
+sections/Development/Tasks/DevelopmentTaskProgressAction.vue
+sections/Development/Tasks/DevelopmentTaskReviewActions.vue
+sections/Development/Tasks/DevelopmentTaskRoadmapSummaryFields.vue
+sections/Development/Tasks/DevelopmentTaskSectionCard.vue
+sections/Development/Tasks/DevelopmentTaskSummaryField.vue
+sections/Development/Tasks/DevelopmentTaskSummarySection.vue
+sections/Development/Tasks/DevelopmentTaskTestingRequestForm.vue
+sections/Development/Tasks/DevelopmentTaskTestingSection.vue
+sections/Development/Tasks/DevelopmentTaskWorkflowActions.vue
+sections/Development/Tasks/DevelopmentTaskWorkflowSection.vue
+sections/Development/UserTesting/UserTestingRoundSection.vue
+sections/Landing/LandingCardGridSection.vue
+sections/Landing/LandingContactSection.vue
+sections/Landing/LandingOperationsSection.vue
+sections/Landing/LandingProcessSection.vue
+sections/Landing/landingContent.ts
+PATHS);
+
+    $currentLegacySections = collect(File::allFiles(resource_path('js/sections')))
+        ->map(fn (SplFileInfo $file): string => 'sections/'.$file->getRelativePathname())
+        ->sort()
+        ->values()
+        ->all();
+
+    $misnamedColocationDirectories = collect(File::directories(resource_path('js/pages')))
+        ->flatMap(function (string $directory): array {
+            return collect(File::allDirectories($directory))
+                ->filter(fn (string $nestedDirectory): bool => Str::lower(File::name($nestedDirectory)) === 'components')
+                ->reject(fn (string $nestedDirectory): bool => File::name($nestedDirectory) === 'Components')
+                ->all();
+        })
+        ->values()
+        ->all();
+
+    expect($currentLegacySections)->toBe($expectedLegacySections)
+        ->and($misnamedColocationDirectories)->toBe([]);
 });
 
 test('the frontend source follows the documented naming convention', function (): void {
@@ -167,10 +377,104 @@ test('the frontend source follows the documented naming convention', function ()
     expect($invalidVueDirectories)->toBe([])
         ->and($invalidVueFiles)->toBe([])
         ->and($invalidTypeScriptFiles)->toBe([])
-        ->and($invalidAssetPaths)->toBe([]);
+        ->and($invalidAssetPaths)->toBe([])
+        ->and(collect($generatedRoots)->every(
+            fn (string $root): bool => File::isDirectory(resource_path('js/'.Str::beforeLast($root, '/'))),
+        ))->toBeTrue();
 });
 
-test('the current product primitives and Nuxt UI foundation remain explicit', function (): void {
+test('sfc script budgets allow only documented exact-file exceptions', function (): void {
+    $architecture = File::get(base_path('docs/development/frontend-ui-architecture.md'));
+    $exceptions = [
+        'components/FormCurrencyInput.vue' => [
+            'budget' => 60,
+            'reason' => 'legacy currency masking and Nuxt UI input adaptation',
+        ],
+        'components/FormPhoneInput.vue' => [
+            'budget' => 60,
+            'reason' => 'legacy phone formatting and Nuxt UI input adaptation',
+        ],
+        'components/UserMenu.vue' => [
+            'budget' => 60,
+            'reason' => 'route-aware account navigation and appearance state',
+        ],
+        'pages/Settings/Profile.vue' => [
+            'budget' => 40,
+            'reason' => 'one shared profile form',
+        ],
+    ];
+
+    $scriptLineCount = function (string $contents): int {
+        if (preg_match('/<script(?=[^>]*\bsetup\b)[^>]*>([\s\S]*?)<\/script>/', $contents, $matches) !== 1) {
+            return 0;
+        }
+
+        $count = 0;
+        $insideImport = false;
+
+        foreach (preg_split('/\R/', $matches[1]) as $rawLine) {
+            $line = mb_trim($rawLine);
+
+            if ($line === '') {
+                continue;
+            }
+
+            if ($insideImport) {
+                if (Str::endsWith($line, ';')) {
+                    $insideImport = false;
+                }
+
+                continue;
+            }
+
+            if (Str::startsWith($line, 'import ')) {
+                $insideImport = ! Str::endsWith($line, ';');
+
+                continue;
+            }
+
+            $count++;
+        }
+
+        return $count;
+    };
+
+    $violations = collect(File::allFiles(resource_path('js')))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->filter(fn (SplFileInfo $file): bool => Str::startsWith($file->getRelativePathname(), [
+            'components/',
+            'layouts/',
+            'pages/',
+            'sections/',
+        ]))
+        ->mapWithKeys(function (SplFileInfo $file) use ($scriptLineCount): array {
+            $path = $file->getRelativePathname();
+            $budget = match (true) {
+                Str::startsWith($path, 'components/Ui/') => 40,
+                Str::startsWith($path, 'pages/') && ! Str::contains($path, '/Components/') => 40,
+                default => 60,
+            };
+            $lines = $scriptLineCount(File::get($file->getPathname()));
+
+            return $lines > $budget
+                ? [$path => ['budget' => $budget, 'lines' => $lines]]
+                : [];
+        })
+        ->sortKeys()
+        ->all();
+
+    expect(array_keys($violations))->toBe(array_keys($exceptions));
+
+    foreach ($exceptions as $path => $exception) {
+        expect($path)->not->toContain('*')
+            ->and($exception['reason'])->not->toBeEmpty()
+            ->and($violations[$path]['budget'])->toBe($exception['budget'])
+            ->and($architecture)->toContain("`resources/js/{$path}`")
+            ->and($architecture)->toContain($exception['reason']);
+    }
+});
+
+test('the current application components and Nuxt UI foundation remain explicit', function (): void {
     foreach ([
         'resources/js/components/FormField.vue',
         'resources/js/components/FormInput.vue',
