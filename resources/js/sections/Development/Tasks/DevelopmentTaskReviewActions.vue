@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Form } from "@inertiajs/vue3";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { cn } from "@/lib/utils";
 import { promote, reject } from "@/routes/development/tasks";
 import { store as requestInformation } from "@/routes/development/tasks/informationRequest";

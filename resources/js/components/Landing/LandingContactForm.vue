@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import FormInput from "@/components/FormInput.vue";
-import FormCurrencyInput from "@/components/FormCurrencyInput.vue";
-import FormMultiSelect from "@/components/FormMultiSelect.vue";
-import FormPhoneInput from "@/components/FormPhoneInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormCurrencyInput } from "@/components/Ui/FormCurrencyInput";
+import { FormMultiSelect } from "@/components/Ui/FormMultiSelect";
+import { FormPhoneInput } from "@/components/Ui/FormPhoneInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import PrivacyDialogLink from "@/components/Privacy/PrivacyDialogLink.vue";
 import { useLandingAttribution } from "@/composables/useLandingAttribution";
 import { store } from "@/routes/contact";

@@ -25,10 +25,11 @@ they are not permission to split coherent behavior into arbitrary fragments.
 and `resources/js/wayfinder` are generated Wayfinder transport trees: never edit them by hand or treat them as
 composition layers. `resources/js/assets`, `app.ts`, and `ssr.ts` remain supporting infrastructure.
 
-The current flat files and grouped directories under `resources/js/components` are transitional application
-components. Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` remain the starting point;
-they move only with the route-family slice that can verify their behavior. New reusable components use the directory
-standard below instead of adding to the flat legacy shape.
+The remaining flat files and grouped directories under `resources/js/components` are transitional application
+components. Floating form controls now live behind typed `components/Ui/<Control>` public APIs, while the
+domain-aware `AsyncCrmSelect` application component composes the portable async-select primitive from its own
+directory. Other transitional components move only with the route-family slice that can verify their behavior. New
+reusable components use the directory standard below instead of adding to the flat legacy shape.
 
 ## Component directories and public APIs
 
@@ -121,12 +122,10 @@ Import blocks, blank lines, and generated declarations are excluded from these `
 - Inertia page: 40 lines.
 
 An over-budget component needs an exact-file exception with a reason explaining why extraction would make ownership
-less clear. Directory-wide and wildcard exceptions are prohibited. Task 3 starts with four transitional exceptions:
+less clear. Directory-wide and wildcard exceptions are prohibited. Two transitional exceptions remain:
 
 | Exact file | Budget | Reason |
 | --- | ---: | --- |
-| `resources/js/components/FormCurrencyInput.vue` | 60 | It owns legacy currency masking and Nuxt UI input adaptation; the floating-form migration owns its typed primitive split. |
-| `resources/js/components/FormPhoneInput.vue` | 60 | It owns legacy phone formatting and Nuxt UI input adaptation; the floating-form migration owns its typed primitive split. |
 | `resources/js/components/UserMenu.vue` | 60 | It currently coordinates route-aware account navigation and appearance state; the layouts/navigation migration owns its split. |
 | `resources/js/pages/Settings/Profile.vue` | 40 | It intentionally coordinates one shared profile form to prevent partial forms overwriting shared state; the settings migration owns its final page-family extraction. |
 

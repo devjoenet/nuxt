@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import IndexPagination from "@/components/IndexPagination.vue";
 import IndexTableFrame from "@/components/IndexTableFrame.vue";

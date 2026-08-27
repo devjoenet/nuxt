@@ -7,36 +7,36 @@ export type CardStyle = "solid" | "outline" | "soft" | "subtle";
 export type PageCardStyle = CardStyle | "ghost" | "naked";
 
 const cardBorderClasses: Record<CardVariant, string> = {
-  primary: "border-primary-800 dark:border-primary-800",
-  secondary: "border-secondary-800 dark:border-secondary-800",
-  muted: "border-muted-800 dark:border-muted-800",
-  neutral: "border-neutral-800 dark:border-neutral-800",
-  info: "border-info-800 dark:border-info-800",
-  success: "border-success-800 dark:border-success-800",
-  warning: "border-warning-800 dark:border-warning-800",
-  error: "border-error-800 dark:border-error-800",
+  primary: "border-primary-200 dark:border-primary-700",
+  secondary: "border-secondary-200 dark:border-secondary-700",
+  muted: "border-muted-200 dark:border-muted-700",
+  neutral: "border-neutral-200 dark:border-neutral-700",
+  info: "border-info-200 dark:border-info-700",
+  success: "border-success-200 dark:border-success-700",
+  warning: "border-warning-200 dark:border-warning-700",
+  error: "border-error-200 dark:border-error-700",
 };
 
 const cardBackgroundClasses: Record<CardVariant, string> = {
-  primary: "bg-primary-100 dark:bg-primary-900",
-  secondary: "bg-secondary-100 dark:bg-secondary-900",
-  muted: "bg-muted-100 dark:bg-muted-900",
-  neutral: "bg-neutral-100 dark:bg-neutral-900",
-  info: "bg-info-100 dark:bg-info-900",
-  success: "bg-success-100 dark:bg-success-900",
-  warning: "bg-warning-100 dark:bg-warning-900",
-  error: "bg-error-100 dark:bg-error-900",
+  primary: "bg-primary-100 dark:bg-primary-800",
+  secondary: "bg-secondary-100 dark:bg-secondary-800",
+  muted: "bg-muted-100 dark:bg-muted-800",
+  neutral: "bg-neutral-100 dark:bg-neutral-800",
+  info: "bg-info-100 dark:bg-info-800",
+  success: "bg-success-100 dark:bg-success-800",
+  warning: "bg-warning-100 dark:bg-warning-800",
+  error: "bg-error-100 dark:bg-error-800",
 };
 
 const cardSolidClasses: Record<CardVariant, string> = {
-  primary: "bg-primary-100 dark:bg-primary-900",
-  secondary: "bg-secondary-100 dark:bg-secondary-900",
-  muted: "bg-muted-100 dark:bg-muted-900",
-  neutral: "bg-neutral-100 dark:bg-neutral-900",
-  info: "bg-info-100 dark:bg-info-900",
-  success: "bg-success-100 dark:bg-success-900",
-  warning: "bg-warning-100 dark:bg-warning-900",
-  error: "bg-error-100 dark:bg-error-900",
+  primary: "bg-primary-800 text-white dark:bg-primary-200 dark:text-primary-950",
+  secondary: "bg-secondary-800 text-white dark:bg-secondary-200 dark:text-secondary-950",
+  muted: "bg-muted-800 text-white dark:bg-muted-200 dark:text-muted-950",
+  neutral: "bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-950",
+  info: "bg-info-800 text-white dark:bg-info-200 dark:text-info-950",
+  success: "bg-success-800 text-white dark:bg-success-200 dark:text-success-950",
+  warning: "bg-warning-800 text-white dark:bg-warning-200 dark:text-warning-950",
+  error: "bg-error-800 text-white dark:bg-error-200 dark:text-error-950",
 };
 
 const cardHoverClasses: Record<CardVariant, string> = {

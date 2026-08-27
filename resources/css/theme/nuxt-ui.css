@@ -1,54 +1,54 @@
 /* Nuxt UI semantic roles. These are the values components consume. */
 :root {
-  --ui-primary: var(--color-teal-600);
-  --ui-secondary: var(--color-violet-600);
+  --ui-primary: var(--color-argon-600);
+  --ui-secondary: var(--color-argon-secondary-500);
   --ui-success: var(--color-green-500);
   --ui-info: var(--color-cyan-500);
   --ui-warning: var(--color-orange-500);
   --ui-error: var(--color-red-500);
 
-  --ui-text-dimmed: var(--color-grey-500);
-  --ui-text-muted: var(--color-slate-500);
+  --ui-text-dimmed: var(--color-grey-600);
+  --ui-text-muted: var(--argon-text-body);
   --ui-text-toned: var(--color-slate-600);
-  --ui-text: var(--color-slate-800);
-  --ui-text-highlighted: var(--color-slate-950);
-  --ui-text-inverted: var(--color-slate-50);
+  --ui-text: var(--argon-text-body);
+  --ui-text-highlighted: var(--argon-text-heading);
+  --ui-text-inverted: var(--color-grey-50);
 
-  --ui-bg: var(--color-slate-50);
-  --ui-bg-muted: var(--color-slate-100);
-  --ui-bg-elevated: color-mix(in oklab, var(--color-grey-50) 82%, var(--color-teal-50));
-  --ui-bg-accented: var(--color-slate-200);
+  --ui-bg: var(--argon-surface-canvas);
+  --ui-bg-muted: var(--argon-surface-inset);
+  --ui-bg-elevated: var(--argon-surface-elevated);
+  --ui-bg-accented: var(--argon-surface-interactive);
   --ui-bg-inverted: var(--color-slate-950);
 
-  --ui-border: var(--color-slate-200);
-  --ui-border-muted: var(--color-slate-100);
+  --ui-border: var(--argon-border);
+  --ui-border-muted: var(--argon-divider);
   --ui-border-accented: var(--color-slate-300);
   --ui-border-inverted: var(--color-slate-950);
 }
 
 .dark {
-  --ui-primary: var(--color-teal-400);
-  --ui-secondary: var(--color-violet-500);
+  --ui-primary: var(--color-argon-400);
+  --ui-secondary: var(--color-argon-secondary-400);
   --ui-success: var(--color-green-500);
   --ui-info: var(--color-cyan-500);
   --ui-warning: var(--color-orange-500);
   --ui-error: var(--color-red-500);
 
-  --ui-text-dimmed: var(--color-grey-300);
-  --ui-text-muted: var(--color-grey-200);
-  --ui-text-toned: var(--color-slate-200);
-  --ui-text: var(--color-grey-100);
-  --ui-text-highlighted: var(--color-grey-50);
+  --ui-text-dimmed: var(--color-grey-400);
+  --ui-text-muted: var(--argon-text-body);
+  --ui-text-toned: var(--color-grey-300);
+  --ui-text: var(--argon-text-body);
+  --ui-text-highlighted: var(--argon-text-heading);
   --ui-text-inverted: var(--color-slate-950);
 
-  --ui-bg: var(--color-slate-950);
-  --ui-bg-muted: var(--color-slate-900);
-  --ui-bg-elevated: color-mix(in oklab, var(--color-slate-800) 38%, var(--color-teal-950) 62%);
-  --ui-bg-accented: var(--color-slate-800);
+  --ui-bg: var(--argon-surface-canvas);
+  --ui-bg-muted: var(--argon-surface-inset);
+  --ui-bg-elevated: var(--argon-surface-elevated);
+  --ui-bg-accented: var(--argon-surface-interactive);
   --ui-bg-inverted: var(--color-grey-50);
 
-  --ui-border: var(--color-slate-800);
-  --ui-border-muted: var(--color-slate-800);
+  --ui-border: var(--argon-border);
+  --ui-border-muted: var(--argon-divider);
   --ui-border-accented: var(--color-slate-700);
   --ui-border-inverted: var(--color-grey-50);
 }

@@ -1,4 +1,7 @@
-/* Utility aliases: grey is neutral, slate is muted, and pink is accent. */
+/*
+ * Product aliases plus temporary pre-Argon color names used by unmigrated pages.
+ * The compatibility aliases are intentionally removed with the legacy frontend in Task 18.
+ */
 @theme inline {
   --color-neutral-50: var(--color-grey-50);
   --color-neutral-100: var(--color-grey-100);
@@ -24,15 +27,39 @@
   --color-muted-900: var(--color-slate-900);
   --color-muted-950: var(--color-slate-950);
 
-  --color-accent-50: var(--color-pink-50);
-  --color-accent-100: var(--color-pink-100);
-  --color-accent-200: var(--color-pink-200);
-  --color-accent-300: var(--color-pink-300);
-  --color-accent-400: var(--color-pink-400);
-  --color-accent-500: var(--color-pink-500);
-  --color-accent-600: var(--color-pink-600);
-  --color-accent-700: var(--color-pink-700);
-  --color-accent-800: var(--color-pink-800);
-  --color-accent-900: var(--color-pink-900);
-  --color-accent-950: var(--color-pink-950);
+  --color-accent-50: var(--color-argon-accent-50);
+  --color-accent-100: var(--color-argon-accent-100);
+  --color-accent-200: var(--color-argon-accent-200);
+  --color-accent-300: var(--color-argon-accent-300);
+  --color-accent-400: var(--color-argon-accent-400);
+  --color-accent-500: var(--color-argon-accent-500);
+  --color-accent-600: var(--color-argon-accent-600);
+  --color-accent-700: var(--color-argon-accent-700);
+  --color-accent-800: var(--color-argon-accent-800);
+  --color-accent-900: var(--color-argon-accent-900);
+  --color-accent-950: var(--color-argon-accent-950);
+
+  --color-teal-50: var(--color-argon-50);
+  --color-teal-100: var(--color-argon-100);
+  --color-teal-200: var(--color-argon-200);
+  --color-teal-300: var(--color-argon-300);
+  --color-teal-400: var(--color-argon-400);
+  --color-teal-500: var(--color-argon-500);
+  --color-teal-600: var(--color-argon-600);
+  --color-teal-700: var(--color-argon-700);
+  --color-teal-800: var(--color-argon-800);
+  --color-teal-900: var(--color-argon-900);
+  --color-teal-950: var(--color-argon-950);
+
+  --color-violet-50: var(--color-argon-accent-50);
+  --color-violet-100: var(--color-argon-accent-100);
+  --color-violet-200: var(--color-argon-accent-200);
+  --color-violet-300: var(--color-argon-accent-300);
+  --color-violet-400: var(--color-argon-accent-400);
+  --color-violet-500: var(--color-argon-accent-500);
+  --color-violet-600: var(--color-argon-accent-600);
+  --color-violet-700: var(--color-argon-accent-700);
+  --color-violet-800: var(--color-argon-accent-800);
+  --color-violet-900: var(--color-argon-accent-900);
+  --color-violet-950: var(--color-argon-accent-950);
 }

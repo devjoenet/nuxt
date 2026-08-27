@@ -2,6 +2,7 @@
 @import "@nuxt/ui";
 @import "./theme/palette.css";
 @import "./theme/aliases.css";
+@import "./theme/foundations.css";
 @import "./theme/nuxt-ui.css";
 @import "./theme/forms.css";
 
@@ -12,7 +13,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
-  body {
-    @apply bg-default text-default antialiased scheme-light dark:scheme-dark;
+  [data-argon-app] {
+    @apply bg-surface-canvas text-content-body antialiased scheme-light dark:scheme-dark;
   }
 }

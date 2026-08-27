@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { AsyncCrmSelect } from "@/components/AsyncCrmSelect";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import IndexPagination from "@/components/IndexPagination.vue";
 import IndexTableFrame from "@/components/IndexTableFrame.vue";

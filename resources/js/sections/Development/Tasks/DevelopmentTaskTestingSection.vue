@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Form } from "@inertiajs/vue3";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { isWebUrl } from "@/lib/webUrl";
 import { update as updateTestRun } from "@/routes/development/testRuns";

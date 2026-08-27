@@ -10,13 +10,13 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=public-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=open-sans:300,400,600,700&display=swap" rel="stylesheet" />
 
     @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
     @inertiaHead
   </head>
   <body>
-    <div class="isolate">
+    <div class="isolate" data-argon-app>
       @inertia
     </div>
   </body>

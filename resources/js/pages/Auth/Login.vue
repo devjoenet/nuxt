@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedSessionController from "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import TextLink from "@/components/TextLink.vue";
 import AuthBase from "@/layouts/AuthLayout.vue";
 import { request } from "@/routes/password";

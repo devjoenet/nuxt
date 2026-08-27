@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form } from "@inertiajs/vue3";
-import FormSelect from "@/components/FormSelect.vue";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormSelect } from "@/components/Ui/FormSelect";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { store as storeNote } from "@/routes/development/tasks/notes";
 import DevelopmentTaskSectionCard from "@/sections/Development/Tasks/DevelopmentTaskSectionCard.vue";

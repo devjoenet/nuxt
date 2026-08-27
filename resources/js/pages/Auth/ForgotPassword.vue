@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PasswordResetLinkController from "@/actions/App/Http/Controllers/Auth/PasswordResetLinkController";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import TextLink from "@/components/TextLink.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import { login } from "@/routes";

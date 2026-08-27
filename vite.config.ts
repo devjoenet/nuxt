@@ -90,8 +90,8 @@ export default defineConfig(({ isSsrBuild }) => ({
           warning: "i-ph-warning",
         },
         colors: {
-          primary: "teal",
-          secondary: "violet",
+          primary: "argon",
+          secondary: "argon-secondary",
           success: "green",
           info: "cyan",
           warning: "orange",

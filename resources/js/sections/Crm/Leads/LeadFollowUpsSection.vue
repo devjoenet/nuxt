@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, router } from "@inertiajs/vue3";
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { complete as completeTask, store as storeTask } from "@/routes/crm/leads/tasks";

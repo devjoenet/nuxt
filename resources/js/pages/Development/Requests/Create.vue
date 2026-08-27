@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { index, store } from "@/routes/development/requests";
 import type { DevelopmentOption } from "@/types/development";
 

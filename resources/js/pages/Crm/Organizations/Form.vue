@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import { index, show, store, update } from "@/routes/crm/organizations";
 import type { Option, Organization, Owner } from "@/types/crm";
 

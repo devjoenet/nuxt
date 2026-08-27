@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { Form } from "@inertiajs/vue3";
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { cn } from "@/lib/utils";
 import { store as requestTesting } from "@/routes/development/tasks/testRuns";
 import type { DevelopmentOption } from "@/types/development";

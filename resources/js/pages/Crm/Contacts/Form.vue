@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import AsyncCrmSelect from "@/components/AsyncCrmSelect.vue";
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { AsyncCrmSelect } from "@/components/AsyncCrmSelect";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import { index, show, store, update } from "@/routes/crm/contacts";
 import { create as createOrganization } from "@/routes/crm/organizations";
 import type { Contact, Option, Owner } from "@/types/crm";

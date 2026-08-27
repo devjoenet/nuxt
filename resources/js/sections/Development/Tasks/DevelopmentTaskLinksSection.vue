@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form } from "@inertiajs/vue3";
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import { store as storeLink } from "@/routes/development/tasks/links";
 import DevelopmentTaskSectionCard from "@/sections/Development/Tasks/DevelopmentTaskSectionCard.vue";
 import type { DevelopmentOption, DevelopmentTask } from "@/types/development";

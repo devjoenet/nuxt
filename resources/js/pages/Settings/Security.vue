@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import { provideTwoFactorAuth } from "@/composables/useTwoFactorAuth";
 import SettingsLayout from "@/layouts/SettingsLayout.vue";
 import { Form } from "@inertiajs/vue3";
