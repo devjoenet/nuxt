@@ -76,7 +76,8 @@
     ],
     "update:requirements": [
       "composer bump",
-      "npx npm-check-updates -u"
+      "yarn upgrade",
+      "@php artisan @php artisan boost:update"
     ],
     "setup": [
       "composer install",
