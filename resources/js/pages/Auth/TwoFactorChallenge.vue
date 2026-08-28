@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import AuthLayout from "@/layouts/AuthLayout.vue";
 import { FormInput } from "@/components/Ui/FormInput";
 import { store } from "@/routes/two-factor/login";
-import { Form, Head } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { Form, Head, setLayoutProps } from "@inertiajs/vue3";
+import { computed, ref, watchEffect } from "vue";
 
 const authConfigContent = computed<{
   title: string;
@@ -35,10 +34,17 @@ function toggleRecoveryMode(clearErrors: () => void) {
 
 const code = ref<number[]>([]);
 const codeValue = computed<string>(() => code.value.join(""));
+
+watchEffect(() => {
+  setLayoutProps({
+    title: authConfigContent.value.title,
+    description: authConfigContent.value.description,
+  });
+});
 </script>
 
 <template>
-  <AuthLayout :title="authConfigContent.title" :description="authConfigContent.description">
+  <div class="contents">
     <Head title="Two-Factor Authentication" />
 
     <div class="space-y-6">
@@ -76,5 +82,5 @@ const codeValue = computed<string>(() => code.value.join(""));
         </Form>
       </template>
     </div>
-  </AuthLayout>
+  </div>
 </template>

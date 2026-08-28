@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import AuthLayout from "@/layouts/AuthLayout.vue";
 import { FormInput } from "@/components/Ui/FormInput";
 import { store } from "@/routes/password/confirm";
-import { Form, Head } from "@inertiajs/vue3";
+import { Form, Head, setLayoutProps } from "@inertiajs/vue3";
+
+setLayoutProps({
+  title: "Confirm your password",
+  description: "This is a secure area. Confirm your password before continuing.",
+});
 </script>
 
 <template>
-  <AuthLayout title="Confirm your password" description="This is a secure area of the application. Please confirm your password before continuing.">
+  <div class="contents">
     <Head title="Confirm password" />
 
     <Form v-bind="store.form()" reset-on-success v-slot="{ errors, processing }">
@@ -18,5 +22,5 @@ import { Form, Head } from "@inertiajs/vue3";
         </div>
       </div>
     </Form>
-  </AuthLayout>
+  </div>
 </template>
