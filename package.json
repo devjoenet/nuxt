@@ -1,6 +1,8 @@
 {
   "private": true,
   "type": "module",
+  "name": "nuxt",
+  "packageManager": "yarn@4.18.0",
   "scripts": {
     "build": "vite build && vite build --ssr",
     "dev": "vite",
