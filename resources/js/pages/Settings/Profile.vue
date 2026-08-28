@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import SettingsLayout from "@/layouts/SettingsLayout.vue";
 import { send } from "@/routes/verification";
 import type { FormSubmitEvent } from "@nuxt/ui";

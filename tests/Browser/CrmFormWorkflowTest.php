@@ -37,6 +37,8 @@ test('organization create form presents validation and submit state on mobile', 
         ->click('Create organization')
         ->assertPresent('[data-testid="form-error-summary"]')
         ->assertSee('The website has already been taken.')
+        ->assertAttribute('input[name="website"]', 'aria-invalid', 'true')
+        ->assertScript("document.querySelector('input[name=\"website\"]')?.getAttribute('aria-describedby') === document.querySelector('input[name=\"website\"]')?.closest('.form-field')?.querySelector('[role=\"alert\"]')?.id", true)
         ->assertPathIs(route('crm.organizations.create', [], false))
         ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
         ->fill('website', 'https://new-mobile.example');

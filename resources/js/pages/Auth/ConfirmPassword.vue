@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthLayout from "@/layouts/AuthLayout.vue";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import { store } from "@/routes/password/confirm";
 import { Form, Head } from "@inertiajs/vue3";
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Form } from "@inertiajs/vue3";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import { getNestedFieldError } from "@/lib/formErrors";
 import { store } from "@/routes/admin/roles";
 import RolePermissionGroupList from "@/sections/Admin/Roles/RolePermissionGroupList.vue";

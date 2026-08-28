@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import { Form } from "@inertiajs/vue3";
 
 const open = ref(false);

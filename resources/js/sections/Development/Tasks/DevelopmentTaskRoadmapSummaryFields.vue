@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { FormDataConvertible } from "@inertiajs/core";
 import { Form } from "@inertiajs/vue3";
-import FormInput from "@/components/FormInput.vue";
-import FormSelect from "@/components/FormSelect.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import InlineEditActions from "@/components/InlineEditActions.vue";
 import { cn } from "@/lib/utils";
 import { update as updateRoadmap } from "@/routes/development/tasks/roadmap";

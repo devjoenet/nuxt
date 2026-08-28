@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Form } from "@inertiajs/vue3";
-import FormSelect from "@/components/FormSelect.vue";
+import { FormSelect } from "@/components/Ui/FormSelect";
 import { getNestedFieldError } from "@/lib/formErrors";
 import { update } from "@/routes/admin/roles";
 import CreateAdminRoleSection from "@/sections/Admin/Roles/CreateAdminRoleSection.vue";

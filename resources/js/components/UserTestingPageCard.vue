@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import { Form } from "@inertiajs/vue3";
-import FormTextarea from "@/components/FormTextarea.vue";
+import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { update } from "@/routes/development/userTesting";
 
 type ReviewStatus = "Needs eyes" | "In Development" | "Needs verification" | "Reviewed" | "Needs Approval";

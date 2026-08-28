@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Form, router } from "@inertiajs/vue3";
-import FormInput from "@/components/FormInput.vue";
-import FormMultiSelect from "@/components/FormMultiSelect.vue";
+import { FormInput } from "@/components/Ui/FormInput";
+import { FormMultiSelect } from "@/components/Ui/FormMultiSelect";
 import IndexEmptyState from "@/components/IndexEmptyState.vue";
 import IndexPagination from "@/components/IndexPagination.vue";
 import IndexTableFrame from "@/components/IndexTableFrame.vue";

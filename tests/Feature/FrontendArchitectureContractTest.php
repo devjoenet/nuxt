@@ -18,7 +18,7 @@ test('the frontend architecture defines the complete composition boundary', func
         ->toContain('Pages')
         ->toContain('Composables')
         ->toContain('Pure helpers')
-        ->toContain('Existing `FormField`, form controls, `AsyncCrmSelect`, and `CrmDetailLayout` remain the starting point')
+        ->toContain('Floating form controls now live behind typed `components/Ui/<Control>` public APIs')
         ->toContain('## Component directories and public APIs')
         ->toContain('## Page colocation and legacy retirement')
         ->toContain('## State, props, events, slots, and styling')
@@ -156,7 +156,6 @@ components/AppCard.vue
 components/AppLogo.vue
 components/AppLogoIcon.vue
 components/AppPageCard.vue
-components/AsyncCrmSelect.vue
 components/ConfirmActionButton.vue
 components/Crm/CrmDetailLayout.vue
 components/Crm/CrmDetailMetadata.vue
@@ -164,14 +163,7 @@ components/Crm/CrmRecordStatusBadge.vue
 components/Crm/LeadStatusBadge.vue
 components/DeleteAccount.vue
 components/FormActions.vue
-components/FormCurrencyInput.vue
-components/FormField.vue
-components/FormInput.vue
-components/FormMultiSelect.vue
-components/FormPhoneInput.vue
 components/FormSectionHeading.vue
-components/FormSelect.vue
-components/FormTextarea.vue
 components/IndexEmptyState.vue
 components/IndexPagination.vue
 components/IndexTableFrame.vue
@@ -386,14 +378,6 @@ test('the frontend source follows the documented naming convention', function ()
 test('sfc script budgets allow only documented exact-file exceptions', function (): void {
     $architecture = File::get(base_path('docs/development/frontend-ui-architecture.md'));
     $exceptions = [
-        'components/FormCurrencyInput.vue' => [
-            'budget' => 60,
-            'reason' => 'legacy currency masking and Nuxt UI input adaptation',
-        ],
-        'components/FormPhoneInput.vue' => [
-            'budget' => 60,
-            'reason' => 'legacy phone formatting and Nuxt UI input adaptation',
-        ],
         'components/UserMenu.vue' => [
             'budget' => 60,
             'reason' => 'route-aware account navigation and appearance state',
@@ -476,12 +460,12 @@ test('sfc script budgets allow only documented exact-file exceptions', function 
 
 test('the current application components and Nuxt UI foundation remain explicit', function (): void {
     foreach ([
-        'resources/js/components/FormField.vue',
-        'resources/js/components/FormInput.vue',
-        'resources/js/components/FormSelect.vue',
-        'resources/js/components/FormMultiSelect.vue',
-        'resources/js/components/FormTextarea.vue',
-        'resources/js/components/AsyncCrmSelect.vue',
+        'resources/js/components/Ui/FormField/FormField.vue',
+        'resources/js/components/Ui/FormInput/FormInput.vue',
+        'resources/js/components/Ui/FormSelect/FormSelect.vue',
+        'resources/js/components/Ui/FormMultiSelect/FormMultiSelect.vue',
+        'resources/js/components/Ui/FormTextarea/FormTextarea.vue',
+        'resources/js/components/AsyncCrmSelect/AsyncCrmSelect.vue',
         'resources/js/components/WorkspacePage.vue',
         'resources/js/components/Crm/CrmDetailLayout.vue',
         'resources/js/lib/utils.ts',
@@ -500,7 +484,7 @@ test('the current application components and Nuxt UI foundation remain explicit'
 
 test('index workflows share navigation and framing without hiding domain columns', function (): void {
     $filterComposable = File::get(resource_path('js/composables/useInertiaFilters.ts'));
-    $asyncCrmSelect = File::get(resource_path('js/components/AsyncCrmSelect.vue'));
+    $asyncCrmSelect = File::get(resource_path('js/components/AsyncCrmSelect/AsyncCrmSelect.vue'));
 
     expect($filterComposable)
         ->toContain('watchDebounced(filters, visitFilters')

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import FormInput from "@/components/FormInput.vue";
+import { FormInput } from "@/components/Ui/FormInput";
 import { useTwoFactorAuth } from "@/composables/useTwoFactorAuth";
 
 const emit = defineEmits<{

@@ -1,0 +1,19 @@
+export const uiTones = ["primary", "secondary", "success", "info", "warning", "error", "neutral"] as const;
+
+export type UiTone = (typeof uiTones)[number];
+
+export const uiToneClasses: Record<UiTone, string> = {
+  primary:
+    "[--ui-tone:var(--ui-color-primary-600)] [--ui-tone-strong:var(--ui-color-primary-700)] [--ui-tone-soft:var(--ui-color-primary-100)] [--ui-tone-soft-hover:var(--ui-color-primary-200)] [--ui-tone-border:var(--ui-color-primary-300)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--ui-color-primary-400)] dark:[--ui-tone-strong:var(--ui-color-primary-200)] dark:[--ui-tone-soft:var(--ui-color-primary-950)] dark:[--ui-tone-soft-hover:var(--ui-color-primary-900)] dark:[--ui-tone-border:var(--ui-color-primary-700)]",
+  secondary:
+    "[--ui-tone:var(--ui-color-secondary-500)] [--ui-tone-strong:var(--ui-color-secondary-700)] [--ui-tone-soft:var(--ui-color-secondary-100)] [--ui-tone-soft-hover:var(--ui-color-secondary-200)] [--ui-tone-border:var(--ui-color-secondary-300)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--ui-color-secondary-400)] dark:[--ui-tone-strong:var(--ui-color-secondary-200)] dark:[--ui-tone-soft:var(--ui-color-secondary-950)] dark:[--ui-tone-soft-hover:var(--ui-color-secondary-900)] dark:[--ui-tone-border:var(--ui-color-secondary-700)]",
+  success:
+    "[--ui-tone:var(--ui-color-success-500)] [--ui-tone-strong:var(--ui-color-success-700)] [--ui-tone-soft:var(--ui-color-success-100)] [--ui-tone-soft-hover:var(--ui-color-success-200)] [--ui-tone-border:var(--ui-color-success-300)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--ui-color-success-400)] dark:[--ui-tone-strong:var(--ui-color-success-200)] dark:[--ui-tone-soft:var(--ui-color-success-950)] dark:[--ui-tone-soft-hover:var(--ui-color-success-900)] dark:[--ui-tone-border:var(--ui-color-success-700)]",
+  info: "[--ui-tone:var(--ui-color-info-500)] [--ui-tone-strong:var(--ui-color-info-700)] [--ui-tone-soft:var(--ui-color-info-100)] [--ui-tone-soft-hover:var(--ui-color-info-200)] [--ui-tone-border:var(--ui-color-info-300)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--ui-color-info-400)] dark:[--ui-tone-strong:var(--ui-color-info-200)] dark:[--ui-tone-soft:var(--ui-color-info-950)] dark:[--ui-tone-soft-hover:var(--ui-color-info-900)] dark:[--ui-tone-border:var(--ui-color-info-700)]",
+  warning:
+    "[--ui-tone:var(--ui-color-warning-400)] [--ui-tone-strong:var(--ui-color-warning-700)] [--ui-tone-soft:var(--ui-color-warning-100)] [--ui-tone-soft-hover:var(--ui-color-warning-200)] [--ui-tone-border:var(--ui-color-warning-300)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--ui-color-warning-400)] dark:[--ui-tone-strong:var(--ui-color-warning-200)] dark:[--ui-tone-soft:var(--ui-color-warning-950)] dark:[--ui-tone-soft-hover:var(--ui-color-warning-900)] dark:[--ui-tone-border:var(--ui-color-warning-700)]",
+  error:
+    "[--ui-tone:var(--ui-color-error-500)] [--ui-tone-strong:var(--ui-color-error-700)] [--ui-tone-soft:var(--ui-color-error-100)] [--ui-tone-soft-hover:var(--ui-color-error-200)] [--ui-tone-border:var(--ui-color-error-300)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--ui-color-error-400)] dark:[--ui-tone-strong:var(--ui-color-error-200)] dark:[--ui-tone-soft:var(--ui-color-error-950)] dark:[--ui-tone-soft-hover:var(--ui-color-error-900)] dark:[--ui-tone-border:var(--ui-color-error-700)]",
+  neutral:
+    "[--ui-tone:var(--color-slate-700)] [--ui-tone-strong:var(--color-slate-800)] [--ui-tone-soft:var(--color-grey-200)] [--ui-tone-soft-hover:var(--color-grey-300)] [--ui-tone-border:var(--color-grey-400)] [--ui-tone-contrast:white] dark:[--ui-tone:var(--color-grey-300)] dark:[--ui-tone-strong:var(--color-grey-100)] dark:[--ui-tone-soft:var(--color-slate-900)] dark:[--ui-tone-soft-hover:var(--color-slate-800)] dark:[--ui-tone-border:var(--color-slate-700)] dark:[--ui-tone-contrast:var(--color-slate-950)]",
+};

@@ -1,121 +1,113 @@
-/* Primitive design tokens: values that define the brand palette. */
+/*
+ * Argon Dashboard Pro 2.1.0 color references translated into authored palettes.
+ * The licensed Sass remains outside Git; these values are application-only tokens.
+ */
 @theme static {
-  --font-sans: "Public Sans", sans-serif;
+  --color-argon-50: #f4f6ff;
+  --color-argon-100: #e9edff;
+  --color-argon-200: #cdd5ff;
+  --color-argon-300: #aab8ff;
+  --color-argon-400: #8291f6;
+  --color-argon-500: #6d80ec;
+  --color-argon-600: #5e72e4;
+  --color-argon-700: #4c5ac2;
+  --color-argon-800: #3f4a9d;
+  --color-argon-900: #373f7d;
+  --color-argon-950: #202448;
 
-  /* Primary */
-  --color-teal-50: #f5fdfa;
-  --color-teal-100: #ebfefc;
-  --color-teal-200: #eafbf5;
-  --color-teal-300: #adf1d7;
-  --color-teal-400: #6fe6b8;
-  --color-teal-500: #31db9a;
-  --color-teal-600: #2cc58b;
-  --color-teal-700: #1d835c;
-  --color-teal-800: #166345;
-  --color-teal-900: #0f422e;
-  --color-teal-950: #082c29;
+  --color-argon-secondary-50: #f7f8fa;
+  --color-argon-secondary-100: #edf0f4;
+  --color-argon-secondary-200: #d8dee7;
+  --color-argon-secondary-300: #b7c1d0;
+  --color-argon-secondary-400: #98a6ba;
+  --color-argon-secondary-500: #8392ab;
+  --color-argon-secondary-600: #627594;
+  --color-argon-secondary-700: #4d5b76;
+  --color-argon-secondary-800: #414d62;
+  --color-argon-secondary-900: #394352;
+  --color-argon-secondary-950: #252b36;
 
-  /* Secondary */
-  --color-violet-50: #f8f7fc;
-  --color-violet-100: #f1f0f8;
-  --color-violet-200: #dbd9ed;
-  --color-violet-300: #c5c3e2;
-  --color-violet-400: #9a95cc;
-  --color-violet-500: #6e68b6;
-  --color-violet-600: #635ea4;
-  --color-violet-700: #423e6d;
-  --color-violet-800: #322f52;
-  --color-violet-900: #211f37;
-  --color-violet-950: #151322;
+  --color-argon-accent-50: #faf7ff;
+  --color-argon-accent-100: #f3edff;
+  --color-argon-accent-200: #e8ddff;
+  --color-argon-accent-300: #d5bcff;
+  --color-argon-accent-400: #b78cff;
+  --color-argon-accent-500: #9864f4;
+  --color-argon-accent-600: #825ee4;
+  --color-argon-accent-700: #663dc2;
+  --color-argon-accent-800: #56359e;
+  --color-argon-accent-900: #482e7f;
+  --color-argon-accent-950: #2d1857;
 
-  /* Accent */
-  --color-pink-50: #fdf5f8;
-  --color-pink-100: #faebf2;
-  --color-pink-200: #f3cedd;
-  --color-pink-300: #ecb0c9;
-  --color-pink-400: #de74a1;
-  --color-pink-500: #d03978;
-  --color-pink-600: #bb336c;
-  --color-pink-700: #7d2248;
-  --color-pink-800: #5e1a36;
-  --color-pink-900: #3e1124;
-  --color-pink-950: #260a16;
+  --color-green-50: #f1fcf7;
+  --color-green-100: #dff9ec;
+  --color-green-200: #c1f2da;
+  --color-green-300: #90e7bd;
+  --color-green-400: #58d69d;
+  --color-green-500: #2dce89;
+  --color-green-600: #1fa96e;
+  --color-green-700: #1c865b;
+  --color-green-800: #1b6a4b;
+  --color-green-900: #18573f;
+  --color-green-950: #0a3023;
 
-  /* Success */
-  --color-green-50: #f4fefa;
-  --color-green-100: #ebfdf5;
-  --color-green-200: #ccf9e6;
-  --color-green-300: #adf5d7;
-  --color-green-400: #70eeba;
-  --color-green-500: #32e79c;
-  --color-green-600: #2dd08c;
-  --color-green-700: #1e8b5e;
-  --color-green-800: #176846;
-  --color-green-900: #0f452f;
-  --color-green-950: #08291c;
+  --color-cyan-50: #edfdff;
+  --color-cyan-100: #d6f9fd;
+  --color-cyan-200: #b5f2fa;
+  --color-cyan-300: #7de7f6;
+  --color-cyan-400: #3dd7f0;
+  --color-cyan-500: #11cdef;
+  --color-cyan-600: #079fc4;
+  --color-cyan-700: #0b7f9e;
+  --color-cyan-800: #10667f;
+  --color-cyan-900: #13556b;
+  --color-cyan-950: #063747;
 
-  /* Info */
-  --color-cyan-50: #f3fbfe;
-  --color-cyan-100: #e7f8fd;
-  --color-cyan-200: #c2ecfb;
-  --color-cyan-300: #9de1f8;
-  --color-cyan-400: #54cbf2;
-  --color-cyan-500: #0ab4ed;
-  --color-cyan-600: #09a2d5;
-  --color-cyan-700: #066c8e;
-  --color-cyan-800: #05516b;
-  --color-cyan-900: #033647;
-  --color-cyan-950: #02212b;
+  --color-orange-50: #fff4f0;
+  --color-orange-100: #ffe5dc;
+  --color-orange-200: #ffc7b6;
+  --color-orange-300: #ffa184;
+  --color-orange-400: #fb6340;
+  --color-orange-500: #f44820;
+  --color-orange-600: #d93213;
+  --color-orange-700: #b42712;
+  --color-orange-800: #8f2416;
+  --color-orange-900: #742118;
+  --color-orange-950: #3e0d09;
 
-  /* Warning */
-  --color-orange-50: #fff8f3;
-  --color-orange-100: #fff0e7;
-  --color-orange-200: #ffdac4;
-  --color-orange-300: #ffc3a0;
-  --color-orange-400: #ff9659;
-  --color-orange-500: #ff6912;
-  --color-orange-600: #e65f10;
-  --color-orange-700: #993f0b;
-  --color-orange-800: #732f08;
-  --color-orange-900: #4d2005;
-  --color-orange-950: #2e1303;
+  --color-red-50: #fff1f3;
+  --color-red-100: #ffe3e7;
+  --color-red-200: #ffcbd3;
+  --color-red-300: #ffa1b0;
+  --color-red-400: #fb6f86;
+  --color-red-500: #f5365c;
+  --color-red-600: #e21d4c;
+  --color-red-700: #bf123d;
+  --color-red-800: #a01239;
+  --color-red-900: #891337;
+  --color-red-950: #4c0519;
 
-  /* Error */
-  --color-red-50: #fff4f7;
-  --color-red-100: #ffe7ee;
-  --color-red-200: #ffc2d4;
-  --color-red-300: #ff9dba;
-  --color-red-400: #ff5487;
-  --color-red-500: #ff0a53;
-  --color-red-600: #e6094b;
-  --color-red-700: #990632;
-  --color-red-800: #730525;
-  --color-red-900: #4d0319;
-  --color-red-950: #2e020f;
+  --color-grey-50: #ffffff;
+  --color-grey-100: #f8f9fa;
+  --color-grey-200: #e9ecef;
+  --color-grey-300: #dee2e6;
+  --color-grey-400: #ced4da;
+  --color-grey-500: #adb5bd;
+  --color-grey-600: #6c757d;
+  --color-grey-700: #495057;
+  --color-grey-800: #343a40;
+  --color-grey-900: #212529;
+  --color-grey-950: #14151a;
 
-  /* Neutral primitives — mapped to the neutral utility namespace. */
-  --color-grey-50: #f8f9fa;
-  --color-grey-100: #f0f1f3;
-  --color-grey-200: #d8dce2;
-  --color-grey-300: #c1c7d1;
-  --color-grey-400: #939eae;
-  --color-grey-500: #64748b;
-  --color-grey-600: #5a687d;
-  --color-grey-700: #3c4653;
-  --color-grey-800: #2d343f;
-  --color-grey-900: #1e232a;
-  --color-grey-950: #121519;
-
-  /* Muted primitives — mapped to the muted utility namespace. */
-  --color-slate-50: #f3f5f6;
-  --color-slate-100: #e6e9eb;
-  --color-slate-200: #c0c8cd;
-  --color-slate-300: #9ba7af;
-  --color-slate-400: #4f6672;
-  --color-slate-500: #042436;
-  --color-slate-600: #042031;
-  --color-slate-700: #021620;
-  --color-slate-800: #021018;
-  --color-slate-900: #010b10;
-  --color-slate-950: #01080c;
+  --color-slate-50: #f8f9fe;
+  --color-slate-100: #eef0f7;
+  --color-slate-200: #dce1ec;
+  --color-slate-300: #b9c3d6;
+  --color-slate-400: #8d9ab3;
+  --color-slate-500: #67748e;
+  --color-slate-600: #52617d;
+  --color-slate-700: #43506a;
+  --color-slate-800: #344767;
+  --color-slate-900: #253451;
+  --color-slate-950: #17223a;
 }
