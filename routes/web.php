@@ -6,6 +6,7 @@ use App\Enums\ServiceInterest;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\ArgonGalleryController;
 use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Admin\RoleController;
@@ -93,6 +94,13 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
         Route::get('jobs', [JobOperationsController::class, 'index'])
             ->middleware('can:jobs.view')
             ->name('jobs.index');
+
+        Route::prefix('argon-gallery')->name('argonGallery.')->middleware('can:argon.gallery.view')->group(function (): void {
+            Route::get('/', [ArgonGalleryController::class, 'index'])->name('index');
+            Route::get('examples/{example}', [ArgonGalleryController::class, 'show'])
+                ->where('example', '[a-z0-9]+(?:-[a-z0-9]+)*')
+                ->name('examples.show');
+        });
 
         Route::redirect('roadmap', '/development/roadmap')
             ->middleware('can:development.roadmap.manage')

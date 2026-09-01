@@ -19,6 +19,7 @@ enum Permission: string
     case DevelopmentRequestsReview = 'development.requests.review';
     case DevelopmentRoadmapManage = 'development.roadmap.manage';
     case DevelopmentUserTestingManage = 'development.user_testing.manage';
+    case ArgonGalleryView = 'argon.gallery.view';
 
     /** @return array<int, string> */
     public static function values(): array
@@ -43,7 +44,8 @@ enum Permission: string
             self::DevelopmentRequestsCreate,
             self::DevelopmentRequestsReview,
             self::DevelopmentRoadmapManage,
-            self::DevelopmentUserTestingManage => PermissionGroup::Development,
+            self::DevelopmentUserTestingManage,
+            self::ArgonGalleryView => PermissionGroup::Development,
             self::JobsView,
             self::JobsManage => PermissionGroup::Jobs,
             self::SettingsManage => PermissionGroup::BusinessSettings,
