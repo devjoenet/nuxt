@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { getInitials } from "@/lib/nameFormatters";
+import { useAppearance } from "@/composables/useAppearance";
 import { logout } from "@/routes";
 import { edit as profileEdit } from "@/routes/profile";
 import { router } from "@inertiajs/vue3";
 import type { DropdownMenuItem } from "@nuxt/ui";
-import { useColorMode } from "@vueuse/core";
 
 defineProps<{
   collapsed?: boolean;
 }>();
 
-const colorMode = useColorMode();
+const { appearance, setAppearance } = useAppearance();
 const auth = useAuth();
-
-type ColorModePreference = "auto" | "light" | "dark";
 
 const user = computed(() => ({
   name: auth.value.user.name,
@@ -51,36 +49,27 @@ const items = computed<DropdownMenuItem[][]>(() => [
           label: "System",
           icon: "i-ph-monitor",
           type: "checkbox",
-          checked: colorMode.store.value === "auto",
-          onSelect(e: Event) {
-            e.preventDefault();
-
-            setColorMode("auto");
+          checked: appearance.value === "system",
+          onSelect() {
+            setAppearance("system");
           },
         },
         {
           label: "Light",
           icon: "i-ph-sun",
           type: "checkbox",
-          checked: colorMode.store.value === "light",
-          onSelect(e: Event) {
-            e.preventDefault();
-
-            setColorMode("light");
+          checked: appearance.value === "light",
+          onSelect() {
+            setAppearance("light");
           },
         },
         {
           label: "Dark",
           icon: "i-ph-moon",
           type: "checkbox",
-          checked: colorMode.store.value === "dark",
-          onUpdateChecked(checked: boolean) {
-            if (checked) {
-              setColorMode("dark");
-            }
-          },
-          onSelect(e: Event) {
-            e.preventDefault();
+          checked: appearance.value === "dark",
+          onSelect() {
+            setAppearance("dark");
           },
         },
       ],
@@ -98,14 +87,6 @@ const items = computed<DropdownMenuItem[][]>(() => [
 
 function handleLogout() {
   router.flushAll();
-}
-
-function setColorMode(preference: ColorModePreference): void {
-  const appearance = preference === "auto" ? "system" : preference;
-  const secure = window.location.protocol === "https:" ? "; Secure" : "";
-
-  document.cookie = `appearance=${appearance}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
-  colorMode.store.value = preference;
 }
 </script>
 

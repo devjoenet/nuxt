@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
 import { FormInput } from "@/components/Ui/FormInput";
-import SettingsLayout from "@/layouts/SettingsLayout.vue";
 import { send } from "@/routes/verification";
+import { setLayoutProps } from "@inertiajs/vue3";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
 
@@ -12,6 +12,7 @@ defineProps<{
 }>();
 
 const fileRef = ref<HTMLInputElement>();
+setLayoutProps({ documentTitle: "Profile settings" });
 
 const profileSchema = z.object({
   name: z.string().min(2, "Too short"),
@@ -72,7 +73,7 @@ function onFileClick() {
 </script>
 
 <template>
-  <SettingsLayout document-title="Profile settings">
+  <div class="contents">
     <UForm id="settings" #default="{ errors }" :schema="profileSchema" :state="profile" @submit="onSubmit">
       <AppPageCard :style="'naked'" class="mb-4" description="This information will be displayed publicly." orientation="horizontal" title="Profile">
         <UButton form="settings" label="Save changes" color="neutral" type="submit" class="w-fit lg:ms-auto" />
@@ -97,5 +98,5 @@ function onFileClick() {
         </UFormField>
       </AppPageCard>
     </UForm>
-  </SettingsLayout>
+  </div>
 </template>

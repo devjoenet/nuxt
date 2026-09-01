@@ -3,6 +3,8 @@ import { Head } from "@inertiajs/vue3";
 import type { DashboardToolbarProps } from "@nuxt/ui";
 import type { ClassValue } from "clsx";
 import { computed, useAttrs } from "vue";
+import { WorkspaceFooter } from "@/components/WorkspaceFooter";
+import { WorkspaceNavbar } from "@/components/WorkspaceNavbar";
 import { cn } from "@/lib/utils";
 
 defineOptions({ inheritAttrs: false });
@@ -51,10 +53,9 @@ const contentClass = computed(() =>
     <template #header>
       <Head :title="documentTitle ?? title" />
 
-      <UDashboardNavbar :aria-describedby="description ? descriptionId : undefined" :title="title">
-        <template #leading><UDashboardSidebarCollapse /></template>
-        <template #right><slot name="actions" /></template>
-      </UDashboardNavbar>
+      <WorkspaceNavbar :description-id="description ? descriptionId : undefined" :title="title">
+        <template #actions><slot name="actions" /></template>
+      </WorkspaceNavbar>
 
       <p v-if="description" :id="descriptionId" class="sr-only">{{ description }}</p>
 
@@ -64,9 +65,12 @@ const contentClass = computed(() =>
     </template>
 
     <template #body>
-      <main :class="contentClass" :data-content-width="contentWidth" data-workspace-page-content>
-        <slot />
-      </main>
+      <div class="flex min-h-full flex-col">
+        <main :class="contentClass" :data-content-width="contentWidth" data-workspace-page-content>
+          <slot />
+        </main>
+        <WorkspaceFooter />
+      </div>
     </template>
   </UDashboardPanel>
 </template>

@@ -2,18 +2,22 @@
 import AuthenticatedSessionController from "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController";
 import { FormInput } from "@/components/Ui/FormInput";
 import TextLink from "@/components/TextLink.vue";
-import AuthBase from "@/layouts/AuthLayout.vue";
 import { request } from "@/routes/password";
-import { Form, Head } from "@inertiajs/vue3";
+import { Form, Head, setLayoutProps } from "@inertiajs/vue3";
 
 defineProps<{
   status?: string;
   canResetPassword: boolean;
 }>();
+
+setLayoutProps({
+  title: "Log in to your account",
+  description: "Enter your email and password below to log in.",
+});
 </script>
 
 <template>
-  <AuthBase title="Log in to your account" description="Enter your email and password below to log in">
+  <div class="contents">
     <Head title="Log in" />
 
     <div v-if="status" class="mb-4 text-center text-sm font-medium text-success">
@@ -36,5 +40,5 @@ defineProps<{
         <UButton :loading="processing" type="submit" block class="mt-4">Log in</UButton>
       </div>
     </Form>
-  </AuthBase>
+  </div>
 </template>

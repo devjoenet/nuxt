@@ -59,10 +59,10 @@
   --argon-surface-inset: var(--color-grey-200);
   --argon-surface-interactive: color-mix(in oklab, var(--color-argon-100) 65%, var(--color-grey-50));
   --argon-surface-overlay: rgb(23 34 58 / 0.48);
-  --argon-text-body: var(--color-slate-500);
+  --argon-text-body: var(--color-slate-600);
   --argon-text-heading: var(--color-slate-800);
-  --argon-text-subtle: var(--color-grey-600);
-  --argon-icon: var(--color-slate-500);
+  --argon-text-subtle: var(--color-grey-700);
+  --argon-icon: var(--color-slate-600);
   --argon-border: var(--color-grey-300);
   --argon-divider: var(--color-grey-200);
   --argon-focus: var(--color-argon-600);

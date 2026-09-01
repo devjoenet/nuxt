@@ -36,7 +36,7 @@ test('the Argon foundation is authored, scoped, and explicit in both themes', fu
         ->toContain('the existing Bunny Fonts provider')
         ->toContain('Icons remain the already-installed Phosphor set.')
         ->and($nuxtUi)
-        ->toContain('--ui-primary: var(--color-argon-600);')
+        ->toContain('--ui-primary: var(--color-argon-800);')
         ->toContain('--ui-bg: var(--argon-surface-canvas);')
         ->toContain('.dark {')
         ->and($blade)
@@ -115,7 +115,6 @@ test('core visual primitives expose typed public APIs and CVA variants', functio
         ->all();
 
     expect($rawValueFiles)->toBe([
-        'js/components/Landing/LandingHeader.vue',
         'js/components/Landing/LandingHero.vue',
         'js/components/Landing/MetricCard.vue',
         'js/components/Landing/ProcessTimeline.vue',
@@ -123,6 +122,32 @@ test('core visual primitives expose typed public APIs and CVA variants', functio
         'js/sections/Landing/LandingContactSection.vue',
         'js/sections/Landing/LandingOperationsSection.vue',
     ]);
+});
+
+test('Argon navigation shells share semantic chrome and accessible overlays', function (): void {
+    $workspaceNavbar = File::get(resource_path('js/components/WorkspaceNavbar/WorkspaceNavbar.vue'));
+    $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
+    $landingHeader = File::get(resource_path('js/components/Landing/LandingHeader.vue'));
+    $appearanceMenu = File::get(resource_path('js/components/AppearanceMenu/AppearanceMenu.vue'));
+    $breadcrumbs = File::get(resource_path('js/components/Ui/Breadcrumbs/Breadcrumbs.vue'));
+
+    expect($workspaceNavbar)
+        ->toContain('<Breadcrumbs')
+        ->toContain('<AppearanceMenu />')
+        ->toContain('bg-surface-translucent')
+        ->and($workspaceSidebar)
+        ->toContain('v-model:open="open"')
+        ->toContain('bg-surface-elevated')
+        ->and($landingHeader)
+        ->toContain('<USlideover v-model:open="mobileNavigationOpen"')
+        ->toContain('data-testid="public-navigation-trigger"')
+        ->toContain('aria-label="Mobile navigation"')
+        ->and($appearanceMenu)
+        ->toContain('data-testid="appearance-menu-trigger"')
+        ->toContain('type: "checkbox" as const')
+        ->and($breadcrumbs)
+        ->toContain('<ULink')
+        ->not->toContain('<a v-if="item.href');
 });
 
 test('the floating form system covers the approved controls and retires flat wrappers', function (): void {

@@ -2,8 +2,7 @@
 import PasswordController from "@/actions/App/Http/Controllers/Settings/PasswordController";
 import { FormInput } from "@/components/Ui/FormInput";
 import { provideTwoFactorAuth } from "@/composables/useTwoFactorAuth";
-import SettingsLayout from "@/layouts/SettingsLayout.vue";
-import { Form } from "@inertiajs/vue3";
+import { Form, setLayoutProps } from "@inertiajs/vue3";
 
 interface Props {
   requiresConfirmation: boolean;
@@ -16,6 +15,7 @@ withDefaults(defineProps<Props>(), {
 });
 
 provideTwoFactorAuth();
+setLayoutProps({ documentTitle: "Security settings" });
 
 const toast = useToast();
 
@@ -30,7 +30,7 @@ function handleSuccess() {
 </script>
 
 <template>
-  <SettingsLayout document-title="Security settings">
+  <div class="contents">
     <AppPageCard description="Confirm your current password before setting a new one." title="Password">
       <Form
         v-bind="PasswordController.update.form()"
@@ -60,5 +60,5 @@ function handleSuccess() {
         <DeleteAccount />
       </template>
     </AppPageCard>
-  </SettingsLayout>
+  </div>
 </template>

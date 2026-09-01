@@ -21,7 +21,8 @@ test('authorized users can search nested navigation and page headings', function
         ->assertSee('Leads')
         ->assertSee('CRM')
         ->assertPresent('a[data-slot="item"][href="/crm/leads"]')
-        ->keys($searchInput, ['ArrowDown', 'Enter'])
+        ->assertPresent('a[data-slot="item"][href="/crm/leads"][data-highlighted]')
+        ->keys($searchInput, 'Enter')
         ->assertPathIs('/crm/leads')
         ->click('Search…')
         ->fill($searchInput, 'Roles and permissions')
@@ -90,11 +91,43 @@ test('mobile navigation closes after selecting a destination', function (): void
         ->resize(390, 844)
         ->click('button[aria-label="Open sidebar"]')
         ->assertVisible('[role="dialog"]')
+        ->assertScript('document.activeElement?.closest("[role=dialog]") !== null', true)
         ->assertPresent('[role="dialog"] nav[aria-label="Primary workspace navigation"]')
         ->assertPresent('[role="dialog"] nav[aria-label="Account navigation"]')
+        ->keys('[role="dialog"]', 'Escape')
+        ->assertMissing('[role="dialog"]')
+        ->assertScript('document.activeElement?.getAttribute("aria-label")', 'Open sidebar')
+        ->click('button[aria-label="Open sidebar"]')
         ->click("[role=\"dialog\"] a[href=\"{$leadsPath}\"]")
         ->assertPathIs($leadsPath)
         ->assertMissing('[role="dialog"]')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
+test('appearance controls persist both explicit themes across navigation and reloads', function (): void {
+    $user = User::factory()->create();
+
+    $this->actingAs($user);
+
+    $page = visit(route('dashboard', absolute: false))
+        ->click('[data-testid="appearance-menu-trigger"]')
+        ->click('Dark')
+        ->assertScript('document.documentElement.classList.contains("dark")', true)
+        ->assertScript('document.documentElement.dataset.appearance', 'dark')
+        ->assertScript('document.cookie.includes("appearance=dark")', true)
+        ->click('a[data-slot="link"][href="/settings/profile"]')
+        ->assertPathIs('/settings/profile')
+        ->assertScript('document.documentElement.classList.contains("dark")', true);
+
+    $page->page()->reload();
+
+    $page->wait(0.3)
+        ->assertScript('document.documentElement.classList.contains("dark")', true)
+        ->click('[data-testid="appearance-menu-trigger"]')
+        ->click('Light')
+        ->assertScript('document.documentElement.classList.contains("dark")', false)
+        ->assertScript('document.documentElement.dataset.appearance', 'light')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });

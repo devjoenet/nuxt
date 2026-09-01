@@ -1,13 +1,13 @@
 /* Nuxt UI semantic roles. These are the values components consume. */
 :root {
-  --ui-primary: var(--color-argon-600);
-  --ui-secondary: var(--color-argon-secondary-500);
+  --ui-primary: var(--color-argon-800);
+  --ui-secondary: var(--color-argon-secondary-700);
   --ui-success: var(--color-green-500);
-  --ui-info: var(--color-cyan-500);
+  --ui-info: var(--color-cyan-800);
   --ui-warning: var(--color-orange-500);
   --ui-error: var(--color-red-500);
 
-  --ui-text-dimmed: var(--color-grey-600);
+  --ui-text-dimmed: var(--color-grey-700);
   --ui-text-muted: var(--argon-text-body);
   --ui-text-toned: var(--color-slate-600);
   --ui-text: var(--argon-text-body);

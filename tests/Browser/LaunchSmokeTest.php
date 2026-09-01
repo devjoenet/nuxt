@@ -88,6 +88,20 @@ test('landing anchors and logo naming stay connected to real sections', function
         ->assertNoConsoleLogs();
 });
 
+test('mobile public navigation traps focus and restores it when dismissed', function (): void {
+    visit('/')
+        ->resize(390, 844)
+        ->click('[data-testid="public-navigation-trigger"]')
+        ->assertVisible('[role="dialog"]')
+        ->assertPresent('[role="dialog"] nav[aria-label="Mobile navigation"]')
+        ->assertScript('document.activeElement?.closest("[role=dialog]") !== null', true)
+        ->keys('[role="dialog"]', 'Escape')
+        ->assertMissing('[role="dialog"]')
+        ->assertScript('document.activeElement?.getAttribute("data-testid")', 'public-navigation-trigger')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
 test('landing navigation and attribution stay page scoped', function (): void {
     $page = visit('/?utm_source=newsletter&utm_medium=email&utm_campaign=operations#contact')
         ->assertAttribute('input[name="landing_page"]', 'value', '/')
@@ -98,7 +112,7 @@ test('landing navigation and attribution stay page scoped', function (): void {
     $page->script('() => document.getElementById("services")?.scrollIntoView()');
 
     $page->wait(0.3)
-        ->assertAttribute('header nav a[href="#services"]', 'aria-current', 'true')
+        ->assertAttribute('header nav a[href="#services"]', 'aria-current', 'page')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });

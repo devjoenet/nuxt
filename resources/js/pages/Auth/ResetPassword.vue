@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import NewPasswordController from "@/actions/App/Http/Controllers/Auth/NewPasswordController";
 import { FormInput } from "@/components/Ui/FormInput";
-import AuthLayout from "@/layouts/AuthLayout.vue";
-import { Form, Head } from "@inertiajs/vue3";
+import { Form, Head, setLayoutProps } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps<{
@@ -11,10 +10,14 @@ const props = defineProps<{
 }>();
 
 const inputEmail = ref(props.email);
+setLayoutProps({
+  title: "Reset password",
+  description: "Enter your new password below.",
+});
 </script>
 
 <template>
-  <AuthLayout title="Reset password" description="Please enter your new password below">
+  <div class="contents">
     <Head title="Reset password" />
 
     <Form v-bind="NewPasswordController.store.form()" :transform="(data) => ({ ...data, token, email })" :reset-on-success="['password', 'password_confirmation']" v-slot="{ errors, processing }">
@@ -28,5 +31,5 @@ const inputEmail = ref(props.email);
         <UButton :loading="processing" type="submit" block class="mt-4">Confirm Password</UButton>
       </div>
     </Form>
-  </AuthLayout>
+  </div>
 </template>

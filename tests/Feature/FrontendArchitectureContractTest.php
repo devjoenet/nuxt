@@ -555,8 +555,8 @@ test('authenticated pages compose the product workspace shell', function (): voi
     expect($workspacePage)
         ->toContain('<Head :title="documentTitle ?? title" />')
         ->toContain('<UDashboardPanel')
-        ->toContain('<UDashboardNavbar')
-        ->toContain('<UDashboardSidebarCollapse />')
+        ->toContain('<WorkspaceNavbar')
+        ->toContain('<WorkspaceFooter />')
         ->toContain('<UDashboardToolbar v-if="$slots.toolbar"')
         ->toContain('<slot name="actions" />')
         ->toContain('data-workspace-page-content')
@@ -598,11 +598,11 @@ test('authenticated editors share form composition without replacing typed field
 });
 
 test('crm details share typed lifecycle presentation and accessible confirmation', function (): void {
-    $defaultLayout = File::get(resource_path('js/layouts/Default.vue'));
+    $applicationLayout = File::get(resource_path('js/layouts/ApplicationLayout.vue'));
     $flashToasts = File::get(resource_path('js/composables/useFlashToasts.ts'));
     $confirmation = File::get(resource_path('js/components/ConfirmActionButton.vue'));
 
-    expect($defaultLayout)
+    expect($applicationLayout)
         ->toContain('useFlashToasts();')
         ->and($flashToasts)
         ->toContain('lastToast')
@@ -675,7 +675,7 @@ test('landing appearance stays stable across server rendering and first paint', 
     $blade = File::get(resource_path('views/app.blade.php'));
     $bootstrap = File::get(public_path('theme-bootstrap.js'));
     $picture = File::get(resource_path('js/components/Landing/LandingHeroPicture.vue'));
-    $userMenu = File::get(resource_path('js/components/UserMenu.vue'));
+    $appearance = File::get(resource_path('js/composables/useAppearance.ts'));
 
     expect($blade)
         ->toContain('data-appearance=')
@@ -688,24 +688,29 @@ test('landing appearance stays stable across server rendering and first paint', 
         ->toContain('(prefers-color-scheme: dark)')
         ->toContain('(prefers-color-scheme: light)')
         ->toContain('"not all"')
-        ->and($userMenu)
-        ->toContain('document.cookie = `appearance=${appearance}')
-        ->toContain('preference === "auto" ? "system" : preference');
+        ->and($appearance)
+        ->toContain('document.documentElement.dataset.appearance = nextAppearance;')
+        ->toContain('document.cookie = `appearance=${nextAppearance}')
+        ->toContain('nextAppearance === "system" ? "auto" : nextAppearance');
 });
 
-test('the authenticated workspace uses one client and server layout boundary', function (): void {
+test('route families use shared client and server layout boundaries', function (): void {
     $appEntry = File::get(resource_path('js/app.ts'));
     $serverEntry = File::get(resource_path('js/ssr.ts'));
     $layoutResolver = File::get(resource_path('js/layouts/resolveAppLayout.ts'));
     $viteConfig = File::get(base_path('vite.config.ts'));
-    $defaultLayout = File::get(resource_path('js/layouts/Default.vue'));
+    $applicationLayout = File::get(resource_path('js/layouts/ApplicationLayout.vue'));
+    $authLayout = File::get(resource_path('js/layouts/AuthLayout.vue'));
+    $publicLayout = File::get(resource_path('js/layouts/PublicLayout.vue'));
+    $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
+    $galleryLayout = File::get(resource_path('js/layouts/GalleryLayout.vue'));
     $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
     $workspaceSearch = File::get(resource_path('js/components/WorkspaceSearch.vue'));
 
-    $pagesDeclaringDefaultLayout = collect(File::allFiles(resource_path('js/pages')))
+    $pagesDeclaringApplicationLayout = collect(File::allFiles(resource_path('js/pages')))
         ->filter(fn (SplFileInfo $page): bool => Str::contains(
             File::get($page->getPathname()),
-            '@/layouts/Default.vue',
+            '@/layouts/ApplicationLayout.vue',
         ))
         ->map(fn (SplFileInfo $page): string => $page->getRelativePathname())
         ->values()
@@ -722,17 +727,31 @@ test('the authenticated workspace uses one client and server layout boundary', f
         ->toContain('createSSRApp({ render: () => h(UApp')
         ->not->toContain('VITE_APP_ENV')
         ->and($layoutResolver)
-        ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | null')
+        ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | Component[] | null')
         ->toContain('name.startsWith("Auth/")')
+        ->toContain('return [ApplicationLayout, SettingsLayout];')
+        ->toContain('return [ApplicationLayout, GalleryLayout];')
         ->and($viteConfig)
         ->toContain('defineConfig(({ isSsrBuild }) => ({')
         ->toContain('entry: "resources/js/ssr.ts"')
         ->toContain('sourcemap: !isSsrBuild')
-        ->and($pagesDeclaringDefaultLayout)->toBe([])
-        ->and($defaultLayout)
+        ->and($pagesDeclaringApplicationLayout)->toBe([])
+        ->and($applicationLayout)
         ->toContain('<WorkspaceSidebar')
         ->toContain('useWorkspaceNavigation')
         ->not->toContain('@/routes/')
+        ->and($authLayout)
+        ->toContain('<AppearanceMenu />')
+        ->toContain('<Card as="section"')
+        ->and($publicLayout)
+        ->toContain('<LandingHeader />')
+        ->toContain('<LandingFooter :columns="footerColumns" />')
+        ->and($settingsLayout)
+        ->toContain('profileEdit.url()')
+        ->toContain('securityShow.url()')
+        ->and($galleryLayout)
+        ->toContain('<WorkspacePage')
+        ->toContain('<UNavigationMenu')
         ->and($workspaceSidebar)
         ->toContain('aria-label="Primary workspace navigation"')
         ->toContain('aria-label="Account navigation"')

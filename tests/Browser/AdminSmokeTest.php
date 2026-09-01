@@ -74,38 +74,36 @@ test('the workspace shell preserves CRM, admin, settings, and Development screen
     $page->assertPathIs('/settings/security');
 });
 
-test('neutral subtle cards and floating labels use the specified light and dark surfaces', function (): void {
+test('the auth shell and floating labels use the specified light and dark surfaces', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
 
     $lightPage = visit('/user/confirm-password')->inLightMode();
     $lightPage
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral]")).backgroundColor', 'rgb(240, 241, 243)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral]")).borderColor', 'rgb(216, 220, 226)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__shell[data-variant=outlined]")).backgroundColor', 'rgba(0, 0, 0, 0)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__label")).backgroundColor', 'rgb(240, 241, 243)');
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card]")).backgroundColor', 'rgb(255, 255, 255)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__shell[data-variant=outlined]")).backgroundColor', 'rgba(0, 0, 0, 0)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).backgroundColor', 'rgb(255, 255, 255)');
 
     $lightPage->page()->locator('input[name="password"]')->press('Tab');
 
     $lightPage
         ->wait(0.2)
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__shell[data-variant=outlined]")).borderColor === getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__label")).color', true)
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__shell[data-variant=outlined]")).borderColor === getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).color', true)
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 
     $darkPage = visit('/user/confirm-password')->inDarkMode();
     $darkPage
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral]")).backgroundColor', 'rgb(45, 52, 63)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral]")).borderColor', 'rgb(60, 70, 83)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__shell[data-variant=outlined]")).backgroundColor', 'rgba(0, 0, 0, 0)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__label")).backgroundColor', 'rgb(45, 52, 63)');
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card]")).backgroundColor', 'rgb(26, 32, 53)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__shell[data-variant=outlined]")).backgroundColor', 'rgba(0, 0, 0, 0)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).backgroundColor', 'rgb(26, 32, 53)');
 
     $darkPage->page()->locator('input[name="password"]')->press('Tab');
 
     $darkPage
         ->wait(0.2)
-        ->assertScript('getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__shell[data-variant=outlined]")).borderColor === getComputedStyle(document.querySelector("[data-card-style=subtle][data-card-variant=neutral] .form-field__label")).color', true)
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__shell[data-variant=outlined]")).borderColor === getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).color', true)
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });

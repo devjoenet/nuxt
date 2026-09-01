@@ -76,6 +76,7 @@ test('admins can create a role with initial permissions', function (): void {
         ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
         ->assertScript('document.querySelectorAll("[data-testid=\"create-role-permission-list\"] fieldset").length', 6)
         ->assertScript('Array.from(document.querySelectorAll("[data-testid=\"create-role-permission-list\"] legend")).map((legend) => legend.textContent?.trim()).join("|")', 'Admin|Audit log|CRM|Development|Jobs & queues|Business settings')
+        ->wait(0.3)
         ->assertNoAccessibilityIssues()
         ->fill('input[name="name"]', 'Project Manager')
         ->check('[data-testid="create-role-permission-list"] input[value="'.$crmView->getKey().'"]')
@@ -108,8 +109,8 @@ test('admin role cards retain visible hierarchy in dark mode', function (): void
     visit('/admin/roles')
         ->inDarkMode()
         ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).backgroundColor !== getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).backgroundColor', true)
-        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).borderColor', 'rgb(60, 70, 83)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).borderColor', 'rgb(60, 70, 83)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-editor-card]")).borderColor', 'rgb(73, 80, 87)')
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=role-permission-list-admin]")).borderColor', 'rgb(73, 80, 87)')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
