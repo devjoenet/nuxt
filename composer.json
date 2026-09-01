@@ -109,7 +109,7 @@
       "rector --dry-run",
       "yarn format:check"
     ],
-    "test:browser": "pest --testsuite=Browser",
+    "test:browser": "pest --testsuite=Browser --parallel --processes=2 --compact",
     "test:unit": [
       "@php artisan config:clear --ansi",
       "pest --testsuite=Unit,Feature --parallel --coverage --min=80.0"
