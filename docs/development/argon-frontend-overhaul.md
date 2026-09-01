@@ -352,6 +352,38 @@ No original jQuery or Bootstrap plugin is copied blindly. Adapter components iso
 normalize it to typed Vue props/events, lazy-load expensive code where possible, and keep vendor-specific types out of
 pages.
 
+Task 8 established the following concrete boundaries:
+
+| Capability | Application boundary | Loading decision |
+| --- | --- | --- |
+| Dropdown, tooltip, popover, accordion, tabs, modal, toast | Existing Nuxt UI and Reka UI primitives | Shared foundation |
+| Table and pagination | Existing `IndexTableFrame` and `IndexPagination` compositions | Shared foundation |
+| Chart | `AdvancedChart` over Unovis, with a textual data table fallback | Lazy component and dynamic vendor imports |
+| Date and time | `AdvancedDateTime` over native date and time inputs | Eager, no additional picker runtime |
+| Select and upload | Existing form components over Nuxt UI | Shared foundation |
+| Kanban | `AdvancedKanban` with pointer and Left/Right Arrow movement | Eager first-party interaction |
+| Calendar | `AdvancedCalendar` with an ISO date string public boundary | Eager; vendor date values remain internal |
+| Rich text | `AdvancedEditor` over Nuxt UI and TipTap with a string HTML boundary | Lazy component |
+| Map | `AdvancedMap` over MapLibre GL with a textual marker list | Lazy component and dynamic JS/CSS imports |
+
+The adapter capability registry in `resources/js/lib/advancedBehaviorCapabilities.ts` is the source for gallery and
+architecture checks. Expensive adapters are exported as `LazyAdvancedChart`, `LazyAdvancedEditor`, and
+`LazyAdvancedMap`; ordinary application entry points do not import their runtimes.
+
+Every direct dependency added for this task was evaluated before adoption:
+
+| Package | Need and compatibility | License and maintenance | Accessibility and bundle impact |
+| --- | --- | --- | --- |
+| `vite-plus` 0.3.0 | Runs the existing Vue, Inertia, Laravel, Wayfinder, and Nuxt UI Vite plugins through the current Laravel starter-kit toolchain | MIT; active VoidZero project, pinned for reproducibility | Development-only; no rendered interface or shipped CLI |
+| `@unovis/ts` 1.6.7 | Required peer for the existing `@unovis/vue` integration | Apache-2.0; maintained with Unovis Vue | Chart provides a label and textual data; runtime stays behind the lazy chart boundary |
+| `@internationalized/date` 3.12.3 | Converts ISO strings at the calendar boundary and is already used by Nuxt UI | Apache-2.0; maintained by Adobe React Spectrum | Nuxt UI owns focus and keyboard behavior; shared date-model code is small |
+| `maplibre-gl` 6.6.0 | Maintained, non-proprietary replacement for manifest map behavior | BSD-3-Clause; active MapLibre community | Adapter adds keyboard markers, status, errors, and a textual list; runtime and CSS load dynamically |
+| `vue-eslint-parser` 10.x | Explicitly satisfies the upgraded Vue ESLint peer contract | MIT; maintained with the Vue ESLint toolchain | Development-only; no runtime bundle impact |
+
+Vite+ runs its fast, non-type-aware lint pass as part of `vp check`. Vue SFC and path-alias type analysis remains with
+`vue-tsc`, while the repository's ESLint architecture rules and Prettier checks remain explicit quality gates. This
+avoids treating Vite+'s TypeScript-only checker as authoritative for Vue files it cannot resolve.
+
 ## Protected reference gallery
 
 All licensed Argon examples must be discoverable inside the application without becoming public product routes. The

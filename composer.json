@@ -71,20 +71,20 @@
       "@php artisan key:generate --ansi",
       "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
       "@php artisan migrate --graceful --ansi",
-      "yarn install --frozen-lockfile",
+      "yarn install --immutable",
       "yarn build"
     ],
     "update:requirements": [
       "composer bump",
-      "yarn upgrade",
-      "@php artisan @php artisan boost:update"
+      "yarn up \"*\"",
+      "@php artisan boost:update"
     ],
     "setup": [
       "composer install",
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
       "@php artisan key:generate",
       "@php artisan migrate --force",
-      "yarn install --frozen-lockfile",
+      "yarn install --immutable",
       "yarn build"
     ],
     "dev": [

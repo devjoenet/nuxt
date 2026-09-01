@@ -2,13 +2,13 @@ import { wayfinder } from "@laravel/vite-plugin-wayfinder";
 import inertia from "@inertiajs/vite";
 import vue from "@vitejs/plugin-vue";
 import laravel from "laravel-vite-plugin";
-import { defineConfig } from "vite";
+import { defineConfig, lazyPlugins } from "vite-plus";
 import ui from "@nuxt/ui/vite";
 import path from "path";
 import vueDevTools from "vite-plugin-vue-devtools";
 
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [
+  plugins: lazyPlugins(() => [
     laravel({
       input: ["resources/js/app.ts"],
       refresh: true,
@@ -112,7 +112,18 @@ export default defineConfig(({ isSsrBuild }) => ({
       },
     }),
     vueDevTools(),
-  ],
+  ]),
+  check: {
+    fmt: false,
+  },
+  lint: {
+    ignorePatterns: [".yarn/**", "bootstrap/ssr/**", "node_modules/**", "public/**", "resources/js/actions/**", "resources/js/routes/**", "resources/js/wayfinder/**", "vendor/**"],
+    options: {
+      denyWarnings: true,
+      typeAware: false,
+      typeCheck: false,
+    },
+  },
   build: {
     sourcemap: !isSsrBuild,
     rolldownOptions: {
