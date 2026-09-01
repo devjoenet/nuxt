@@ -11,6 +11,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdvancedCalendar: typeof import('./resources/js/components/AdvancedCalendar/AdvancedCalendar.vue')['default']
+    AdvancedChart: typeof import('./resources/js/components/AdvancedChart/AdvancedChart.vue')['default']
+    AdvancedDateTime: typeof import('./resources/js/components/AdvancedDateTime/AdvancedDateTime.vue')['default']
+    AdvancedEditor: typeof import('./resources/js/components/AdvancedEditor/AdvancedEditor.vue')['default']
+    AdvancedKanban: typeof import('./resources/js/components/AdvancedKanban/AdvancedKanban.vue')['default']
+    AdvancedMap: typeof import('./resources/js/components/AdvancedMap/AdvancedMap.vue')['default']
     Alert: typeof import('./resources/js/components/Ui/Alert/Alert.vue')['default']
     AlertError: typeof import('./resources/js/components/AlertError.vue')['default']
     AppCard: typeof import('./resources/js/components/AppCard.vue')['default']
