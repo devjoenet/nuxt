@@ -25,6 +25,7 @@ export interface ArgonGalleryExample {
   divergence_note: string;
   family: ArgonGalleryFamily;
   id: string;
+  implementation_state: "implemented" | "planned";
   layout: string;
   planned_vue_destination: string;
   source_note: string;

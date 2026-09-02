@@ -124,13 +124,14 @@ final class ArgonGalleryManifestQuery
             'source_status' => $sourceStatus,
             'layout' => $this->stringValue($example, 'layout'),
             'adaptation_state' => $this->stringValue($example, 'adaptation_state'),
+            'implementation_state' => $this->stringValue($example, 'implementation_state'),
             'planned_vue_destination' => $this->stringValue($example, 'planned_vue_destination'),
             'behaviors' => $this->stringList($example, 'behaviors'),
             'dependencies' => $this->stringList($example, 'dependencies'),
             'source_note' => $sourceStatus === 'empty'
                 ? 'The licensed source file is empty; the gallery preserves its manifest record and route without inventing missing design content.'
                 : 'The licensed source remains outside Git and is available only as authorized implementation reference.',
-            'divergence_note' => 'Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task.',
+            'divergence_note' => $this->stringValue($example, 'divergence_note'),
             'consuming_pages' => [],
         ];
     }

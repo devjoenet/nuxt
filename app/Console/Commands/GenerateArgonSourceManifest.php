@@ -273,12 +273,41 @@ class GenerateArgonSourceManifest extends Command
                 'behaviors' => $this->behaviors($html, $plugins),
                 'planned_vue_destination' => $this->plannedVueDestination($sourcePath, $family),
                 'adaptation_state' => 'adapted',
+                'implementation_state' => $family === 'general' ? 'implemented' : 'planned',
+                'divergence_note' => $this->divergenceNote($id, $family, $sourceStatus, $html),
             ];
         }
 
         usort($examples, static fn (array $left, array $right): int => $left['source_path'] <=> $right['source_path']);
 
         return $examples;
+    }
+
+    private function divergenceNote(string $id, string $family, string $sourceStatus, string $html): string
+    {
+        if ($family !== 'general') {
+            return 'Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task.';
+        }
+
+        if ($sourceStatus === 'empty') {
+            return 'The licensed source file is empty. Task 10 preserves a dedicated unavailable-state Vue destination without inventing source content.';
+        }
+
+        if (str_contains($html, 'If you are not redirected automatically')) {
+            return 'The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported.';
+        }
+
+        return match ($id) {
+            'general-charts' => 'Chart.js examples are adapted to the approved lazy AdvancedChart boundary plus accessible CSS-only comparison specimens.',
+            'general-maps-google', 'general-maps-vector' => 'Map examples use the approved lazy MapLibre adapter rather than adding the source Google or vector-map runtimes.',
+            'general-notifications' => 'Bootstrap alerts and toasts are adapted to shared Argon alerts and the application toast provider.',
+            'general-pricing-page' => 'The pricing composition keeps the source hierarchy and inert billing interaction without licensed imagery or purchase links.',
+            'general-rtl-page' => 'The RTL dashboard is rebuilt with native direction and logical layout behavior rather than source Bootstrap positioning.',
+            'general-sweet-alerts' => 'SweetAlert dialogs are adapted to the existing accessible Nuxt UI modal boundary.',
+            'general-vr-vr-default', 'general-vr-vr-info' => 'The virtual-reality composition uses authored semantic gradients instead of distributing licensed raster backgrounds.',
+            'general-widgets' => 'The widget dashboard uses inert fixtures and the approved chart and calendar adapters.',
+            default => 'Task 10 ports the source composition through shared Argon foundations and typed Vue components.',
+        };
     }
 
     /**

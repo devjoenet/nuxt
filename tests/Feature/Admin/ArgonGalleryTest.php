@@ -91,6 +91,31 @@ test('every manifest entry resolves to its protected reference route', function 
     }
 });
 
+test('all general manifest entries resolve to implemented Vue destinations', function (): void {
+    $user = galleryUser();
+    $manifest = json_decode(File::get(resource_path('argon/source-manifest.json')), true, flags: JSON_THROW_ON_ERROR);
+    $generalExamples = array_values(array_filter(
+        $manifest['examples'],
+        static fn (array $example): bool => $example['family'] === 'general',
+    ));
+
+    expect($generalExamples)->toHaveCount(22);
+
+    foreach ($generalExamples as $example) {
+        expect(File::exists(base_path($example['planned_vue_destination'])))
+            ->toBeTrue("Missing general reference page: {$example['planned_vue_destination']}");
+
+        $this->actingAs($user)
+            ->get(route('admin.argonGallery.examples.show', $example['id']))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('Admin/ArgonGallery/Show')
+                ->where('example.id', $example['id'])
+                ->where('example.implementation_state', 'implemented')
+                ->where('example.divergence_note', $example['divergence_note']));
+    }
+});
+
 test('unknown manifest identifiers return not found', function (): void {
     $this->actingAs(galleryUser())
         ->get(route('admin.argonGallery.examples.show', 'not-a-manifest-entry'))
@@ -113,6 +138,21 @@ test('gallery laboratories remain lazy and absent from ordinary entry source', f
         ->and($page)->not->toContain('FoundationLab', 'PrimitiveLab', 'FormLab', 'LayoutLab', 'AdvancedLab')
         ->and($applicationEntry)->not->toContain('ArgonGallery', 'GalleryLaboratory', 'AdvancedLab')
         ->and($ssrEntry)->not->toContain('ArgonGallery', 'GalleryLaboratory', 'AdvancedLab');
+});
+
+test('general reference pages remain lazy and absent from ordinary entry source', function (): void {
+    $references = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/generalExamples.ts'));
+    $applicationEntry = File::get(resource_path('js/app.ts'));
+    $ssrEntry = File::get(resource_path('js/ssr.ts'));
+
+    expect($references)
+        ->toContain('defineAsyncComponent')
+        ->toContain('general-charts')
+        ->toContain('general-widgets')
+        ->and(mb_substr_count($references, 'defineAsyncComponent(() => import'))
+        ->toBe(22)
+        ->and($applicationEntry)->not->toContain('generalExamples', 'Examples/General')
+        ->and($ssrEntry)->not->toContain('generalExamples', 'Examples/General');
 });
 
 test('the production manifest emits distinct gallery lab chunks outside an ordinary page bundle', function (): void {

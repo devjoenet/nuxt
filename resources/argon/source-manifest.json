@@ -163,7 +163,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Billing.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "account-invoice",
@@ -224,7 +226,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Invoice.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "account-security",
@@ -289,7 +293,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Security.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "account-settings",
@@ -361,7 +367,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Settings.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "applications-analytics",
@@ -434,7 +442,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Applications/Analytics.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "applications-calendar",
@@ -513,7 +523,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Applications/Calendar.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "applications-datatables",
@@ -581,7 +593,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Applications/DataTables.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "applications-kanban",
@@ -653,7 +667,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Applications/Kanban.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "applications-wizard",
@@ -727,7 +743,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Applications/Wizard.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-error-404",
@@ -792,7 +810,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Error/Error404.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-error-500",
@@ -858,7 +878,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Error/Error500.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-lock-basic",
@@ -924,7 +946,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Lock/Basic.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-lock-cover",
@@ -992,7 +1016,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Lock/Cover.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-lock-illustration",
@@ -1058,7 +1084,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Lock/Illustration.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-reset-basic",
@@ -1124,7 +1152,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Reset/Basic.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-reset-cover",
@@ -1191,7 +1221,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Reset/Cover.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-reset-illustration",
@@ -1257,7 +1289,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Reset/Illustration.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-signin-basic",
@@ -1325,7 +1359,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignIn/Basic.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-signin-cover",
@@ -1392,7 +1428,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignIn/Cover.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-signin-illustration",
@@ -1458,7 +1496,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignIn/Illustration.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-signup-basic",
@@ -1524,7 +1564,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignUp/Basic.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-signup-cover",
@@ -1591,7 +1633,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignUp/Cover.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-signup-illustration",
@@ -1657,7 +1701,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignUp/Illustration.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-verification-basic",
@@ -1724,7 +1770,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Verification/Basic.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-verification-cover",
@@ -1790,7 +1838,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Verification/Cover.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "authentication-verification-illustration",
@@ -1856,7 +1906,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Verification/Illustration.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "dashboards-automotive",
@@ -1933,7 +1985,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Dashboards/Automotive.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "dashboards-crm",
@@ -2006,7 +2060,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Dashboards/Crm.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "dashboards-default",
@@ -2101,7 +2157,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Dashboards/Default.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "dashboards-landing",
@@ -2162,7 +2220,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Dashboards/Landing.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "dashboards-smart-home",
@@ -2247,7 +2307,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Dashboards/SmartHome.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-orders-details",
@@ -2315,7 +2377,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Orders/Details.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-orders-list",
@@ -2388,7 +2452,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Orders/List.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-overview",
@@ -2468,7 +2534,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Overview.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-products-edit-product",
@@ -2542,7 +2610,9 @@
         "rich-text-editing"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Products/EditProduct.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-products-new-product",
@@ -2625,7 +2695,9 @@
         "rich-text-editing"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Products/NewProduct.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-products-product-page",
@@ -2707,7 +2779,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Products/ProductPage.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-products-products-list",
@@ -2793,7 +2867,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Products/ProductsList.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "ecommerce-referral",
@@ -2869,7 +2945,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Ecommerce/Referral.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "general-charts",
@@ -2937,7 +3015,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Charts.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "Chart.js examples are adapted to the approved lazy AdvancedChart boundary plus accessible CSS-only comparison specimens."
     },
     {
       "id": "general-components-buttons",
@@ -3001,7 +3081,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Components/Buttons.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-components-cards",
@@ -3065,7 +3147,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Components/Cards.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-components-grid",
@@ -3129,7 +3213,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Components/Grid.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-components-icons",
@@ -3193,7 +3279,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Components/Icons.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-components-notifications",
@@ -3257,7 +3345,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Components/Notifications.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-components-typography",
@@ -3321,7 +3411,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Components/Typography.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-forms-components",
@@ -3385,7 +3477,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Forms/Components.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-forms-elements",
@@ -3449,7 +3543,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Forms/Elements.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-forms-validation",
@@ -3513,7 +3609,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Forms/Validation.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-maps-google",
@@ -3577,7 +3675,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Maps/Google.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-maps-vector",
@@ -3641,7 +3741,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Maps/Vector.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source contains only a redirect stub. Task 10 records the intended page family with shared typed Argon specimens instead of claiming unavailable markup was ported."
     },
     {
       "id": "general-notifications",
@@ -3705,7 +3807,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Notifications.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "Bootstrap alerts and toasts are adapted to shared Argon alerts and the application toast provider."
     },
     {
       "id": "general-pricing-page",
@@ -3778,7 +3882,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/PricingPage.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The pricing composition keeps the source hierarchy and inert billing interaction without licensed imagery or purchase links."
     },
     {
       "id": "general-rtl-page",
@@ -3857,7 +3963,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/RtlPage.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The RTL dashboard is rebuilt with native direction and logical layout behavior rather than source Bootstrap positioning."
     },
     {
       "id": "general-sweet-alerts",
@@ -3924,7 +4032,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/SweetAlerts.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "SweetAlert dialogs are adapted to the existing accessible Nuxt UI modal boundary."
     },
     {
       "id": "general-tables-datatables",
@@ -3942,7 +4052,9 @@
         "source-content-missing"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Tables/DataTables.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source file is empty. Task 10 preserves a dedicated unavailable-state Vue destination without inventing source content."
     },
     {
       "id": "general-tables-sortable",
@@ -3960,7 +4072,9 @@
         "source-content-missing"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Tables/Sortable.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source file is empty. Task 10 preserves a dedicated unavailable-state Vue destination without inventing source content."
     },
     {
       "id": "general-tables-tables",
@@ -3978,7 +4092,9 @@
         "source-content-missing"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Tables/Tables.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The licensed source file is empty. Task 10 preserves a dedicated unavailable-state Vue destination without inventing source content."
     },
     {
       "id": "general-vr-vr-default",
@@ -4052,7 +4168,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/VirtualReality/VrDefault.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The virtual-reality composition uses authored semantic gradients instead of distributing licensed raster backgrounds."
     },
     {
       "id": "general-vr-vr-info",
@@ -4124,7 +4242,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/VirtualReality/VrInfo.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The virtual-reality composition uses authored semantic gradients instead of distributing licensed raster backgrounds."
     },
     {
       "id": "general-widgets",
@@ -4200,7 +4320,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/General/Widgets.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "implemented",
+      "divergence_note": "The widget dashboard uses inert fixtures and the approved chart and calendar adapters."
     },
     {
       "id": "projects-general",
@@ -4273,7 +4395,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Projects/General.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "projects-new-project",
@@ -4353,7 +4477,9 @@
         "rich-text-editing"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Projects/NewProject.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "projects-timeline",
@@ -4417,7 +4543,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Projects/Timeline.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "team-new-user",
@@ -4485,7 +4613,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/NewUser.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "team-overview",
@@ -4562,7 +4692,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Overview.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "team-projects",
@@ -4637,7 +4769,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Projects.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "team-reports",
@@ -4711,7 +4845,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Reports.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     },
     {
       "id": "team-teams",
@@ -4792,7 +4928,9 @@
         "responsive-shell-and-theme"
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Teams.vue",
-      "adaptation_state": "adapted"
+      "adaptation_state": "adapted",
+      "implementation_state": "planned",
+      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
     }
   ],
   "dependencies": [
