@@ -273,7 +273,9 @@ class GenerateArgonSourceManifest extends Command
                 'behaviors' => $this->behaviors($html, $plugins),
                 'planned_vue_destination' => $this->plannedVueDestination($sourcePath, $family),
                 'adaptation_state' => 'adapted',
-                'implementation_state' => $family === 'general' ? 'implemented' : 'planned',
+                'implementation_state' => in_array($family, ['account', 'authentication', 'general', 'projects', 'team'], true)
+                    ? 'implemented'
+                    : 'planned',
                 'divergence_note' => $this->divergenceNote($id, $family, $sourceStatus, $html),
             ];
         }
@@ -285,8 +287,27 @@ class GenerateArgonSourceManifest extends Command
 
     private function divergenceNote(string $id, string $family, string $sourceStatus, string $html): string
     {
-        if ($family !== 'general') {
+        if (! in_array($family, ['account', 'authentication', 'general', 'projects', 'team'], true)) {
             return 'Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task.';
+        }
+
+        if ($family === 'authentication') {
+            return match ($id) {
+                'authentication-error-404', 'authentication-error-500' => 'Task 11 rebuilds the status composition with authored semantic surfaces and an inert homepage action instead of distributing the licensed background artwork.',
+                default => 'Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account.',
+            };
+        }
+
+        if ($family === 'account') {
+            return 'Task 11 preserves the source account state with inert local fixtures and shared controls. Billing, security, profile, session, and destructive actions never reach production mutations.';
+        }
+
+        if ($family === 'projects') {
+            return 'Task 11 adapts the source project composition to shared semantic cards, forms, and timelines backed only by inert gallery fixtures.';
+        }
+
+        if ($family === 'team') {
+            return 'Task 11 adapts the source team composition to shared semantic cards and controls backed only by inert gallery fixtures; invitations, profile changes, and messages are never sent.';
         }
 
         if ($sourceStatus === 'empty') {

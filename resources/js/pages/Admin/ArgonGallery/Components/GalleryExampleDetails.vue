@@ -4,9 +4,10 @@ import type { ArgonGalleryExample } from "@/types/argonGallery";
 import { computed } from "vue";
 import { galleryLabel } from "./galleryCatalog";
 import { resolveGeneralExample } from "./generalExamples";
+import { resolveIdentityProjectExample } from "./identityProjectExamples";
 
 const props = defineProps<{ example: ArgonGalleryExample }>();
-const generalExample = computed(() => (props.example.family === "general" ? resolveGeneralExample(props.example.id) : null));
+const referenceExample = computed(() => resolveGeneralExample(props.example.id) ?? resolveIdentityProjectExample(props.example.id));
 </script>
 
 <template>
@@ -21,15 +22,15 @@ const generalExample = computed(() => (props.example.family === "general" ? reso
         <div class="flex flex-wrap gap-2"><UBadge color="neutral" :label="example.implementation_state" variant="outline" /><UBadge color="neutral" :label="example.source_status" variant="outline" /></div>
       </div>
     </header>
-    <section v-if="generalExample" :aria-label="`${example.title} reference implementation`" class="rounded-2xl border border-content-border bg-surface-elevated p-4 shadow-sm dark:shadow-none sm:p-6">
+    <section v-if="referenceExample" :aria-label="`${example.title} reference implementation`" class="rounded-2xl border border-content-border bg-surface-elevated p-4 shadow-sm dark:shadow-none sm:p-6">
       <Suspense>
-        <component :is="generalExample" />
+        <component :is="referenceExample" />
         <template #fallback
           ><div aria-live="polite" class="grid gap-4"><USkeleton class="h-8 w-48" /><USkeleton class="h-72 w-full rounded-xl" /></div
         ></template>
       </Suspense>
     </section>
-    <UAlert v-else-if="example.family === 'general'" color="error" description="The manifest entry has no registered Vue destination." title="Reference implementation missing" />
+    <UAlert v-else-if="example.implementation_state === 'implemented'" color="error" description="The manifest entry has no registered Vue destination." title="Reference implementation missing" />
     <dl class="grid gap-4 rounded-xl border border-content-border p-4 sm:grid-cols-2">
       <div>
         <dt class="font-medium text-content-heading">Manifest ID</dt>
@@ -79,7 +80,7 @@ const generalExample = computed(() => (props.example.family === "general" ? reso
     <UAlert
       v-if="example.implementation_state === 'planned'"
       color="info"
-      description="No production page consumes this reference yet. Tasks 11–12 own the remaining inert Vue ports; later migration tasks decide whether application pages consume their compositions."
+      description="No production page consumes this reference yet. Task 12 owns the remaining inert Vue ports; later migration tasks decide whether application pages consume their compositions."
       title="Consumption status"
       variant="subtle"
     />
