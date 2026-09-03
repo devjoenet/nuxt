@@ -133,3 +133,88 @@ test('the general gallery preserves rtl and empty-source states', function (): v
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
+
+test('the authentication references submit locally with keyboard access in both themes', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    $page = visit(route('admin.argonGallery.examples.show', 'authentication-signin-cover', absolute: false))
+        ->inDarkMode()
+        ->assertSee('A protected preview, not an authentication endpoint.')
+        ->fill('input[name="reference-auth-email"]', 'reviewer@example.com')
+        ->fill('input[name="reference-auth-password"]', 'preview-password');
+    $page->page()->getByRole('button', ['name' => 'Sign in', 'exact' => true])->press('Enter');
+
+    $page->assertSee('Inert state confirmed')
+        ->resize(390, 844)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});
+
+test('the account settings reference exposes profile security session and danger states', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    visit(route('admin.argonGallery.examples.show', 'account-settings', absolute: false))
+        ->inDarkMode()
+        ->assertSee('Alex Morgan')
+        ->assertSee('Two-factor authentication')
+        ->assertSee('Active sessions')
+        ->assertSee('Delete account')
+        ->resize(390, 844)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});
+
+test('the team invitation reference advances with keyboard controls without sending an invitation', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    $page = visit(route('admin.argonGallery.examples.show', 'team-new-user', absolute: false))
+        ->assertSee('Identity');
+    $page->page()->getByRole('button', ['name' => 'Next', 'exact' => true])->press('Enter');
+    $page->assertSee('Address');
+    $page->page()->getByRole('button', ['name' => 'Next', 'exact' => true])->press('Enter');
+    $page->assertSee('Socials')
+        ->resize(390, 844)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});
+
+test('the project timeline reference renders both semantic surface variants', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    visit(route('admin.argonGallery.examples.show', 'projects-timeline', absolute: false))
+        ->inDarkMode()
+        ->assertSee('Light timeline')
+        ->assertSee('Dark timeline')
+        ->assertSee('$2,400 design changes')
+        ->resize(390, 844)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});

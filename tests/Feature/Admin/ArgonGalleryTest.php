@@ -116,6 +116,46 @@ test('all general manifest entries resolve to implemented Vue destinations', fun
     }
 });
 
+test('all identity and project manifest entries resolve to inert implemented Vue destinations', function (): void {
+    $user = galleryUser();
+    $manifest = json_decode(File::get(resource_path('argon/source-manifest.json')), true, flags: JSON_THROW_ON_ERROR);
+    $families = ['account', 'authentication', 'projects', 'team'];
+    $identityProjectExamples = array_values(array_filter(
+        $manifest['examples'],
+        static fn (array $example): bool => in_array($example['family'], $families, true),
+    ));
+
+    expect($identityProjectExamples)->toHaveCount(29);
+
+    foreach ($identityProjectExamples as $example) {
+        expect(File::exists(base_path($example['planned_vue_destination'])))
+            ->toBeTrue("Missing identity or project reference page: {$example['planned_vue_destination']}");
+
+        $this->actingAs($user)
+            ->get(route('admin.argonGallery.examples.show', $example['id']))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page): Assert => $page
+                ->component('Admin/ArgonGallery/Show')
+                ->where('example.id', $example['id'])
+                ->where('example.implementation_state', 'implemented')
+                ->where('example.divergence_note', $example['divergence_note']));
+    }
+});
+
+test('identity and project references stay lazy and disconnected from production transports', function (): void {
+    $references = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/identityProjectExamples.ts'));
+    $components = collect(File::files(resource_path('js/pages/Admin/ArgonGallery/Components/IdentityProjectReferences')))
+        ->map(fn (SplFileInfo $file): string => $file->getContents())
+        ->implode("\n");
+    $applicationEntry = File::get(resource_path('js/app.ts'));
+    $ssrEntry = File::get(resource_path('js/ssr.ts'));
+
+    expect(mb_substr_count($references, 'defineAsyncComponent(() =>'))->toBe(29)
+        ->and($components)->not->toContain('@/actions/', '@/routes/', '@inertiajs/', 'router.', 'useForm(')
+        ->and($applicationEntry)->not->toContain('identityProjectExamples', 'IdentityProjectReferences')
+        ->and($ssrEntry)->not->toContain('identityProjectExamples', 'IdentityProjectReferences');
+});
+
 test('unknown manifest identifiers return not found', function (): void {
     $this->actingAs(galleryUser())
         ->get(route('admin.argonGallery.examples.show', 'not-a-manifest-entry'))

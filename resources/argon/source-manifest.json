@@ -164,8 +164,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Billing.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source account state with inert local fixtures and shared controls. Billing, security, profile, session, and destructive actions never reach production mutations."
     },
     {
       "id": "account-invoice",
@@ -227,8 +227,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Invoice.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source account state with inert local fixtures and shared controls. Billing, security, profile, session, and destructive actions never reach production mutations."
     },
     {
       "id": "account-security",
@@ -294,8 +294,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Security.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source account state with inert local fixtures and shared controls. Billing, security, profile, session, and destructive actions never reach production mutations."
     },
     {
       "id": "account-settings",
@@ -368,8 +368,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Account/Settings.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source account state with inert local fixtures and shared controls. Billing, security, profile, session, and destructive actions never reach production mutations."
     },
     {
       "id": "applications-analytics",
@@ -811,8 +811,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Error/Error404.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 rebuilds the status composition with authored semantic surfaces and an inert homepage action instead of distributing the licensed background artwork."
     },
     {
       "id": "authentication-error-500",
@@ -879,8 +879,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Error/Error500.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 rebuilds the status composition with authored semantic surfaces and an inert homepage action instead of distributing the licensed background artwork."
     },
     {
       "id": "authentication-lock-basic",
@@ -947,8 +947,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Lock/Basic.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-lock-cover",
@@ -1017,8 +1017,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Lock/Cover.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-lock-illustration",
@@ -1085,8 +1085,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Lock/Illustration.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-reset-basic",
@@ -1153,8 +1153,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Reset/Basic.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-reset-cover",
@@ -1222,8 +1222,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Reset/Cover.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-reset-illustration",
@@ -1290,8 +1290,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Reset/Illustration.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-signin-basic",
@@ -1360,8 +1360,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignIn/Basic.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-signin-cover",
@@ -1429,8 +1429,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignIn/Cover.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-signin-illustration",
@@ -1497,8 +1497,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignIn/Illustration.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-signup-basic",
@@ -1565,8 +1565,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignUp/Basic.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-signup-cover",
@@ -1634,8 +1634,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignUp/Cover.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-signup-illustration",
@@ -1702,8 +1702,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/SignUp/Illustration.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-verification-basic",
@@ -1771,8 +1771,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Verification/Basic.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-verification-cover",
@@ -1839,8 +1839,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Verification/Cover.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "authentication-verification-illustration",
@@ -1907,8 +1907,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Authentication/Verification/Illustration.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 preserves the source authentication state and layout variant through a shared inert form composition. It never submits to Fortify or mutates an application account."
     },
     {
       "id": "dashboards-automotive",
@@ -4396,8 +4396,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Projects/General.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source project composition to shared semantic cards, forms, and timelines backed only by inert gallery fixtures."
     },
     {
       "id": "projects-new-project",
@@ -4478,8 +4478,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Projects/NewProject.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source project composition to shared semantic cards, forms, and timelines backed only by inert gallery fixtures."
     },
     {
       "id": "projects-timeline",
@@ -4544,8 +4544,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Projects/Timeline.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source project composition to shared semantic cards, forms, and timelines backed only by inert gallery fixtures."
     },
     {
       "id": "team-new-user",
@@ -4614,8 +4614,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/NewUser.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source team composition to shared semantic cards and controls backed only by inert gallery fixtures; invitations, profile changes, and messages are never sent."
     },
     {
       "id": "team-overview",
@@ -4693,8 +4693,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Overview.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source team composition to shared semantic cards and controls backed only by inert gallery fixtures; invitations, profile changes, and messages are never sent."
     },
     {
       "id": "team-projects",
@@ -4770,8 +4770,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Projects.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source team composition to shared semantic cards and controls backed only by inert gallery fixtures; invitations, profile changes, and messages are never sent."
     },
     {
       "id": "team-reports",
@@ -4846,8 +4846,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Reports.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source team composition to shared semantic cards and controls backed only by inert gallery fixtures; invitations, profile changes, and messages are never sent."
     },
     {
       "id": "team-teams",
@@ -4929,8 +4929,8 @@
       ],
       "planned_vue_destination": "resources/js/pages/Admin/ArgonGallery/Examples/Team/Teams.vue",
       "adaptation_state": "adapted",
-      "implementation_state": "planned",
-      "divergence_note": "Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task."
+      "implementation_state": "implemented",
+      "divergence_note": "Task 11 adapts the source team composition to shared semantic cards and controls backed only by inert gallery fixtures; invitations, profile changes, and messages are never sent."
     }
   ],
   "dependencies": [

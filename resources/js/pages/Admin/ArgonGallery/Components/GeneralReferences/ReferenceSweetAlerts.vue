@@ -36,11 +36,12 @@ function show(alert: (typeof alerts)[number]): void {
     <UModal
       v-model:open="open"
       :description="selected.description"
+      :portal="false"
       :title="selected.title"
       :ui="{
-        content: 'bg-white dark:bg-surface-elevated',
-        title: 'text-slate-800 dark:text-white',
-        description: 'text-slate-600 dark:text-grey-300',
+        content: 'bg-surface-elevated',
+        title: 'text-content-heading',
+        description: 'text-content-body',
         footer: 'justify-end',
       }"
       ><template #footer><Button label="Cancel" tone="neutral" variant="outline" @click="open = false" /><Button class="dark:[--ui-tone:var(--ui-color-primary-700)]" label="Confirm" @click="open = false" /></template
