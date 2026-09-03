@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { index } from "@/routes/admin/argonGallery";
 import type { ArgonGalleryExample } from "@/types/argonGallery";
+import { computed } from "vue";
 import { galleryLabel } from "./galleryCatalog";
+import { resolveGeneralExample } from "./generalExamples";
 
-defineProps<{ example: ArgonGalleryExample }>();
+const props = defineProps<{ example: ArgonGalleryExample }>();
+const generalExample = computed(() => (props.example.family === "general" ? resolveGeneralExample(props.example.id) : null));
 </script>
 
 <template>
@@ -15,9 +18,18 @@ defineProps<{ example: ArgonGalleryExample }>();
           <p class="text-base font-medium text-primary sm:text-sm">{{ galleryLabel(example.family) }}</p>
           <h2 class="text-balance text-2xl font-semibold tracking-tight text-content-heading">{{ example.title }}</h2>
         </div>
-        <UBadge :color="example.source_status === 'available' ? 'success' : 'warning'" :label="example.source_status" variant="subtle" />
+        <div class="flex flex-wrap gap-2"><UBadge color="neutral" :label="example.implementation_state" variant="outline" /><UBadge color="neutral" :label="example.source_status" variant="outline" /></div>
       </div>
     </header>
+    <section v-if="generalExample" :aria-label="`${example.title} reference implementation`" class="rounded-2xl border border-content-border bg-surface-elevated p-4 shadow-sm dark:shadow-none sm:p-6">
+      <Suspense>
+        <component :is="generalExample" />
+        <template #fallback
+          ><div aria-live="polite" class="grid gap-4"><USkeleton class="h-8 w-48" /><USkeleton class="h-72 w-full rounded-xl" /></div
+        ></template>
+      </Suspense>
+    </section>
+    <UAlert v-else-if="example.family === 'general'" color="error" description="The manifest entry has no registered Vue destination." title="Reference implementation missing" />
     <dl class="grid gap-4 rounded-xl border border-content-border p-4 sm:grid-cols-2">
       <div>
         <dt class="font-medium text-content-heading">Manifest ID</dt>
@@ -64,6 +76,12 @@ defineProps<{ example: ArgonGalleryExample }>();
         </ul>
       </section>
     </div>
-    <UAlert color="info" description="No production page consumes this reference yet. Tasks 10–12 own the inert Vue ports; later migration tasks decide whether application pages consume their compositions." title="Consumption status" variant="subtle" />
+    <UAlert
+      v-if="example.implementation_state === 'planned'"
+      color="info"
+      description="No production page consumes this reference yet. Tasks 11–12 own the remaining inert Vue ports; later migration tasks decide whether application pages consume their compositions."
+      title="Consumption status"
+      variant="subtle"
+    />
   </article>
 </template>

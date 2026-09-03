@@ -52,3 +52,84 @@ test('gallery-only users receive a usable permission-filtered navigation destina
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();
 });
+
+test('the charts reference renders accessibly without mobile overflow', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    visit(route('admin.argonGallery.examples.show', 'general-charts', absolute: false))
+        ->assertSee('Revenue trend')
+        ->assertSee('Channel mix')
+        ->resize(390, 844)
+        ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});
+
+test('the pricing reference updates prices in dark mode', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    visit(route('admin.argonGallery.examples.show', 'general-pricing-page', absolute: false))
+        ->inDarkMode()
+        ->assertSee('$89')
+        ->click('Annual billing')
+        ->assertSee('$71')
+        ->resize(390, 844)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+});
+
+test('the sweet alerts reference opens an accessible shared modal', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    $page = visit(route('admin.argonGallery.examples.show', 'general-sweet-alerts', absolute: false))
+        ->inDarkMode();
+    $page->page()->getByTestId('sweet-alert-0')->press('Enter');
+
+    $page->assertSee('A concise informational dialog.')
+        ->assertNoAccessibilityIssues();
+
+    $page->page()->getByRole('button', ['name' => 'Confirm', 'exact' => true])->press('Enter');
+
+    $page->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});
+
+test('the general gallery preserves rtl and empty-source states', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->actingAs($admin);
+
+    visit(route('admin.argonGallery.examples.show', 'general-rtl-page', absolute: false))
+        ->assertSee('نظرة عامة على المبيعات')
+        ->assertScript('document.querySelector("[dir=rtl]")?.dir', 'rtl')
+        ->resize(390, 844)
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs()
+        ->assertNoAccessibilityIssues();
+
+    visit(route('admin.argonGallery.examples.show', 'general-tables-datatables', absolute: false))
+        ->assertSee('DataTables source unavailable')
+        ->assertSee('without inventing source content')
+        ->assertNoJavaScriptErrors()
+        ->assertNoConsoleLogs();
+});

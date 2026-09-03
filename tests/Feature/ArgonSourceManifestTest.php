@@ -116,7 +116,9 @@ test('all licensed examples have stable complete gallery mappings', function () 
             ->planned_vue_destination->toMatch(
                 '~^resources/js/pages/Admin/ArgonGallery/Examples/[A-Z][A-Za-z0-9]*(?:/[A-Z][A-Za-z0-9]*)+\.vue$~',
             )
-            ->adaptation_state->toBe('adapted');
+            ->adaptation_state->toBe('adapted')
+            ->implementation_state->toBeIn(['implemented', 'planned'])
+            ->divergence_note->toBeString()->not->toBeEmpty();
 
         if ($example['source_status'] === 'available') {
             expect($example)
