@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@inertiajs/vue3": "^3.7.0",
-    "@internationalized/date": "^3.12.3",
+    "@internationalized/date": "^3.12.4",
     "@nuxt/ui": "^4.11.0",
     "@phosphor-icons/vue": "^2.2.1",
     "@unovis/ts": "^1.6.7",
