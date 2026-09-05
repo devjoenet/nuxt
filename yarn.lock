@@ -1213,10 +1213,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@laravel/vite-plugin-wayfinder@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@laravel/vite-plugin-wayfinder@npm:0.1.7"
-  checksum: 10c0/c7023f8155a02f44e3caa436fac177069551987552c213bc4968e32d9f4a2dc85e1e4e64cd6fcb72531ff875c3bc0d17a250b578cc3a1cadcf4b718f777c3475
+"@laravel/vite-plugin-wayfinder@npm:^0.1.10":
+  version: 0.1.10
+  resolution: "@laravel/vite-plugin-wayfinder@npm:0.1.10"
+  checksum: 10c0/0f461c4c3fe93527fc88c7b850bfe61d23db3f885bac44cceafd3acf0c8eb733a9efa7dcc0fafcf8899c3c549efbef2bc0a2aae818fa31c85f7e22424c5ddd9d
   languageName: node
   linkType: hard
 
@@ -7981,7 +7981,7 @@ __metadata:
     "@inertiajs/vite": "npm:^3.7.0"
     "@inertiajs/vue3": "npm:^3.7.0"
     "@internationalized/date": "npm:^3.12.3"
-    "@laravel/vite-plugin-wayfinder": "npm:^0.1.7"
+    "@laravel/vite-plugin-wayfinder": "npm:^0.1.10"
     "@nuxt/ui": "npm:^4.11.0"
     "@phosphor-icons/vue": "npm:^2.2.1"
     "@rollup/rollup-linux-x64-gnu": "npm:^4.63.1"

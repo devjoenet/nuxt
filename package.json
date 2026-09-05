@@ -20,7 +20,7 @@
     "@eslint/js": "^10.0.1",
     "@iconify-json/ph": "^1.2.2",
     "@inertiajs/vite": "^3.7.0",
-    "@laravel/vite-plugin-wayfinder": "^0.1.7",
+    "@laravel/vite-plugin-wayfinder": "^0.1.10",
     "@shufo/prettier-plugin-blade": "^1.16.2",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.4.0",
