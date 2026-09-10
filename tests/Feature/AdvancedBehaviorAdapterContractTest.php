@@ -130,6 +130,8 @@ test('expensive vendors stay behind typed lazy adapters and clean up imperative 
         ->toContain('Editor content could not be parsed')
         ->and($mapAdapter)
         ->toContain('await import("maplibre-gl")')
+        ->toContain('await import("maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url")')
+        ->toContain('maplibre.setWorkerUrl(workerUrl)')
         ->toContain('await import("maplibre-gl/dist/maplibre-gl.css")')
         ->toContain('onBeforeUnmount')
         ->toContain('map?.remove()')

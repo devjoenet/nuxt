@@ -2,12 +2,13 @@
 import { index } from "@/routes/admin/argonGallery";
 import type { ArgonGalleryExample } from "@/types/argonGallery";
 import { computed } from "vue";
+import { resolveComplexExample } from "./complexExamples";
 import { galleryLabel } from "./galleryCatalog";
 import { resolveGeneralExample } from "./generalExamples";
 import { resolveIdentityProjectExample } from "./identityProjectExamples";
 
 const props = defineProps<{ example: ArgonGalleryExample }>();
-const referenceExample = computed(() => resolveGeneralExample(props.example.id) ?? resolveIdentityProjectExample(props.example.id));
+const referenceExample = computed(() => resolveGeneralExample(props.example.id) ?? resolveIdentityProjectExample(props.example.id) ?? resolveComplexExample(props.example.id));
 </script>
 
 <template>
@@ -24,7 +25,7 @@ const referenceExample = computed(() => resolveGeneralExample(props.example.id) 
     </header>
     <section v-if="referenceExample" :aria-label="`${example.title} reference implementation`" class="rounded-2xl border border-content-border bg-surface-elevated p-4 shadow-sm dark:shadow-none sm:p-6">
       <Suspense>
-        <component :is="referenceExample" />
+        <component :is="referenceExample" :key="example.id" />
         <template #fallback
           ><div aria-live="polite" class="grid gap-4"><USkeleton class="h-8 w-48" /><USkeleton class="h-72 w-full rounded-xl" /></div
         ></template>
