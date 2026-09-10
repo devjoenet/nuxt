@@ -95,6 +95,7 @@ declare module 'vue' {
     UCalendar: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Calendar.vue')['default']
     UCard: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Card.vue')['default']
     UCheckbox: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Checkbox.vue')['default']
+    UCheckboxGroup: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/CheckboxGroup.vue')['default']
     UCollapsible: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Collapsible.vue')['default']
     UContainer: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Container.vue')['default']
     UDashboardGroup: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/DashboardGroup.vue')['default']

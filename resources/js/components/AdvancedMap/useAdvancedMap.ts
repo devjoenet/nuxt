@@ -14,10 +14,12 @@ export function useAdvancedMap(props: AdvancedMapProps, onReady: () => void, onM
   onMounted(async () => {
     try {
       const maplibre = await import("maplibre-gl");
+      const { default: workerUrl } = await import("maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url");
       await import("maplibre-gl/dist/maplibre-gl.css");
 
       if (disposed || !container.value) return;
 
+      maplibre.setWorkerUrl(workerUrl);
       map = new maplibre.Map({ container: container.value, center: props.center, zoom: props.zoom, style: props.styleUrl ?? emptyStyle, attributionControl: false });
       map.addControl(new maplibre.NavigationControl(), "top-right");
       props.markers?.forEach((marker) => {

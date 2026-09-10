@@ -273,9 +273,7 @@ class GenerateArgonSourceManifest extends Command
                 'behaviors' => $this->behaviors($html, $plugins),
                 'planned_vue_destination' => $this->plannedVueDestination($sourcePath, $family),
                 'adaptation_state' => 'adapted',
-                'implementation_state' => in_array($family, ['account', 'authentication', 'general', 'projects', 'team'], true)
-                    ? 'implemented'
-                    : 'planned',
+                'implementation_state' => 'implemented',
                 'divergence_note' => $this->divergenceNote($id, $family, $sourceStatus, $html),
             ];
         }
@@ -287,8 +285,24 @@ class GenerateArgonSourceManifest extends Command
 
     private function divergenceNote(string $id, string $family, string $sourceStatus, string $html): string
     {
-        if (! in_array($family, ['account', 'authentication', 'general', 'projects', 'team'], true)) {
-            return 'Task 9 exposes manifest metadata and an inert reference route. The visual Vue port is intentionally deferred to the family implementation task.';
+        if (in_array($family, ['applications', 'dashboards', 'ecommerce'], true)) {
+            $composition = match ($id) {
+                'dashboards-landing' => 'The licensed landing source has an empty content grid; its dedicated Vue destination explains the limitation and links to implemented dashboards without inventing a source dashboard.',
+                'dashboards-automotive' => 'Vehicle artwork is replaced by an authored icon composition. The lazy MapLibre adapter uses local markers without external tiles; music controls simulate playback without fetching audio.',
+                'dashboards-smart-home' => 'Camera feeds are authored placeholder surfaces; room selection, playback state, thermostat and device switches use local state. Energy trends use the lazy chart adapter.',
+                'dashboards-crm' => 'The CRM uses local calendar selection, a lazy visitor chart and an unsent birthday-message preview.',
+                'applications-calendar' => 'FullCalendar is replaced by the approved keyboard-accessible calendar and a date-filtered agenda with local event creation; it does not reproduce the source drag-rescheduling grid.',
+                'applications-kanban' => 'The approved accessible kanban adapter replaces jKanban and Dragula, with local task creation and drag or arrow-key moves. Source board creation and task-detail dialogs are omitted.',
+                'applications-wizard' => 'The source profile wizard becomes a three-step local form with native validation and shared choice controls.',
+                'applications-datatables', 'ecommerce-orders-list', 'ecommerce-products-products-list' => 'A shared semantic table preserves representative source-shaped rows with local search, sorting and pagination. Bulk CSV import/export is omitted; gallery links remain permission-protected.',
+                'ecommerce-products-new-product', 'ecommerce-products-edit-product' => 'Product information, media, socials and pricing use instance-local forms, the lazy editor and file selection without uploads. New-product steps validate before advancing; edits never call domain endpoints.',
+                'ecommerce-products-product-page' => 'Authored icons replace external licensed product photos. Thumbnail selection, an accessible modal gallery and a local cart confirmation replace PhotoSwipe and checkout.',
+                'ecommerce-orders-details' => 'A static delivery timeline, billing summary and accessible demo invoice preview replace order and invoice mutations.',
+                'ecommerce-referral' => 'Static counters, local code reveal and searchable referred-user fixtures replace animated counters and outbound referral actions.',
+                default => 'Source metric and report hierarchy is adapted to semantic cards, local period switching and the lazy chart adapter. Representative tables retain source-shaped fixtures; multiple Chart.js chart types use the approved trend and progress presentations.',
+            };
+
+            return "Task 12: {$composition} Each Vue destination loads through complexExamples.ts as a separate async entry; chart, editor and map vendors retain their lazy adapter boundaries. Original asset and dependency provenance stays in this manifest; no licensed media, Bootstrap runtime or new dependencies are shipped. Demo changes reset on navigation.";
         }
 
         if ($family === 'authentication') {
