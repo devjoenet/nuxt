@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import PrivacyPolicyContent from "@/components/Privacy/PrivacyPolicyContent.vue";
+import { PrivacyPolicyContent } from "@/components/PrivacyPolicyContent";
 import { Head, setLayoutProps } from "@inertiajs/vue3";
 
 defineProps<{ canonicalUrl: string }>();

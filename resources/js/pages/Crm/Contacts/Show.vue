@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { router } from "@inertiajs/vue3";
-import ConfirmActionButton from "@/components/ConfirmActionButton.vue";
-import CrmDetailLayout from "@/components/Crm/CrmDetailLayout.vue";
-import CrmDetailMetadata from "@/components/Crm/CrmDetailMetadata.vue";
-import CrmRecordStatusBadge from "@/components/Crm/CrmRecordStatusBadge.vue";
+import { ConfirmActionButton } from "@/components/ConfirmActionButton";
+import { CrmDetailLayout } from "@/components/CrmDetailLayout";
+import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";
+import { CrmRecordStatusBadge } from "@/components/CrmRecordStatusBadge";
 import { formatDate } from "@/lib/dateFormatters";
 import { archive, destroy, edit, index, restore } from "@/routes/crm/contacts";
 import { show as organizationShow } from "@/routes/crm/organizations";

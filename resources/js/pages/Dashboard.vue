@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Stat } from "@/components/Ui/Stat";
 import { Link } from "@inertiajs/vue3";
 import { index as leadsIndex, show as leadShow } from "@/routes/crm/leads";
 
@@ -14,10 +15,7 @@ defineProps<{
   <WorkspacePage id="workspace-dashboard" description="A practical view of the work that needs attention." title="Workspace">
     <template v-if="canViewCrm">
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <AppPageCard v-for="stat in stats" :key="stat.label" :description="stat.label">
-          <template #leading><UIcon :name="stat.icon" class="size-5 text-primary" /></template>
-          <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
-        </AppPageCard>
+        <Stat v-for="stat in stats" :key="stat.label" :icon="stat.icon" :label="stat.label" :value="stat.value" />
       </div>
 
       <div class="mt-6 grid gap-6 xl:grid-cols-2">

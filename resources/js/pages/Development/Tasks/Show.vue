@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { index as requestsIndex } from "@/routes/development/requests";
 import { index as roadmapIndex } from "@/routes/development/roadmap";
-import DevelopmentTaskBriefSection from "@/sections/Development/Tasks/DevelopmentTaskBriefSection.vue";
-import DevelopmentTaskDiscussionSection from "@/sections/Development/Tasks/DevelopmentTaskDiscussionSection.vue";
-import DevelopmentTaskLinksSection from "@/sections/Development/Tasks/DevelopmentTaskLinksSection.vue";
-import DevelopmentTaskSummarySection from "@/sections/Development/Tasks/DevelopmentTaskSummarySection.vue";
-import DevelopmentTaskTestingSection from "@/sections/Development/Tasks/DevelopmentTaskTestingSection.vue";
-import DevelopmentTaskWorkflowSection from "@/sections/Development/Tasks/DevelopmentTaskWorkflowSection.vue";
+import DevelopmentTaskBriefSection from "@/pages/Development/Tasks/Components/DevelopmentTaskBriefSection.vue";
+import DevelopmentTaskDiscussionSection from "@/pages/Development/Tasks/Components/DevelopmentTaskDiscussionSection.vue";
+import DevelopmentTaskLinksSection from "@/pages/Development/Tasks/Components/DevelopmentTaskLinksSection.vue";
+import DevelopmentTaskSummarySection from "@/pages/Development/Tasks/Components/DevelopmentTaskSummarySection.vue";
+import DevelopmentTaskTestingSection from "@/pages/Development/Tasks/Components/DevelopmentTaskTestingSection.vue";
+import DevelopmentTaskWorkflowSection from "@/pages/Development/Tasks/Components/DevelopmentTaskWorkflowSection.vue";
 import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
 const props = defineProps<{

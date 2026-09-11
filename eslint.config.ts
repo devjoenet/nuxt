@@ -73,7 +73,7 @@ export default defineConfigWithVueTs(
             uiPrimitiveDeepImport,
             applicationComponentDeepImport,
             {
-              regex: "^(?:@/(?:actions|layouts|pages|routes|sections|wayfinder)(?:/|$)|@/components/(?!Ui(?:/|$))|@inertiajs/vue3(?:/|$)|(?:\\.\\./){2,})",
+              regex: "^(?:@/(?:actions|layouts|pages|routes|wayfinder)(?:/|$)|@/components/(?!Ui(?:/|$))|@inertiajs/vue3(?:/|$)|(?:\\.\\./){2,})",
               message: "UI primitives cannot depend on application, route, or generated transport layers.",
             },
           ],
@@ -91,7 +91,7 @@ export default defineConfigWithVueTs(
             uiPrimitiveDeepImport,
             applicationComponentDeepImport,
             {
-              regex: "^(?:@/|(?:\\.\\.?/)+)(?:components|layouts|pages|sections)/",
+              regex: "^(?:@/|(?:\\.\\.?/)+)(?:components|layouts|pages)/",
               message: "Composables cannot depend on frontend rendering layers.",
             },
           ],
@@ -109,30 +109,12 @@ export default defineConfigWithVueTs(
             uiPrimitiveDeepImport,
             applicationComponentDeepImport,
             {
-              regex: "^(?:@/|(?:\\.\\.?/)+)(?:actions|components|layouts|pages|routes|sections|wayfinder)/",
+              regex: "^(?:@/|(?:\\.\\.?/)+)(?:actions|components|layouts|pages|routes|wayfinder)/",
               message: "Pure utilities cannot depend on rendering or generated transport layers.",
             },
             {
               regex: "^(?:@inertiajs/vue3|@vueuse/core|vue)(?:/|$)",
               message: "Pure utilities cannot depend on Vue lifecycle, VueUse, or Inertia.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ["resources/js/sections/**/*.{ts,vue}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            uiPrimitiveDeepImport,
-            applicationComponentDeepImport,
-            {
-              regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages)/",
-              message: "Domain sections cannot depend on layouts or route pages.",
             },
           ],
         },
@@ -149,8 +131,8 @@ export default defineConfigWithVueTs(
             uiPrimitiveDeepImport,
             applicationComponentDeepImport,
             {
-              regex: "^(?:@/|(?:\\.\\.?/)+)(?:pages|sections)/",
-              message: "Workflow shells cannot depend on route pages or domain sections.",
+              regex: "^(?:@/|(?:\\.\\.?/)+)pages/",
+              message: "Workflow shells cannot depend on route pages.",
             },
           ],
         },

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import IndexEmptyState from "@/components/IndexEmptyState.vue";
+import { IndexEmptyState } from "@/components/IndexEmptyState";
 import { index as userTestingIndex } from "@/routes/development/userTesting";
-import RoadmapColumnSection from "@/sections/Development/Roadmap/RoadmapColumnSection.vue";
-import type { RoadmapColumn } from "@/sections/Development/Roadmap/types";
+import RoadmapColumnSection from "@/pages/Development/Roadmap/Components/RoadmapColumnSection.vue";
+import type { RoadmapColumn } from "@/pages/Development/Roadmap/Components/types";
 import type { DevelopmentRoadmapTasks } from "@/types/development";
 
 const auth = useAuth();

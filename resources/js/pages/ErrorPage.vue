@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import AppLogo from "@/components/AppLogo.vue";
+import { AppLogo } from "@/components/AppLogo";
 import { dashboard, home } from "@/routes";
 import { Head, Link, usePage } from "@inertiajs/vue3";
 import { useColorMode } from "@vueuse/core";

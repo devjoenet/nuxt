@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { Stat } from "@/components/Ui/Stat";
+
 defineProps<{
   stats: { label: string; value: number }[];
   recentActivities: { id: number; description: string; causer: string | null; created_at: string | null }[];
@@ -9,9 +11,7 @@ defineProps<{
 <template>
   <WorkspacePage id="admin-dashboard" description="Business health and access control" document-title="Admin dashboard" title="Admin">
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-      <AppPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" :style="'outline'" class="dark:bg-elevated dark:shadow-none">
-        <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
-      </AppPageCard>
+      <Stat v-for="stat in stats" :key="stat.label" :label="stat.label" tone="secondary" :value="stat.value" />
     </div>
 
     <div class="mt-6 grid gap-6 xl:grid-cols-2">

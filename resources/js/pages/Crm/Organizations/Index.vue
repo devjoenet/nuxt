@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormSelect } from "@/components/Ui/FormSelect";
-import IndexEmptyState from "@/components/IndexEmptyState.vue";
-import IndexPagination from "@/components/IndexPagination.vue";
-import IndexTableFrame from "@/components/IndexTableFrame.vue";
+import { IndexEmptyState } from "@/components/IndexEmptyState";
+import { IndexPagination } from "@/components/IndexPagination";
+import { IndexTableFrame } from "@/components/IndexTableFrame";
 import { useInertiaFilters } from "@/composables/useInertiaFilters";
 import { create, index } from "@/routes/crm/organizations";
-import { createOrganizationIndexColumns } from "@/sections/Crm/Organizations/organizationIndexColumns";
+import { createOrganizationIndexColumns } from "@/pages/Crm/Organizations/Components/organizationIndexColumns";
 import type { Option, Organization, Owner, Paginated } from "@/types/crm";
 
 const props = defineProps<{ organizations: Paginated<Organization>; filters: Record<string, string | number>; owners: Owner[]; canManage: boolean; canAssign: boolean }>();

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import AdminUsersTableSection from "@/sections/Admin/Users/AdminUsersTableSection.vue";
-import InviteAdminUserSection from "@/sections/Admin/Users/InviteAdminUserSection.vue";
-import type { AdminRoleOption, AdminUsersPage } from "@/sections/Admin/Users/types";
+import AdminUsersTableSection from "@/pages/Admin/Users/Components/AdminUsersTableSection.vue";
+import InviteAdminUserSection from "@/pages/Admin/Users/Components/InviteAdminUserSection.vue";
+import type { AdminRoleOption, AdminUsersPage } from "@/pages/Admin/Users/Components/types";
 
 defineProps<{
   users: AdminUsersPage;

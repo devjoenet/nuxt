@@ -2,13 +2,13 @@
 import { Head, setLayoutProps } from "@inertiajs/vue3";
 import { computed } from "vue";
 import socialImageAsset from "../../img/landing/social/southeast-code-social-card.avif";
-import LandingHero from "@/components/Landing/LandingHero.vue";
+import LandingHero from "@/pages/Welcome/Components/LandingHero.vue";
 import { useLandingHeroAssets } from "@/composables/useLandingHeroAssets";
-import LandingCardGridSection from "@/sections/Landing/LandingCardGridSection.vue";
-import LandingContactSection from "@/sections/Landing/LandingContactSection.vue";
-import LandingOperationsSection from "@/sections/Landing/LandingOperationsSection.vue";
-import LandingProcessSection from "@/sections/Landing/LandingProcessSection.vue";
-import { footerColumns, processSteps, realityCards, services, transformationCards } from "@/sections/Landing/landingContent";
+import LandingCardGridSection from "@/pages/Welcome/Components/LandingCardGridSection.vue";
+import LandingContactSection from "@/pages/Welcome/Components/LandingContactSection.vue";
+import LandingOperationsSection from "@/pages/Welcome/Components/LandingOperationsSection.vue";
+import LandingProcessSection from "@/pages/Welcome/Components/LandingProcessSection.vue";
+import { footerColumns, processSteps, realityCards, services, transformationCards } from "@/pages/Welcome/Components/landingContent";
 import type { Appearance } from "@/types";
 import type { Option } from "@/types/crm";
 

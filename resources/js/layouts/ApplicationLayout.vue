@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import WorkspaceSearch from "@/components/WorkspaceSearch.vue";
-import WorkspaceSidebar from "@/components/WorkspaceSidebar.vue";
+import { WorkspaceSearch } from "@/components/WorkspaceSearch";
+import { WorkspaceSidebar } from "@/components/WorkspaceSidebar";
 import { useFlashToasts } from "@/composables/useFlashToasts";
 import { useWorkspaceNavigation } from "@/composables/useWorkspaceNavigation";
 import { ref } from "vue";

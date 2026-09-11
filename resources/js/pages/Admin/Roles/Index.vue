@@ -3,8 +3,8 @@ import { Form } from "@inertiajs/vue3";
 import { FormSelect } from "@/components/Ui/FormSelect";
 import { getNestedFieldError } from "@/lib/formErrors";
 import { update } from "@/routes/admin/roles";
-import CreateAdminRoleSection from "@/sections/Admin/Roles/CreateAdminRoleSection.vue";
-import RolePermissionGroupList from "@/sections/Admin/Roles/RolePermissionGroupList.vue";
+import CreateAdminRoleSection from "@/pages/Admin/Roles/Components/CreateAdminRoleSection.vue";
+import RolePermissionGroupList from "@/pages/Admin/Roles/Components/RolePermissionGroupList.vue";
 import type { AdminPermissionGroup, AdminRole } from "@/types";
 import { computed, ref } from "vue";
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import UserTestingPageCard from "@/components/UserTestingPageCard.vue";
+import UserTestingPageCard from "@/pages/Development/UserTesting/Components/UserTestingPageCard.vue";
 
 interface UserTestingPage {
   id: number;

@@ -1,6 +1,6 @@
 # Frontend UI Architecture
 
-This document defines the approved target and transitional composition boundary for the Inertia/Vue client. The goal
+This document defines the approved composition boundary for the Inertia/Vue client. The goal
 is small, responsibility-focused components with explicit public APIs. Nuxt UI remains the accessible vendor
 foundation; the first-party Argon layer supplies portable visual primitives and application components add only real
 Southeast Code behavior or defaults.
@@ -25,11 +25,11 @@ they are not permission to split coherent behavior into arbitrary fragments.
 and `resources/js/wayfinder` are generated Wayfinder transport trees: never edit them by hand or treat them as
 composition layers. `resources/js/assets`, `app.ts`, and `ssr.ts` remain supporting infrastructure.
 
-The remaining flat files and grouped directories under `resources/js/components` are transitional application
-components. Floating form controls now live behind typed `components/Ui/<Control>` public APIs, while the
-domain-aware `AsyncCrmSelect` application component composes the portable async-select primitive from its own
-directory. Other transitional components move only with the route-family slice that can verify their behavior. New
-reusable components use the directory standard below instead of adding to the flat legacy shape.
+Reusable application components live in PascalCase directories with explicit public APIs. Floating form controls
+live behind typed `components/Ui/<Control>` public APIs, while the domain-aware `AsyncCrmSelect` application
+component composes the portable async-select primitive from its own directory. Page-only workflow components are
+colocated beneath their owning route family. The former flat component files, grouped component buckets, and
+`resources/js/sections` compatibility tree were retired with the application migration.
 
 ## Component directories and public APIs
 
@@ -68,7 +68,7 @@ pages -> layouts -> application components -> UI primitives -> pure helpers
   and generated routes; they do not import pages, page-owned components, or layouts.
 - UI primitives may import Vue, approved generic behavior foundations, other UI primitive public APIs, generic types,
   product-free composables, and pure helpers. They do not import Inertia, generated transport code, application
-  components, layouts, pages, or legacy sections.
+  components, layouts, or pages.
 - Composables do not import rendering layers. An explicitly transport-aware composable may import Inertia or
   generated routes when that concern is visible in its API.
 - Pure helpers do not import Vue, VueUse, Inertia, generated transport code, or rendering layers.
@@ -83,10 +83,9 @@ to the application layer only after a real cross-family product contract exists.
 selection, metadata, and coordination; child components emit intent while the page decides which navigation or
 mutation follows.
 
-The existing `resources/js/sections` tree is a frozen compatibility boundary. Architecture coverage records its exact
-Task 3 baseline, so new files cannot extend it. Later route-family migrations move a section beside its owning page or
-promote a proven reusable contract into `components`, then remove that exact legacy path from the baseline. There is
-no bulk move that merely recreates `sections` under a different spelling.
+The former `resources/js/sections` compatibility tree is retired and guarded from returning. Each application route
+family owns its focused components under the nearest `pages/<Family>/Components` directory, while cross-family
+product contracts use component-directory public APIs under `resources/js/components`.
 
 ## State, props, events, slots, and styling
 
@@ -122,22 +121,16 @@ Import blocks, blank lines, and generated declarations are excluded from these `
 - Inertia page: 40 lines.
 
 An over-budget component needs an exact-file exception with a reason explaining why extraction would make ownership
-less clear. Directory-wide and wildcard exceptions are prohibited. Two transitional exceptions remain:
-
-| Exact file | Budget | Reason |
-| --- | ---: | --- |
-| `resources/js/components/UserMenu.vue` | 60 | It currently coordinates route-aware account navigation and appearance state; the layouts/navigation migration owns its split. |
-| `resources/js/pages/Settings/Profile.vue` | 40 | It intentionally coordinates one shared profile form to prevent partial forms overwriting shared state; the settings migration owns its final page-family extraction. |
-
-Exceptions are removed as soon as a responsible migration brings the file within budget. The automated list is
-exact, so a new over-budget file cannot borrow one of these reasons.
+less clear. Directory-wide and wildcard exceptions are prohibited. The application migration removed the final two
+transitional exceptions; the automated list is exact, so a new over-budget file requires an explicit architectural
+decision rather than borrowing a historical reason.
 
 ## Testing and enforcement
 
 - ESLint enforces dependency direction and rejects imports that bypass component-directory public APIs.
 - `tests/Feature/FrontendArchitectureContractTest.php` enforces source homes, PascalCase/camelCase naming, component
-  directory exports, forbidden deep imports, generated-code exclusions, the frozen legacy-section baseline, page
-  colocation spelling, and exact-file SFC budget exceptions.
+  directory exports, forbidden deep imports, generated-code exclusions, retired legacy homes, page colocation
+  spelling, and SFC responsibility budgets.
 - Pure helpers receive focused unit coverage. Components receive component or browser coverage when they own
   interaction, accessibility, or validation behavior; presentational composition does not need snapshots by default.
 - Route behavior, authorization, and mutations remain covered by Laravel feature tests, with browser coverage for

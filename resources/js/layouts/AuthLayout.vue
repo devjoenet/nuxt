@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppLogo from "@/components/AppLogo.vue";
+import { AppLogo } from "@/components/AppLogo";
 import { AppearanceMenu } from "@/components/AppearanceMenu";
 import { Card } from "@/components/Ui/Card";
 import { home, privacy } from "@/routes";

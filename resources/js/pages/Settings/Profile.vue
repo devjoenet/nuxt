@@ -2,33 +2,17 @@
 import { update } from "@/actions/App/Http/Controllers/Settings/ProfileController";
 import { FormInput } from "@/components/Ui/FormInput";
 import { send } from "@/routes/verification";
-import { setLayoutProps } from "@inertiajs/vue3";
+import { setLayoutProps, useForm } from "@inertiajs/vue3";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import * as z from "zod";
+import { profileSchema, type ProfileSchema, useProfileEditor } from "./Components/useProfileEditor";
 
 defineProps<{
   mustVerifyEmail: boolean;
   status?: string;
 }>();
 
-const fileRef = ref<HTMLInputElement>();
 setLayoutProps({ documentTitle: "Profile settings" });
-
-const profileSchema = z.object({
-  name: z.string().min(2, "Too short"),
-  email: z.email("Invalid email"),
-  avatar: z.string().optional(),
-});
-
-type ProfileSchema = z.output<typeof profileSchema>;
-type ProfileFormError = { name?: string; message: string };
-const auth = useAuth();
-
-const profile = reactive<Partial<ProfileSchema>>({
-  name: auth.value.user.name,
-  email: auth.value.user.email,
-  avatar: undefined,
-});
+const { auth, fieldError, fileRef, onFileChange, onFileClick, profile } = useProfileEditor();
 
 const form = useForm<Partial<ProfileSchema>>({
   name: "",
@@ -36,12 +20,8 @@ const form = useForm<Partial<ProfileSchema>>({
   avatar: undefined,
 });
 
-function fieldError(errors: ProfileFormError[], field: string): string | undefined {
-  return errors.find((error) => error.name === field)?.message;
-}
-
 const toast = useToast();
-async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
+function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
   form.name = event.data.name;
   form.email = event.data.email;
   form.avatar = event.data.avatar;
@@ -55,20 +35,6 @@ async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
       });
     },
   });
-}
-
-function onFileChange(e: Event) {
-  const input = e.target as HTMLInputElement;
-
-  if (!input.files?.length) {
-    return;
-  }
-
-  profile.avatar = URL.createObjectURL(input.files[0]);
-}
-
-function onFileClick() {
-  fileRef.value?.click();
 }
 </script>
 

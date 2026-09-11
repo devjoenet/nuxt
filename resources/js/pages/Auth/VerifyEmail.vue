@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EmailVerificationNotificationController from "@/actions/App/Http/Controllers/Auth/EmailVerificationNotificationController";
-import TextLink from "@/components/TextLink.vue";
+import { TextLink } from "@/components/TextLink";
 import { logout } from "@/routes";
 import { Form, Head, setLayoutProps } from "@inertiajs/vue3";
 
