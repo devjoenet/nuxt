@@ -1268,7 +1268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@maplibre/maplibre-gl-style-spec@npm:^26.3.0":
+"@maplibre/maplibre-gl-style-spec@npm:^26.4.1":
   version: 26.4.1
   resolution: "@maplibre/maplibre-gl-style-spec@npm:26.4.1"
   dependencies:
@@ -1286,12 +1286,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@maplibre/mlt@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@maplibre/mlt@npm:1.2.0"
+"@maplibre/mlt@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@maplibre/mlt@npm:1.2.1"
   dependencies:
     "@mapbox/point-geometry": "npm:^1.1.0"
-  checksum: 10c0/2435fc519805ca11a8df7d5f74bdf50ef3a863a7ddfd1830ab89b335c6fbe6aed169cdcc2536b2d573978670cf7efb3347d8523c767368bfbfe36edc1d595660
+  checksum: 10c0/6f4f5799fd2e14719d27c5f6eb50d9aadfbaa39d7ddf65ad05773a077ca1426f40b28e6875e3f6a1924f930b9e76b98748db0041c9f6ab9760fbb175668486c6
   languageName: node
   linkType: hard
 
@@ -7507,17 +7507,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"maplibre-gl@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "maplibre-gl@npm:6.6.0"
+"maplibre-gl@npm:^6.8.0":
+  version: 6.8.0
+  resolution: "maplibre-gl@npm:6.8.0"
   dependencies:
     "@mapbox/point-geometry": "npm:^1.1.0"
     "@mapbox/tiny-sdf": "npm:^2.2.0"
     "@mapbox/unitbezier": "npm:^1.0.0"
     "@mapbox/vector-tile": "npm:^3.0.0"
     "@maplibre/geojson-vt": "npm:^6.1.1"
-    "@maplibre/maplibre-gl-style-spec": "npm:^26.3.0"
-    "@maplibre/mlt": "npm:^1.2.0"
+    "@maplibre/maplibre-gl-style-spec": "npm:^26.4.1"
+    "@maplibre/mlt": "npm:^1.2.1"
     "@maplibre/vt-pbf": "npm:^4.3.2"
     "@types/geojson": "npm:^7946.0.16"
     earcut: "npm:^3.2.3"
@@ -7528,7 +7528,7 @@ __metadata:
     potpack: "npm:^2.1.0"
     quickselect: "npm:^3.0.0"
     tinyqueue: "npm:^3.0.0"
-  checksum: 10c0/f51e36bc349eb3b4050177f24445d4615c7b41568e080a71fe51440d12231d53798bb80ee04982fe8cc6f94b417c0a8d9eaed478d473d465f886f5314b7bc621
+  checksum: 10c0/e6f2b021059425bfdcc0d6233e67f6fbb3e84ac97c572c5faaab791982c6f5070aa7761f3bb8855275967e35b48efbda455b42031c8ff6b51d6b6fc0c4023577
   languageName: node
   linkType: hard
 
@@ -7845,7 +7845,7 @@ __metadata:
     eslint-plugin-vue: "npm:^10.10.0"
     laravel-vite-plugin: "npm:^3.2.0"
     lightningcss-linux-x64-gnu: "npm:^1.33.0"
-    maplibre-gl: "npm:^6.6.0"
+    maplibre-gl: "npm:^6.8.0"
     motion-v: "npm:^2.4.0"
     playwright: "npm:^1.62.1"
     prettier: "npm:^3.9.6"
