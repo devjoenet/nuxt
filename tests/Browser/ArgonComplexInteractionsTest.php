@@ -92,18 +92,13 @@ test('new products validate advance and save while gallery navigation resets edi
     $before = $admin->fresh()->getAttributes();
 
     $page = visit(route('admin.argonGallery.examples.show', 'ecommerce-products-new-product', absolute: false))
-        ->assertSee('Product Information')
-;
+        ->assertSee('Product Information');
     $page->click('Next')->assertSee('Product Information')->assertMissing('input[name="demo-product-images"]')
-        ->fill('input[name="demo-product-name"]', 'Gallery chair')
-;
+        ->fill('input[name="demo-product-name"]', 'Gallery chair');
     $page->click('Next')->assertSee('0 images selected')
-        ->assertScript('(() => { const input = document.querySelector("input[name=demo-product-images]"); const files = new DataTransfer(); files.items.add(new File(["demo image"], "demo.png", { type: "image/png" })); input.files = files.files; input.dispatchEvent(new Event("change", { bubbles: true })); return input.files.length; })()', 1)->assertSee('1 images selected')
-;
-    $page->click('Next')->assertSee('Shopify handle')
-;
-    $page->click('Next')->assertSee('SKU')
-;
+        ->assertScript('(() => { const input = document.querySelector("input[name=demo-product-images]"); const files = new DataTransfer(); files.items.add(new File(["demo image"], "demo.png", { type: "image/png" })); input.files = files.files; input.dispatchEvent(new Event("change", { bubbles: true })); return input.files.length; })()', 1)->assertSee('1 images selected');
+    $page->click('Next')->assertSee('Shopify handle');
+    $page->click('Next')->assertSee('SKU');
     $page->click('Create demo product')->assertSee('Demo product saved')->assertSee('Gallery chair · USD 99')
         ->assertNoJavaScriptErrors();
     $page->click('Back to manifest');
