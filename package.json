@@ -77,6 +77,9 @@
     "fsevents@2.3.3": true,
     "esbuild@0.28.1": true
   },
+  "resolutions": {
+    "maplibre-gl": "^6.6.0"
+  },
   "overrides": {
     "esbuild": "^0.28.1"
   }
