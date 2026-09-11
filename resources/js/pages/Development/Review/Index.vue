@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { router } from "@inertiajs/vue3";
-import IndexEmptyState from "@/components/IndexEmptyState.vue";
-import IndexPagination from "@/components/IndexPagination.vue";
+import { IndexEmptyState } from "@/components/IndexEmptyState";
+import { IndexPagination } from "@/components/IndexPagination";
 import { formatDate } from "@/lib/dateFormatters";
 import { index } from "@/routes/development/review";
 import { show } from "@/routes/development/tasks";

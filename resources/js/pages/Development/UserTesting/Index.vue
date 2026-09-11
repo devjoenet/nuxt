@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import IndexEmptyState from "@/components/IndexEmptyState.vue";
-import UserTestingRoundSection from "@/sections/Development/UserTesting/UserTestingRoundSection.vue";
+import { IndexEmptyState } from "@/components/IndexEmptyState";
+import UserTestingRoundSection from "@/pages/Development/UserTesting/Components/UserTestingRoundSection.vue";
 import type { DevelopmentTestRun } from "@/types/development";
 
 defineProps<{ testRuns: DevelopmentTestRun[] }>();

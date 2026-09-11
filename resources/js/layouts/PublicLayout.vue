@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LandingFooter from "@/components/Landing/LandingFooter.vue";
-import LandingHeader from "@/components/Landing/LandingHeader.vue";
+import { LandingFooter } from "@/components/LandingFooter";
+import { LandingHeader } from "@/components/LandingHeader";
 import { MotionConfig } from "motion-v";
 
 interface FooterLink {

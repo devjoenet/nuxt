@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import CrmDetailLayout from "@/components/Crm/CrmDetailLayout.vue";
+import { CrmDetailLayout } from "@/components/CrmDetailLayout";
 import { edit, index } from "@/routes/crm/leads";
-import LeadFollowUpsSection from "@/sections/Crm/Leads/LeadFollowUpsSection.vue";
-import LeadNotesSection from "@/sections/Crm/Leads/LeadNotesSection.vue";
-import LeadOverviewSection from "@/sections/Crm/Leads/LeadOverviewSection.vue";
-import LeadTimelineSection from "@/sections/Crm/Leads/LeadTimelineSection.vue";
+import LeadFollowUpsSection from "@/pages/Crm/Leads/Components/LeadFollowUpsSection.vue";
+import LeadNotesSection from "@/pages/Crm/Leads/Components/LeadNotesSection.vue";
+import LeadOverviewSection from "@/pages/Crm/Leads/Components/LeadOverviewSection.vue";
+import LeadTimelineSection from "@/pages/Crm/Leads/Components/LeadTimelineSection.vue";
 import type { Lead } from "@/types/crm";
 
 defineProps<{ lead: Lead; canManage: boolean }>();

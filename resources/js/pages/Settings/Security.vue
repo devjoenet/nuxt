@@ -3,6 +3,8 @@ import PasswordController from "@/actions/App/Http/Controllers/Settings/Password
 import { FormInput } from "@/components/Ui/FormInput";
 import { provideTwoFactorAuth } from "@/composables/useTwoFactorAuth";
 import { Form, setLayoutProps } from "@inertiajs/vue3";
+import DeleteAccount from "./Components/DeleteAccount.vue";
+import TwoFactor from "./Components/TwoFactor.vue";
 
 interface Props {
   requiresConfirmation: boolean;

@@ -18,7 +18,8 @@ test('the frontend architecture defines the complete composition boundary', func
         ->toContain('Pages')
         ->toContain('Composables')
         ->toContain('Pure helpers')
-        ->toContain('Floating form controls now live behind typed `components/Ui/<Control>` public APIs')
+        ->toContain('Floating form controls')
+        ->toContain('live behind typed `components/Ui/<Control>` public APIs')
         ->toContain('## Component directories and public APIs')
         ->toContain('## Page colocation and legacy retirement')
         ->toContain('## State, props, events, slots, and styling')
@@ -85,8 +86,7 @@ test('eslint enforces frontend dependency direction and component public APIs', 
         ->toContain('Composables cannot depend on frontend rendering layers.')
         ->toContain('Pure utilities cannot depend on rendering or generated transport layers.')
         ->toContain('Pure utilities cannot depend on Vue lifecycle, VueUse, or Inertia.')
-        ->toContain('Domain sections cannot depend on layouts or route pages.')
-        ->toContain('Workflow shells cannot depend on route pages or domain sections.')
+        ->toContain('Workflow shells cannot depend on route pages.')
         ->not->toContain('Direct Nuxt UI imports are forbidden');
 });
 
@@ -106,7 +106,6 @@ test('the frontend source uses only approved top-level homes', function (): void
         'lib',
         'pages',
         'routes',
-        'sections',
         'types',
         'wayfinder',
     ])->and(File::isDirectory(resource_path('js/components/Ui')))->toBeTrue()
@@ -117,18 +116,14 @@ test('the frontend source uses only approved top-level homes', function (): void
         ->and(File::exists(resource_path('js/components/Ui/README.md')))->toBeTrue();
 });
 
-test('new reusable components use PascalCase directories and public index exports', function (): void {
-    $legacyComponentGroups = ['Crm', 'Landing', 'Privacy'];
+test('reusable components use PascalCase directories and public index exports', function (): void {
     $componentRoot = resource_path('js/components');
     $uiRoot = resource_path('js/components/Ui');
 
     $componentDirectories = collect(File::directories($uiRoot))
         ->merge(
             collect(File::directories($componentRoot))
-                ->reject(fn (string $directory): bool => in_array(File::name($directory), [
-                    ...$legacyComponentGroups,
-                    'Ui',
-                ], true)),
+                ->reject(fn (string $directory): bool => File::name($directory) === 'Ui'),
         );
 
     foreach ($componentDirectories as $componentDirectory) {
@@ -150,75 +145,20 @@ test('new reusable components use PascalCase directories and public index export
         expect(File::get($indexFile))->toMatch($componentExport);
     }
 
-    $expectedLegacyComponentPaths = preg_split('/\R/', <<<'PATHS'
-components/AlertError.vue
-components/AppCard.vue
-components/AppLogo.vue
-components/AppLogoIcon.vue
-components/AppPageCard.vue
-components/ConfirmActionButton.vue
-components/Crm/CrmDetailLayout.vue
-components/Crm/CrmDetailMetadata.vue
-components/Crm/CrmRecordStatusBadge.vue
-components/Crm/LeadStatusBadge.vue
-components/DeleteAccount.vue
-components/FormActions.vue
-components/FormSectionHeading.vue
-components/IndexEmptyState.vue
-components/IndexPagination.vue
-components/IndexTableFrame.vue
-components/InlineEditActions.vue
-components/Landing/FeatureCard.vue
-components/Landing/LandingContactForm.vue
-components/Landing/LandingFooter.vue
-components/Landing/LandingHeader.vue
-components/Landing/LandingHero.vue
-components/Landing/LandingHeroPicture.vue
-components/Landing/MetricCard.vue
-components/Landing/OperationsShowcase.vue
-components/Landing/Previews/DashboardPreview.vue
-components/Landing/Previews/MobileCheckInPreview.vue
-components/Landing/Previews/PermissionsPreview.vue
-components/Landing/ProcessTimeline.vue
-components/Landing/SectionHeading.vue
-components/Privacy/PrivacyDialog.vue
-components/Privacy/PrivacyDialogLink.vue
-components/Privacy/PrivacyPolicyContent.vue
-components/TeamsMenu.vue
-components/TextLink.vue
-components/TwoFactor.vue
-components/TwoFactorConfirmationStep.vue
-components/TwoFactorRecoveryCodes.vue
-components/TwoFactorRegenerateRecoveryCodesForm.vue
-components/TwoFactorSetupModal.vue
-components/TwoFactorSetupStep.vue
-components/UserMenu.vue
-components/UserTestingPageCard.vue
-components/WorkspaceFormPage.vue
-components/WorkspacePage.vue
-components/WorkspaceSearch.vue
-components/WorkspaceSidebar.vue
-PATHS);
-
-    $currentLegacyComponentPaths = collect(File::allFiles($componentRoot))
-        ->map(fn (SplFileInfo $file): string => 'components/'.$file->getRelativePathname())
-        ->reject(fn (string $path): bool => Str::startsWith($path, 'components/Ui/'))
-        ->reject(function (string $path) use ($legacyComponentGroups): bool {
-            $segments = explode('/', $path);
-
-            return count($segments) > 2 && ! in_array($segments[1], $legacyComponentGroups, true);
-        })
+    $looseComponentFiles = collect(File::files($componentRoot))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->map(fn (SplFileInfo $file): string => $file->getFilename())
         ->sort()
         ->values()
         ->all();
 
-    expect($currentLegacyComponentPaths)->toBe($expectedLegacyComponentPaths);
+    expect($looseComponentFiles)->toBe([]);
 });
 
 test('callers cannot deep import component-directory internals', function (): void {
     $applicationComponentDirectories = collect(File::directories(resource_path('js/components')))
         ->map(fn (string $directory): string => File::name($directory))
-        ->reject(fn (string $directory): bool => in_array($directory, ['Crm', 'Landing', 'Privacy', 'Ui'], true))
+        ->reject(fn (string $directory): bool => $directory === 'Ui')
         ->values();
 
     $deepImports = collect(File::allFiles(resource_path('js')))
@@ -253,50 +193,7 @@ test('callers cannot deep import component-directory internals', function (): vo
     expect($deepImports)->toBe([]);
 });
 
-test('legacy sections are frozen until page-family migrations retire them', function (): void {
-    $expectedLegacySections = preg_split('/\R/', <<<'PATHS'
-sections/Admin/Roles/CreateAdminRoleSection.vue
-sections/Admin/Roles/RolePermissionGroupList.vue
-sections/Admin/Users/AdminUsersTableSection.vue
-sections/Admin/Users/InviteAdminUserSection.vue
-sections/Admin/Users/types.ts
-sections/Crm/Contacts/contactIndexColumns.ts
-sections/Crm/Leads/LeadFollowUpsSection.vue
-sections/Crm/Leads/LeadNotesSection.vue
-sections/Crm/Leads/LeadOverviewSection.vue
-sections/Crm/Leads/LeadTimelineSection.vue
-sections/Crm/Leads/leadIndexColumns.ts
-sections/Crm/Organizations/organizationIndexColumns.ts
-sections/Development/Roadmap/RoadmapColumnSection.vue
-sections/Development/Roadmap/types.ts
-sections/Development/Tasks/DevelopmentTaskBriefSection.vue
-sections/Development/Tasks/DevelopmentTaskDiscussionSection.vue
-sections/Development/Tasks/DevelopmentTaskLifecycleTimeline.vue
-sections/Development/Tasks/DevelopmentTaskLinksSection.vue
-sections/Development/Tasks/DevelopmentTaskProgressAction.vue
-sections/Development/Tasks/DevelopmentTaskReviewActions.vue
-sections/Development/Tasks/DevelopmentTaskRoadmapSummaryFields.vue
-sections/Development/Tasks/DevelopmentTaskSectionCard.vue
-sections/Development/Tasks/DevelopmentTaskSummaryField.vue
-sections/Development/Tasks/DevelopmentTaskSummarySection.vue
-sections/Development/Tasks/DevelopmentTaskTestingRequestForm.vue
-sections/Development/Tasks/DevelopmentTaskTestingSection.vue
-sections/Development/Tasks/DevelopmentTaskWorkflowActions.vue
-sections/Development/Tasks/DevelopmentTaskWorkflowSection.vue
-sections/Development/UserTesting/UserTestingRoundSection.vue
-sections/Landing/LandingCardGridSection.vue
-sections/Landing/LandingContactSection.vue
-sections/Landing/LandingOperationsSection.vue
-sections/Landing/LandingProcessSection.vue
-sections/Landing/landingContent.ts
-PATHS);
-
-    $currentLegacySections = collect(File::allFiles(resource_path('js/sections')))
-        ->map(fn (SplFileInfo $file): string => 'sections/'.$file->getRelativePathname())
-        ->sort()
-        ->values()
-        ->all();
-
+test('legacy sections are retired into page-family component homes', function (): void {
     $misnamedColocationDirectories = collect(File::directories(resource_path('js/pages')))
         ->flatMap(function (string $directory): array {
             return collect(File::allDirectories($directory))
@@ -307,12 +204,32 @@ PATHS);
         ->values()
         ->all();
 
-    expect($currentLegacySections)->toBe($expectedLegacySections)
+    expect(File::isDirectory(resource_path('js/sections')))->toBeFalse()
+        ->and(File::exists(resource_path('js/pages/Welcome/Components/LandingContactSection.vue')))->toBeTrue()
+        ->and(File::exists(resource_path('js/pages/Admin/Users/Components/AdminUsersTableSection.vue')))->toBeTrue()
+        ->and(File::exists(resource_path('js/pages/Crm/Leads/Components/LeadOverviewSection.vue')))->toBeTrue()
+        ->and(File::exists(resource_path('js/pages/Development/Tasks/Components/DevelopmentTaskWorkflowSection.vue')))->toBeTrue()
         ->and($misnamedColocationDirectories)->toBe([]);
 });
 
+test('all baseline application pages are covered by the migrated route families', function (): void {
+    $applicationPages = collect(File::allFiles(resource_path('js/pages')))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->reject(fn (SplFileInfo $file): bool => Str::contains($file->getRelativePathname(), [
+            '/Components/',
+            'Admin/ArgonGallery/',
+            'Development/Argon/',
+        ]))
+        ->values();
+
+    expect($applicationPages)->toHaveCount(35)
+        ->and($applicationPages->every(
+            fn (SplFileInfo $file): bool => ! Str::contains(File::get($file->getPathname()), '@/sections/'),
+        ))->toBeTrue();
+});
+
 test('the frontend source follows the documented naming convention', function (): void {
-    $vueArchitectureRoots = ['components', 'layouts', 'pages', 'sections'];
+    $vueArchitectureRoots = ['components', 'layouts', 'pages'];
     $generatedRoots = ['actions/', 'routes/', 'wayfinder/'];
 
     $invalidVueDirectories = collect($vueArchitectureRoots)
@@ -375,18 +292,9 @@ test('the frontend source follows the documented naming convention', function ()
         ))->toBeTrue();
 });
 
-test('sfc script budgets allow only documented exact-file exceptions', function (): void {
+test('sfc script budgets reject undocumented responsibility exceptions', function (): void {
     $architecture = File::get(base_path('docs/development/frontend-ui-architecture.md'));
-    $exceptions = [
-        'components/UserMenu.vue' => [
-            'budget' => 60,
-            'reason' => 'route-aware account navigation and appearance state',
-        ],
-        'pages/Settings/Profile.vue' => [
-            'budget' => 40,
-            'reason' => 'one shared profile form',
-        ],
-    ];
+    $exceptions = [];
 
     $scriptLineCount = function (string $contents): int {
         if (preg_match('/<script(?=[^>]*\bsetup\b)[^>]*>([\s\S]*?)<\/script>/', $contents, $matches) !== 1) {
@@ -429,7 +337,6 @@ test('sfc script budgets allow only documented exact-file exceptions', function 
             'components/',
             'layouts/',
             'pages/',
-            'sections/',
         ]))
         ->mapWithKeys(function (SplFileInfo $file) use ($scriptLineCount): array {
             $path = $file->getRelativePathname();
@@ -466,8 +373,8 @@ test('the current application components and Nuxt UI foundation remain explicit'
         'resources/js/components/Ui/FormMultiSelect/FormMultiSelect.vue',
         'resources/js/components/Ui/FormTextarea/FormTextarea.vue',
         'resources/js/components/AsyncCrmSelect/AsyncCrmSelect.vue',
-        'resources/js/components/WorkspacePage.vue',
-        'resources/js/components/Crm/CrmDetailLayout.vue',
+        'resources/js/components/WorkspacePage/WorkspacePage.vue',
+        'resources/js/components/CrmDetailLayout/CrmDetailLayout.vue',
         'resources/js/lib/utils.ts',
     ] as $foundationPath) {
         expect(File::exists(base_path($foundationPath)))->toBeTrue("Missing frontend foundation: {$foundationPath}");
@@ -502,7 +409,7 @@ test('index workflows share navigation and framing without hiding domain columns
         'IndexEmptyState.vue',
         'IndexPagination.vue',
     ] as $component) {
-        expect(File::exists(resource_path("js/components/{$component}")))
+        expect(File::exists(resource_path('js/components/'.Str::beforeLast($component, '.vue')."/{$component}")))
             ->toBeTrue("Missing index product component: {$component}");
     }
 
@@ -512,7 +419,7 @@ test('index workflows share navigation and framing without hiding domain columns
         'Organizations' => 'organizationIndexColumns.ts',
     ] as $domain => $columnFile) {
         $page = File::get(resource_path("js/pages/Crm/{$domain}/Index.vue"));
-        $columns = File::get(resource_path("js/sections/Crm/{$domain}/{$columnFile}"));
+        $columns = File::get(resource_path("js/pages/Crm/{$domain}/Components/{$columnFile}"));
 
         expect($page)
             ->toContain('useInertiaFilters({')
@@ -530,7 +437,7 @@ test('index workflows share navigation and framing without hiding domain columns
 
     foreach ([
         'pages/Admin/Audit/Index.vue',
-        'sections/Admin/Users/AdminUsersTableSection.vue',
+        'pages/Admin/Users/Components/AdminUsersTableSection.vue',
         'pages/Development/Requests/Index.vue',
         'pages/Development/Review/Index.vue',
     ] as $indexSurface) {
@@ -540,13 +447,13 @@ test('index workflows share navigation and framing without hiding domain columns
 });
 
 test('authenticated pages compose the product workspace shell', function (): void {
-    $workspacePage = File::get(resource_path('js/components/WorkspacePage.vue'));
-    $crmDetailLayout = File::get(resource_path('js/components/Crm/CrmDetailLayout.vue'));
+    $workspacePage = File::get(resource_path('js/components/WorkspacePage/WorkspacePage.vue'));
+    $crmDetailLayout = File::get(resource_path('js/components/CrmDetailLayout/CrmDetailLayout.vue'));
     $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
     $workspaceShellOptOuts = [];
 
     $rawDashboardPanels = collect(File::allFiles(resource_path('js')))
-        ->reject(fn (SplFileInfo $file): bool => $file->getRelativePathname() === 'components/WorkspacePage.vue')
+        ->reject(fn (SplFileInfo $file): bool => $file->getRelativePathname() === 'components/WorkspacePage/WorkspacePage.vue')
         ->filter(fn (SplFileInfo $file): bool => Str::contains(File::get($file->getPathname()), '<UDashboardPanel'))
         ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
         ->values()
@@ -568,7 +475,7 @@ test('authenticated pages compose the product workspace shell', function (): voi
 
 test('authenticated editors share form composition without replacing typed fields', function (): void {
     foreach (['WorkspaceFormPage.vue', 'FormSectionHeading.vue', 'FormActions.vue'] as $component) {
-        expect(File::exists(resource_path("js/components/{$component}")))
+        expect(File::exists(resource_path("js/components/WorkspaceFormPage/{$component}")))
             ->toBeTrue("Missing form composition component: {$component}");
     }
 
@@ -583,7 +490,7 @@ test('authenticated editors share form composition without replacing typed field
             ->not->toContain('<Form ');
     }
 
-    $workspaceFormPage = File::get(resource_path('js/components/WorkspaceFormPage.vue'));
+    $workspaceFormPage = File::get(resource_path('js/components/WorkspaceFormPage/WorkspaceFormPage.vue'));
     $profilePage = File::get(resource_path('js/pages/Settings/Profile.vue'));
 
     expect($workspaceFormPage)
@@ -600,7 +507,7 @@ test('authenticated editors share form composition without replacing typed field
 test('crm details share typed lifecycle presentation and accessible confirmation', function (): void {
     $applicationLayout = File::get(resource_path('js/layouts/ApplicationLayout.vue'));
     $flashToasts = File::get(resource_path('js/composables/useFlashToasts.ts'));
-    $confirmation = File::get(resource_path('js/components/ConfirmActionButton.vue'));
+    $confirmation = File::get(resource_path('js/components/ConfirmActionButton/ConfirmActionButton.vue'));
 
     expect($applicationLayout)
         ->toContain('useFlashToasts();')
@@ -617,7 +524,7 @@ test('crm details share typed lifecycle presentation and accessible confirmation
             ->not->toContain('window.confirm');
     }
 
-    expect(File::get(resource_path('js/sections/Crm/Leads/LeadOverviewSection.vue')))
+    expect(File::get(resource_path('js/pages/Crm/Leads/Components/LeadOverviewSection.vue')))
         ->toContain('<CrmDetailMetadata')
         ->toContain('<ConfirmActionButton')
         ->not->toContain('window.confirm');
@@ -628,8 +535,8 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
     $landingHeroAssets = File::get(resource_path('js/composables/useLandingHeroAssets.ts'));
     $securityPage = File::get(resource_path('js/pages/Settings/Security.vue'));
     $landingPage = File::get(resource_path('js/pages/Welcome.vue'));
-    $landingHeader = File::get(resource_path('js/components/Landing/LandingHeader.vue'));
-    $landingContact = File::get(resource_path('js/components/Landing/LandingContactForm.vue'));
+    $landingHeader = File::get(resource_path('js/components/LandingHeader/LandingHeader.vue'));
+    $landingContact = File::get(resource_path('js/pages/Welcome/Components/LandingContactForm.vue'));
 
     expect($twoFactorState)
         ->toContain('provideTwoFactorAuth')
@@ -645,7 +552,7 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
         'TwoFactorRecoveryCodes.vue',
         'TwoFactorRegenerateRecoveryCodesForm.vue',
     ] as $twoFactorStep) {
-        expect(File::exists(resource_path("js/components/{$twoFactorStep}")))
+        expect(File::exists(resource_path("js/pages/Settings/Components/{$twoFactorStep}")))
             ->toBeTrue("Missing two-factor step: {$twoFactorStep}");
     }
 
@@ -666,7 +573,7 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
         'DevelopmentTaskProgressAction.vue',
         'DevelopmentTaskTestingRequestForm.vue',
     ] as $taskSection) {
-        expect(File::exists(resource_path("js/sections/Development/Tasks/{$taskSection}")))
+        expect(File::exists(resource_path("js/pages/Development/Tasks/Components/{$taskSection}")))
             ->toBeTrue("Missing Development task section: {$taskSection}");
     }
 });
@@ -674,7 +581,7 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
 test('landing appearance stays stable across server rendering and first paint', function (): void {
     $blade = File::get(resource_path('views/app.blade.php'));
     $bootstrap = File::get(public_path('theme-bootstrap.js'));
-    $picture = File::get(resource_path('js/components/Landing/LandingHeroPicture.vue'));
+    $picture = File::get(resource_path('js/pages/Welcome/Components/LandingHeroPicture.vue'));
     $appearance = File::get(resource_path('js/composables/useAppearance.ts'));
 
     expect($blade)
@@ -704,8 +611,8 @@ test('route families use shared client and server layout boundaries', function (
     $publicLayout = File::get(resource_path('js/layouts/PublicLayout.vue'));
     $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
     $galleryLayout = File::get(resource_path('js/layouts/GalleryLayout.vue'));
-    $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
-    $workspaceSearch = File::get(resource_path('js/components/WorkspaceSearch.vue'));
+    $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar/WorkspaceSidebar.vue'));
+    $workspaceSearch = File::get(resource_path('js/components/WorkspaceSearch/WorkspaceSearch.vue'));
 
     $pagesDeclaringApplicationLayout = collect(File::allFiles(resource_path('js/pages')))
         ->filter(fn (SplFileInfo $page): bool => Str::contains(

@@ -6,21 +6,15 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
-test('app cards expose one style and color variant contract', function (): void {
+test('page cards expose the application style and color variant contract', function (): void {
     $appearance = File::get(resource_path('js/lib/cardAppearance.ts'));
-    $pageCard = File::get(resource_path('js/components/AppPageCard.vue'));
-    $sectionCard = File::get(resource_path('js/components/AppCard.vue'));
+    $pageCard = File::get(resource_path('js/components/AppPageCard/AppPageCard.vue'));
 
     expect($appearance)
         ->toContain('export const cardVariants = ["primary", "secondary", "muted", "neutral", "info", "success", "warning", "error"] as const;')
         ->toContain('export type CardStyle = "solid" | "outline" | "soft" | "subtle";')
         ->toContain('export type PageCardStyle = CardStyle | "ghost" | "naked";')
         ->and($pageCard)
-        ->toContain('cn("app-card", cardAppearanceClass(props.style, props.variant), props.class)')
-        ->toContain('style: "subtle"')
-        ->toContain('variant: "neutral"')
-        ->toContain(':variant="props.style"')
-        ->and($sectionCard)
         ->toContain('cn("app-card", cardAppearanceClass(props.style, props.variant), props.class)')
         ->toContain('style: "subtle"')
         ->toContain('variant: "neutral"')
@@ -77,8 +71,7 @@ test('application card surfaces use the product card contract', function (): voi
     $rawCardFiles = collect(File::allFiles(resource_path('js')))
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->reject(fn (SplFileInfo $file): bool => in_array($file->getRelativePathname(), [
-            'components/AppCard.vue',
-            'components/AppPageCard.vue',
+            'components/AppPageCard/AppPageCard.vue',
         ], true))
         ->filter(fn (SplFileInfo $file): bool => Str::contains(File::get($file->getPathname()), ['<UCard', '<UPageCard']))
         ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
@@ -92,6 +85,15 @@ test('application card surfaces use the product card contract', function (): voi
         ->values()
         ->all();
 
+    $developmentTaskComponents = collect(File::allFiles(resource_path('js/pages/Development/Tasks/Components')))
+        ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
+        ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
+        ->implode("\n");
+
     expect($rawCardFiles)->toBe([])
         ->and($staticStyleFiles)->toBe([]);
+
+    expect($developmentTaskComponents)
+        ->toContain('import { Card } from "@/components/Ui/Card";')
+        ->not->toContain('<AppCard');
 });

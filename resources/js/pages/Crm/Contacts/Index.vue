@@ -2,12 +2,12 @@
 import { AsyncCrmSelect } from "@/components/AsyncCrmSelect";
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormSelect } from "@/components/Ui/FormSelect";
-import IndexEmptyState from "@/components/IndexEmptyState.vue";
-import IndexPagination from "@/components/IndexPagination.vue";
-import IndexTableFrame from "@/components/IndexTableFrame.vue";
+import { IndexEmptyState } from "@/components/IndexEmptyState";
+import { IndexPagination } from "@/components/IndexPagination";
+import { IndexTableFrame } from "@/components/IndexTableFrame";
 import { useInertiaFilters } from "@/composables/useInertiaFilters";
 import { create, index } from "@/routes/crm/contacts";
-import { createContactIndexColumns } from "@/sections/Crm/Contacts/contactIndexColumns";
+import { createContactIndexColumns } from "@/pages/Crm/Contacts/Components/contactIndexColumns";
 import type { Contact, Option, Owner, Paginated } from "@/types/crm";
 
 const props = defineProps<{

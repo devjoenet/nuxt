@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import IndexEmptyState from "@/components/IndexEmptyState.vue";
-import IndexPagination from "@/components/IndexPagination.vue";
-import IndexTableFrame from "@/components/IndexTableFrame.vue";
+import { IndexEmptyState } from "@/components/IndexEmptyState";
+import { IndexPagination } from "@/components/IndexPagination";
+import { IndexTableFrame } from "@/components/IndexTableFrame";
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormSelect } from "@/components/Ui/FormSelect";
 import { useInertiaFilters } from "@/composables/useInertiaFilters";
 import { create, index } from "@/routes/crm/leads";
-import { createLeadIndexColumns } from "@/sections/Crm/Leads/leadIndexColumns";
+import { createLeadIndexColumns } from "@/pages/Crm/Leads/Components/leadIndexColumns";
 import type { Lead, Option, Owner, Paginated } from "@/types/crm";
 
 const props = defineProps<{

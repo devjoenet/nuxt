@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { Stat } from "@/components/Ui/Stat";
+
 defineProps<{
   queue: { connection: string; default: string; production_driver: string };
   stats: { label: string; value: number }[];
@@ -9,9 +11,7 @@ defineProps<{
 <template>
   <WorkspacePage id="admin-jobs" description="Queue health, Horizon monitoring, and operational links" document-title="Jobs and queues" title="Jobs & queues">
     <div class="grid gap-4 sm:grid-cols-3">
-      <AppPageCard v-for="stat in stats" :key="stat.label" :description="stat.label" :style="'outline'" class="dark:bg-elevated dark:shadow-none">
-        <p class="text-3xl font-semibold text-highlighted">{{ stat.value }}</p>
-      </AppPageCard>
+      <Stat v-for="stat in stats" :key="stat.label" :label="stat.label" tone="info" :value="stat.value" />
     </div>
 
     <UAlert

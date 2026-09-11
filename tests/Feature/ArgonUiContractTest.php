@@ -115,19 +115,19 @@ test('core visual primitives expose typed public APIs and CVA variants', functio
         ->all();
 
     expect($rawValueFiles)->toBe([
-        'js/components/Landing/LandingHero.vue',
-        'js/components/Landing/MetricCard.vue',
-        'js/components/Landing/ProcessTimeline.vue',
         'js/pages/Welcome.vue',
-        'js/sections/Landing/LandingContactSection.vue',
-        'js/sections/Landing/LandingOperationsSection.vue',
+        'js/pages/Welcome/Components/LandingContactSection.vue',
+        'js/pages/Welcome/Components/LandingHero.vue',
+        'js/pages/Welcome/Components/LandingOperationsSection.vue',
+        'js/pages/Welcome/Components/MetricCard.vue',
+        'js/pages/Welcome/Components/ProcessTimeline.vue',
     ]);
 });
 
 test('Argon navigation shells share semantic chrome and accessible overlays', function (): void {
     $workspaceNavbar = File::get(resource_path('js/components/WorkspaceNavbar/WorkspaceNavbar.vue'));
-    $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar.vue'));
-    $landingHeader = File::get(resource_path('js/components/Landing/LandingHeader.vue'));
+    $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar/WorkspaceSidebar.vue'));
+    $landingHeader = File::get(resource_path('js/components/LandingHeader/LandingHeader.vue'));
     $appearanceMenu = File::get(resource_path('js/components/AppearanceMenu/AppearanceMenu.vue'));
     $breadcrumbs = File::get(resource_path('js/components/Ui/Breadcrumbs/Breadcrumbs.vue'));
 
