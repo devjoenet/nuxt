@@ -24,11 +24,11 @@ defineProps<{
     <div class="relative mx-auto grid max-w-7xl gap-10 lg:min-h-[calc(100vh-9rem)] lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
       <Motion :animate="{ opacity: 1, x: 0 }" :initial="{ opacity: 0, x: -34 }" :transition="{ duration: 0.8, ease: 'easeOut' }" as="div" class="max-w-2xl">
         <p class="mb-5 text-sm font-bold tracking-[0.24em] text-secondary-400 uppercase">Custom operations software</p>
-        <h1 class="max-w-3xl text-4xl leading-[1.02] font-black text-neutral-50 uppercase sm:text-6xl lg:text-7xl">
+        <h1 class="max-w-3xl text-4xl leading-[1.02] font-black text-grey-50 uppercase sm:text-6xl lg:text-7xl">
           Software that fits
           <span class="block text-primary-400">how work moves.</span>
         </h1>
-        <p class="mt-6 max-w-lg text-base leading-7 text-neutral-100 dark:text-neutral-200">We turn fragmented operations into secure web applications for the teams moving data, approvals, inventory, and decisions every day.</p>
+        <p class="mt-6 max-w-lg text-base leading-7 text-grey-100 dark:text-grey-200">We turn fragmented operations into secure web applications for the teams moving data, approvals, inventory, and decisions every day.</p>
 
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <a

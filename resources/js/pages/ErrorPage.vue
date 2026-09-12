@@ -62,14 +62,14 @@ const isAuthenticated = computed(() => page.props.auth.user !== null);
     <div aria-hidden="true" class="pointer-events-none absolute -top-32 -left-24 size-80 rounded-full bg-primary-500/10 blur-3xl dark:bg-primary-400/10"></div>
     <div aria-hidden="true" class="pointer-events-none absolute -right-24 -bottom-32 size-96 rounded-full bg-secondary-500/10 blur-3xl dark:bg-secondary-400/10"></div>
 
-    <section aria-labelledby="error-title" class="relative w-full max-w-2xl rounded-2xl border border-default bg-elevated/90 p-6 shadow-2xl shadow-muted-950/10 ring-1 ring-default/60 dark:shadow-none sm:p-10">
+    <section aria-labelledby="error-title" class="relative w-full max-w-2xl rounded-2xl border border-default bg-elevated/90 p-6 shadow-2xl shadow-slate-950/10 ring-1 ring-default/60 dark:shadow-none sm:p-10">
       <Link :href="home.url()" aria-label="Southeast Code home" class="inline-flex max-w-full rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500">
         <AppLogo
           :icon-class="'h-auto w-44 max-w-full sm:w-56'"
           aria-hidden="true"
-          code-variant-class="fill-violet-600 dark:fill-violet-400"
-          hr-variant-class="stroke-violet-600 dark:stroke-violet-400"
-          logo-variant-class="fill-teal-600 dark:fill-teal-400"
+          code-variant-class="fill-argon-accent-600 dark:fill-argon-accent-400"
+          hr-variant-class="stroke-argon-accent-600 dark:stroke-argon-accent-400"
+          logo-variant-class="fill-argon-600 dark:fill-argon-400"
           southeast-variant-class="fill-slate-950 dark:fill-slate-50"
         />
       </Link>

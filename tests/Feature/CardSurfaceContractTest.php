@@ -62,8 +62,8 @@ test('neutral subtle cards use the requested light and dark colors', function ()
     $appearance = File::get(resource_path('js/lib/cardAppearance.ts'));
 
     expect($appearance)
-        ->toContain('neutral: "border-neutral-200 dark:border-neutral-700"')
-        ->toContain('neutral: "bg-neutral-100 dark:bg-neutral-800"')
+        ->toContain('neutral: "border-grey-200 dark:border-grey-700"')
+        ->toContain('neutral: "bg-grey-100 dark:bg-grey-800"')
         ->toContain('return cn("border ring-0", cardBackgroundClasses[variant], cardBorderClasses[variant]);');
 });
 

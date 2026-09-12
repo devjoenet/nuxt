@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 @import "./theme/palette.css";
-@import "./theme/aliases.css";
 @import "./theme/foundations.css";
 @import "./theme/nuxt-ui.css";
 @import "./theme/forms.css";

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
@@ -40,6 +41,8 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
         'resources/js/layouts/AuthBasic.vue',
         'resources/js/layouts/Auth/AuthSplitLayout.vue',
         'resources/js/pages/Auth/ForgotPasswordNuxt.vue',
+        'resources/js/pages/Development/Argon',
+        'resources/js/pages/Welcome/Components/MetricCard.vue',
         'resources/js/composables/getErrors.ts',
         'resources/js/composables/useInitials.ts',
     ] as $retiredPath) {
@@ -99,7 +102,6 @@ test('the frontend source uses only approved top-level homes', function (): void
 
     expect($frontendDirectories)->toBe([
         'actions',
-        'assets',
         'components',
         'composables',
         'layouts',
@@ -220,12 +222,87 @@ test('all baseline application pages are covered by the migrated route families'
             'Admin/ArgonGallery/',
             'Development/Argon/',
         ]))
-        ->values();
+        ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
+        ->sort()
+        ->values()
+        ->all();
 
-    expect($applicationPages)->toHaveCount(35)
-        ->and($applicationPages->every(
-            fn (SplFileInfo $file): bool => ! Str::contains(File::get($file->getPathname()), '@/sections/'),
-        ))->toBeTrue();
+    expect($applicationPages)->toBe([
+        'Admin/Audit/Index.vue',
+        'Admin/Dashboard.vue',
+        'Admin/Jobs/Index.vue',
+        'Admin/Roles/Index.vue',
+        'Admin/Settings/Index.vue',
+        'Admin/Users/Index.vue',
+        'Auth/ConfirmPassword.vue',
+        'Auth/ForgotPassword.vue',
+        'Auth/Login.vue',
+        'Auth/ResetPassword.vue',
+        'Auth/TwoFactorChallenge.vue',
+        'Auth/VerifyEmail.vue',
+        'Crm/Contacts/Form.vue',
+        'Crm/Contacts/Index.vue',
+        'Crm/Contacts/Show.vue',
+        'Crm/Leads/Form.vue',
+        'Crm/Leads/Index.vue',
+        'Crm/Leads/Show.vue',
+        'Crm/Organizations/Form.vue',
+        'Crm/Organizations/Index.vue',
+        'Crm/Organizations/Show.vue',
+        'Dashboard.vue',
+        'Development/Overview.vue',
+        'Development/Requests/Create.vue',
+        'Development/Requests/Index.vue',
+        'Development/Review/Index.vue',
+        'Development/Roadmap/Index.vue',
+        'Development/Tasks/Show.vue',
+        'Development/UserTesting/Index.vue',
+        'Development/UserTesting/Legacy.vue',
+        'ErrorPage.vue',
+        'Privacy.vue',
+        'Settings/Profile.vue',
+        'Settings/Security.vue',
+        'Welcome.vue',
+    ]);
+});
+
+test('all baseline routes remain alongside the protected Argon gallery routes', function (): void {
+    Artisan::call('route:list', [
+        '--except-vendor' => true,
+        '--json' => true,
+    ]);
+
+    $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR));
+    $galleryRoutes = $routes
+        ->filter(fn (array $route): bool => Str::startsWith($route['name'] ?? '', 'admin.argonGallery.'))
+        ->values();
+    $baselineRoutes = $routes
+        ->reject(fn (array $route): bool => Str::startsWith($route['name'] ?? '', 'admin.argonGallery.'));
+
+    expect($routes)->toHaveCount(90)
+        ->and($galleryRoutes)->toHaveCount(2)
+        ->and($galleryRoutes->pluck('name')->all())->toBe([
+            'admin.argonGallery.index',
+            'admin.argonGallery.examples.show',
+        ])
+        ->and($baselineRoutes)->toHaveCount(88);
+});
+
+test('temporary frontend compatibility aliases cannot return', function (): void {
+    $legacyAliasUsages = collect(File::allFiles(resource_path()))
+        ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['css', 'ts', 'vue'], true))
+        ->filter(fn (SplFileInfo $file): bool => preg_match(
+            '/(?<!argon-)\b(?:neutral|muted|accent|teal|violet)-\d+/',
+            File::get($file->getPathname()),
+        ) === 1)
+        ->map(fn (SplFileInfo $file): string => Str::after($file->getPathname(), resource_path().DIRECTORY_SEPARATOR))
+        ->sort()
+        ->values()
+        ->all();
+
+    expect(File::exists(resource_path('css/theme/aliases.css')))->toBeFalse()
+        ->and(File::get(resource_path('css/app.css')))->not->toContain('theme/aliases.css')
+        ->and($legacyAliasUsages)->toBe([]);
 });
 
 test('the frontend source follows the documented naming convention', function (): void {
@@ -273,7 +350,7 @@ test('the frontend source follows the documented naming convention', function ()
         ->values()
         ->all();
 
-    $invalidAssetPaths = collect(File::allFiles(resource_path('js/assets')))
+    $invalidAssetPaths = collect(File::allFiles(resource_path('img')))
         ->reject(fn (SplFileInfo $file): bool => preg_match(
             '/^(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)*[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+)+$/',
             $file->getRelativePathname(),
