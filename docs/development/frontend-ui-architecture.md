@@ -23,7 +23,7 @@ they are not permission to split coherent behavior into arbitrary fragments.
 
 `resources/js/types` holds authored contracts shared across domains. `resources/js/actions`, `resources/js/routes`,
 and `resources/js/wayfinder` are generated Wayfinder transport trees: never edit them by hand or treat them as
-composition layers. `resources/js/assets`, `app.ts`, and `ssr.ts` remain supporting infrastructure.
+composition layers. Authored images live under `resources/img`; `app.ts` and `ssr.ts` remain supporting infrastructure.
 
 Reusable application components live in PascalCase directories with explicit public APIs. Floating form controls
 live behind typed `components/Ui/<Control>` public APIs, while the domain-aware `AsyncCrmSelect` application

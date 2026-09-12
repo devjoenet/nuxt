@@ -85,8 +85,8 @@ const handleSuccess = async (): Promise<void> => {
       <input :value="attribution.utmTerm" name="utm_term" type="hidden" />
       <input :value="attribution.utmContent" name="utm_content" type="hidden" />
 
-      <div class="flex items-start gap-3 text-sm leading-6 text-muted-700 dark:text-neutral-300">
-        <input id="intake-consent" class="mt-1 size-4 rounded border-muted-400 text-primary-600 focus:ring-primary-400" name="consent" required type="checkbox" value="1" />
+      <div class="flex items-start gap-3 text-sm leading-6 text-slate-700 dark:text-grey-300">
+        <input id="intake-consent" class="mt-1 size-4 rounded border-slate-400 text-primary-600 focus:ring-primary-400" name="consent" required type="checkbox" value="1" />
         <p>
           <label for="intake-consent">I agree that Southeast Code may use these details to respond to my inquiry.</label> See the
           <PrivacyDialogLink id="intake-privacy-notice" class="font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300">privacy notice</PrivacyDialogLink>.
@@ -96,7 +96,7 @@ const handleSuccess = async (): Promise<void> => {
 
       <button
         :disabled="processing"
-        class="inline-flex min-h-12 items-center justify-center rounded-md bg-accent-500 px-6 py-3 text-sm font-bold text-accent-50 shadow-lg shadow-accent-500/25 transition hover:bg-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-200 disabled:cursor-wait disabled:opacity-60"
+        class="inline-flex min-h-12 items-center justify-center rounded-md bg-argon-accent-500 px-6 py-3 text-sm font-bold text-argon-accent-50 shadow-lg shadow-argon-accent-500/25 transition hover:bg-argon-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-argon-accent-200 disabled:cursor-wait disabled:opacity-60"
         type="submit"
       >
         {{ processing ? "Sending…" : "Send project details" }}

@@ -16,6 +16,7 @@ const samples: Record<FoundationGroup, { label: string; class: string; value: st
     { label: "Secondary", class: "bg-secondary", value: "--ui-secondary" },
     { label: "Success", class: "bg-success", value: "--ui-success" },
     { label: "Warning", class: "bg-warning", value: "--ui-warning" },
+    { label: "Error", class: "bg-error", value: "--ui-error" },
   ],
   surface: [
     { label: "Canvas", class: "bg-surface-canvas", value: "--surface-canvas" },

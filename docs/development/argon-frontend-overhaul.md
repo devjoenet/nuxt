@@ -2,10 +2,10 @@
 
 ## Purpose and status
 
-This document is the approved implementation blueprint for replacing the current frontend with a Vue 3, Inertia 3,
-Tailwind CSS 4 adaptation of Creative Tim's Argon Dashboard 3 Pro design system. It is a durable reference blueprint,
-not an active task queue. The database-backed Development workspace remains the sole source of truth for task status,
-assignment, acceptance criteria, implementation notes, testing rounds, and completion.
+This document records the implemented Vue 3, Inertia 3, Tailwind CSS 4 adaptation of Creative Tim's Argon Dashboard 3
+Pro design system. It is a durable architecture and verification reference, not an active task queue. The
+database-backed Development workspace remains the sole source of truth for task status, assignment, acceptance
+criteria, implementation notes, testing rounds, and completion.
 
 The work deliberately stops before extracting a reusable starter-kit repository. That later repository will be based on
 the completed and hardened application implementation, not developed in parallel with it.
@@ -127,8 +127,8 @@ the approved Argon token work rather than concealed by weakening the assertions.
    provides the required behavior. Any new dependency requires explicit review and approval.
 7. Migrate a page or component as one complete vertical slice: implementation, tests, visual comparison, responsive
    checks, and removal of the superseded code.
-8. Keep the application buildable at every merged task. Transitional adapters are allowed; two competing permanent
-   design systems are not.
+8. Keep the application buildable at every merged task. Approved vendor adapters remain isolated behind typed Vue
+   boundaries; a competing presentation system is not allowed.
 9. Do not encode live status in this document. Use the Development workspace for sequencing and progress.
 
 ## Target frontend organization
@@ -140,7 +140,6 @@ to preserve the existing Vite and Inertia conventions. The `@` Vite alias and Ty
 ```text
 resources/js/
 ├── actions/                 # Wayfinder-generated; never edited manually
-├── assets/                  # Authored frontend assets
 ├── components/
 │   ├── Ui/                  # Argon primitives, one PascalCase directory per primitive
 │   │   └── FormInput/
@@ -193,9 +192,9 @@ Pages remain Inertia route entries and own route-level prop boundaries, metadata
 coordination. Components that serve a single page family live in that family's `Components` directory. This keeps
 one-off workflow code near its owner without turning `components` into a miscellaneous drawer.
 
-The existing `resources/js/sections` root will be removed progressively. A section moves beside its owning page when
-that page is migrated, or into `components` when demonstrated reuse gives it an application-wide contract. There will
-be no bulk relocation that preserves the current structure under a different spelling.
+The former `resources/js/sections` root is retired. Page-family components live beside their owning pages; components
+with demonstrated application-wide contracts live under `components`. The architecture guard prevents the old tree or
+a renamed bulk copy from returning.
 
 ### Supporting roots
 
@@ -204,7 +203,7 @@ be no bulk relocation that preserves the current structure under a different spe
   created.
 - `lib` owns deterministic helpers without Vue or Inertia dependencies.
 - `types` owns contracts shared across domains. Component-specific contracts stay in that component directory.
-- `assets` owns authored frontend assets. Vendor-source provenance is recorded in the Task 2 manifest.
+- `resources/img` owns authored frontend images. Vendor-source provenance is recorded in the Task 2 manifest.
 - `app.ts` and `ssr.ts` remain the client and server-rendering entrypoints.
 
 ## Component directory standard
@@ -282,7 +281,7 @@ The token inventory must cover:
 - Layering for navigation, sticky content, dropdowns, popovers, modals, toasts, and devtools.
 
 Tokens are defined once, mapped to Tailwind utilities where appropriate, and consumed semantically. Light and dark
-themes receive explicit values. Temporary compatibility mappings must be named, documented, and removed in Task 18.
+themes receive explicit values. The final implementation contains no temporary color compatibility mappings.
 
 ## Primitive implementation standard
 
@@ -333,7 +332,7 @@ WebKit. Textareas and non-text controls need intentional floating-label behavior
 
 ## Advanced behavior adapters
 
-The original kit uses Bootstrap-oriented plugins. Each capability will be classified before implementation:
+The original kit uses Bootstrap-oriented plugins. The implementation classifies each capability as follows:
 
 | Capability | Preferred adaptation path |
 | --- | --- |
@@ -386,8 +385,8 @@ avoids treating Vite+'s TypeScript-only checker as authoritative for Vue files i
 
 ## Protected reference gallery
 
-All licensed Argon examples must be discoverable inside the application without becoming public product routes. The
-gallery will use a dedicated authenticated layout and an explicit permission. It will include:
+All licensed Argon examples are discoverable inside the application without becoming public product routes. The
+gallery uses a dedicated authenticated layout and an explicit permission. It includes:
 
 - A searchable manifest index grouped by the eight source families.
 - A route for every one of the 69 source examples.
@@ -518,46 +517,18 @@ complete the user-testing workflow where applicable.
 - Preserve source data shape for visual fidelity while keeping fixtures inert and non-production.
 - Verify all 18 manifest IDs, lazy chunks, themes, breakpoints, and interactions.
 
-### 13. Public, privacy, error, and authentication migration
+### 13. Application migration
 
-- Rebuild public landing/intake, privacy, branded error, login, password, invitation/registration, verification,
-  confirmation, and two-factor views.
-- Preserve Fortify flows, redirects, rate limits, validation, autofill, password managers, recovery codes, and privacy
-  fallback behavior.
-- Remove superseded public/auth sections only after focused feature and browser coverage passes.
-- Compare anonymous mobile/desktop light/dark states against the approved Argon direction.
+- Rebuild public, authentication, workspace, dashboard, CRM, settings, administration, and Development surfaces with
+  the shared Argon layouts, primitives, and application components.
+- Preserve Fortify flows, role and permission boundaries, route contracts, Inertia props, CRM mutations, typed
+  filtering, destructive-action safeguards, and the Development Action boundary and audit history.
+- Move single-family components beside their pages, retain only proven reusable application contracts, and remove the
+  superseded `resources/js/sections` tree after focused feature and browser coverage passes.
+- Verify anonymous, authenticated, restricted-user, administrator, CRM, and Development workflows across supported
+  themes and responsive widths.
 
-### 14. Workspace and dashboard migration
-
-- Rebuild the authenticated workspace shell and dashboard pages with Argon navigation, cards, metrics, activity,
-  empty/loading/error states, and responsive behavior.
-- Preserve role-aware navigation, deferred data, polling/prefetching where present, and SSR behavior.
-- Move one-family components beside their pages and promote only proven reusable contracts.
-- Remove replaced sections and verify routes, permissions, queries, browser workflows, and both themes.
-
-### 15. CRM migration
-
-- Rebuild CRM indexes, detail layouts, forms, selectors, filters, pagination, notes, and domain workflows.
-- Preserve typed filtering, query strings, async selection, permission boundaries, mutations, feedback, and data
-  ownership behavior.
-- Keep route/business coordination outside UI primitives.
-- Remove superseded CRM sections and verify feature, query-count, type, build, browser, responsive, and theme behavior.
-
-### 16. Settings and administration migration
-
-- Rebuild profile, password/security, appearance, team/user/role/permission, and other administration surfaces.
-- Preserve authorization, confirmation, destructive-action safeguards, two-factor behavior, and application defaults.
-- Reuse Argon primitives through application contracts instead of page-specific styling copies.
-- Remove replaced sections and verify Super Admin and restricted-user browser paths.
-
-### 17. Development workflow migration
-
-- Rebuild requests, review, roadmap, task detail, progress, notes, links, testing rounds, and result-recording surfaces.
-- Preserve the Action boundary, explicit actor attribution, transition guards, assignments, ordering, and audit history.
-- Verify role-specific navigation and every supported lifecycle transition in feature and browser tests.
-- Remove superseded Development sections and confirm this blueprint still points to live tracking as the sole truth.
-
-### 18. Legacy removal and final hardening
+### 14. Legacy removal and final hardening
 
 - Confirm all 35 baseline pages, 88 baseline routes, and 69 Argon examples are mapped and verified.
 - Remove `resources/js/sections`, obsolete components, Nuxt UI-specific application remnants, compatibility tokens,
@@ -566,6 +537,27 @@ complete the user-testing workflow where applicable.
   visual matrices, bundle analysis, dependency/license audit, and dead-import searches.
 - Update maintained architecture and contributor documentation to describe only the final implementation.
 - Produce a final divergence register and a clean basis for the later starter-kit extraction decision.
+
+## Final implementation inventory and divergence register
+
+The final architecture contract pins the original 35 application page paths and verifies the 88-route baseline beside
+the two protected gallery routes. The source-manifest contract separately verifies all 69 licensed examples, including
+the three empty upstream files represented by explicit unavailable states. Existing feature and browser suites remain
+the behavioral evidence for those inventories rather than replacing behavior checks with a count.
+
+The remaining divergences are deliberate approved decisions:
+
+| Decision | Final implementation |
+| --- | --- |
+| Accessible component foundation | Nuxt UI remains the vendor foundation where it owns useful behavior. First-party `components/Ui` primitives own the portable Argon presentation API; direct Nuxt UI composition is allowed only for intentional one-off behavior. |
+| Licensed source distribution | The licensed Argon checkout stays outside Git. `resources/argon/source-manifest.json` records provenance, adaptation, distribution, and the gallery destination for every source item. |
+| Example behavior | Protected gallery examples use inert fixtures and controls. They do not invoke production authentication, billing, account, ecommerce, or CRM mutations. |
+| Empty upstream examples | The three empty licensed HTML files render explicit unavailable states instead of invented source content. |
+| Fonts, icons, and media | The application uses the existing Bunny-hosted Open Sans family, Phosphor icons, and authored application imagery rather than redistributing licensed source assets. |
+| Advanced runtimes | Charts, rich text, and maps stay behind typed lazy Vue adapters. Bootstrap, jQuery, and the original Argon runtime are not shipped. |
+| Starter-kit extraction | Extraction remains a separately authorized project and requires the license and asset-distribution review recorded in `argon-source-licensing.md`. |
+
+No unresolved application divergence remains outside these decisions.
 
 ## Per-task operating procedure
 
@@ -592,7 +584,7 @@ run. The program-level minimum is:
 | Concern | Evidence |
 | --- | --- |
 | PHP formatting | Pint on changed PHP files |
-| PHP behavior | Focused Pest tests; full suite at integration milestones and Task 18 |
+| PHP behavior | Focused Pest tests; full suite at integration milestones and Task 14 |
 | Frontend formatting | Prettier check |
 | Frontend conventions | ESLint and architecture contracts |
 | Type safety | `vue-tsc --noEmit` |

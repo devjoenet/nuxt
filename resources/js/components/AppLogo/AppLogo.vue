@@ -11,7 +11,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   logoVariantClass: "primary",
-  southeastVariantClass: "fill-neutral-950 dark:neutral-50",
+  southeastVariantClass: "fill-grey-950 dark:grey-50",
   codeVariantClass: "secondary",
   hrVariantClass: "secondary",
   iconClass: "w-full",

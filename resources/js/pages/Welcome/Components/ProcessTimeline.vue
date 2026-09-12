@@ -15,28 +15,28 @@ defineProps<{
 const circleClasses = {
   primary: "border-primary-400 text-primary-300 shadow-primary-500/30 group-hover:shadow-primary-400/45",
   secondary: "border-secondary-400 text-secondary-300 shadow-secondary-500/30 group-hover:shadow-secondary-400/45",
-  accent: "border-accent-400 text-accent-300 shadow-accent-500/30 group-hover:shadow-accent-400/45",
+  accent: "border-argon-accent-400 text-argon-accent-300 shadow-argon-accent-500/30 group-hover:shadow-argon-accent-400/45",
   warning: "border-warning-400 text-warning-300 shadow-warning-500/30 group-hover:shadow-warning-400/45",
 };
 
 const cardClasses = {
   primary: "group-hover:border-primary-400/45 group-hover:shadow-primary-950/30",
   secondary: "group-hover:border-secondary-400/45 group-hover:shadow-secondary-950/30",
-  accent: "group-hover:border-accent-400/45 group-hover:shadow-accent-950/30",
+  accent: "group-hover:border-argon-accent-400/45 group-hover:shadow-argon-accent-950/30",
   warning: "group-hover:border-warning-400/45 group-hover:shadow-warning-950/30",
 };
 
 const labelClasses = {
   primary: "text-primary-300",
   secondary: "text-secondary-300",
-  accent: "text-accent-300",
+  accent: "text-argon-accent-300",
   warning: "text-warning-300",
 };
 
 const railClasses = {
-  primary: "from-primary-400/90 via-secondary-400/70 to-accent-400/70",
-  secondary: "from-secondary-400/90 via-accent-400/70 to-warning-400/70",
-  accent: "from-accent-400/90 via-warning-400/70 to-primary-400/70",
+  primary: "from-primary-400/90 via-secondary-400/70 to-argon-accent-400/70",
+  secondary: "from-secondary-400/90 via-argon-accent-400/70 to-warning-400/70",
+  accent: "from-argon-accent-400/90 via-warning-400/70 to-primary-400/70",
   warning: "from-warning-400/90 via-primary-400/70 to-secondary-400/70",
 };
 </script>
@@ -55,15 +55,15 @@ const railClasses = {
     >
       <div class="relative h-20">
         <div v-if="index < steps.length - 1" :class="railClasses[step.tone]" aria-hidden="true" class="absolute top-1/2 left-10 hidden h-px w-[calc(100%+1.25rem)] -translate-y-1/2 bg-linear-to-r md:block"></div>
-        <div v-if="index < steps.length - 1" aria-hidden="true" class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-neutral-100/45 shadow-[0_0_18px_rgba(255,255,255,0.32)] md:block"></div>
+        <div v-if="index < steps.length - 1" aria-hidden="true" class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-grey-100/45 shadow-[0_0_18px_rgba(255,255,255,0.32)] md:block"></div>
 
         <div
           :class="circleClasses[step.tone]"
-          class="relative z-10 flex size-20 items-center justify-center rounded-full border bg-muted-50/95 text-xl font-semibold shadow-2xl ring-1 ring-muted-200/80 transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 dark:bg-muted-950/95 dark:ring-neutral-100/10"
+          class="relative z-10 flex size-20 items-center justify-center rounded-full border bg-slate-50/95 text-xl font-semibold shadow-2xl ring-1 ring-slate-200/80 transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 dark:bg-slate-950/95 dark:ring-grey-100/10"
         >
           <span
             aria-hidden="true"
-            class="absolute inset-2 rounded-full border border-muted-200 bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.7),transparent_45%)] dark:border-neutral-100/10 dark:bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.18),transparent_45%)]"
+            class="absolute inset-2 rounded-full border border-slate-200 bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.7),transparent_45%)] dark:border-grey-100/10 dark:bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.18),transparent_45%)]"
           ></span>
           <span class="relative flex flex-col items-center gap-0.5">
             <UIcon :name="step.icon" aria-hidden="true" class="size-5" />
@@ -74,12 +74,12 @@ const railClasses = {
 
       <article
         :class="cardClasses[step.tone]"
-        class="relative min-h-44 overflow-hidden rounded-lg border border-muted-200 bg-muted-50/80 p-5 shadow-xl shadow-muted-950/10 ring-1 ring-muted-200/70 backdrop-blur-sm transition duration-300 group-hover:-translate-y-1 group-hover:bg-muted-100/90 dark:border-neutral-100/10 dark:bg-muted-900/45 dark:shadow-muted-950/20 dark:ring-neutral-100/5 dark:group-hover:bg-muted-900/70"
+        class="relative min-h-44 overflow-hidden rounded-lg border border-slate-200 bg-slate-50/80 p-5 shadow-xl shadow-slate-950/10 ring-1 ring-slate-200/70 backdrop-blur-sm transition duration-300 group-hover:-translate-y-1 group-hover:bg-slate-100/90 dark:border-grey-100/10 dark:bg-slate-900/45 dark:shadow-slate-950/20 dark:ring-grey-100/5 dark:group-hover:bg-slate-900/70"
       >
-        <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-muted-300 to-transparent dark:via-neutral-100/30"></div>
+        <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-grey-100/30"></div>
         <p :class="labelClasses[step.tone]" class="text-[0.68rem] font-bold tracking-[0.24em] uppercase">Step {{ index + 1 }}</p>
-        <h3 class="mt-3 text-lg font-semibold text-muted-950 dark:text-neutral-50">{{ step.title }}</h3>
-        <p class="mt-3 text-sm leading-6 text-muted-600 dark:text-neutral-400">{{ step.description }}</p>
+        <h3 class="mt-3 text-lg font-semibold text-slate-950 dark:text-grey-50">{{ step.title }}</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-grey-400">{{ step.description }}</p>
       </article>
     </Motion>
   </ol>

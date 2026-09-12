@@ -15,7 +15,7 @@ const initials = computed(
       .join("") ?? "",
 );
 const avatarClass = computed(() => cn(avatarVariants({ size: props.size, shape: props.shape }), props.class));
-const statusClass = computed(() => ({ online: "bg-success", offline: "bg-neutral-400", busy: "bg-error" })[props.status ?? "offline"]);
+const statusClass = computed(() => ({ online: "bg-success", offline: "bg-grey-400", busy: "bg-error" })[props.status ?? "offline"]);
 </script>
 
 <template>

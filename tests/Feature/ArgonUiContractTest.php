@@ -119,7 +119,6 @@ test('core visual primitives expose typed public APIs and CVA variants', functio
         'js/pages/Welcome/Components/LandingContactSection.vue',
         'js/pages/Welcome/Components/LandingHero.vue',
         'js/pages/Welcome/Components/LandingOperationsSection.vue',
-        'js/pages/Welcome/Components/MetricCard.vue',
         'js/pages/Welcome/Components/ProcessTimeline.vue',
     ]);
 });
@@ -217,10 +216,10 @@ test('the floating form system covers the approved controls and retires flat wra
         ->toContain('"native input[type=datetime-local]": "components/Ui/FormInput type=datetime-local"');
 });
 
-test('Argon specimens cover foundation, primitive, and form states', function (): void {
-    $foundation = File::get(resource_path('js/pages/Development/Argon/Components/FoundationSpecimens.vue'));
-    $primitives = File::get(resource_path('js/pages/Development/Argon/Components/PrimitiveSpecimens.vue'));
-    $forms = File::get(resource_path('js/pages/Development/Argon/Components/FormSpecimens.vue'));
+test('Argon gallery labs cover foundation, primitive, and form states', function (): void {
+    $foundation = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/FoundationLab.vue'));
+    $primitives = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/PrimitiveLab.vue'));
+    $forms = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/FormLab.vue'));
 
     expect($foundation)
         ->toContain('bg-primary')
@@ -228,19 +227,21 @@ test('Argon specimens cover foundation, primitive, and form states', function ()
         ->toContain('bg-success')
         ->toContain('bg-error')
         ->and($primitives)
-        ->toContain('v-for="tone in uiTones"')
-        ->toContain('label="Loading" loading')
-        ->toContain('<EmptyState')
-        ->toContain('<Progress')
+        ->toContain('const toneItems = uiTones.map')
+        ->toContain('v-model="disabled"')
+        ->toContain('v-model="loading"')
+        ->toContain('<Button')
+        ->toContain('<Badge')
         ->and($forms)
-        ->toContain('label="Empty text"')
-        ->toContain('label="Filled or restored"')
-        ->toContain('error="Review this value."')
-        ->toContain('disabled label="Disabled"')
-        ->toContain('label="Readonly"')
-        ->toContain('label="Loading search"')
-        ->toContain('<FormAsyncSelect')
-        ->toContain('<FormFileUpload')
-        ->toContain('<FormRadioGroup')
+        ->toContain('const value = ref("Restored value")')
+        ->toContain('"invalid"')
+        ->toContain('"disabled"')
+        ->toContain('"readonly"')
+        ->toContain('"loading"')
+        ->toContain('Review this value.')
+        ->toContain('<FormInput')
+        ->toContain('<FormSelect')
+        ->toContain('<FormTextarea')
+        ->toContain('<FormCheckbox')
         ->toContain('<FormSwitch');
 });
