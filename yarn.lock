@@ -6421,6 +6421,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^13.3.0":
+  version: 13.4.0
+  resolution: "framer-motion@npm:13.4.0"
+  dependencies:
+    motion-dom: "npm:^13.3.0"
+    motion-utils: "npm:^13.3.0"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/1cba0f674c0a3893c7803876a54fa2c2c66a1a06665668cc8145909478cc6d78944c85a8eb9bdc169c61b3163cc597a2c0ebd0bcc37c2e3410e5960950b5d40b
+  languageName: node
+  linkType: hard
+
 "fsevents@npm:~2.3.2, fsevents@npm:~2.3.3":
   version: 2.3.3
   resolution: "fsevents@npm:2.3.3"
@@ -7567,6 +7586,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"motion-dom@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "motion-dom@npm:13.3.0"
+  dependencies:
+    motion-utils: "npm:^13.3.0"
+  checksum: 10c0/b59ee63a4a487abb571159853d9bb47c02740d9707f01b91440b2d157af26cde16db5ebf29d1b5e19aabccc9dcb9ec763e9bbf931fdf25beae2af3e4d0f9652d
+  languageName: node
+  linkType: hard
+
 "motion-utils@npm:^13.0.0":
   version: 13.0.0
   resolution: "motion-utils@npm:13.0.0"
@@ -7574,7 +7602,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-v@npm:^2.4.0, motion-v@npm:^2.4.2":
+"motion-utils@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "motion-utils@npm:13.3.0"
+  checksum: 10c0/9efb8388cc43501d1d6d1f2997fdd3a9e4c2bd42c57c3979586fdbcc83969a3b9aae7e3108cfb53312db0a46d945ad1b4d54ad388a6585f2eb5f5e742a58d927
+  languageName: node
+  linkType: hard
+
+"motion-v@npm:^2.4.2":
   version: 2.4.2
   resolution: "motion-v@npm:2.4.2"
   dependencies:
@@ -7586,6 +7621,21 @@ __metadata:
     "@vueuse/core": ">=10.0.0"
     vue: ">=3.0.0"
   checksum: 10c0/de43ebca48080c541e67625e68906a5c336831743d3d13bab7e258ee646f679d2aaf99beee4e28bbf930774056d02a54bf5a3f17232111e537854f81c45d3d4e
+  languageName: node
+  linkType: hard
+
+"motion-v@npm:^2.4.4":
+  version: 2.4.4
+  resolution: "motion-v@npm:2.4.4"
+  dependencies:
+    framer-motion: "npm:^13.3.0"
+    hey-listen: "npm:^1.0.8"
+    motion-dom: "npm:^13.3.0"
+    motion-utils: "npm:^13.3.0"
+  peerDependencies:
+    "@vueuse/core": ">=10.0.0"
+    vue: ">=3.0.0"
+  checksum: 10c0/2b8119bde9b39b43d1f35003f0a019a3556b6e3f5735588ce80a05449ba23a05dd8156c59e419d0196adeaf5f30895848199ac1f41489ab42788bdc797d16364
   languageName: node
   linkType: hard
 
@@ -7769,7 +7819,7 @@ __metadata:
     laravel-vite-plugin: "npm:^3.2.0"
     lightningcss-linux-x64-gnu: "npm:^1.33.0"
     maplibre-gl: "npm:^6.6.0"
-    motion-v: "npm:^2.4.0"
+    motion-v: "npm:^2.4.4"
     playwright: "npm:^1.62.1"
     prettier: "npm:^3.9.6"
     prettier-plugin-organize-imports: "npm:^4.3.0"
