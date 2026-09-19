@@ -21,7 +21,7 @@
     "@laravel/vite-plugin-wayfinder": "^0.1.7",
     "@shufo/prettier-plugin-blade": "^1.16.2",
     "@types/node": "^26.4.0",
-    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitejs/plugin-vue": "^6.0.9",
     "@vue/eslint-config-typescript": "^14.9.0",
     "concurrently": "^10.0.5",
     "esbuild": "^0.28.2",
