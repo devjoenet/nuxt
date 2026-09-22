@@ -38,7 +38,7 @@ const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
           <div class="grid gap-4 @2xl:grid-cols-2">
             <div class="grid content-start gap-1">
               <h3 class="font-medium text-highlighted">Instructions</h3>
-              <p class="whitespace-pre-wrap text-base/7 text-pretty text-muted sm:text-sm/6">{{ testRun.instructions }}</p>
+              <p class="text-base/7 text-pretty whitespace-pre-wrap text-muted sm:text-sm/6">{{ testRun.instructions }}</p>
             </div>
             <div v-if="testRun.build_reference" class="grid content-start gap-1">
               <h3 class="font-medium text-highlighted">Build reference</h3>
@@ -48,7 +48,7 @@ const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
                 </p>
                 <span class="sr-only">(opens in a new tab)</span>
               </a>
-              <p v-else class="break-all text-base/7 text-muted sm:text-sm/6">{{ testRun.build_reference }}</p>
+              <p v-else class="text-base/7 break-all text-muted sm:text-sm/6">{{ testRun.build_reference }}</p>
             </div>
           </div>
         </div>

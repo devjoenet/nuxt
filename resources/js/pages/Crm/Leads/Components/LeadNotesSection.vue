@@ -22,7 +22,7 @@ const props = defineProps<{
     </Form>
     <ul class="grid gap-4" role="list">
       <li v-for="note in lead.notes" :key="note.id" class="border-t border-default pt-4">
-        <p class="whitespace-pre-wrap text-pretty text-base text-highlighted sm:text-sm">{{ note.body }}</p>
+        <p class="text-base text-pretty whitespace-pre-wrap text-highlighted sm:text-sm">{{ note.body }}</p>
         <p class="mt-2 text-base text-muted sm:text-sm">{{ note.author }} · {{ formatDateTime(note.created_at) }}</p>
       </li>
       <li v-if="!lead.notes?.length" class="text-base text-muted sm:text-sm">No notes yet.</li>

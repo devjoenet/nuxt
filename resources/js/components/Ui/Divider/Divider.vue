@@ -10,7 +10,7 @@ const dividerClass = computed(() => cn(dividerVariants({ orientation: props.orie
 </script>
 
 <template>
-  <div v-if="label && orientation === 'horizontal'" :class="cn('flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-content-subtle', props.class)" :role="decorative ? undefined : 'separator'">
+  <div v-if="label && orientation === 'horizontal'" :class="cn('flex items-center gap-3 text-xs font-semibold tracking-wider text-content-subtle uppercase', props.class)" :role="decorative ? undefined : 'separator'">
     <span class="h-px flex-1 bg-content-divider" /><span
       ><slot>{{ label }}</slot></span
     ><span class="h-px flex-1 bg-content-divider" />

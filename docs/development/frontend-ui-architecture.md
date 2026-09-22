@@ -127,7 +127,7 @@ decision rather than borrowing a historical reason.
 
 ## Testing and enforcement
 
-- ESLint enforces dependency direction and rejects imports that bypass component-directory public APIs.
+- Vite+ and Oxlint enforce dependency direction and reject imports that bypass component-directory public APIs.
 - `tests/Feature/FrontendArchitectureContractTest.php` enforces source homes, PascalCase/camelCase naming, component
   directory exports, forbidden deep imports, generated-code exclusions, retired legacy homes, page colocation
   spelling, and SFC responsibility budgets.

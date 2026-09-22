@@ -24,7 +24,7 @@ const devices = ref([
           <h3 class="text-lg font-semibold text-content-heading">Cameras</h3>
           <div class="flex gap-2"><UButton v-for="room in ['Lounge', 'Office', 'Attic']" :key="room" :label="room" :variant="camera === room ? 'solid' : 'outline'" :aria-pressed="camera === room" @click="camera = room" /></div>
         </div>
-        <div class="grid min-h-64 place-content-center gap-4 rounded-xl bg-surface-subtle p-8 text-center">
+        <div class="bg-surface-subtle grid min-h-64 place-content-center gap-4 rounded-xl p-8 text-center">
           <PhVideoCamera aria-hidden="true" class="mx-auto size-16 text-primary" />
           <p class="text-2xl font-semibold text-content-heading">{{ camera }} camera</p>
           <p class="text-sm text-content-subtle">Demo camera preview</p>

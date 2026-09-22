@@ -28,7 +28,7 @@ const users = [
         ><h3 class="text-lg font-semibold text-content-heading">Referral Code</h3>
         <p class="my-4 text-content-body">Share your unique code with friends and earn rewards.</p>
         <UButton :label="revealed ? 'Hide demo code' : 'Reveal demo code'" @click="revealed = !revealed" />
-        <p v-if="revealed" role="status" class="mt-5 break-all font-mono text-lg text-content-heading">ARGON-DEMO-2021</p></Card
+        <p v-if="revealed" role="status" class="mt-5 font-mono text-lg break-all text-content-heading">ARGON-DEMO-2021</p></Card
       ><Card variant="outline"
         ><h3 class="mb-4 text-lg font-semibold text-content-heading">How to use</h3>
         <ol class="grid list-inside list-decimal gap-4 text-content-body">
@@ -41,8 +41,8 @@ const users = [
     <ReferenceTable title="Top Referred Users" :rows="users" /><Card variant="outline"
       ><h3 class="mb-4 font-semibold text-content-heading">Other programs</h3>
       <div class="grid gap-4 sm:grid-cols-2">
-        <p class="rounded-xl bg-surface-subtle p-5 text-content-body">Partner program · earn rewards with your team.</p>
-        <p class="rounded-xl bg-surface-subtle p-5 text-content-body">Community program · help others get started.</p>
+        <p class="bg-surface-subtle rounded-xl p-5 text-content-body">Partner program · earn rewards with your team.</p>
+        <p class="bg-surface-subtle rounded-xl p-5 text-content-body">Community program · help others get started.</p>
       </div></Card
     >
   </div>

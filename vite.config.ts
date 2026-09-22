@@ -7,6 +7,16 @@ import ui from "@nuxt/ui/vite";
 import path from "path";
 import vueDevTools from "vite-plugin-vue-devtools";
 
+const uiPrimitiveDeepImport = {
+  regex: "^@/components/Ui/[^/]+/.+",
+  message: "Import UI primitives through their component-directory index.ts public API.",
+};
+
+const applicationComponentDeepImport = {
+  regex: "^@/components/([A-Z][A-Za-z0-9]*)/\\1(?:\\.vue|/)",
+  message: "Import application components through their component-directory index.ts public API.",
+};
+
 export default defineConfig(({ isSsrBuild }) => ({
   plugins: lazyPlugins(() => [
     laravel({
@@ -113,15 +123,164 @@ export default defineConfig(({ isSsrBuild }) => ({
     }),
     vueDevTools(),
   ]),
-  check: {
-    fmt: false,
-  },
   lint: {
     ignorePatterns: [".yarn/**", "bootstrap/ssr/**", "node_modules/**", "public/**", "resources/js/actions/**", "resources/js/routes/**", "resources/js/wayfinder/**", "vendor/**"],
+    plugins: ["eslint", "typescript", "unicorn", "oxc", "vue"],
+    rules: {
+      "typescript/no-explicit-any": "error",
+      "no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+    },
+    overrides: [
+      {
+        files: ["resources/js/**/*.{ts,vue}"],
+        excludeFiles: ["resources/js/{actions,routes,wayfinder}/**/*.ts"],
+        rules: {
+          "no-restricted-imports": ["error", { patterns: [uiPrimitiveDeepImport, applicationComponentDeepImport] }],
+        },
+      },
+      {
+        files: ["resources/js/components/**/*.{ts,vue}"],
+        excludeFiles: ["resources/js/components/Ui/**/*.{ts,vue}"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                uiPrimitiveDeepImport,
+                applicationComponentDeepImport,
+                {
+                  regex: "^(?:@/|(?:\\.\\.?/)+)(?:layouts|pages|sections)/",
+                  message: "Application components cannot depend on workflow or route rendering layers.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        files: ["resources/js/components/Ui/**/*.{ts,vue}"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                uiPrimitiveDeepImport,
+                applicationComponentDeepImport,
+                {
+                  regex: "^(?:@/(?:actions|layouts|pages|routes|wayfinder)(?:/|$)|@/components/(?!Ui(?:/|$))|@inertiajs/vue3(?:/|$)|(?:\\.\\./){2,})",
+                  message: "UI primitives cannot depend on application, route, or generated transport layers.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        files: ["resources/js/composables/**/*.ts"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                uiPrimitiveDeepImport,
+                applicationComponentDeepImport,
+                {
+                  regex: "^(?:@/|(?:\\.\\.?/)+)(?:components|layouts|pages)/",
+                  message: "Composables cannot depend on frontend rendering layers.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        files: ["resources/js/lib/**/*.ts"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                uiPrimitiveDeepImport,
+                applicationComponentDeepImport,
+                {
+                  regex: "^(?:@/|(?:\\.\\.?/)+)(?:actions|components|layouts|pages|routes|wayfinder)/",
+                  message: "Pure utilities cannot depend on rendering or generated transport layers.",
+                },
+                {
+                  regex: "^(?:@inertiajs/vue3|@vueuse/core|vue)(?:/|$)",
+                  message: "Pure utilities cannot depend on Vue lifecycle, VueUse, or Inertia.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        files: ["resources/js/layouts/**/*.{ts,vue}"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                uiPrimitiveDeepImport,
+                applicationComponentDeepImport,
+                {
+                  regex: "^(?:@/|(?:\\.\\.?/)+)pages/",
+                  message: "Workflow shells cannot depend on route pages.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ],
     options: {
       denyWarnings: true,
       typeAware: false,
       typeCheck: false,
+    },
+  },
+  fmt: {
+    printWidth: 285,
+    tabWidth: 2,
+    singleQuote: false,
+    semi: true,
+    singleAttributePerLine: false,
+    htmlWhitespaceSensitivity: "css",
+    ignorePatterns: [
+      ".github/**",
+      ".codex/**",
+      ".yarn/**",
+      "auto-imports.d.ts",
+      "bootstrap/ssr/**",
+      "boost.json",
+      "components.d.ts",
+      "composer.json",
+      "node_modules/**",
+      "public/**",
+      "resources/argon/source-manifest.json",
+      "resources/js/actions/**",
+      "resources/js/routes/**",
+      "resources/js/wayfinder/**",
+      "resources/views/**",
+      "vendor/**",
+      "**/*.md",
+    ],
+    sortTailwindcss: {
+      functions: ["clsx", "cn", "cva"],
+      stylesheet: "resources/css/app.css",
+    },
+  },
+  server: {
+    watch: {
+      ignored: ["**/.agents/**", "**/.claude/**", "**/.cursor/**", "**/.junie/**", "**/vendor/**"],
     },
   },
   build: {

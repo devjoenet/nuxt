@@ -12,13 +12,13 @@ operations, queues, and audit visibility. It is built for a single Southeast Cod
 - Laravel Wayfinder for typed frontend routes
 - MySQL for staging/production, SQLite for lightweight local work
 - Database queues locally; Redis and Horizon in staging/production
-- Pest, Larastan, Pint, Rector, ESLint, Prettier, and Vite for quality checks
+- Pest, Larastan, Pint, Rector, and Vite+ for quality checks
 - Pest browser testing with Playwright Chromium for critical-flow smoke coverage
 - Spatie Permission and Activitylog for authorization and audit history
 
 ## Local setup
 
-Requirements: PHP 8.5, Composer, Node.js 22 or newer, Yarn Classic, and either SQLite or MySQL. Laravel Herd can serve the project at the
+Requirements: PHP 8.5, Composer, Node.js 22 or newer, Corepack with Yarn 4, and either SQLite or MySQL. Laravel Herd can serve the project at the
 configured local site URL.
 
 ```bash
@@ -26,7 +26,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
-yarn install --frozen-lockfile
+corepack yarn install --immutable
 yarn playwright install chromium
 yarn build
 ```

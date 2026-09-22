@@ -45,7 +45,7 @@ const columnToneClasses = ["text-primary-400", "text-secondary-400", "text-argon
         <div>
           <h2 class="text-xs font-bold tracking-[0.18em] text-primary-400 uppercase">Let's connect</h2>
           <div class="mt-4 flex gap-4 text-slate-600 dark:text-grey-400">
-            <a aria-label="Contact form" class="inline-flex items-center justify-center rounded-md border px-1 py-1 transition duration-300 hover:border-argon-600 hover:text-argon-600 hover:bg-argon-200/10" href="#contact"
+            <a aria-label="Contact form" class="inline-flex items-center justify-center rounded-md border px-1 py-1 transition duration-300 hover:border-argon-600 hover:bg-argon-200/10 hover:text-argon-600" href="#contact"
               ><UIcon aria-hidden="true" class="size-5" name="i-ph-chat-circle-text"
             /></a>
           </div>

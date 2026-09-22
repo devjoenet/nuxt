@@ -34,7 +34,7 @@ const taskStatusColor = computed<StatusColor>(() => {
       <div class="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
         <div class="grid gap-3">
           <p class="font-mono text-base tracking-wide text-primary uppercase sm:text-sm">{{ pageContextLabel }}</p>
-          <h1 class="max-w-[28ch] wrap-break-word text-3xl font-semibold tracking-tight text-balance text-highlighted sm:text-4xl">
+          <h1 class="max-w-[28ch] text-3xl font-semibold tracking-tight text-balance wrap-break-word text-highlighted sm:text-4xl">
             {{ task.title }}
           </h1>
           <p class="max-w-[70ch] text-base/7 text-pretty text-muted sm:text-sm/6">

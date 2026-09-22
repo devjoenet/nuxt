@@ -40,8 +40,8 @@ const samples: Record<FoundationGroup, { label: string; class: string; value: st
   <section aria-labelledby="foundation-lab-title" class="grid gap-5">
     <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_14rem] sm:items-end">
       <div>
-        <h3 id="foundation-lab-title" class="text-balance text-lg font-semibold text-content-heading">Foundation tokens</h3>
-        <p class="text-pretty text-base text-content-body sm:text-sm">Choose a token family to inspect its semantic application.</p>
+        <h3 id="foundation-lab-title" class="text-lg font-semibold text-balance text-content-heading">Foundation tokens</h3>
+        <p class="text-base text-pretty text-content-body sm:text-sm">Choose a token family to inspect its semantic application.</p>
       </div>
       <FormSelect v-model="group" :items="groups" label="Token family" name="foundation-group" />
     </div>

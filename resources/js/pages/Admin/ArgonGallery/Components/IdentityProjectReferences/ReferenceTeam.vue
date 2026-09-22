@@ -46,7 +46,7 @@ const acknowledge = (): void => {
   <div class="grid min-w-0 gap-5">
     <UAlert color="info" description="Team members, messages, reports, and invitations are local fixtures. No production team or notification is touched." title="Inert team reference" variant="subtle" />
 
-    <Card v-if="specimen === 'new-user'" as="section" class="grid min-w-0 max-w-full gap-6" padding="lg" variant="outline">
+    <Card v-if="specimen === 'new-user'" as="section" class="grid max-w-full min-w-0 gap-6" padding="lg" variant="outline">
       <header class="grid gap-4">
         <div>
           <p class="text-sm font-semibold text-primary">New team member</p>
@@ -162,7 +162,7 @@ const acknowledge = (): void => {
       </div>
       <div class="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
         <Card as="section" class="grid content-start gap-4 bg-linear-to-br from-primary to-info text-white" padding="lg"
-          ><p class="text-sm font-semibold uppercase tracking-[0.18em]">Quarterly score</p>
+          ><p class="text-sm font-semibold tracking-[0.18em] uppercase">Quarterly score</p>
           <p class="text-5xl font-semibold">9.4</p>
           <p class="text-white/80">Based on delivery, collaboration, and client review fixtures.</p></Card
         ><Card as="section" class="grid gap-4" variant="outline"

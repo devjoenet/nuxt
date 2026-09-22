@@ -53,7 +53,6 @@ test('new dependencies have recorded decision criteria and current package contr
         '@unovis/ts' => 'Apache-2.0',
         '@internationalized/date' => 'Apache-2.0',
         'maplibre-gl' => 'BSD-3-Clause',
-        'vue-eslint-parser' => 'MIT',
     ] as $dependency => $license) {
         expect($registry)
             ->toContain("packageName: \"{$dependency}\"")
@@ -61,10 +60,15 @@ test('new dependencies have recorded decision criteria and current package contr
     }
 
     expect($package['devDependencies']['vite-plus'])->toBe('0.3.0')
+        ->and($package['optionalDependencies']['@laravel/multiplex'])->toBe('^0.4.3')
         ->and($package['dependencies']['@unovis/ts'])->toBe('^1.6.7')
         ->and($package['dependencies']['@internationalized/date'])->toBe('^3.12.3')
         ->and($package['dependencies']['maplibre-gl'])->toBe('^6.6.0')
-        ->and($package['devDependencies']['vue-eslint-parser'])->toBe('^10.2.0');
+        ->and(array_keys($package['devDependencies']))->not->toContain(
+            'eslint',
+            'prettier',
+            'vue-eslint-parser',
+        );
 });
 
 test('Vite Plus owns development and build commands without removing project quality gates', function (): void {
@@ -76,19 +80,23 @@ test('Vite Plus owns development and build commands without removing project qua
         ->toMatchArray([
             'build' => 'vp build && vp build --ssr',
             'dev' => 'vp dev',
-            'lint:check' => 'eslint . && yarn test:frontend-architecture',
+            'check:fix' => 'vp check --fix && yarn test:frontend-architecture && yarn typecheck',
+            'lint:check' => 'vp lint && yarn test:frontend-architecture',
             'typecheck' => 'vue-tsc --noEmit',
         ])
         ->and($package['scripts']['check'])
         ->toContain('vp check')
-        ->toContain('yarn lint:check')
-        ->toContain('yarn format:check')
+        ->toContain('yarn test:frontend-architecture')
         ->toContain('yarn typecheck')
         ->and($vite)
         ->toContain('from "vite-plus"')
         ->toContain('lazyPlugins(() => [')
-        ->toContain('fmt: false')
+        ->toContain('sortTailwindcss: {')
+        ->toContain('"typescript/no-explicit-any": "error"')
+        ->toContain('"**/.agents/**"')
+        ->toContain('"**/vendor/**"')
         ->and($composer)
+        ->toContain('"@php artisan dev"')
         ->toContain('yarn install --immutable')
         ->toContain('yarn up \"*\"')
         ->not->toContain('--frozen-lockfile')

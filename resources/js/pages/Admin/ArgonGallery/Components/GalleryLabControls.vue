@@ -19,7 +19,7 @@ const viewports: { label: string; value: ArgonGalleryViewport }[] = [
 </script>
 
 <template>
-  <div class="grid gap-4 rounded-xl border border-content-border bg-surface-subtle p-4">
+  <div class="bg-surface-subtle grid gap-4 rounded-xl border border-content-border p-4">
     <div class="grid gap-2">
       <p class="text-base font-medium text-content-heading sm:text-sm">Laboratory</p>
       <div class="flex max-w-full gap-1 overflow-x-auto" role="tablist">

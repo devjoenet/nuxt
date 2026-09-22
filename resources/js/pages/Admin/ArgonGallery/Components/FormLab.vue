@@ -19,8 +19,8 @@ const fieldProps = computed(() => ({ disabled: state.value === "disabled", error
 <template>
   <section aria-labelledby="form-lab-title" class="grid gap-5">
     <div>
-      <h3 id="form-lab-title" class="text-balance text-lg font-semibold text-content-heading">Floating form states</h3>
-      <p class="text-pretty text-base text-content-body sm:text-sm">Exercise a shared field state across text, selection, and choice controls.</p>
+      <h3 id="form-lab-title" class="text-lg font-semibold text-balance text-content-heading">Floating form states</h3>
+      <p class="text-base text-pretty text-content-body sm:text-sm">Exercise a shared field state across text, selection, and choice controls.</p>
     </div>
     <div class="grid gap-3 sm:grid-cols-2"><FormSelect v-model="variant" :items="variants" label="Presentation" name="form-variant" /><FormSelect v-model="state" :items="states" label="State" name="form-state" /></div>
     <div class="grid gap-4 sm:grid-cols-2">

@@ -35,8 +35,8 @@ function finishSaving(): void {
       <template v-else>
         <section aria-labelledby="role-selection-heading" class="grid gap-4 border-b border-default pb-6 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:items-end">
           <div class="grid gap-1">
-            <h2 id="role-selection-heading" class="text-lg font-semibold text-highlighted mb-4">Choose a role</h2>
-            <p class="max-w-2xl text-base text-muted sm:text-sm italic mb-4">Select the role whose access you want to review or change.</p>
+            <h2 id="role-selection-heading" class="mb-4 text-lg font-semibold text-highlighted">Choose a role</h2>
+            <p class="mb-4 max-w-2xl text-base text-muted italic sm:text-sm">Select the role whose access you want to review or change.</p>
           </div>
 
           <FormSelect id="role-selector" v-model="selectedRoleId" :disabled="isSaving" :items="roleOptions" class="role-selector w-full" label="Role" size="lg" />

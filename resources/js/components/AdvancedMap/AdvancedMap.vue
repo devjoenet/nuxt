@@ -18,7 +18,7 @@ const { container, error, loading } = useAdvancedMap(
 
 <template>
   <div :class="cn('grid gap-3', props.class)">
-    <div class="relative min-h-72 overflow-hidden rounded-xl border border-content-border bg-surface-subtle">
+    <div class="bg-surface-subtle relative min-h-72 overflow-hidden rounded-xl border border-content-border">
       <div ref="container" :aria-busy="loading" :aria-label="ariaLabel" class="absolute inset-0" role="application" />
       <div v-if="loading" aria-live="polite" class="absolute inset-0 grid place-items-center bg-surface-translucent"><USkeleton class="size-full" /></div>
     </div>

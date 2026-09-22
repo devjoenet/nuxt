@@ -80,14 +80,4 @@ export const advancedDependencyEvaluations = [
     bundleImpact: "Map runtime and CSS are dynamically imported and excluded from ordinary entry chunks.",
     vueCompatibility: "Imperative lifecycle is isolated behind a typed Vue mount and cleanup adapter.",
   },
-  {
-    packageName: "vue-eslint-parser",
-    scope: "development",
-    necessity: "Satisfies the upgraded eslint-plugin-vue peer contract explicitly.",
-    license: "MIT",
-    maintenance: "Maintained with the current Vue ESLint parser release.",
-    accessibility: "Static tooling only.",
-    bundleImpact: "Development dependency with no runtime output.",
-    vueCompatibility: "Official parser used by eslint-plugin-vue for Vue SFCs.",
-  },
 ] satisfies AdvancedDependencyEvaluation[];

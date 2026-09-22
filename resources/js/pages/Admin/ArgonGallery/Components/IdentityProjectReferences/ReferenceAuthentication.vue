@@ -67,7 +67,7 @@ const submit = (): void => {
       <div class="grid size-64 rotate-6 place-items-center rounded-[3rem] border border-primary/20 bg-primary/10 text-primary shadow-xl"><Icon decorative name="i-ph-shield-check" class="size-28" /></div>
     </div>
     <div v-if="layout === 'cover'" class="relative mb-6 max-w-xl text-white">
-      <p class="text-sm font-semibold uppercase tracking-[0.2em]">Argon identity reference</p>
+      <p class="text-sm font-semibold tracking-[0.2em] uppercase">Argon identity reference</p>
       <h2 class="mt-2 text-3xl font-semibold">A protected preview, not an authentication endpoint.</h2>
     </div>
     <div class="relative grid place-items-center" :class="layout === 'illustration' ? 'lg:w-1/2' : ''">

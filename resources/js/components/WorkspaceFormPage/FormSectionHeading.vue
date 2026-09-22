@@ -17,10 +17,10 @@ const props = withDefaults(
 
 <template>
   <div :class="cn('grid gap-1', props.class)">
-    <component :is="as" :id="headingId" class="text-balance text-xl font-semibold text-highlighted">
+    <component :is="as" :id="headingId" class="text-xl font-semibold text-balance text-highlighted">
       {{ title }}
     </component>
-    <p v-if="description" class="text-pretty text-base text-muted sm:text-sm">
+    <p v-if="description" class="text-base text-pretty text-muted sm:text-sm">
       {{ description }}
     </p>
   </div>

@@ -39,7 +39,7 @@ const emit = defineEmits<{
         variant="ghost"
         @click="emit('edit')"
       >
-        <span aria-hidden="true" class="pointer-fine:hidden absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2" />
+        <span aria-hidden="true" class="absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2 pointer-fine:hidden" />
       </UButton>
     </dt>
     <dd :class="editing ? undefined : valueClass">

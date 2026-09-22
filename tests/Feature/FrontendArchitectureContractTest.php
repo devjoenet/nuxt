@@ -77,10 +77,10 @@ test('route pages keep mutable state instance scoped', function (): void {
     expect($pageFilesWithModuleScripts)->toBe([]);
 });
 
-test('eslint enforces frontend dependency direction and component public APIs', function (): void {
-    $eslintConfig = File::get(base_path('eslint.config.ts'));
+test('Vite Plus enforces frontend dependency direction and component public APIs', function (): void {
+    $viteConfig = File::get(base_path('vite.config.ts'));
 
-    expect($eslintConfig)
+    expect($viteConfig)
         ->toContain('"no-restricted-imports"')
         ->toContain('Import UI primitives through their component-directory index.ts public API.')
         ->toContain('Import application components through their component-directory index.ts public API.')

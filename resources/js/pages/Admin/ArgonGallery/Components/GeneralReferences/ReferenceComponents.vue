@@ -24,15 +24,15 @@ const tones = ["primary", "secondary", "success", "info", "warning", "error"] as
       <Card v-for="variant in ['outline', 'soft', 'glass'] as const" :key="variant" class="grid content-between gap-5" :variant="variant"
         ><div class="grid gap-2">
           <Badge :label="variant" variant="soft" />
-          <h3 class="text-balance text-lg font-semibold text-content-heading">{{ variant }} surface</h3>
-          <p class="text-pretty text-base text-content-body sm:text-sm">Shared padding, semantic tones, and a stable content hierarchy.</p>
+          <h3 class="text-lg font-semibold text-balance text-content-heading">{{ variant }} surface</h3>
+          <p class="text-base text-pretty text-content-body sm:text-sm">Shared padding, semantic tones, and a stable content hierarchy.</p>
         </div>
         <Button label="Inspect state" tone="neutral" variant="ghost"
       /></Card>
     </section>
     <section v-else-if="specimen === 'grid'" aria-label="Responsive grid specimen" class="grid gap-4">
       <div class="grid grid-cols-12 gap-2">
-        <div v-for="column in 12" :key="column" class="grid min-h-20 place-items-center rounded-lg border border-content-border bg-surface-interactive text-base font-medium tabular-nums text-content-heading sm:text-sm">{{ column }}</div>
+        <div v-for="column in 12" :key="column" class="grid min-h-20 place-items-center rounded-lg border border-content-border bg-surface-interactive text-base font-medium text-content-heading tabular-nums sm:text-sm">{{ column }}</div>
       </div>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card v-for="(width, index) in ['One half', 'One half', 'One third', 'One third', 'One third']" :key="`${width}-${index}`" variant="outline"

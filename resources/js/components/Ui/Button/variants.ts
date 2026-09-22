@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { uiToneClasses } from "@/lib/uiTone";
 
 export const buttonVariants = cva(
-  "inline-flex select-none items-center justify-center gap-2 border font-semibold tracking-[0.025rem] transition duration-(--argon-motion-base) ease-argon-standard focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content-focus disabled:pointer-events-none disabled:opacity-65 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
+  "inline-flex items-center justify-center gap-2 border font-semibold tracking-[0.025rem] transition duration-(--argon-motion-base) ease-argon-standard select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content-focus disabled:pointer-events-none disabled:opacity-65 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
   {
     variants: {
       tone: uiToneClasses,
@@ -11,7 +11,7 @@ export const buttonVariants = cva(
         soft: "border-transparent bg-[var(--ui-tone-soft)] text-[var(--ui-tone-strong)] hover:bg-[var(--ui-tone-soft-hover)]",
         outline: "border-[var(--ui-tone-border)] bg-transparent text-[var(--ui-tone-strong)] hover:bg-[var(--ui-tone-soft)]",
         ghost: "border-transparent bg-transparent text-[var(--ui-tone-strong)] shadow-none hover:bg-[var(--ui-tone-soft)]",
-        link: "border-transparent bg-transparent p-0 text-[var(--ui-tone-strong)] shadow-none underline-offset-4 hover:translate-y-0 hover:underline",
+        link: "border-transparent bg-transparent p-0 text-[var(--ui-tone-strong)] underline-offset-4 shadow-none hover:translate-y-0 hover:underline",
       },
       size: {
         xs: "min-h-8 px-3 text-xs",

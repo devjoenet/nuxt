@@ -26,7 +26,7 @@ const props = defineProps<{
       :transition="{ duration: 0.75, delay: 0.1, ease: 'easeOut' }"
       :viewport="{ once: true, amount: 0.22 }"
       :while-in-view="{ opacity: 1, y: 0, scale: 1 }"
-      class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-argon-accent-500/25 bg-slate-50/90 p-6 shadow-2xl shadow-argon-accent-950/10 ring-1 ring-slate-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-slate-900/85 dark:shadow-argon-accent-950/30 dark:ring-transparent"
+      class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-argon-accent-500/25 bg-slate-50/90 p-6 shadow-2xl ring-1 shadow-argon-accent-950/10 ring-slate-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-slate-900/85 dark:shadow-argon-accent-950/30 dark:ring-transparent"
     >
       <div>
         <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-300">Ready to replace the workaround?</p>

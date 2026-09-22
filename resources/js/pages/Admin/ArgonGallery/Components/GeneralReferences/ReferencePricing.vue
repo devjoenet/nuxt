@@ -18,8 +18,8 @@ const tiers = [
     <div class="grid justify-items-center gap-4 text-center">
       <div>
         <p class="text-base font-medium text-primary sm:text-sm">Flexible plans</p>
-        <h3 id="pricing-reference-title" class="max-w-[35ch] text-balance text-3xl font-semibold tracking-tight text-content-heading">See our pricing</h3>
-        <p class="max-w-[48ch] text-pretty text-base text-content-body sm:text-sm">Choose monthly billing or save with an annual commitment.</p>
+        <h3 id="pricing-reference-title" class="max-w-[35ch] text-3xl font-semibold tracking-tight text-balance text-content-heading">See our pricing</h3>
+        <p class="max-w-[48ch] text-base text-pretty text-content-body sm:text-sm">Choose monthly billing or save with an annual commitment.</p>
       </div>
       <FormSwitch v-model="annual" label="Annual billing" name="reference-billing-cycle" />
     </div>
@@ -27,14 +27,14 @@ const tiers = [
       <Card v-for="tier in tiers" :key="tier.name" class="flex flex-col justify-between gap-6" variant="outline"
         ><div class="grid gap-4">
           <div class="flex items-center justify-between gap-3">
-            <h4 class="text-balance text-xl font-semibold text-content-heading">{{ tier.name }}</h4>
+            <h4 class="text-xl font-semibold text-balance text-content-heading">{{ tier.name }}</h4>
             <Badge v-if="tier.recommended" label="Recommended" />
           </div>
           <div>
-            <strong class="text-4xl font-semibold tracking-tight tabular-nums text-content-heading">${{ annual ? Math.round(tier.monthly * 0.8) : tier.monthly }}</strong
+            <strong class="text-4xl font-semibold tracking-tight text-content-heading tabular-nums">${{ annual ? Math.round(tier.monthly * 0.8) : tier.monthly }}</strong
             ><span class="text-content-subtle"> / month</span>
           </div>
-          <p class="text-pretty text-base text-content-body sm:text-sm">{{ tier.description }}</p>
+          <p class="text-base text-pretty text-content-body sm:text-sm">{{ tier.description }}</p>
           <ul class="grid gap-3" role="list">
             <li v-for="feature in tier.features" :key="feature" class="flex items-start gap-2 text-base text-content-body sm:text-sm"><UIcon class="size-4 shrink-0 text-success" name="i-ph-check" />{{ feature }}</li>
           </ul>

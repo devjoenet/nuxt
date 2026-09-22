@@ -13,12 +13,12 @@ function notify(tone: (typeof tones)[number]): void {
 <template>
   <div class="grid gap-6 lg:grid-cols-2">
     <section aria-labelledby="notification-alerts" class="grid content-start gap-3">
-      <h3 id="notification-alerts" class="text-balance text-lg font-semibold text-content-heading">Persistent alerts</h3>
+      <h3 id="notification-alerts" class="text-lg font-semibold text-balance text-content-heading">Persistent alerts</h3>
       <Alert v-for="tone in tones" :key="tone" :description="`${tone} context remains visible until the surrounding state changes.`" :title="`${tone} alert`" :tone="tone" variant="soft" />
     </section>
     <section aria-labelledby="notification-toasts" class="grid content-start gap-3">
-      <h3 id="notification-toasts" class="text-balance text-lg font-semibold text-content-heading">Ephemeral notifications</h3>
-      <p class="text-pretty text-base text-content-body sm:text-sm">Trigger the four feedback states represented by the source page.</p>
+      <h3 id="notification-toasts" class="text-lg font-semibold text-balance text-content-heading">Ephemeral notifications</h3>
+      <p class="text-base text-pretty text-content-body sm:text-sm">Trigger the four feedback states represented by the source page.</p>
       <div class="grid gap-3 sm:grid-cols-2"><Button v-for="(tone, index) in tones" :key="tone" :label="`${tone} notification`" :tone="tone" :variant="index === 0 ? 'solid' : 'outline'" @click="notify(tone)" /></div>
     </section>
   </div>

@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const formControlVariants = cva("w-full !bg-transparent px-4 text-base leading-6 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60", {
   variants: {
     variant: {
-      filled: "rounded-xl pb-2 pt-6",
+      filled: "rounded-xl pt-6 pb-2",
       outlined: "rounded-xl py-4",
     },
     size: {
@@ -12,7 +12,7 @@ export const formControlVariants = cva("w-full !bg-transparent px-4 text-base le
       lg: "min-h-16",
     },
     multiline: {
-      true: "min-h-32 pb-3 pt-6",
+      true: "min-h-32 pt-6 pb-3",
       false: "",
     },
   },

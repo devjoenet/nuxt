@@ -58,11 +58,11 @@ const isAuthenticated = computed(() => page.props.auth.user !== null);
     <meta content="noindex, nofollow" name="robots" />
   </Head>
 
-  <main class="relative flex min-h-screen min-h-dvh items-center justify-center overflow-hidden bg-default px-4 py-8 text-default sm:px-6 sm:py-12">
+  <main class="relative flex min-h-dvh min-h-screen items-center justify-center overflow-hidden bg-default px-4 py-8 text-default sm:px-6 sm:py-12">
     <div aria-hidden="true" class="pointer-events-none absolute -top-32 -left-24 size-80 rounded-full bg-primary-500/10 blur-3xl dark:bg-primary-400/10"></div>
     <div aria-hidden="true" class="pointer-events-none absolute -right-24 -bottom-32 size-96 rounded-full bg-secondary-500/10 blur-3xl dark:bg-secondary-400/10"></div>
 
-    <section aria-labelledby="error-title" class="relative w-full max-w-2xl rounded-2xl border border-default bg-elevated/90 p-6 shadow-2xl shadow-slate-950/10 ring-1 ring-default/60 dark:shadow-none sm:p-10">
+    <section aria-labelledby="error-title" class="relative w-full max-w-2xl rounded-2xl border border-default bg-elevated/90 p-6 shadow-2xl ring-1 shadow-slate-950/10 ring-default/60 sm:p-10 dark:shadow-none">
       <Link :href="home.url()" aria-label="Southeast Code home" class="inline-flex max-w-full rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500">
         <AppLogo
           :icon-class="'h-auto w-44 max-w-full sm:w-56'"

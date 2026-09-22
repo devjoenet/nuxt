@@ -18,12 +18,12 @@ const referenceExample = computed(() => resolveGeneralExample(props.example.id) 
       <div class="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p class="text-base font-medium text-primary sm:text-sm">{{ galleryLabel(example.family) }}</p>
-          <h2 class="text-balance text-2xl font-semibold tracking-tight text-content-heading">{{ example.title }}</h2>
+          <h2 class="text-2xl font-semibold tracking-tight text-balance text-content-heading">{{ example.title }}</h2>
         </div>
         <div class="flex flex-wrap gap-2"><UBadge color="neutral" :label="example.implementation_state" variant="outline" /><UBadge color="neutral" :label="example.source_status" variant="outline" /></div>
       </div>
     </header>
-    <section v-if="referenceExample" :aria-label="`${example.title} reference implementation`" class="rounded-2xl border border-content-border bg-surface-elevated p-4 shadow-sm dark:shadow-none sm:p-6">
+    <section v-if="referenceExample" :aria-label="`${example.title} reference implementation`" class="rounded-2xl border border-content-border bg-surface-elevated p-4 shadow-sm sm:p-6 dark:shadow-none">
       <Suspense>
         <component :is="referenceExample" :key="example.id" />
         <template #fallback
@@ -35,13 +35,13 @@ const referenceExample = computed(() => resolveGeneralExample(props.example.id) 
     <dl class="grid gap-4 rounded-xl border border-content-border p-4 sm:grid-cols-2">
       <div>
         <dt class="font-medium text-content-heading">Manifest ID</dt>
-        <dd class="break-words text-base text-content-body sm:text-sm">
+        <dd class="text-base break-words text-content-body sm:text-sm">
           <code>{{ example.id }}</code>
         </dd>
       </div>
       <div>
         <dt class="font-medium text-content-heading">Source path</dt>
-        <dd class="break-words text-base text-content-body sm:text-sm">
+        <dd class="text-base break-words text-content-body sm:text-sm">
           <code>{{ example.source_path }}</code>
         </dd>
       </div>
@@ -51,17 +51,17 @@ const referenceExample = computed(() => resolveGeneralExample(props.example.id) 
       </div>
       <div>
         <dt class="font-medium text-content-heading">Planned Vue destination</dt>
-        <dd class="break-words text-base text-content-body sm:text-sm">
+        <dd class="text-base break-words text-content-body sm:text-sm">
           <code>{{ example.planned_vue_destination }}</code>
         </dd>
       </div>
       <div>
         <dt class="font-medium text-content-heading">Source note</dt>
-        <dd class="text-pretty text-base text-content-body sm:text-sm">{{ example.source_note }}</dd>
+        <dd class="text-base text-pretty text-content-body sm:text-sm">{{ example.source_note }}</dd>
       </div>
       <div>
         <dt class="font-medium text-content-heading">Intentional divergence</dt>
-        <dd class="text-pretty text-base text-content-body sm:text-sm">{{ example.divergence_note }}</dd>
+        <dd class="text-base text-pretty text-content-body sm:text-sm">{{ example.divergence_note }}</dd>
       </div>
     </dl>
     <div class="grid gap-5 lg:grid-cols-2">

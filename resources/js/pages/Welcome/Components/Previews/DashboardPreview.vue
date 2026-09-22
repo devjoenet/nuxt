@@ -31,7 +31,7 @@ const approvals = [
     :transition="{ duration: 0.8, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.2 }"
     :while-in-view="{ opacity: 1, scale: 1 }"
-    class="relative rounded-xl border border-secondary-500/25 bg-slate-50/82 p-3 shadow-2xl shadow-slate-950/16 ring-1 ring-slate-200/80 backdrop-blur-md dark:bg-slate-950/72 dark:shadow-slate-950/60 dark:ring-grey-100/10"
+    class="relative rounded-xl border border-secondary-500/25 bg-slate-50/82 p-3 shadow-2xl ring-1 shadow-slate-950/16 ring-slate-200/80 backdrop-blur-md dark:bg-slate-950/72 dark:shadow-slate-950/60 dark:ring-grey-100/10"
     aria-label="Operations command dashboard preview"
   >
     <div class="grid gap-3 lg:grid-cols-[9rem_1fr]">

@@ -43,21 +43,21 @@ const props = defineProps<{
 
         <div>
           <h3 class="font-semibold text-highlighted">Testing instructions</h3>
-          <p class="mt-2 whitespace-pre-wrap text-sm leading-6 text-muted">{{ testRun.instructions }}</p>
+          <p class="mt-2 text-sm leading-6 whitespace-pre-wrap text-muted">{{ testRun.instructions }}</p>
         </div>
 
         <div v-if="testRun.task">
           <h3 class="font-semibold text-highlighted">Acceptance criteria</h3>
-          <p class="mt-2 whitespace-pre-wrap text-sm leading-6 text-muted">{{ testRun.task.acceptance_criteria }}</p>
+          <p class="mt-2 text-sm leading-6 whitespace-pre-wrap text-muted">{{ testRun.task.acceptance_criteria }}</p>
         </div>
 
         <div v-if="testRun.build_reference">
           <h3 class="font-semibold text-highlighted">Build or deployment reference</h3>
-          <a v-if="isWebUrl(testRun.build_reference)" :href="testRun.build_reference" class="mt-2 inline-block break-all text-sm text-primary hover:underline" rel="noreferrer" target="_blank">
+          <a v-if="isWebUrl(testRun.build_reference)" :href="testRun.build_reference" class="mt-2 inline-block text-sm break-all text-primary hover:underline" rel="noreferrer" target="_blank">
             {{ testRun.build_reference }}
             <span class="sr-only">(opens in a new tab)</span>
           </a>
-          <p v-else class="mt-2 break-all text-sm text-muted">{{ testRun.build_reference }}</p>
+          <p v-else class="mt-2 text-sm break-all text-muted">{{ testRun.build_reference }}</p>
         </div>
 
         <UButton v-if="testRun.task" :to="show(testRun.task.id).url" class="justify-self-start" color="neutral" label="Open task workspace" variant="ghost" />

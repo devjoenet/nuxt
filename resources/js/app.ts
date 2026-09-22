@@ -10,7 +10,7 @@ import { createSSRApp, h } from "vue";
 
 const appName = import.meta.env.VITE_APP_NAME || "Southeast Code";
 
-createInertiaApp({
+void createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),
   layout: resolveAppLayout,
   resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>("./pages/**/*.vue")),

@@ -32,7 +32,7 @@ const deleteContact = (): void => router.delete(destroy(props.contact.id).url);
     <template #summary>
       <div class="min-w-0" data-testid="contact-summary">
         <div class="flex flex-wrap items-start gap-3">
-          <h1 class="break-words text-2xl font-semibold tracking-tight text-highlighted">{{ contact.name }}</h1>
+          <h1 class="text-2xl font-semibold tracking-tight break-words text-highlighted">{{ contact.name }}</h1>
           <CrmRecordStatusBadge v-if="contact.archived_at" data-testid="contact-archived-status" status="archived" />
         </div>
       </div>

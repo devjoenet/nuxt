@@ -18,7 +18,7 @@ export const cardVariants = cva("overflow-hidden rounded-xl transition duration-
       lg: "p-6 sm:p-8",
     },
     interactive: {
-      true: "motion-safe:hover:-translate-y-1 hover:shadow-lg",
+      true: "hover:shadow-lg motion-safe:hover:-translate-y-1",
       false: "",
     },
   },

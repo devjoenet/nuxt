@@ -29,10 +29,10 @@ const deleteOrganization = (): void => router.delete(destroy(props.organization.
     <template #summary>
       <div class="min-w-0" data-testid="organization-summary">
         <div class="flex flex-wrap items-start gap-3">
-          <h1 class="break-words text-2xl font-semibold tracking-tight text-highlighted">{{ organization.name }}</h1>
+          <h1 class="text-2xl font-semibold tracking-tight break-words text-highlighted">{{ organization.name }}</h1>
           <CrmRecordStatusBadge v-if="organization.archived_at" data-testid="organization-archived-status" status="archived" />
         </div>
-        <a v-if="organization.website" :href="organization.website" class="mt-2 block break-all text-base text-muted hover:text-highlighted hover:underline sm:text-sm" rel="noreferrer" target="_blank">
+        <a v-if="organization.website" :href="organization.website" class="mt-2 block text-base break-all text-muted hover:text-highlighted hover:underline sm:text-sm" rel="noreferrer" target="_blank">
           {{ organization.website }}
         </a>
         <p v-else class="mt-2 text-base text-muted sm:text-sm">No website recorded.</p>

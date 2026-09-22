@@ -33,14 +33,14 @@ const convertLead = (): void => router.post(convert(props.lead.id).url);
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div>
         <div class="flex flex-wrap items-center gap-3">
-          <Link v-if="lead.contact && !lead.contact.deleted_at" :href="contactShow(lead.contact.id).url" class="text-balance text-2xl font-semibold tracking-tight text-highlighted hover:underline">
+          <Link v-if="lead.contact && !lead.contact.deleted_at" :href="contactShow(lead.contact.id).url" class="text-2xl font-semibold tracking-tight text-balance text-highlighted hover:underline">
             {{ lead.contact.name }}
           </Link>
-          <h1 v-else class="text-balance text-2xl font-semibold tracking-tight text-highlighted">{{ lead.contact?.name ?? "Contact unavailable" }}</h1>
+          <h1 v-else class="text-2xl font-semibold tracking-tight text-balance text-highlighted">{{ lead.contact?.name ?? "Contact unavailable" }}</h1>
           <CrmRecordStatusBadge v-if="lead.contact?.deleted_at" data-testid="lead-deleted-contact-status" label="Deleted contact" status="deleted" />
           <LeadStatusBadge :status="lead.status" />
         </div>
-        <p class="text-pretty text-base text-muted sm:text-sm">{{ lead.organization?.name ?? "Independent contact" }} · {{ lead.source }}</p>
+        <p class="text-base text-pretty text-muted sm:text-sm">{{ lead.organization?.name ?? "Independent contact" }} · {{ lead.source }}</p>
       </div>
       <div v-if="canManage" class="flex flex-wrap gap-2">
         <ConfirmActionButton
@@ -60,7 +60,7 @@ const convertLead = (): void => router.post(convert(props.lead.id).url);
     <CrmDetailMetadata :items="overviewMetadata" layout="grid" />
     <div>
       <h2 class="font-semibold text-highlighted">Project details</h2>
-      <p class="mt-2 whitespace-pre-wrap text-pretty text-base text-muted sm:text-sm">{{ lead.project_details }}</p>
+      <p class="mt-2 text-base text-pretty whitespace-pre-wrap text-muted sm:text-sm">{{ lead.project_details }}</p>
     </div>
   </section>
 </template>

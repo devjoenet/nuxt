@@ -47,7 +47,7 @@ function sort(key: string): void {
         <thead>
           <tr>
             <th v-for="key in keys" :key="key" class="border-b border-content-border p-3" :aria-sort="sortKey === key ? (descending ? 'descending' : 'ascending') : 'none'">
-              <button class="whitespace-nowrap rounded text-content-heading focus-visible:outline-2 focus-visible:outline-primary" type="button" @click="sort(key)">
+              <button class="rounded whitespace-nowrap text-content-heading focus-visible:outline-2 focus-visible:outline-primary" type="button" @click="sort(key)">
                 {{ key }} <span aria-hidden="true">{{ sortKey === key ? (descending ? "↓" : "↑") : "↕" }}</span>
               </button>
             </th>

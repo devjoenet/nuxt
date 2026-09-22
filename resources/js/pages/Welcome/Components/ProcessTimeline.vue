@@ -74,7 +74,7 @@ const railClasses = {
 
       <article
         :class="cardClasses[step.tone]"
-        class="relative min-h-44 overflow-hidden rounded-lg border border-slate-200 bg-slate-50/80 p-5 shadow-xl shadow-slate-950/10 ring-1 ring-slate-200/70 backdrop-blur-sm transition duration-300 group-hover:-translate-y-1 group-hover:bg-slate-100/90 dark:border-grey-100/10 dark:bg-slate-900/45 dark:shadow-slate-950/20 dark:ring-grey-100/5 dark:group-hover:bg-slate-900/70"
+        class="relative min-h-44 overflow-hidden rounded-lg border border-slate-200 bg-slate-50/80 p-5 shadow-xl ring-1 shadow-slate-950/10 ring-slate-200/70 backdrop-blur-sm transition duration-300 group-hover:-translate-y-1 group-hover:bg-slate-100/90 dark:border-grey-100/10 dark:bg-slate-900/45 dark:shadow-slate-950/20 dark:ring-grey-100/5 dark:group-hover:bg-slate-900/70"
       >
         <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-grey-100/30"></div>
         <p :class="labelClasses[step.tone]" class="text-[0.68rem] font-bold tracking-[0.24em] uppercase">Step {{ index + 1 }}</p>

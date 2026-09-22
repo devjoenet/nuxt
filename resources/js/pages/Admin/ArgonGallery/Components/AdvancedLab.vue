@@ -40,8 +40,8 @@ function moveCard(move: AdvancedKanbanMove): void {
   <section aria-labelledby="advanced-lab-title" class="grid gap-5">
     <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_16rem] sm:items-end">
       <div>
-        <h3 id="advanced-lab-title" class="text-balance text-lg font-semibold text-content-heading">Advanced adapters</h3>
-        <p class="text-pretty text-base text-content-body sm:text-sm">Select a capability to mount only its typed specimen.</p>
+        <h3 id="advanced-lab-title" class="text-lg font-semibold text-balance text-content-heading">Advanced adapters</h3>
+        <p class="text-base text-pretty text-content-body sm:text-sm">Select a capability to mount only its typed specimen.</p>
       </div>
       <FormSelect v-model="capability" :items="capabilityItems" label="Capability" name="advanced-capability" />
     </div>

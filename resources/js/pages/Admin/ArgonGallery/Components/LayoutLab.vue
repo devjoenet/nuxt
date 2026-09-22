@@ -11,12 +11,12 @@ const layouts = ["public", "authentication", "application", "settings", "gallery
 <template>
   <section aria-labelledby="layout-lab-title" class="grid gap-5">
     <div>
-      <h3 id="layout-lab-title" class="text-balance text-lg font-semibold text-content-heading">Layout compositions</h3>
-      <p class="text-pretty text-base text-content-body sm:text-sm">Preview inert shell geometry without nesting a second application or exposing product actions.</p>
+      <h3 id="layout-lab-title" class="text-lg font-semibold text-balance text-content-heading">Layout compositions</h3>
+      <p class="text-base text-pretty text-content-body sm:text-sm">Preview inert shell geometry without nesting a second application or exposing product actions.</p>
     </div>
     <div class="grid gap-3 sm:grid-cols-2"><FormSelect v-model="layout" :items="layouts" label="Layout shell" name="layout-shell" /><UCheckbox v-model="navigationOpen" label="Show navigation region" /></div>
     <div class="grid min-h-72 overflow-hidden rounded-xl border border-content-border" :class="navigationOpen && !['public', 'authentication'].includes(layout) ? 'grid-cols-[5rem_minmax(0,1fr)] sm:grid-cols-[12rem_minmax(0,1fr)]' : 'grid-cols-1'">
-      <aside v-if="navigationOpen && !['public', 'authentication'].includes(layout)" class="border-r border-content-border bg-surface-subtle p-3">
+      <aside v-if="navigationOpen && !['public', 'authentication'].includes(layout)" class="bg-surface-subtle border-r border-content-border p-3">
         <p class="text-base font-medium text-content-heading sm:text-sm">{{ layout }}</p>
         <div class="grid gap-2 pt-4"><USkeleton class="h-8" /><USkeleton class="h-8" /><USkeleton class="h-8" /></div>
       </aside>

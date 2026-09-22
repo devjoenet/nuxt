@@ -22,7 +22,7 @@ const views = [
     <h3 class="text-xl font-semibold text-content-heading">Product Details</h3>
     <div class="grid gap-6 lg:grid-cols-2">
       <div class="grid gap-4">
-        <button class="grid min-h-72 place-content-center gap-4 rounded-xl bg-surface-subtle p-8 text-content-heading focus-visible:outline-2 focus-visible:outline-primary" type="button" aria-label="Enlarge product preview" @click="gallery = true">
+        <button class="bg-surface-subtle grid min-h-72 place-content-center gap-4 rounded-xl p-8 text-content-heading focus-visible:outline-2 focus-visible:outline-primary" type="button" aria-label="Enlarge product preview" @click="gallery = true">
           <component :is="views[selected]?.icon" aria-hidden="true" class="mx-auto size-32 text-primary" /><span>{{ views[selected]?.label }}</span>
         </button>
         <div class="grid grid-cols-4 gap-3">
@@ -55,7 +55,7 @@ const views = [
     <Card variant="outline"
       ><h3 class="mb-4 text-lg font-semibold text-content-heading">Other Products</h3>
       <div class="grid gap-4 sm:grid-cols-3">
-        <div v-for="name in ['Christopher Knight Home', 'Bar Height Swivel Barstool', 'Signature Design by Ashley']" :key="name" class="rounded-xl bg-surface-subtle p-5">
+        <div v-for="name in ['Christopher Knight Home', 'Bar Height Swivel Barstool', 'Signature Design by Ashley']" :key="name" class="bg-surface-subtle rounded-xl p-5">
           <PhArmchair aria-hidden="true" class="mb-3 size-12 text-primary" />
           <h4 class="font-semibold text-content-heading">{{ name }}</h4>
           <p class="mt-2 text-sm text-content-subtle">Modern furniture collection</p>

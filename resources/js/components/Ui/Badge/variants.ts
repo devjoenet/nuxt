@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { uiToneClasses } from "@/lib/uiTone";
 
-export const badgeVariants = cva("inline-flex w-fit items-center gap-1.5 rounded-md border font-bold leading-none", {
+export const badgeVariants = cva("inline-flex w-fit items-center gap-1.5 rounded-md border leading-none font-bold", {
   variants: {
     tone: uiToneClasses,
     variant: {

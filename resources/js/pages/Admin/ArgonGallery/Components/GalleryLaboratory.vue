@@ -14,14 +14,14 @@ const previewStyle = computed(() => ({ "--gallery-viewport": viewportWidths[view
 </script>
 
 <template>
-  <section id="component-laboratory" aria-labelledby="component-laboratory-title" class="scroll-mt-28 grid gap-5">
+  <section id="component-laboratory" aria-labelledby="component-laboratory-title" class="grid scroll-mt-28 gap-5">
     <header>
-      <h2 id="component-laboratory-title" class="text-balance text-xl font-semibold text-content-heading">Component laboratory</h2>
-      <p class="max-w-[70ch] text-pretty text-base text-content-body sm:text-sm">Inspect typed states in isolation, switch the application theme, and constrain the preview to representative widths without loading licensed resources.</p>
+      <h2 id="component-laboratory-title" class="text-xl font-semibold text-balance text-content-heading">Component laboratory</h2>
+      <p class="max-w-[70ch] text-base text-pretty text-content-body sm:text-sm">Inspect typed states in isolation, switch the application theme, and constrain the preview to representative widths without loading licensed resources.</p>
     </header>
     <GalleryLabControls :appearance="appearance" :lab="activeLab" :viewport="viewport" @appearance="setAppearance" @lab="activeLab = $event" @viewport="viewport = $event" />
     <div class="overflow-x-auto rounded-xl bg-surface-canvas p-3 sm:p-5">
-      <div :style="previewStyle" class="mx-auto w-full max-w-(--gallery-viewport) rounded-xl border border-content-border bg-surface-elevated p-4 shadow-md dark:shadow-none sm:p-6" data-testid="gallery-preview">
+      <div :style="previewStyle" class="mx-auto w-full max-w-(--gallery-viewport) rounded-xl border border-content-border bg-surface-elevated p-4 shadow-md sm:p-6 dark:shadow-none" data-testid="gallery-preview">
         <Suspense>
           <component :is="definition.component" />
           <template #fallback><USkeleton class="h-72 w-full rounded-xl" /></template>

@@ -14,13 +14,13 @@ const schedule = [
 </script>
 
 <template>
-  <section class="relative isolate overflow-hidden rounded-2xl bg-linear-to-br from-primary-950 via-primary-800 to-secondary-700 p-5 text-white shadow-lg dark:shadow-none sm:p-8">
+  <section class="relative isolate overflow-hidden rounded-2xl bg-linear-to-br from-primary-950 via-primary-800 to-secondary-700 p-5 text-white shadow-lg sm:p-8 dark:shadow-none">
     <div class="pointer-events-none absolute inset-0 opacity-35 [background:radial-gradient(circle_at_20%_10%,white_0,transparent_28%),radial-gradient(circle_at_80%_80%,var(--color-info)_0,transparent_34%)]" />
     <div class="relative grid gap-6">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p class="text-base text-white/75 sm:text-sm">Virtual reality reference</p>
-          <h3 class="text-balance text-3xl font-semibold tracking-tight">{{ specimen === "default" ? "General statistics" : "Daily briefing" }}</h3>
+          <h3 class="text-3xl font-semibold tracking-tight text-balance">{{ specimen === "default" ? "General statistics" : "Daily briefing" }}</h3>
         </div>
         <Badge :label="specimen === 'default' ? '1,600,000 users' : '12°C · Cloudy'" tone="info" />
       </div>
@@ -47,16 +47,16 @@ const schedule = [
           ><h4 class="text-lg font-semibold text-content-heading">Today’s schedule</h4>
           <ol class="grid gap-3" role="list">
             <li v-for="item in schedule" :key="item.time" class="grid grid-cols-[auto_1fr] gap-4 border-b border-content-divider pb-3 last:border-0 last:pb-0">
-              <span class="font-medium tabular-nums text-primary">{{ item.time }}</span
+              <span class="font-medium text-primary tabular-nums">{{ item.time }}</span
               ><span class="text-content-body">{{ item.title }}</span>
             </li>
           </ol></Card
         ><Card class="grid content-between gap-5" variant="glass"
           ><div>
             <p class="text-base text-content-subtle sm:text-sm">To do</p>
-            <p class="text-5xl font-semibold tracking-tight tabular-nums text-content-heading">7</p>
+            <p class="text-5xl font-semibold tracking-tight text-content-heading tabular-nums">7</p>
           </div>
-          <p class="text-pretty text-base text-content-body sm:text-sm">Some Kind of Blues is queued for the afternoon.</p></Card
+          <p class="text-base text-pretty text-content-body sm:text-sm">Some Kind of Blues is queued for the afternoon.</p></Card
         >
       </div>
     </div>

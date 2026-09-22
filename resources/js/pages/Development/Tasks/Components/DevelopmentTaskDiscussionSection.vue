@@ -38,7 +38,7 @@ const noteAudiences = [
           </p>
           <UBadge v-if="note.audience === 'development_team'" :label="note.audience_label" color="warning" variant="subtle" />
         </div>
-        <p class="whitespace-pre-wrap text-base/7 text-pretty text-toned sm:text-sm/6">{{ note.body }}</p>
+        <p class="text-base/7 text-pretty whitespace-pre-wrap text-toned sm:text-sm/6">{{ note.body }}</p>
       </li>
     </ol>
     <UAlert

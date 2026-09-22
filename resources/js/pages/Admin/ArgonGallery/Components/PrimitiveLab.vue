@@ -20,8 +20,8 @@ const sizeItems = ["xs", "sm", "md", "lg"].map((value) => ({ label: value, value
 <template>
   <section aria-labelledby="primitive-lab-title" class="grid gap-5">
     <div>
-      <h3 id="primitive-lab-title" class="text-balance text-lg font-semibold text-content-heading">Primitive states</h3>
-      <p class="text-pretty text-base text-content-body sm:text-sm">Change the typed primitive contract and inspect the composed result.</p>
+      <h3 id="primitive-lab-title" class="text-lg font-semibold text-balance text-content-heading">Primitive states</h3>
+      <p class="text-base text-pretty text-content-body sm:text-sm">Change the typed primitive contract and inspect the composed result.</p>
     </div>
     <div class="grid gap-3 sm:grid-cols-3">
       <FormSelect v-model="tone" :items="toneItems" label="Tone" name="primitive-tone" /><FormSelect v-model="variant" :items="variantItems" label="Variant" name="primitive-variant" /><FormSelect v-model="size" :items="sizeItems" label="Size" name="primitive-size" />

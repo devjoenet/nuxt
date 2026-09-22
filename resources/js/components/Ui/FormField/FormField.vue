@@ -31,7 +31,7 @@ const rootClass = computed(() => cn("form-field grid gap-1.5", props.class));
       class="form-field__shell group"
     >
       <slot v-bind="slotProps" />
-      <label v-if="label" :id="slotProps.labelId" :for="slotProps.id" class="form-field__label">{{ label }}<span v-if="required" aria-hidden="true" class="ms-0.5 text-error">*</span><span v-else-if="optional" class="ms-1 text-xs normal-case text-content-subtle">Optional</span></label>
+      <label v-if="label" :id="slotProps.labelId" :for="slotProps.id" class="form-field__label">{{ label }}<span v-if="required" aria-hidden="true" class="ms-0.5 text-error">*</span><span v-else-if="optional" class="ms-1 text-xs text-content-subtle normal-case">Optional</span></label>
     </div>
     <div v-else-if="kind === 'choice'" :data-disabled="disabled" :data-invalid="Boolean(errorMessage)" :data-loading="loading" :data-readonly="readonly" :data-valid="Boolean(valid && !errorMessage)" class="form-field__choice">
       <slot v-bind="slotProps" /><label v-if="label" :id="slotProps.labelId" :for="slotProps.id" class="form-field__choice-label">{{ label }}<span v-if="required" aria-hidden="true" class="ms-0.5 text-error">*</span></label>

@@ -49,7 +49,7 @@ const detailClasses = "text-slate-600 dark:text-grey-400";
 <template>
   <article
     :class="[articleClasses, { 'text-center': centered }]"
-    class="group relative h-full overflow-hidden rounded-lg border bg-slate-50/90 p-6 shadow-xl shadow-slate-950/10 ring-1 ring-slate-200/70 transition hover:-translate-y-1 dark:bg-slate-900/70 dark:shadow-slate-950/20 dark:ring-grey-100/5"
+    class="group relative h-full overflow-hidden rounded-lg border bg-slate-50/90 p-6 shadow-xl ring-1 shadow-slate-950/10 ring-slate-200/70 transition hover:-translate-y-1 dark:bg-slate-900/70 dark:shadow-slate-950/20 dark:ring-grey-100/5"
   >
     <div class="relative z-10">
       <div :class="centered ? 'justify-center' : 'justify-start'" class="flex">

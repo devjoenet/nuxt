@@ -377,11 +377,9 @@ Every direct dependency added for this task was evaluated before adoption:
 | `@unovis/ts` 1.6.7 | Required peer for the existing `@unovis/vue` integration | Apache-2.0; maintained with Unovis Vue | Chart provides a label and textual data; runtime stays behind the lazy chart boundary |
 | `@internationalized/date` 3.12.3 | Converts ISO strings at the calendar boundary and is already used by Nuxt UI | Apache-2.0; maintained by Adobe React Spectrum | Nuxt UI owns focus and keyboard behavior; shared date-model code is small |
 | `maplibre-gl` 6.6.0 | Maintained, non-proprietary replacement for manifest map behavior | BSD-3-Clause; active MapLibre community | Adapter adds keyboard markers, status, errors, and a textual list; runtime and CSS load dynamically |
-| `vue-eslint-parser` 10.x | Explicitly satisfies the upgraded Vue ESLint peer contract | MIT; maintained with the Vue ESLint toolchain | Development-only; no runtime bundle impact |
-
-Vite+ runs its fast, non-type-aware lint pass as part of `vp check`. Vue SFC and path-alias type analysis remains with
-`vue-tsc`, while the repository's ESLint architecture rules and Prettier checks remain explicit quality gates. This
-avoids treating Vite+'s TypeScript-only checker as authoritative for Vue files it cannot resolve.
+Vite+ owns formatting and its fast, non-type-aware Oxlint pass as part of `vp check`. Vue SFC and path-alias type
+analysis remains with `vue-tsc`, while the repository's architecture tests preserve the application-specific import
+boundaries. This avoids treating Vite+'s TypeScript-only checker as authoritative for Vue files it cannot resolve.
 
 ## Protected reference gallery
 
