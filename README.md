@@ -35,6 +35,11 @@ Use `composer run dev` for the normal local development processes. Local default
 cache, and log mailer, so Redis and an SMTP provider are not required for the first run. Inertia SSR for the public
 home and privacy pages runs through the Vite development server; it does not need a separate local SSR process.
 
+Frontend commands use the project-local Vite+ installation through Yarn: `yarn dev` starts Vite, and `yarn build`
+builds both client and SSR assets. No global `vp` installation or manual `PATH` changes are required. For an occasional
+toolchain migration, use `yarn vp migrate`, then review and commit changes to `package.json`, `.yarnrc.yml`, and
+`yarn.lock`. Do not run migrations of the frontend toolchain during CI or deployment.
+
 ## Application areas
 
 - Public marketing and privacy pages, including the rate-limited contact intake form

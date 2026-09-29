@@ -34,7 +34,7 @@ the dependency-audit task resolves its upstream advisory; do not treat it as a c
 
 ## Deployment contract
 
-The Forge server/site provides PHP 8.5, Node.js 22 or newer, Yarn Classic, MySQL, Redis, zero-downtime releases,
+The Forge server/site provides PHP 8.5, Node.js 22 or newer, Corepack with the Yarn version pinned in `package.json`, MySQL, Redis, zero-downtime releases,
 Supervisor process supervision, scheduled jobs, logs, and a deploy script. Inject secrets through Forge environment
 variables rather than committing environment files.
 
@@ -45,11 +45,17 @@ Configure the Forge deploy script to install dependencies, build the Vite assets
 $CREATE_RELEASE()
 cd $FORGE_RELEASE_DIRECTORY
 composer install --no-dev --optimize-autoloader
-yarn install --frozen-lockfile
-yarn build
+corepack yarn install --immutable
+corepack yarn build
 php artisan optimize
 php artisan migrate --force
 ```
+
+Install Node development dependencies during the asset build: they include the project-local `vite-plus` executable.
+The build script compiles both client and SSR assets and resolves `vp` through Yarn, so Forge does not need a global
+`vp` installation or custom `PATH`. Keep `package.json`, `.yarnrc.yml`, and `yarn.lock` committed together so local
+development, CI, and Forge use the same toolchain. Run `yarn vp migrate` only when intentionally updating the toolchain
+locally, never in the deploy script. CI already uses `yarn install --immutable` followed by `yarn build` with Corepack enabled.
 
 With zero-downtime deployments, run those commands after `$CREATE_RELEASE()` and before `$ACTIVATE_RELEASE()`, then
 finish the script with:

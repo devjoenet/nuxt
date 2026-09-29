@@ -42,10 +42,10 @@
     "concurrently": "^10.0.5",
     "esbuild": "^0.28.2",
     "playwright": "^1.63.0",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.0",
+    "typescript": "6.0.3",
+    "vite": "catalog:",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vite-plus": "1.0.0-rc.0",
+    "vite-plus": "catalog:",
     "vue-tsc": "^3.3.11"
   },
   "optionalDependencies": {
@@ -55,7 +55,8 @@
     "lightningcss-linux-x64-gnu": "^1.33.0"
   },
   "resolutions": {
-    "maplibre-gl": "^6.6.0"
+    "maplibre-gl": "^6.6.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0-rc.0"
   },
   "overrides": {
     "esbuild": "^0.28.1"
