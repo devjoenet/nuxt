@@ -6414,6 +6414,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"motion-v@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "motion-v@npm:2.5.1"
+  dependencies:
+    framer-motion: "npm:^13.3.0"
+    hey-listen: "npm:^1.0.8"
+    motion-dom: "npm:^13.3.0"
+    motion-utils: "npm:^13.3.0"
+  peerDependencies:
+    "@vueuse/core": ">=10.0.0"
+    vue: ">=3.0.0"
+  checksum: 10c0/9ef9a2f68545f481a9970fd163f6111a5cbd4cd912eb90988fb9fa67dcd760ff8b6375423ed9cea2aa222e992073293206032d7eab5aff0e30f169813f33cccb
+  languageName: node
+  linkType: hard
+
 "mrmime@npm:^2.0.0":
   version: 2.0.1
   resolution: "mrmime@npm:2.0.1"
@@ -6552,7 +6567,7 @@ __metadata:
     laravel-vite-plugin: "npm:^3.2.0"
     lightningcss-linux-x64-gnu: "npm:^1.33.0"
     maplibre-gl: "npm:^6.10.0"
-    motion-v: "npm:^2.4.4"
+    motion-v: "npm:^2.5.1"
     playwright: "npm:^1.63.0"
     tailwind-merge: "npm:^3.7.0"
     typescript: "npm:6.0.3"
