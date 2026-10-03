@@ -1825,9 +1825,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:^4.63.4":
-  version: 4.63.4
-  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.63.4"
+"@rollup/rollup-linux-x64-gnu@npm:^4.63.5":
+  version: 4.63.5
+  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.63.5"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -6538,7 +6538,7 @@ __metadata:
     "@laravel/vite-plugin-wayfinder": "npm:^0.1.10"
     "@nuxt/ui": "npm:^4.11.2"
     "@phosphor-icons/vue": "npm:^2.2.1"
-    "@rollup/rollup-linux-x64-gnu": "npm:^4.63.4"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.63.5"
     "@tailwindcss/oxide-linux-x64-gnu": "npm:^4.3.3"
     "@types/node": "npm:^26.6.2"
     "@unovis/ts": "npm:^1.7.0"
