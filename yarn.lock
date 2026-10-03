@@ -6551,7 +6551,7 @@ __metadata:
     esbuild: "npm:^0.28.2"
     laravel-vite-plugin: "npm:^3.2.0"
     lightningcss-linux-x64-gnu: "npm:^1.33.0"
-    maplibre-gl: "npm:^6.10.0"
+    maplibre-gl: "npm:^6.11.2"
     motion-v: "npm:^2.4.4"
     playwright: "npm:^1.63.0"
     tailwind-merge: "npm:^3.7.0"
