@@ -3152,13 +3152,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unovis/vue@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@unovis/vue@npm:1.7.0"
+"@unovis/vue@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "@unovis/vue@npm:1.7.1"
   peerDependencies:
-    "@unovis/ts": 1.7.0
+    "@unovis/ts": 1.7.1
     vue: ^3
-  checksum: 10c0/936c6ff849f82a7a74a660211be933c63ca05acfaa771821346dc12b6c873a186181cf33487ee21f6215f62ba268078317a9fb831665c74df24cd61257ace55d
+  checksum: 10c0/87642e5bf4ea821c0b07958517302084e072dc9603b71c7944a0816d201152289a29ed077da065a7fc2f78ce1e539c7d0616542b3ca960842b1ce10cc20c32ab
   languageName: node
   linkType: hard
 
@@ -6542,7 +6542,7 @@ __metadata:
     "@tailwindcss/oxide-linux-x64-gnu": "npm:^4.3.3"
     "@types/node": "npm:^26.6.2"
     "@unovis/ts": "npm:^1.7.0"
-    "@unovis/vue": "npm:^1.7.0"
+    "@unovis/vue": "npm:^1.7.1"
     "@vitejs/plugin-vue": "npm:^6.0.9"
     "@vueuse/core": "npm:^15.0.0"
     class-variance-authority: "npm:^0.7.1"
