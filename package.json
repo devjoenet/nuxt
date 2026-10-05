@@ -8,26 +8,27 @@
     "check:fix": "vp check --fix && yarn test:frontend-architecture && yarn typecheck",
     "audit:production": "yarn npm audit --recursive --environment production --severity high --no-deprecations",
     "audit:full": "yarn npm audit --recursive --severity high --no-deprecations",
-    "format": "vp fmt resources --write",
-    "format:check": "vp fmt resources --check",
+    "format": "vp fmt . --write",
+    "format:check": "vp fmt . --check",
     "lint": "vp lint --fix && yarn test:frontend-architecture",
     "lint:check": "vp lint && yarn test:frontend-architecture",
     "test:frontend-architecture": "php artisan test --compact tests/Feature/FrontendArchitectureContractTest.php",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "update:requirements": "yarn up -R \"*\" && yarn audit:full"
   },
   "dependencies": {
-    "@inertiajs/vue3": "^3.7.1",
+    "@inertiajs/vue3": "^3.8.0",
     "@internationalized/date": "^3.12.4",
-    "@nuxt/ui": "^4.11.2",
+    "@nuxt/ui": "^4.11.3",
     "@phosphor-icons/vue": "^2.2.1",
-    "@unovis/ts": "^1.7.0",
-    "@unovis/vue": "^1.7.0",
+    "@unovis/ts": "^1.7.1",
+    "@unovis/vue": "^1.7.1",
     "@vueuse/core": "^15.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "laravel-vite-plugin": "^3.2.0",
-    "maplibre-gl": "^6.10.0",
-    "motion-v": "^2.4.4",
+    "maplibre-gl": "^6.12.0",
+    "motion-v": "^2.6.0",
     "tailwind-merge": "^3.7.0",
     "vue": "^3.5.43",
     "vue-currency-input": "^3.2.2",
@@ -35,9 +36,9 @@
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
-    "@inertiajs/vite": "^3.7.1",
+    "@inertiajs/vite": "^3.8.0",
     "@laravel/vite-plugin-wayfinder": "^0.1.10",
-    "@types/node": "^26.6.2",
+    "@types/node": "^26.6.4",
     "@vitejs/plugin-vue": "^6.0.9",
     "concurrently": "^10.0.5",
     "esbuild": "^0.28.2",
@@ -46,17 +47,17 @@
     "vite": "catalog:",
     "vite-plugin-vue-devtools": "^8.2.1",
     "vite-plus": "catalog:",
-    "vue-tsc": "^3.3.11"
+    "vue-tsc": "3.3.11"
   },
   "optionalDependencies": {
-    "@laravel/multiplex": "^0.4.4",
-    "@rollup/rollup-linux-x64-gnu": "^4.63.4",
+    "@laravel/multiplex": "^0.4.5",
+    "@rollup/rollup-linux-x64-gnu": "^4.64.0",
     "@tailwindcss/oxide-linux-x64-gnu": "^4.3.3",
     "lightningcss-linux-x64-gnu": "^1.33.0"
   },
   "resolutions": {
-    "maplibre-gl": "^6.6.0",
-    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0-rc.0"
+    "maplibre-gl": "^6.12.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0"
   },
   "overrides": {
     "esbuild": "^0.28.1"
@@ -65,7 +66,7 @@
   "allowScripts": {
     "vue-demi@0.14.10": true,
     "core-js-pure@3.49.0": true,
-    "maplibre-gl@6.6.0": true,
+    "maplibre-gl@6.12.0": true,
     "fsevents@2.3.2": true,
     "fsevents@2.3.3": true,
     "esbuild@0.28.1": true
