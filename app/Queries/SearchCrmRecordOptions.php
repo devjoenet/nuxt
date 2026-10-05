@@ -9,39 +9,37 @@ use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\Paginator;
 
 class SearchCrmRecordOptions
 {
-    /** @return Collection<int, Contact> */
-    public function contacts(User $user, CrmOptionSearchData $data): Collection
+    /** @return Paginator<int, Contact> */
+    public function contacts(User $user, CrmOptionSearchData $data): Paginator
     {
         return Contact::query()
             ->visibleTo($user)
             ->whereNull('archived_at')
-            ->where(function (Builder $query) use ($data): void {
+            ->when($data->query !== '', fn (Builder $query): Builder => $query->where(function (Builder $query) use ($data): void {
                 $query->where('name', 'like', "%{$data->query}%")
                     ->orWhere('email', 'like', "%{$data->query}%");
-            })
+            }))
             ->orderBy('name')
             ->orderBy('uuid')
-            ->limit(20)
-            ->get();
+            ->simplePaginate(20, ['id', 'uuid', 'name', 'email'], page: $data->page);
     }
 
-    /** @return Collection<int, Organization> */
-    public function organizations(User $user, CrmOptionSearchData $data): Collection
+    /** @return Paginator<int, Organization> */
+    public function organizations(User $user, CrmOptionSearchData $data): Paginator
     {
         return Organization::query()
             ->visibleTo($user)
             ->whereNull('archived_at')
-            ->where(function (Builder $query) use ($data): void {
+            ->when($data->query !== '', fn (Builder $query): Builder => $query->where(function (Builder $query) use ($data): void {
                 $query->where('name', 'like', "%{$data->query}%")
                     ->orWhere('website', 'like', "%{$data->query}%");
-            })
+            }))
             ->orderBy('name')
             ->orderBy('uuid')
-            ->limit(20)
-            ->get();
+            ->simplePaginate(20, ['id', 'uuid', 'name', 'website'], page: $data->page);
     }
 }

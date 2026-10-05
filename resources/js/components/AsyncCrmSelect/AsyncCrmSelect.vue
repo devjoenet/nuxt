@@ -1,10 +1,7 @@
 <script lang="ts" setup>
-import { useHttp } from "@inertiajs/vue3";
-import { useDebounceFn } from "@vueuse/core";
-import { ref, watch } from "vue";
 import { FormAsyncSelect } from "@/components/Ui/FormAsyncSelect";
-import { contacts, organizations } from "@/routes/crm/options";
 import type { CrmOption } from "@/types/crm";
+import { useCrmOptions } from "./useCrmOptions";
 
 const props = withDefaults(defineProps<{ id: string; name: string; label: string; error?: string | boolean; required?: boolean; placeholder: string; type: "contact" | "organization"; initialOption?: CrmOption | null; clearable?: boolean }>(), {
   error: undefined,
@@ -12,40 +9,23 @@ const props = withDefaults(defineProps<{ id: string; name: string; label: string
   clearable: false,
 });
 const selectedValue = defineModel<string | null>({ default: null });
-const searchTerm = ref("");
-const options = ref<CrmOption[]>(props.initialOption ? [props.initialOption] : []);
-const request = useHttp<Record<string, never>, { data: CrmOption[] }>({});
-const endpoint = (query: string): string => (props.type === "contact" ? contacts({ query: { query } }).url : organizations({ query: { query } }).url);
-const search = useDebounceFn(async (query: string): Promise<void> => {
-  if (query.trim().length < 2) {
-    options.value = props.initialOption ? [props.initialOption] : [];
-    return;
-  }
-  try {
-    options.value = (await request.get(endpoint(query.trim()))).data;
-  } catch {
-    /* Superseded searches are expected to cancel. */
-  }
-}, 200);
-watch(searchTerm, (query) => {
-  request.cancel();
-  void search(query);
-});
+const { searchTerm, options, selectedLabel, loading, failed, emptyText, nextPage, setOpen, loadMore, retry } = useCrmOptions(props.type, selectedValue, () => props.initialOption);
 </script>
 
 <template>
-  <FormAsyncSelect
-    v-model="selectedValue"
-    v-model:search-term="searchTerm"
-    :clearable="clearable"
-    :empty-text="`No matching ${type}s.`"
-    :error="error"
-    :id="id"
-    :items="options"
-    :label="label"
-    :loading="request.processing"
-    :name="name"
-    :placeholder="placeholder"
-    :required="required"
-  />
+  <FormAsyncSelect v-model="selectedValue" v-model:search-term="searchTerm" :clearable="clearable" :empty-text="emptyText" :error="error" :id="id" :items="options" :label="label" :loading="loading" :name="name" :placeholder="placeholder" :required="required" @update:open="setOpen">
+    <template #default
+      ><span class="w-0 min-w-0 flex-1 truncate text-left" :class="selectedLabel ? '' : 'text-content-subtle'">{{ selectedLabel ?? placeholder }}</span></template
+    >
+    <template #empty
+      ><span role="status">{{ loading ? "Loading options…" : failed ? "Options could not be loaded." : emptyText }}</span></template
+    >
+    <template #content-bottom>
+      <div v-if="failed || nextPage" class="border-t border-content-border p-2">
+        <p v-if="failed" class="mb-2 text-sm text-content-subtle" role="alert">Options could not be loaded. Try again.</p>
+        <UButton v-if="failed" block color="neutral" size="sm" variant="ghost" @click="retry">Retry</UButton>
+        <UButton v-else block color="neutral" :loading="loading" :disabled="loading" size="sm" variant="ghost" @click="loadMore">Load more options</UButton>
+      </div>
+    </template>
+  </FormAsyncSelect>
 </template>
