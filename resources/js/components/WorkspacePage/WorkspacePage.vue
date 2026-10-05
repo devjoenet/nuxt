@@ -37,7 +37,7 @@ const panelClass = computed(() => cn(attrs.class as ClassValue));
 const descriptionId = computed(() => `${props.id}-description`);
 const contentClass = computed(() =>
   cn(
-    "flex w-full flex-col gap-4 sm:gap-6",
+    "flex w-full flex-col gap-4 pb-4 sm:gap-6 sm:pb-6",
     {
       "mx-auto max-w-2xl": props.contentWidth === "narrow",
       "mx-auto max-w-3xl": props.contentWidth === "medium",

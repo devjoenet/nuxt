@@ -19,7 +19,8 @@ class SearchCrmRecordOptionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'query' => ['required', 'string', 'min:2', 'max:100'],
+            'query' => ['nullable', 'string', 'max:100'],
+            'page' => ['sometimes', 'integer', 'min:1', 'max:10000'],
         ];
     }
 }

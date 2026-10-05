@@ -59,11 +59,11 @@ test('new dependencies have recorded decision criteria and current package contr
             ->toContain("license: \"{$license}\"");
     }
 
-    expect($package['devDependencies']['vite-plus'])->toBe('0.3.0')
-        ->and($package['optionalDependencies']['@laravel/multiplex'])->toBe('^0.4.3')
-        ->and($package['dependencies']['@unovis/ts'])->toBe('^1.6.7')
-        ->and($package['dependencies']['@internationalized/date'])->toBe('^3.12.3')
-        ->and($package['dependencies']['maplibre-gl'])->toBe('^6.6.0')
+    expect($package['devDependencies']['vite-plus'])->toBe('catalog:')
+        ->and(File::get(base_path('.yarnrc.yml')))->toContain('catalog:', 'vite-plus:')
+        ->and($package['optionalDependencies'])->toHaveKey('@laravel/multiplex')
+        ->and($package['dependencies'])->toHaveKeys(['@unovis/ts', '@unovis/vue', '@internationalized/date', 'maplibre-gl'])
+        ->and($package['dependencies']['@unovis/ts'])->toBe($package['dependencies']['@unovis/vue'])
         ->and(array_keys($package['devDependencies']))->not->toContain(
             'eslint',
             'prettier',
@@ -98,7 +98,10 @@ test('Vite Plus owns development and build commands without removing project qua
         ->and($composer)
         ->toContain('"@php artisan dev"')
         ->toContain('yarn install --immutable')
-        ->toContain('yarn up \"*\"')
+        ->toContain('corepack yarn update:requirements')
+        ->and($package['scripts']['update:requirements'])
+        ->toContain('yarn up -R "*"')
+        ->and($composer)
         ->not->toContain('--frozen-lockfile')
         ->not->toContain('yarn upgrade')
         ->not->toContain('@php artisan @php artisan');

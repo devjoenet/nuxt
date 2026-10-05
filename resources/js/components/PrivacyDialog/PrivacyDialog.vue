@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { PrivacyPolicyContent } from "@/components/PrivacyPolicyContent";
 import { privacy } from "@/routes";
+import { Link } from "@inertiajs/vue3";
 import { useMediaQuery } from "@vueuse/core";
 
 defineProps<{
@@ -41,7 +42,7 @@ const handleNavigation = (): void => {
     </template>
 
     <template #footer>
-      <a :href="privacy.url()" class="text-sm font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300" @click="handleNavigation"> Open full privacy page </a>
+      <Link :href="privacy.url()" class="text-sm font-semibold text-secondary-700 underline hover:text-secondary-600 dark:text-secondary-300" @click="handleNavigation"> Open full privacy page </Link>
     </template>
   </UModal>
 </template>

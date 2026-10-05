@@ -468,7 +468,7 @@ test('the current application components and Nuxt UI foundation remain explicit'
 
 test('index workflows share navigation and framing without hiding domain columns', function (): void {
     $filterComposable = File::get(resource_path('js/composables/useInertiaFilters.ts'));
-    $asyncCrmSelect = File::get(resource_path('js/components/AsyncCrmSelect/AsyncCrmSelect.vue'));
+    $asyncCrmSelect = File::get(resource_path('js/components/AsyncCrmSelect/useCrmOptions.ts'));
 
     expect($filterComposable)
         ->toContain('watchDebounced(filters, visitFilters')

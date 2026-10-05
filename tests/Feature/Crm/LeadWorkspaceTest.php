@@ -312,7 +312,50 @@ test('CRM option endpoints are visibility-scoped and bounded', function (): void
 
     $this->actingAs($user)
         ->getJson(route('crm.options.contacts', ['query' => 'x']))
-        ->assertUnprocessable();
+        ->assertSuccessful();
+});
+
+test('CRM options browse and paginate without a query while excluding inaccessible and archived records', function (string $type, string $model): void {
+    $user = crmUser();
+    $records = $model::factory()->count(21)->create(['owner_id' => $user->id, 'name' => 'Browseable record']);
+    $hidden = $model::factory()->create(['owner_id' => User::factory()->create()->id, 'name' => 'A hidden record']);
+    $archived = $model::factory()->create(['owner_id' => $user->id, 'name' => 'A archived record', 'archived_at' => now()]);
+    $deleted = $model::factory()->create(['owner_id' => $user->id, 'name' => 'A deleted record']);
+    $deleted->delete();
+
+    $first = $this->actingAs($user)->getJson(route("crm.options.{$type}"))
+        ->assertSuccessful()
+        ->assertJsonCount(20, 'data')
+        ->assertJsonMissing(['value' => $hidden->uuid])
+        ->assertJsonMissing(['value' => $archived->uuid])
+        ->assertJsonMissing(['value' => $deleted->uuid]);
+    $second = $this->getJson(route("crm.options.{$type}", ['query' => '', 'page' => 2]))
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('links.next', null);
+
+    expect($first->json('links.next'))->not->toBeNull();
+    expect(array_merge(array_column($first->json('data'), 'value'), array_column($second->json('data'), 'value')))
+        ->toEqualCanonicalizing($records->pluck('uuid')->all());
+})->with(['contacts' => ['contacts', Contact::class], 'organizations' => ['organizations', Organization::class]]);
+
+test('CRM options accept a single character and restore browsing with an empty query', function (string $type, string $model): void {
+    $user = crmUser();
+    $extra = $type === 'contacts' ? ['email' => 'alpha@example.com'] : ['website' => null];
+    $matching = $model::factory()->create(['owner_id' => $user->id, 'name' => 'Zebra', ...$extra]);
+    $model::factory()->create(['owner_id' => $user->id, 'name' => 'Alpha', ...$extra]);
+
+    $this->actingAs($user)->getJson(route("crm.options.{$type}", ['query' => 'Z']))
+        ->assertSuccessful()->assertJsonCount(1, 'data')->assertJsonPath('data.0.value', $matching->uuid);
+    $this->getJson(route("crm.options.{$type}", ['query' => '']))
+        ->assertSuccessful()->assertJsonCount(2, 'data');
+})->with(['contacts' => ['contacts', Contact::class], 'organizations' => ['organizations', Organization::class]]);
+
+test('CRM options reject unauthorized browsing and invalid pagination', function (): void {
+    $this->getJson(route('crm.options.contacts'))->assertUnauthorized();
+    $this->actingAs(User::factory()->create())->getJson(route('crm.options.contacts'))->assertForbidden();
+    $this->actingAs(crmUser())->getJson(route('crm.options.contacts', ['page' => 0]))
+        ->assertUnprocessable()->assertJsonValidationErrors('page');
 });
 
 test('CRM viewers cannot mutate leads', function (): void {
