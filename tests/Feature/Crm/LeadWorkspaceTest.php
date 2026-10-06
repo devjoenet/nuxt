@@ -174,6 +174,7 @@ test('CRM managers can create and update leads', function (): void {
     expect($lead->contact->is($contact))->toBeTrue()
         ->and($lead->organization?->is($organization))->toBeTrue()
         ->and($lead->owner_id)->toBe($user->id)
+        ->and($lead->consented_at)->toBeNull()
         ->and($lead->service_interests)->toBe(['reporting', 'operations-app'])
         ->and($lead->service_interest)->toBe('reporting')
         ->and(CrmActivity::query()->count())->toBe(1);

@@ -73,6 +73,7 @@ test('a guest can submit a public inquiry and create the complete lead chain', f
             'phone' => '+1 (912) 555-0142',
             'website' => 'https://rivera-logistics.example',
         ])
+        ->and($lead->consented_at?->toDateTimeString())->toBe('2026-07-10 10:00:00')
         ->and($lead->service_interests)->toBe(['operations-app'])
         ->and($lead->service_interest)->toBe('operations-app')
         ->and($lead->status)->toBe(LeadStatus::New)

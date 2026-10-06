@@ -41,7 +41,7 @@ class CreateLead
                 'owner_id' => $ownerId,
                 'contact_id' => $contact->id,
                 'organization_id' => $organization?->id,
-                'consented_at' => now(),
+                'consented_at' => null,
             ]);
 
             $lead->activities()->create([
