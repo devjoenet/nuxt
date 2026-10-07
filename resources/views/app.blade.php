@@ -16,7 +16,7 @@
     @inertiaHead
   </head>
   <body>
-    <div class="isolate" data-argon-app>
+    <div class="isolate" data-app>
       @inertia
     </div>
   </body>

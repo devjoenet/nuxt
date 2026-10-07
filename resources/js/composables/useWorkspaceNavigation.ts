@@ -1,7 +1,6 @@
 import { dashboard as adminDashboard } from "@/routes/admin";
 import { index as adminAuditIndex } from "@/routes/admin/audit";
 import { index as adminJobsIndex } from "@/routes/admin/jobs";
-import { index as argonGalleryIndex } from "@/routes/admin/argonGallery";
 import { index as adminRolesIndex } from "@/routes/admin/roles";
 import { edit as adminSettingsEdit } from "@/routes/admin/settings";
 import { index as adminUsersIndex } from "@/routes/admin/users";
@@ -67,7 +66,7 @@ export function useWorkspaceNavigation(options: WorkspaceNavigationOptions = {})
   const closeNavigation = (): void => options.onNavigate?.();
   const can = (permission: string): boolean => auth.value.user?.can?.[permission];
   const canAccessDevelopment = (): boolean => can("development.requests.create") || can("development.requests.review") || can("development.roadmap.manage") || can("development.user_testing.manage") || auth.value.user?.has_pending_development_tests;
-  const canAccessAdmin = (): boolean => can("admin.dashboard.view") || can("argon.gallery.view");
+  const canAccessAdmin = (): boolean => can("admin.dashboard.view");
 
   const navigationGroups = computed<SearchableNavigationItem[][]>(() => [
     [
@@ -124,7 +123,7 @@ export function useWorkspaceNavigation(options: WorkspaceNavigationOptions = {})
             {
               label: "Admin",
               icon: "i-ph-shield-check",
-              to: can("admin.dashboard.view") ? adminDashboard.url() : argonGalleryIndex.url(),
+              to: adminDashboard.url(),
               exact: true,
               type: "trigger" as const,
               defaultOpen: true,
@@ -135,7 +134,6 @@ export function useWorkspaceNavigation(options: WorkspaceNavigationOptions = {})
                 ...(can("audit.view") ? [{ label: "Audit log", to: adminAuditIndex.url(), searchDescription: "Activity history · Sensitive workspace changes", onSelect: closeNavigation }] : []),
                 ...(can("settings.manage") ? [{ label: "Business settings", to: adminSettingsEdit.url(), searchDescription: "Workspace defaults", onSelect: closeNavigation }] : []),
                 ...(can("jobs.view") ? [{ label: "Jobs & queues", to: adminJobsIndex.url(), searchDescription: "Jobs and queues · Queue health · Horizon monitoring", onSelect: closeNavigation }] : []),
-                ...(can("argon.gallery.view") ? [{ label: "Argon gallery", to: argonGalleryIndex.url(), searchDescription: "Protected reference gallery · Component laboratories · Source manifest", onSelect: closeNavigation }] : []),
               ],
               onSelect: closeNavigation,
             },

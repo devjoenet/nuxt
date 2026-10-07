@@ -1,23 +1,14 @@
-/*
- * Authored Argon foundation layer.
- *
- * Source reference: Argon Dashboard Pro 2.1.0 licensed Sass variables.
- * Font reference: the source requests Open Sans from Google Fonts. This app uses
- * the existing Bunny Fonts provider with an explicit fallback stack and fixed
- * weights, avoiding the licensed icon fonts and their layout-shifting glyph CSS.
- * Icons remain the already-installed Phosphor set.
- */
 @theme static {
   --font-sans: "Open Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
-  --font-weight-argon-light: 300;
-  --font-weight-argon-regular: 400;
-  --font-weight-argon-semibold: 600;
-  --font-weight-argon-bold: 700;
+  --font-weight-app-light: 300;
+  --font-weight-app-regular: 400;
+  --font-weight-app-semibold: 600;
+  --font-weight-app-bold: 700;
 
-  --tracking-argon-tight: -0.025em;
-  --tracking-argon-wide: 0.025em;
+  --tracking-app-tight: -0.025em;
+  --tracking-app-wide: 0.025em;
 
   --breakpoint-sm: 36rem;
   --breakpoint-md: 48rem;
@@ -33,11 +24,11 @@
   --radius-2xl: 1.5rem;
   --radius-pill: 50rem;
 
-  --spacing-argon-control-x: 1rem;
-  --spacing-argon-control-y: 0.75rem;
-  --spacing-argon-card: 1.5rem;
-  --spacing-argon-gutter: 1.5rem;
-  --spacing-argon-section: 4rem;
+  --spacing-app-control-x: 1rem;
+  --spacing-app-control-y: 0.75rem;
+  --spacing-app-card: 1.5rem;
+  --spacing-app-gutter: 1.5rem;
+  --spacing-app-section: 4rem;
 
   --shadow-xs: 0 0.125rem 0.5625rem -0.3125rem rgb(20 20 20 / 0.15);
   --shadow-sm: 0 0.3125rem 0.625rem rgb(20 20 20 / 0.12);
@@ -45,129 +36,129 @@
   --shadow-lg: 0 0.5rem 1.625rem -0.25rem rgb(20 20 20 / 0.15), 0 0.5rem 0.5625rem -0.3125rem rgb(20 20 20 / 0.06);
   --shadow-xl: 0 1.4375rem 2.8125rem -0.6875rem rgb(20 20 20 / 0.25);
 
-  --blur-argon: 1.875rem;
-  --ease-argon-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-argon-spring: cubic-bezier(0.34, 1.61, 0.7, 1.3);
-  --animate-argon-spin: argon-spin 0.75s linear infinite;
-  --animate-argon-pulse: argon-pulse 1.8s var(--ease-argon-standard) infinite;
+  --blur-app: 1.875rem;
+  --ease-app-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-app-spring: cubic-bezier(0.34, 1.61, 0.7, 1.3);
+  --animate-app-spin: app-spin 0.75s linear infinite;
+  --animate-app-pulse: app-pulse 1.8s var(--ease-app-standard) infinite;
 }
 
 :root {
-  --argon-surface-canvas: var(--color-grey-100);
-  --argon-surface-elevated: var(--color-grey-50);
-  --argon-surface-translucent: color-mix(in oklab, var(--color-grey-50) 82%, transparent);
-  --argon-surface-inset: var(--color-grey-200);
-  --argon-surface-interactive: color-mix(in oklab, var(--color-argon-100) 65%, var(--color-grey-50));
-  --argon-surface-overlay: rgb(23 34 58 / 0.48);
-  --argon-text-body: var(--color-slate-600);
-  --argon-text-heading: var(--color-slate-800);
-  --argon-text-subtle: var(--color-grey-700);
-  --argon-icon: var(--color-slate-600);
-  --argon-border: var(--color-grey-300);
-  --argon-divider: var(--color-grey-200);
-  --argon-focus: var(--color-argon-600);
-  --argon-disabled: var(--color-grey-400);
-  --argon-selection: var(--color-argon-200);
-  --argon-grid-columns: 12;
-  --argon-grid-gutter: 1.5rem;
-  --argon-border-width: 1px;
-  --argon-border-width-strong: 2px;
-  --argon-line-height-body: 1.625;
-  --argon-content-sm: 33.75rem;
-  --argon-content-md: 45rem;
-  --argon-content-lg: 60rem;
-  --argon-content-xl: 71.25rem;
-  --argon-content-2xl: 82.5rem;
-  --argon-motion-fast: 150ms;
-  --argon-motion-base: 200ms;
-  --argon-motion-slow: 350ms;
-  --argon-layer-base: 0;
-  --argon-layer-sticky: 20;
-  --argon-layer-navigation: 30;
-  --argon-layer-dropdown: 40;
-  --argon-layer-popover: 50;
-  --argon-layer-modal-backdrop: 60;
-  --argon-layer-modal: 70;
-  --argon-layer-toast: 80;
-  --argon-layer-devtools: 90;
+  --app-surface-canvas: var(--color-grey-100);
+  --app-surface-elevated: var(--color-grey-50);
+  --app-surface-translucent: color-mix(in oklab, var(--color-grey-50) 82%, transparent);
+  --app-surface-inset: var(--color-grey-200);
+  --app-surface-interactive: color-mix(in oklab, var(--color-brand-100) 65%, var(--color-grey-50));
+  --app-surface-overlay: rgb(23 34 58 / 0.48);
+  --app-text-body: var(--color-slate-600);
+  --app-text-heading: var(--color-slate-800);
+  --app-text-subtle: var(--color-grey-700);
+  --app-icon: var(--color-slate-600);
+  --app-border: var(--color-grey-300);
+  --app-divider: var(--color-grey-200);
+  --app-focus: var(--color-brand-600);
+  --app-disabled: var(--color-grey-400);
+  --app-selection: var(--color-brand-200);
+  --app-grid-columns: 12;
+  --app-grid-gutter: 1.5rem;
+  --app-border-width: 1px;
+  --app-border-width-strong: 2px;
+  --app-line-height-body: 1.625;
+  --app-content-sm: 33.75rem;
+  --app-content-md: 45rem;
+  --app-content-lg: 60rem;
+  --app-content-xl: 71.25rem;
+  --app-content-2xl: 82.5rem;
+  --app-motion-fast: 150ms;
+  --app-motion-base: 200ms;
+  --app-motion-slow: 350ms;
+  --app-layer-base: 0;
+  --app-layer-sticky: 20;
+  --app-layer-navigation: 30;
+  --app-layer-dropdown: 40;
+  --app-layer-popover: 50;
+  --app-layer-modal-backdrop: 60;
+  --app-layer-modal: 70;
+  --app-layer-toast: 80;
+  --app-layer-devtools: 90;
 }
 
 .dark {
-  --argon-surface-canvas: #11152a;
-  --argon-surface-elevated: #1a2035;
-  --argon-surface-translucent: rgb(26 32 53 / 0.86);
-  --argon-surface-inset: #202940;
-  --argon-surface-interactive: #252d47;
-  --argon-surface-overlay: rgb(7 11 24 / 0.72);
-  --argon-text-body: var(--color-grey-300);
-  --argon-text-heading: var(--color-grey-50);
-  --argon-text-subtle: var(--color-grey-400);
-  --argon-icon: var(--color-grey-300);
-  --argon-border: #344767;
-  --argon-divider: #2b3654;
-  --argon-focus: var(--color-argon-400);
-  --argon-disabled: var(--color-grey-600);
-  --argon-selection: var(--color-argon-800);
+  --app-surface-canvas: #11152a;
+  --app-surface-elevated: #1a2035;
+  --app-surface-translucent: rgb(26 32 53 / 0.86);
+  --app-surface-inset: #202940;
+  --app-surface-interactive: #252d47;
+  --app-surface-overlay: rgb(7 11 24 / 0.72);
+  --app-text-body: var(--color-grey-300);
+  --app-text-heading: var(--color-grey-50);
+  --app-text-subtle: var(--color-grey-400);
+  --app-icon: var(--color-grey-300);
+  --app-border: #344767;
+  --app-divider: #2b3654;
+  --app-focus: var(--color-brand-400);
+  --app-disabled: var(--color-grey-600);
+  --app-selection: var(--color-brand-800);
 }
 
 @theme inline {
-  --color-surface-canvas: var(--argon-surface-canvas);
-  --color-surface-elevated: var(--argon-surface-elevated);
-  --color-surface-translucent: var(--argon-surface-translucent);
-  --color-surface-inset: var(--argon-surface-inset);
-  --color-surface-interactive: var(--argon-surface-interactive);
-  --color-surface-overlay: var(--argon-surface-overlay);
-  --color-content-body: var(--argon-text-body);
-  --color-content-heading: var(--argon-text-heading);
-  --color-content-subtle: var(--argon-text-subtle);
-  --color-content-icon: var(--argon-icon);
-  --color-content-border: var(--argon-border);
-  --color-content-divider: var(--argon-divider);
-  --color-content-focus: var(--argon-focus);
-  --color-content-disabled: var(--argon-disabled);
+  --color-surface-canvas: var(--app-surface-canvas);
+  --color-surface-elevated: var(--app-surface-elevated);
+  --color-surface-translucent: var(--app-surface-translucent);
+  --color-surface-inset: var(--app-surface-inset);
+  --color-surface-interactive: var(--app-surface-interactive);
+  --color-surface-overlay: var(--app-surface-overlay);
+  --color-content-body: var(--app-text-body);
+  --color-content-heading: var(--app-text-heading);
+  --color-content-subtle: var(--app-text-subtle);
+  --color-content-icon: var(--app-icon);
+  --color-content-border: var(--app-border);
+  --color-content-divider: var(--app-divider);
+  --color-content-focus: var(--app-focus);
+  --color-content-disabled: var(--app-disabled);
 }
 
-html:has([data-argon-app]),
-body:has([data-argon-app]) {
+html:has([data-app]),
+body:has([data-app]) {
   min-height: 100%;
-  background: var(--argon-surface-canvas);
+  background: var(--app-surface-canvas);
 }
 
-[data-argon-app] {
+[data-app] {
   min-height: 100vh;
-  background: var(--argon-surface-canvas);
-  color: var(--argon-text-body);
+  background: var(--app-surface-canvas);
+  color: var(--app-text-body);
   font-family: var(--font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
-[data-argon-app] ::selection {
-  background: var(--argon-selection);
-  color: var(--argon-text-heading);
+[data-app] ::selection {
+  background: var(--app-selection);
+  color: var(--app-text-heading);
 }
 
-[data-argon-app] :focus-visible {
-  outline: 2px solid var(--argon-focus);
+[data-app] :focus-visible {
+  outline: 2px solid var(--app-focus);
   outline-offset: 2px;
 }
 
-@keyframes argon-spin {
+@keyframes app-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes argon-pulse {
+@keyframes app-pulse {
   50% {
     opacity: 0.55;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-argon-app] *,
-  [data-argon-app] *::before,
-  [data-argon-app] *::after {
+  [data-app] *,
+  [data-app] *::before,
+  [data-app] *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;

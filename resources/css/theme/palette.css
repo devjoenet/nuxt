@@ -1,43 +1,39 @@
-/*
- * Argon Dashboard Pro 2.1.0 color references translated into authored palettes.
- * The licensed Sass remains outside Git; these values are application-only tokens.
- */
 @theme static {
-  --color-argon-50: #f4f6ff;
-  --color-argon-100: #e9edff;
-  --color-argon-200: #cdd5ff;
-  --color-argon-300: #aab8ff;
-  --color-argon-400: #8291f6;
-  --color-argon-500: #6d80ec;
-  --color-argon-600: #5e72e4;
-  --color-argon-700: #4c5ac2;
-  --color-argon-800: #3f4a9d;
-  --color-argon-900: #373f7d;
-  --color-argon-950: #202448;
+  --color-brand-50: #f4f6ff;
+  --color-brand-100: #e9edff;
+  --color-brand-200: #cdd5ff;
+  --color-brand-300: #aab8ff;
+  --color-brand-400: #8291f6;
+  --color-brand-500: #6d80ec;
+  --color-brand-600: #5e72e4;
+  --color-brand-700: #4c5ac2;
+  --color-brand-800: #3f4a9d;
+  --color-brand-900: #373f7d;
+  --color-brand-950: #202448;
 
-  --color-argon-secondary-50: #f7f8fa;
-  --color-argon-secondary-100: #edf0f4;
-  --color-argon-secondary-200: #d8dee7;
-  --color-argon-secondary-300: #b7c1d0;
-  --color-argon-secondary-400: #98a6ba;
-  --color-argon-secondary-500: #8392ab;
-  --color-argon-secondary-600: #627594;
-  --color-argon-secondary-700: #4d5b76;
-  --color-argon-secondary-800: #414d62;
-  --color-argon-secondary-900: #394352;
-  --color-argon-secondary-950: #252b36;
+  --color-brand-secondary-50: #f7f8fa;
+  --color-brand-secondary-100: #edf0f4;
+  --color-brand-secondary-200: #d8dee7;
+  --color-brand-secondary-300: #b7c1d0;
+  --color-brand-secondary-400: #98a6ba;
+  --color-brand-secondary-500: #8392ab;
+  --color-brand-secondary-600: #627594;
+  --color-brand-secondary-700: #4d5b76;
+  --color-brand-secondary-800: #414d62;
+  --color-brand-secondary-900: #394352;
+  --color-brand-secondary-950: #252b36;
 
-  --color-argon-accent-50: #faf7ff;
-  --color-argon-accent-100: #f3edff;
-  --color-argon-accent-200: #e8ddff;
-  --color-argon-accent-300: #d5bcff;
-  --color-argon-accent-400: #b78cff;
-  --color-argon-accent-500: #9864f4;
-  --color-argon-accent-600: #825ee4;
-  --color-argon-accent-700: #663dc2;
-  --color-argon-accent-800: #56359e;
-  --color-argon-accent-900: #482e7f;
-  --color-argon-accent-950: #2d1857;
+  --color-brand-accent-50: #faf7ff;
+  --color-brand-accent-100: #f3edff;
+  --color-brand-accent-200: #e8ddff;
+  --color-brand-accent-300: #d5bcff;
+  --color-brand-accent-400: #b78cff;
+  --color-brand-accent-500: #9864f4;
+  --color-brand-accent-600: #825ee4;
+  --color-brand-accent-700: #663dc2;
+  --color-brand-accent-800: #56359e;
+  --color-brand-accent-900: #482e7f;
+  --color-brand-accent-950: #2d1857;
 
   --color-green-50: #f1fcf7;
   --color-green-100: #dff9ec;

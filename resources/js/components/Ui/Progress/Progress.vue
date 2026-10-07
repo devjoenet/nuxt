@@ -16,8 +16,8 @@ const progressClass = computed(() => cn(progressVariants({ tone: props.tone, siz
       ><span v-if="showValue && percent !== undefined">{{ Math.round(percent) }}%</span>
     </div>
     <div :aria-label="label" :aria-valuemax="max" :aria-valuemin="0" :aria-valuenow="value" :class="progressClass" role="progressbar">
-      <div v-if="percent !== undefined" class="h-full rounded-[inherit] bg-[var(--ui-tone)] transition-[width] duration-500 ease-argon-standard" :style="{ width: `${percent}%` }" />
-      <div v-else class="h-full w-1/2 animate-argon-pulse rounded-[inherit] bg-[var(--ui-tone)]" />
+      <div v-if="percent !== undefined" class="h-full rounded-[inherit] bg-[var(--ui-tone)] transition-[width] duration-500 ease-app-standard" :style="{ width: `${percent}%` }" />
+      <div v-else class="h-full w-1/2 animate-app-pulse rounded-[inherit] bg-[var(--ui-tone)]" />
     </div>
   </div>
 </template>

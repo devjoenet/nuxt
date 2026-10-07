@@ -41,7 +41,6 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
         'resources/js/layouts/AuthBasic.vue',
         'resources/js/layouts/Auth/AuthSplitLayout.vue',
         'resources/js/pages/Auth/ForgotPasswordNuxt.vue',
-        'resources/js/pages/Development/Argon',
         'resources/js/pages/Welcome/Components/MetricCard.vue',
         'resources/js/composables/getErrors.ts',
         'resources/js/composables/useInitials.ts',
@@ -219,8 +218,6 @@ test('all baseline application pages are covered by the migrated route families'
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->reject(fn (SplFileInfo $file): bool => Str::contains($file->getRelativePathname(), [
             '/Components/',
-            'Admin/ArgonGallery/',
-            'Development/Argon/',
         ]))
         ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
         ->sort()
@@ -266,33 +263,22 @@ test('all baseline application pages are covered by the migrated route families'
     ]);
 });
 
-test('all baseline routes remain alongside the protected Argon gallery routes', function (): void {
+test('all baseline application routes remain registered', function (): void {
     Artisan::call('route:list', [
         '--except-vendor' => true,
         '--json' => true,
     ]);
 
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR));
-    $galleryRoutes = $routes
-        ->filter(fn (array $route): bool => Str::startsWith($route['name'] ?? '', 'admin.argonGallery.'))
-        ->values();
-    $baselineRoutes = $routes
-        ->reject(fn (array $route): bool => Str::startsWith($route['name'] ?? '', 'admin.argonGallery.'));
 
-    expect($routes)->toHaveCount(90)
-        ->and($galleryRoutes)->toHaveCount(2)
-        ->and($galleryRoutes->pluck('name')->all())->toBe([
-            'admin.argonGallery.index',
-            'admin.argonGallery.examples.show',
-        ])
-        ->and($baselineRoutes)->toHaveCount(88);
+    expect($routes)->toHaveCount(88);
 });
 
 test('temporary frontend compatibility aliases cannot return', function (): void {
     $legacyAliasUsages = collect(File::allFiles(resource_path()))
         ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['css', 'ts', 'vue'], true))
         ->filter(fn (SplFileInfo $file): bool => preg_match(
-            '/(?<!argon-)\b(?:neutral|muted|accent|teal|violet)-\d+/',
+            '/(?<!brand-)\b(?:neutral|muted|accent|teal|violet)-\d+/',
             File::get($file->getPathname()),
         ) === 1)
         ->map(fn (SplFileInfo $file): string => Str::after($file->getPathname(), resource_path().DIRECTORY_SEPARATOR))
@@ -687,7 +673,6 @@ test('route families use shared client and server layout boundaries', function (
     $authLayout = File::get(resource_path('js/layouts/AuthLayout.vue'));
     $publicLayout = File::get(resource_path('js/layouts/PublicLayout.vue'));
     $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
-    $galleryLayout = File::get(resource_path('js/layouts/GalleryLayout.vue'));
     $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar/WorkspaceSidebar.vue'));
     $workspaceSearch = File::get(resource_path('js/components/WorkspaceSearch/WorkspaceSearch.vue'));
 
@@ -714,7 +699,6 @@ test('route families use shared client and server layout boundaries', function (
         ->toContain('export function resolveAppLayout(name: string, _page: Page): Component | Component[] | null')
         ->toContain('name.startsWith("Auth/")')
         ->toContain('return [ApplicationLayout, SettingsLayout];')
-        ->toContain('return [ApplicationLayout, GalleryLayout];')
         ->and($viteConfig)
         ->toContain('defineConfig(({ isSsrBuild }) => ({')
         ->toContain('entry: "resources/js/ssr.ts"')
@@ -733,9 +717,6 @@ test('route families use shared client and server layout boundaries', function (
         ->and($settingsLayout)
         ->toContain('profileEdit.url()')
         ->toContain('securityShow.url()')
-        ->and($galleryLayout)
-        ->toContain('<WorkspacePage')
-        ->toContain('<UNavigationMenu')
         ->and($workspaceSidebar)
         ->toContain('aria-label="Primary workspace navigation"')
         ->toContain('aria-label="Account navigation"')

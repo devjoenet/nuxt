@@ -67,9 +67,9 @@ const isAuthenticated = computed(() => page.props.auth.user !== null);
         <AppLogo
           :icon-class="'h-auto w-44 max-w-full sm:w-56'"
           aria-hidden="true"
-          code-variant-class="fill-argon-accent-600 dark:fill-argon-accent-400"
-          hr-variant-class="stroke-argon-accent-600 dark:stroke-argon-accent-400"
-          logo-variant-class="fill-argon-600 dark:fill-argon-400"
+          code-variant-class="fill-brand-accent-600 dark:fill-brand-accent-400"
+          hr-variant-class="stroke-brand-accent-600 dark:stroke-brand-accent-400"
+          logo-variant-class="fill-brand-600 dark:fill-brand-400"
           southeast-variant-class="fill-slate-950 dark:fill-slate-50"
         />
       </Link>

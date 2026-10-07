@@ -58,8 +58,7 @@ effects, Eloquent models own persistence and relationships, Policies/Gates own a
 classes shape page data, and Pest feature tests prove workflows and access boundaries. Vue pages live in
 `resources/js/pages`, shared UI lives in `resources/js/components`, and frontend route calls use generated Wayfinder
 imports. The [frontend UI architecture](docs/development/frontend-ui-architecture.md) defines the client composition
-layers, extraction rules, and dependency boundaries. The approved target state and implementation sequence are in the
-[Argon frontend overhaul blueprint](docs/development/argon-frontend-overhaul.md).
+layers, extraction rules, and dependency boundaries.
 
 ## Queues and deployment
 

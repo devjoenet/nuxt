@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { uiToneClasses } from "@/lib/uiTone";
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 border font-semibold tracking-[0.025rem] transition duration-(--argon-motion-base) ease-argon-standard select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content-focus disabled:pointer-events-none disabled:opacity-65 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
+  "inline-flex items-center justify-center gap-2 border font-semibold tracking-[0.025rem] transition duration-(--app-motion-base) ease-app-standard select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content-focus disabled:pointer-events-none disabled:opacity-65 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
   {
     variants: {
       tone: uiToneClasses,

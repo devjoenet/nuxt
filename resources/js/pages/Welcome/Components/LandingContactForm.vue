@@ -96,7 +96,7 @@ const handleSuccess = async (): Promise<void> => {
 
       <button
         :disabled="processing"
-        class="inline-flex min-h-12 items-center justify-center rounded-md bg-argon-accent-500 px-6 py-3 text-sm font-bold text-argon-accent-50 shadow-lg shadow-argon-accent-500/25 transition hover:bg-argon-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-argon-accent-200 disabled:cursor-wait disabled:opacity-60"
+        class="inline-flex min-h-12 items-center justify-center rounded-md bg-brand-accent-500 px-6 py-3 text-sm font-bold text-brand-accent-50 shadow-lg shadow-brand-accent-500/25 transition hover:bg-brand-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent-200 disabled:cursor-wait disabled:opacity-60"
         type="submit"
       >
         {{ processing ? "Sending…" : "Send project details" }}

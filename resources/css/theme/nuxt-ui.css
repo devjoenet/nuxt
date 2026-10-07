@@ -1,54 +1,54 @@
 /* Nuxt UI semantic roles. These are the values components consume. */
 :root {
-  --ui-primary: var(--color-argon-800);
-  --ui-secondary: var(--color-argon-secondary-700);
+  --ui-primary: var(--color-brand-800);
+  --ui-secondary: var(--color-brand-secondary-700);
   --ui-success: var(--color-green-500);
   --ui-info: var(--color-cyan-800);
   --ui-warning: var(--color-orange-500);
   --ui-error: var(--color-red-500);
 
   --ui-text-dimmed: var(--color-grey-700);
-  --ui-text-muted: var(--argon-text-body);
+  --ui-text-muted: var(--app-text-body);
   --ui-text-toned: var(--color-slate-600);
-  --ui-text: var(--argon-text-body);
-  --ui-text-highlighted: var(--argon-text-heading);
+  --ui-text: var(--app-text-body);
+  --ui-text-highlighted: var(--app-text-heading);
   --ui-text-inverted: var(--color-grey-50);
 
-  --ui-bg: var(--argon-surface-canvas);
-  --ui-bg-muted: var(--argon-surface-inset);
-  --ui-bg-elevated: var(--argon-surface-elevated);
-  --ui-bg-accented: var(--argon-surface-interactive);
+  --ui-bg: var(--app-surface-canvas);
+  --ui-bg-muted: var(--app-surface-inset);
+  --ui-bg-elevated: var(--app-surface-elevated);
+  --ui-bg-accented: var(--app-surface-interactive);
   --ui-bg-inverted: var(--color-slate-950);
 
-  --ui-border: var(--argon-border);
-  --ui-border-muted: var(--argon-divider);
+  --ui-border: var(--app-border);
+  --ui-border-muted: var(--app-divider);
   --ui-border-accented: var(--color-slate-300);
   --ui-border-inverted: var(--color-slate-950);
 }
 
 .dark {
-  --ui-primary: var(--color-argon-400);
-  --ui-secondary: var(--color-argon-secondary-400);
+  --ui-primary: var(--color-brand-400);
+  --ui-secondary: var(--color-brand-secondary-400);
   --ui-success: var(--color-green-500);
   --ui-info: var(--color-cyan-500);
   --ui-warning: var(--color-orange-500);
   --ui-error: var(--color-red-500);
 
   --ui-text-dimmed: var(--color-grey-400);
-  --ui-text-muted: var(--argon-text-body);
+  --ui-text-muted: var(--app-text-body);
   --ui-text-toned: var(--color-grey-300);
-  --ui-text: var(--argon-text-body);
-  --ui-text-highlighted: var(--argon-text-heading);
+  --ui-text: var(--app-text-body);
+  --ui-text-highlighted: var(--app-text-heading);
   --ui-text-inverted: var(--color-slate-950);
 
-  --ui-bg: var(--argon-surface-canvas);
-  --ui-bg-muted: var(--argon-surface-inset);
-  --ui-bg-elevated: var(--argon-surface-elevated);
-  --ui-bg-accented: var(--argon-surface-interactive);
+  --ui-bg: var(--app-surface-canvas);
+  --ui-bg-muted: var(--app-surface-inset);
+  --ui-bg-elevated: var(--app-surface-elevated);
+  --ui-bg-accented: var(--app-surface-interactive);
   --ui-bg-inverted: var(--color-grey-50);
 
-  --ui-border: var(--argon-border);
-  --ui-border-muted: var(--argon-divider);
+  --ui-border: var(--app-border);
+  --ui-border-muted: var(--app-divider);
   --ui-border-accented: var(--color-slate-700);
   --ui-border-inverted: var(--color-grey-50);
 }

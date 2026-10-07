@@ -13,7 +13,7 @@ const breadcrumbs = useWorkspaceBreadcrumbs(toRef(props, "title"));
 </script>
 
 <template>
-  <UDashboardNavbar :aria-describedby="descriptionId" class="border-b border-content-border bg-surface-translucent/95 backdrop-blur-argon" :ui="{ root: 'min-h-16 px-4 sm:px-6' }">
+  <UDashboardNavbar :aria-describedby="descriptionId" class="border-b border-content-border bg-surface-translucent/95 backdrop-blur-app" :ui="{ root: 'min-h-16 px-4 sm:px-6' }">
     <template #leading>
       <UDashboardSidebarCollapse />
     </template>

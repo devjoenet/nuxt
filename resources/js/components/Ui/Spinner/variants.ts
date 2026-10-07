@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-export const spinnerVariants = cva("inline-block shrink-0 rounded-full border-2 border-current border-r-transparent motion-safe:animate-argon-spin", {
+export const spinnerVariants = cva("inline-block shrink-0 rounded-full border-2 border-current border-r-transparent motion-safe:animate-app-spin", {
   variants: {
     size: {
       xs: "size-3",

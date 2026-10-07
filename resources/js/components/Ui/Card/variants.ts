@@ -1,14 +1,14 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { uiToneClasses } from "@/lib/uiTone";
 
-export const cardVariants = cva("overflow-hidden rounded-xl transition duration-(--argon-motion-base) ease-argon-standard", {
+export const cardVariants = cva("overflow-hidden rounded-xl transition duration-(--app-motion-base) ease-app-standard", {
   variants: {
     tone: uiToneClasses,
     variant: {
       elevated: "border border-transparent bg-surface-elevated shadow-md",
       outline: "border border-content-border bg-surface-elevated shadow-none",
       soft: "border border-[var(--ui-tone-border)] bg-[var(--ui-tone-soft)] shadow-none",
-      glass: "border border-white/30 bg-surface-translucent shadow-lg backdrop-blur-argon",
+      glass: "border border-white/30 bg-surface-translucent shadow-lg backdrop-blur-app",
       naked: "rounded-none border-0 bg-transparent shadow-none",
     },
     padding: {
