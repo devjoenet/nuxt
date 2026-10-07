@@ -19,7 +19,7 @@ const toneClasses = computed(() => {
   const tones = {
     primary: "text-primary-400",
     secondary: "text-secondary-400",
-    accent: "text-argon-accent-400",
+    accent: "text-brand-accent-400",
   };
 
   return tones[props.tone];

@@ -105,10 +105,10 @@
     border-radius: var(--radius-xl);
     background-color: transparent;
     transition:
-      border-color var(--argon-motion-fast) var(--ease-argon-standard),
-      border-bottom-width var(--argon-motion-fast) var(--ease-argon-standard),
-      background-color var(--argon-motion-fast) var(--ease-argon-standard),
-      outline-color var(--argon-motion-fast) var(--ease-argon-standard);
+      border-color var(--app-motion-fast) var(--ease-app-standard),
+      border-bottom-width var(--app-motion-fast) var(--ease-app-standard),
+      background-color var(--app-motion-fast) var(--ease-app-standard),
+      outline-color var(--app-motion-fast) var(--ease-app-standard);
   }
 
   .form-field__shell[data-variant="filled"] {
@@ -168,12 +168,12 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     transition:
-      inset-inline-start var(--argon-motion-fast) var(--ease-argon-standard),
-      top var(--argon-motion-fast) var(--ease-argon-standard),
-      transform var(--argon-motion-fast) var(--ease-argon-standard),
-      color var(--argon-motion-fast) var(--ease-argon-standard),
-      background-color var(--argon-motion-fast) var(--ease-argon-standard),
-      padding var(--argon-motion-fast) var(--ease-argon-standard);
+      inset-inline-start var(--app-motion-fast) var(--ease-app-standard),
+      top var(--app-motion-fast) var(--ease-app-standard),
+      transform var(--app-motion-fast) var(--ease-app-standard),
+      color var(--app-motion-fast) var(--ease-app-standard),
+      background-color var(--app-motion-fast) var(--ease-app-standard),
+      padding var(--app-motion-fast) var(--ease-app-standard);
   }
 
   .form-field__shell:has([data-slot="leading"]) .form-field__label {
@@ -300,8 +300,8 @@
 
   .form-field__shell[data-disabled="true"],
   .form-field__shell[data-readonly="true"] {
-    border-color: var(--argon-disabled);
-    background-color: color-mix(in oklab, var(--argon-surface-inset) 56%, transparent);
+    border-color: var(--app-disabled);
+    background-color: color-mix(in oklab, var(--app-surface-inset) 56%, transparent);
   }
 
   .form-field__shell[data-disabled="true"] {
@@ -322,7 +322,7 @@
 
   .form-field__choice-label,
   .form-field__legend {
-    color: var(--argon-text-heading);
+    color: var(--app-text-heading);
     font-size: 0.9375rem;
     font-weight: 600;
     line-height: 1.5rem;

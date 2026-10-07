@@ -6,16 +6,15 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
-test('the Argon foundation is authored, scoped, and explicit in both themes', function (): void {
+test('the application foundation is scoped and explicit in both themes', function (): void {
     $palette = File::get(resource_path('css/theme/palette.css'));
     $foundations = File::get(resource_path('css/theme/foundations.css'));
     $nuxtUi = File::get(resource_path('css/theme/nuxt-ui.css'));
     $blade = File::get(resource_path('views/app.blade.php'));
 
     expect($palette)
-        ->toContain('Argon Dashboard Pro 2.1.0 color references translated into authored palettes.')
-        ->toContain('--color-argon-600: #5e72e4;')
-        ->toContain('--color-argon-accent-600: #825ee4;')
+        ->toContain('--color-brand-600: #5e72e4;')
+        ->toContain('--color-brand-accent-600: #825ee4;')
         ->toContain('--color-green-500: #2dce89;')
         ->toContain('--color-cyan-500: #11cdef;')
         ->toContain('--color-orange-400: #fb6340;')
@@ -24,24 +23,22 @@ test('the Argon foundation is authored, scoped, and explicit in both themes', fu
         ->toContain('--font-sans: "Open Sans"')
         ->toContain('--breakpoint-sm: 36rem;')
         ->toContain('--breakpoint-2xl: 87.5rem;')
-        ->toContain('--spacing-argon-gutter: 1.5rem;')
-        ->toContain('--argon-grid-columns: 12;')
-        ->toContain('--argon-border-width: 1px;')
+        ->toContain('--spacing-app-gutter: 1.5rem;')
+        ->toContain('--app-grid-columns: 12;')
+        ->toContain('--app-border-width: 1px;')
         ->toContain('--radius-pill: 50rem;')
         ->toContain('--shadow-xl:')
-        ->toContain('--argon-layer-modal: 70;')
+        ->toContain('--app-layer-modal: 70;')
         ->toContain('.dark {')
-        ->toContain('[data-argon-app] {')
+        ->toContain('[data-app] {')
         ->toContain('@media (prefers-reduced-motion: reduce)')
-        ->toContain('the existing Bunny Fonts provider')
-        ->toContain('Icons remain the already-installed Phosphor set.')
         ->and($nuxtUi)
-        ->toContain('--ui-primary: var(--color-argon-800);')
-        ->toContain('--ui-bg: var(--argon-surface-canvas);')
+        ->toContain('--ui-primary: var(--color-brand-800);')
+        ->toContain('--ui-bg: var(--app-surface-canvas);')
         ->toContain('.dark {')
         ->and($blade)
         ->toContain('open-sans:300,400,600,700')
-        ->toContain('data-argon-app');
+        ->toContain('data-app');
 });
 
 test('core visual primitives expose typed public APIs and CVA variants', function (): void {
@@ -123,7 +120,7 @@ test('core visual primitives expose typed public APIs and CVA variants', functio
     ]);
 });
 
-test('Argon navigation shells share semantic chrome and accessible overlays', function (): void {
+test('application navigation shells share semantic chrome and accessible overlays', function (): void {
     $workspaceNavbar = File::get(resource_path('js/components/WorkspaceNavbar/WorkspaceNavbar.vue'));
     $workspaceSidebar = File::get(resource_path('js/components/WorkspaceSidebar/WorkspaceSidebar.vue'));
     $landingHeader = File::get(resource_path('js/components/LandingHeader/LandingHeader.vue'));
@@ -214,34 +211,4 @@ test('the floating form system covers the approved controls and retires flat wra
         ->toContain('"components/AsyncCrmSelect.vue": "components/AsyncCrmSelect using components/Ui/FormAsyncSelect"')
         ->toContain('"native input[type=file]": "components/Ui/FormFileUpload"')
         ->toContain('"native input[type=datetime-local]": "components/Ui/FormInput type=datetime-local"');
-});
-
-test('Argon gallery labs cover foundation, primitive, and form states', function (): void {
-    $foundation = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/FoundationLab.vue'));
-    $primitives = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/PrimitiveLab.vue'));
-    $forms = File::get(resource_path('js/pages/Admin/ArgonGallery/Components/FormLab.vue'));
-
-    expect($foundation)
-        ->toContain('bg-primary')
-        ->toContain('bg-secondary')
-        ->toContain('bg-success')
-        ->toContain('bg-error')
-        ->and($primitives)
-        ->toContain('const toneItems = uiTones.map')
-        ->toContain('v-model="disabled"')
-        ->toContain('v-model="loading"')
-        ->toContain('<Button')
-        ->toContain('<Badge')
-        ->and($forms)
-        ->toContain('const value = ref("Restored value")')
-        ->toContain('"invalid"')
-        ->toContain('"disabled"')
-        ->toContain('"readonly"')
-        ->toContain('"loading"')
-        ->toContain('Review this value.')
-        ->toContain('<FormInput')
-        ->toContain('<FormSelect')
-        ->toContain('<FormTextarea')
-        ->toContain('<FormCheckbox')
-        ->toContain('<FormSwitch');
 });

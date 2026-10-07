@@ -12,7 +12,7 @@ const roles = ["Admin", "Ops lead", "Analyst", "Driver"];
     :transition="{ duration: 0.75, ease: 'easeOut' }"
     :viewport="{ once: true, amount: 0.2 }"
     :while-in-view="{ opacity: 1, y: 0, rotate: 0 }"
-    class="rounded-xl border border-argon-accent-500/25 bg-slate-50/82 p-4 shadow-2xl ring-1 shadow-slate-950/12 ring-slate-200/80 backdrop-blur-md dark:bg-slate-950/72 dark:shadow-slate-950/40 dark:ring-grey-100/10"
+    class="rounded-xl border border-brand-accent-500/25 bg-slate-50/82 p-4 shadow-2xl ring-1 shadow-slate-950/12 ring-slate-200/80 backdrop-blur-md dark:bg-slate-950/72 dark:shadow-slate-950/40 dark:ring-grey-100/10"
     aria-label="User and role permissions preview"
   >
     <div class="flex items-center justify-between border-b border-slate-200 pb-4 dark:border-grey-100/10">
@@ -31,7 +31,7 @@ const roles = ["Admin", "Ops lead", "Analyst", "Driver"];
         <tbody class="divide-y divide-slate-200 dark:divide-grey-100/10">
           <tr v-for="permission in permissions" :key="permission">
             <th class="px-3 py-3 font-medium text-slate-700 dark:text-grey-300" scope="row">{{ permission }}</th>
-            <td v-for="role in roles" :key="`${permission}-${role}`" class="px-3 py-3 text-center text-argon-accent-400">
+            <td v-for="role in roles" :key="`${permission}-${role}`" class="px-3 py-3 text-center text-brand-accent-400">
               <UIcon aria-label="Included" class="mx-auto size-4" name="i-ph-check" />
             </td>
           </tr>

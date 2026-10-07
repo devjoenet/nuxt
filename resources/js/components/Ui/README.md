@@ -1,6 +1,6 @@
 # UI primitives
 
-This directory is the portable Argon design-system layer. Each primitive lives in a PascalCase directory with the
+This directory is the portable design-system layer. Each primitive lives in a PascalCase directory with the
 same name as its Vue file and exposes its supported API through that directory's `index.ts`.
 
 ```text

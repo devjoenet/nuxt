@@ -54,30 +54,6 @@ test('the database workflow replaces markdown task queues', function (): void {
     }
 });
 
-test('the Argon frontend overhaul remains a durable reference instead of a task queue', function (): void {
-    $blueprint = File::get(base_path('docs/development/argon-frontend-overhaul.md'));
-    $licensingReview = File::get(base_path('docs/development/argon-source-licensing.md'));
-    $readme = File::get(base_path('README.md'));
-
-    expect($blueprint)
-        ->toContain('durable architecture and verification reference')
-        ->toContain('not an active task queue')
-        ->toContain('database-backed Development workspace remains the sole source of truth')
-        ->toContain('resources/js/components/Ui')
-        ->toContain('superseded `resources/js/sections` tree')
-        ->toContain('Licensed Argon HTML examples | 69')
-        ->toContain('[`source-manifest.json`](../../resources/argon/source-manifest.json)')
-        ->toContain('[licensing and distribution review](argon-source-licensing.md)')
-        ->toContain('## Final implementation inventory and divergence register')
-        ->toContain('No unresolved application divergence remains outside these decisions.')
-        ->and($licensingReview)
-        ->toContain('The local licensed checkout remains outside this repository')
-        ->toContain('Questions that must be resolved before starter-kit extraction')
-        ->toContain('argon:generate-source-manifest')
-        ->and($readme)
-        ->toContain('[Argon frontend overhaul blueprint](docs/development/argon-frontend-overhaul.md)');
-});
-
 test('maintained deployment documentation only names registered artisan commands', function (): void {
     $commands = collect(File::allFiles(base_path('docs')))
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'md')

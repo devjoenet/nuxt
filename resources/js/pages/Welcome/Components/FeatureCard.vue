@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 const toneClasses = computed(() => {
   const tones = {
     primary: "text-primary-400 border-primary-500/30 bg-primary-500/10",
-    accent: "text-argon-accent-400 border-argon-accent-500/30 bg-argon-accent-500/10",
+    accent: "text-brand-accent-400 border-brand-accent-500/30 bg-brand-accent-500/10",
     secondary: "text-secondary-400 border-secondary-500/30 bg-secondary-500/10",
     warning: "text-warning-400 border-warning-500/30 bg-warning-500/10",
   };
@@ -33,7 +33,7 @@ const toneClasses = computed(() => {
 const articleClasses = computed(() => {
   const tones = {
     primary: "border-primary-500/15 hover:border-primary-500/35",
-    accent: "border-argon-accent-500/15 hover:border-argon-accent-500/35",
+    accent: "border-brand-accent-500/15 hover:border-brand-accent-500/35",
     secondary: "border-secondary-500/15 hover:border-secondary-500/35",
     warning: "border-warning-500/15 hover:border-warning-500/35",
   };

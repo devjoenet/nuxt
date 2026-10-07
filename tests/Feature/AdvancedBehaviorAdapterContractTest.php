@@ -185,15 +185,3 @@ test('first-party adapters expose SSR-safe values and accessible interaction sta
         ->toContain('CSS.escape(card.id)')
         ->toContain('onBeforeUnmount');
 });
-
-test('the implementation decisions are recorded in the Argon blueprint', function (): void {
-    $blueprint = File::get(base_path('docs/development/argon-frontend-overhaul.md'));
-
-    expect($blueprint)
-        ->toContain('Task 8 established the following concrete boundaries:')
-        ->toContain('LazyAdvancedChart')
-        ->toContain('LazyAdvancedEditor')
-        ->toContain('LazyAdvancedMap')
-        ->toContain('| `vite-plus` 0.3.0 |')
-        ->toContain('| `maplibre-gl` 6.6.0 |');
-});

@@ -55,7 +55,7 @@ import { Motion } from "motion-v";
             <UIcon aria-hidden="true" class="size-4" name="i-ph-camera" />
             Capture photo
           </span>
-          <span class="flex items-center justify-center gap-2 rounded-md border border-argon-accent-500/35 px-3 py-2 text-xs font-semibold text-argon-accent-700 dark:text-argon-accent-100">
+          <span class="flex items-center justify-center gap-2 rounded-md border border-brand-accent-500/35 px-3 py-2 text-xs font-semibold text-brand-accent-700 dark:text-brand-accent-100">
             <UIcon aria-hidden="true" class="size-4" name="i-ph-wifi-high" />
             Complete check-in
           </span>

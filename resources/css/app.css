@@ -12,7 +12,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
-  [data-argon-app] {
+  [data-app] {
     @apply bg-surface-canvas text-content-body antialiased scheme-light dark:scheme-dark;
   }
 }

@@ -2,7 +2,7 @@
 
 This document defines the approved composition boundary for the Inertia/Vue client. The goal
 is small, responsibility-focused components with explicit public APIs. Nuxt UI remains the accessible vendor
-foundation; the first-party Argon layer supplies portable visual primitives and application components add only real
+foundation; the first-party UI layer supplies portable visual primitives and application components add only real
 Southeast Code behavior or defaults.
 
 Responsibility remains the primary design test. Script budgets are review triggers that expose mixed ownership early;
@@ -13,9 +13,9 @@ they are not permission to split coherent behavior into arbitrary fragments.
 | Layer | Home | Responsibility |
 | --- | --- | --- |
 | Vendor foundation | Nuxt UI, Vue, Inertia, VueUse, Reka UI, Motion, Unovis, and `vite.config.ts` | Accessibility behavior, reactivity, routing, and centralized vendor configuration. Direct Nuxt UI composition remains valid when no first-party contract exists. |
-| UI primitives | `resources/js/components/Ui/<Primitive>` | Portable Argon presentation and generic accessible behavior with typed Vue APIs, semantic tokens, and CVA variants. |
+| UI primitives | `resources/js/components/Ui/<Primitive>` | Portable presentation and generic accessible behavior with typed Vue APIs, semantic tokens, and CVA variants. |
 | Application components | `resources/js/components/<Component>` | Reusable Southeast Code defaults, terminology, authorization-aware presentation, route coordination, or other deliberate product behavior. |
-| Layouts | `resources/js/layouts` | Persistent application, authentication, settings, gallery, and workspace shells. |
+| Layouts | `resources/js/layouts` | Persistent application, authentication, settings, and workspace shells. |
 | Page-family components | `resources/js/pages/<Family>/Components` | Components and supporting types owned by one page family or workflow. |
 | Pages | `resources/js/pages` | Inertia route entries that accept typed server props, choose layouts, set route metadata, and coordinate domain behavior. |
 | Composables | `resources/js/composables` | Reusable reactive behavior and explicit lifecycle or browser concerns. Check VueUse before adding one. |
@@ -98,7 +98,7 @@ product contracts use component-directory public APIs under `resources/js/compon
   Wayfinder navigation and server mutations.
 - Use named slots for caller-owned structure or actions, forward meaningful HTML attributes, preserve native and
   Nuxt UI accessibility behavior, and keep external spacing at the call site.
-- Direct design values do not belong in Vue templates. UI primitives consume the semantic Argon tokens and supported
+- Direct design values do not belong in Vue templates. UI primitives consume the semantic application tokens and supported
   Tailwind utilities established by the foundation layer.
 
 ## Naming, typing, and generated code

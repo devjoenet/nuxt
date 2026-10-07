@@ -100,8 +100,8 @@ export default defineConfig(({ isSsrBuild }) => ({
           warning: "i-ph-warning",
         },
         colors: {
-          primary: "argon",
-          secondary: "argon-secondary",
+          primary: "brand",
+          secondary: "brand-secondary",
           success: "green",
           info: "cyan",
           warning: "orange",
@@ -265,7 +265,6 @@ export default defineConfig(({ isSsrBuild }) => ({
       "composer.json",
       "node_modules/**",
       "public/**",
-      "resources/argon/source-manifest.json",
       "resources/js/actions/**",
       "resources/js/routes/**",
       "resources/js/wayfinder/**",

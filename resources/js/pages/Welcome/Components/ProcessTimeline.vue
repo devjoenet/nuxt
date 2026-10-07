@@ -15,28 +15,28 @@ defineProps<{
 const circleClasses = {
   primary: "border-primary-400 text-primary-300 shadow-primary-500/30 group-hover:shadow-primary-400/45",
   secondary: "border-secondary-400 text-secondary-300 shadow-secondary-500/30 group-hover:shadow-secondary-400/45",
-  accent: "border-argon-accent-400 text-argon-accent-300 shadow-argon-accent-500/30 group-hover:shadow-argon-accent-400/45",
+  accent: "border-brand-accent-400 text-brand-accent-300 shadow-brand-accent-500/30 group-hover:shadow-brand-accent-400/45",
   warning: "border-warning-400 text-warning-300 shadow-warning-500/30 group-hover:shadow-warning-400/45",
 };
 
 const cardClasses = {
   primary: "group-hover:border-primary-400/45 group-hover:shadow-primary-950/30",
   secondary: "group-hover:border-secondary-400/45 group-hover:shadow-secondary-950/30",
-  accent: "group-hover:border-argon-accent-400/45 group-hover:shadow-argon-accent-950/30",
+  accent: "group-hover:border-brand-accent-400/45 group-hover:shadow-brand-accent-950/30",
   warning: "group-hover:border-warning-400/45 group-hover:shadow-warning-950/30",
 };
 
 const labelClasses = {
   primary: "text-primary-300",
   secondary: "text-secondary-300",
-  accent: "text-argon-accent-300",
+  accent: "text-brand-accent-300",
   warning: "text-warning-300",
 };
 
 const railClasses = {
-  primary: "from-primary-400/90 via-secondary-400/70 to-argon-accent-400/70",
-  secondary: "from-secondary-400/90 via-argon-accent-400/70 to-warning-400/70",
-  accent: "from-argon-accent-400/90 via-warning-400/70 to-primary-400/70",
+  primary: "from-primary-400/90 via-secondary-400/70 to-brand-accent-400/70",
+  secondary: "from-secondary-400/90 via-brand-accent-400/70 to-warning-400/70",
+  accent: "from-brand-accent-400/90 via-warning-400/70 to-primary-400/70",
   warning: "from-warning-400/90 via-primary-400/70 to-secondary-400/70",
 };
 </script>

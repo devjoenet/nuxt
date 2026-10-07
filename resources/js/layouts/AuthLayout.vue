@@ -43,7 +43,7 @@ withDefaults(
       </div>
 
       <div class="flex flex-1 items-center justify-center py-10">
-        <Card as="section" class="w-full max-w-md [--form-field-label-background:var(--argon-surface-elevated)]" data-testid="auth-shell-card" padding="lg" variant="elevated">
+        <Card as="section" class="w-full max-w-md [--form-field-label-background:var(--app-surface-elevated)]" data-testid="auth-shell-card" padding="lg" variant="elevated">
           <header class="mb-8 space-y-2">
             <p class="text-xs font-bold tracking-[0.16em] text-primary uppercase">Secure workspace</p>
             <h1 class="text-2xl font-semibold tracking-tight text-content-heading">{{ title }}</h1>

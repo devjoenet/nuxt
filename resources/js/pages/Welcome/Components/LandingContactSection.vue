@@ -15,7 +15,7 @@ const props = defineProps<{
     id="contact"
     :class="
       cn(
-        'scroll-mt-28 border-y border-argon-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]',
+        'scroll-mt-28 border-y border-brand-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]',
         props.class,
       )
     "
@@ -26,7 +26,7 @@ const props = defineProps<{
       :transition="{ duration: 0.75, delay: 0.1, ease: 'easeOut' }"
       :viewport="{ once: true, amount: 0.22 }"
       :while-in-view="{ opacity: 1, y: 0, scale: 1 }"
-      class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-argon-accent-500/25 bg-slate-50/90 p-6 shadow-2xl ring-1 shadow-argon-accent-950/10 ring-slate-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-slate-900/85 dark:shadow-argon-accent-950/30 dark:ring-transparent"
+      class="mx-auto grid max-w-6xl gap-10 rounded-xl border border-brand-accent-500/25 bg-slate-50/90 p-6 shadow-2xl ring-1 shadow-brand-accent-950/10 ring-slate-200/70 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:p-10 dark:bg-slate-900/85 dark:shadow-brand-accent-950/30 dark:ring-transparent"
     >
       <div>
         <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-300">Ready to replace the workaround?</p>

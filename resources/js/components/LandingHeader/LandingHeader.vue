@@ -25,7 +25,7 @@ function closeMobileNavigation(): void {
 <template>
   <Motion as="header" :animate="{ opacity: 1, y: 0 }" :initial="{ opacity: 0, y: -18 }" :transition="{ duration: 0.45, ease: 'easeOut' }" class="fixed inset-x-0 top-0 z-50 px-4 py-3 sm:px-8">
     <div
-      :class="navigationHasSurface ? 'border-content-border bg-surface-translucent shadow-lg backdrop-blur-argon' : 'border-transparent bg-transparent shadow-none'"
+      :class="navigationHasSurface ? 'border-content-border bg-surface-translucent shadow-lg backdrop-blur-app' : 'border-transparent bg-transparent shadow-none'"
       class="mx-auto flex min-h-16 w-full max-w-7xl items-center gap-4 rounded-2xl border px-4 transition duration-300 sm:px-6"
     >
       <Link :href="isLandingPage ? '#hero' : home()" aria-label="Southeast Code home" class="w-44 shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">

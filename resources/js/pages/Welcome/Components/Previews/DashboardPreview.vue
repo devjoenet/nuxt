@@ -90,14 +90,14 @@ const approvals = [
           <article class="rounded-lg border border-slate-200 bg-slate-100/80 p-4 dark:border-grey-100/10 dark:bg-slate-900/80">
             <div class="flex items-center justify-between">
               <h2 class="text-sm font-semibold text-slate-900 dark:text-grey-100">Approvals queue</h2>
-              <span class="text-xs text-argon-accent-400">7 pending</span>
+              <span class="text-xs text-brand-accent-400">7 pending</span>
             </div>
             <dl class="mt-4 space-y-3">
               <div v-for="approval in approvals" :key="approval[0]" class="grid grid-cols-[auto_1fr_auto_auto] gap-3 text-xs">
                 <dt class="font-semibold text-slate-800 dark:text-grey-200">{{ approval[0] }}</dt>
                 <dd class="text-slate-600 dark:text-grey-400">{{ approval[1] }}</dd>
                 <dd class="text-slate-700 dark:text-grey-300">{{ approval[2] }}</dd>
-                <dd :class="approval[3] === 'High' ? 'text-warning-400' : 'text-argon-accent-400'">{{ approval[3] }}</dd>
+                <dd :class="approval[3] === 'High' ? 'text-warning-400' : 'text-brand-accent-400'">{{ approval[3] }}</dd>
               </div>
             </dl>
           </article>
@@ -114,7 +114,7 @@ const approvals = [
           <div class="mt-3 flex flex-wrap gap-4 text-xs">
             <p class="flex items-center gap-2 text-warning-400"><UIcon aria-hidden="true" class="size-4" name="i-ph-warning-circle" /> Low stock: BOLT-12</p>
             <p class="text-slate-600 dark:text-grey-400">3 shipments delayed</p>
-            <p class="text-argon-accent-400">Invoice sync failed</p>
+            <p class="text-brand-accent-400">Invoice sync failed</p>
           </div>
         </div>
       </div>
