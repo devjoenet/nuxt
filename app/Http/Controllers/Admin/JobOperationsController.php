@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\ReadQueuePendingCounts;
 use App\Enums\Permission;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class JobOperationsController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, ReadQueuePendingCounts $readQueuePendingCounts): Response
     {
         $user = $this->authenticatedUser($request);
         abort_unless($user->can(Permission::JobsView->value), 403);
 
         $connection = (string) config('queue.default');
         $queue = (string) config(sprintf('queue.connections.%s.queue', $connection), 'default');
+        $pending = $readQueuePendingCounts->handle();
 
         return Inertia::render('Admin/Jobs/Index', [
             'queue' => [
@@ -29,10 +30,11 @@ class JobOperationsController extends Controller
                 'production_driver' => 'redis',
             ],
             'stats' => [
-                ['label' => 'Pending jobs', 'value' => Queue::size($queue)],
+                ['label' => 'Total pending jobs', 'value' => $pending['total']],
                 ['label' => 'Failed database jobs', 'value' => DB::table((string) config('queue.failed.table'))->count()],
                 ['label' => 'Batches', 'value' => DB::table((string) config('queue.batching.table'))->count()],
             ],
+            'queues' => $pending['queues'],
             'links' => [
                 [
                     'label' => 'Horizon dashboard',
