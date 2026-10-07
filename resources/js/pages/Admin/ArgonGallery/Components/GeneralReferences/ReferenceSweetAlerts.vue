@@ -39,7 +39,7 @@ function show(alert: (typeof alerts)[number]): void {
       :portal="false"
       :title="selected.title"
       :ui="{
-        content: 'bg-surface-elevated',
+        content: 'bg-surface-elevated data-[state=open]:animate-none data-[state=closed]:animate-none',
         title: 'text-content-heading',
         description: 'text-content-body',
         footer: 'justify-end',

@@ -13,12 +13,14 @@ use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Contracts\Mail\Factory as MailFactory;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Queue\Job;
+use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Mail\Markdown;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Notifications\Channels\MailChannel;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -54,6 +56,104 @@ test('users without jobs view permission cannot open the operations page', funct
     $user = User::factory()->create();
 
     $this->actingAs($user)->get(route('admin.jobs.index'))->assertForbidden();
+});
+
+test('pending counts include non-default database queues without requiring Horizon or Redis', function (): void {
+    config(['queue.default' => 'database', 'queue.connections.database.after_commit' => false]);
+    $queue = Queue::connection('database');
+    $queue->push(new SendFollowUpTaskReminder('default-task', now()->toDateString()), '', 'default');
+    $queue->push(new SendFollowUpTaskReminder('mail-task', now()->toDateString()), '', 'mail');
+    $queue->push(new SendFollowUpTaskReminder('crm-task', now()->toDateString()), '', 'crm');
+    $queue->later(3600, new SendFollowUpTaskReminder('delayed-task', now()->toDateString()), '', 'mail');
+    $queue->push(new SendFollowUpTaskReminder('reserved-task', now()->toDateString()), '', 'reminders');
+    $queue->pop('reminders');
+
+    $this->actingAs(jobsUser())->get(route('admin.jobs.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('stats.0.label', 'Total pending jobs')
+            ->where('stats.0.value', 3)
+            ->has('queues', 9)
+            ->where('queues.0', ['connection' => 'database', 'name' => 'default', 'pending' => 1])
+            ->where('queues.1', ['connection' => 'database', 'name' => 'crm', 'pending' => 1])
+            ->where('queues.6', ['connection' => 'database', 'name' => 'mail', 'pending' => 1])
+            ->where('queues.8.pending', 0));
+});
+
+test('pending counts follow Horizon environment overrides and deduplicate connection queue pairs', function (): void {
+    config([
+        'queue.default' => 'redis',
+        'horizon.defaults' => [
+            'primary' => ['connection' => 'redis', 'queue' => ['default', 'mail'], 'maxProcesses' => 1],
+            'secondary' => ['connection' => 'other-redis', 'queue' => ['mail'], 'maxProcesses' => 1],
+        ],
+        'horizon.environments' => ['*' => [
+            'primary' => ['queue' => ['crm', 'mail']],
+            'duplicate' => ['connection' => 'redis', 'queue' => 'mail,crm', 'maxProcesses' => 1],
+            'disabled' => ['connection' => 'redis', 'queue' => ['disabled'], 'maxProcesses' => 0],
+        ]],
+    ]);
+    $primary = Mockery::mock(QueueContract::class);
+    $primary->shouldReceive('pendingSize')->once()->with('crm')->andReturn(2);
+    $primary->shouldReceive('pendingSize')->once()->with('mail')->andReturn(3);
+    $primary->shouldReceive('pendingSize')->once()->with('default')->andReturn(1);
+    $secondary = Mockery::mock(QueueContract::class);
+    $secondary->shouldReceive('pendingSize')->once()->with('mail')->andReturn(4);
+    Queue::shouldReceive('connection')->with('redis')->andReturn($primary);
+    Queue::shouldReceive('connection')->with('other-redis')->andReturn($secondary);
+
+    $this->actingAs(jobsUser())->get(route('admin.jobs.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('stats.0.value', 10)
+            ->where('queues', [
+                ['connection' => 'redis', 'name' => 'crm', 'pending' => 2],
+                ['connection' => 'redis', 'name' => 'mail', 'pending' => 3],
+                ['connection' => 'other-redis', 'name' => 'mail', 'pending' => 4],
+                ['connection' => 'redis', 'name' => 'default', 'pending' => 1],
+            ]));
+});
+
+test('the Jobs page shows unavailable counts when Redis cannot be reached', function (): void {
+    config(['queue.default' => 'redis']);
+    Exceptions::fake();
+    Queue::shouldReceive('connection')->once()->with('redis')
+        ->andThrow(new RuntimeException('Redis unavailable.'));
+
+    $this->actingAs(jobsUser())->get(route('admin.jobs.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('stats.0.value', null)
+            ->where('stats.1.value', 0)
+            ->has('links', 6)
+            ->where('queues.0.pending', null));
+
+    Exceptions::assertReported(RuntimeException::class);
+});
+
+test('an unavailable queue connection preserves readable counts without presenting a partial total', function (): void {
+    config([
+        'queue.default' => 'redis',
+        'horizon.defaults' => [],
+        'horizon.environments' => ['testing' => [
+            'primary' => ['connection' => 'redis', 'queue' => ['default'], 'maxProcesses' => 1],
+            'mail' => ['connection' => 'mail-redis', 'queue' => ['mail', 'notifications'], 'maxProcesses' => 1],
+        ]],
+    ]);
+    Exceptions::fake();
+    $primary = Mockery::mock(QueueContract::class);
+    $primary->shouldReceive('pendingSize')->once()->with('default')->andReturn(5);
+    Queue::shouldReceive('connection')->once()->with('redis')->andReturn($primary);
+    Queue::shouldReceive('connection')->once()->with('mail-redis')
+        ->andThrow(new RuntimeException('Mail Redis unavailable.'));
+
+    $this->actingAs(jobsUser())->get(route('admin.jobs.index'))
+        ->assertInertia(fn (Assert $page): Assert => $page
+            ->where('stats.0.value', null)
+            ->where('queues', [
+                ['connection' => 'redis', 'name' => 'default', 'pending' => 5],
+                ['connection' => 'mail-redis', 'name' => 'mail', 'pending' => null],
+                ['connection' => 'mail-redis', 'name' => 'notifications', 'pending' => null],
+            ]));
+
+    Exceptions::assertReported(RuntimeException::class);
 });
 
 test('the reminder command dispatches due tasks onto the mail queue', function (): void {
