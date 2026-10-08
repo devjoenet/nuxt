@@ -55,16 +55,13 @@ const railClasses = {
     >
       <div class="relative h-20">
         <div v-if="index < steps.length - 1" :class="railClasses[step.tone]" aria-hidden="true" class="absolute top-1/2 left-10 hidden h-px w-[calc(100%+1.25rem)] -translate-y-1/2 bg-linear-to-r md:block"></div>
-        <div v-if="index < steps.length - 1" aria-hidden="true" class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-grey-100/45 shadow-[0_0_18px_rgba(255,255,255,0.32)] md:block"></div>
+        <div v-if="index < steps.length - 1" aria-hidden="true" class="absolute top-1/2 left-[4.8rem] hidden size-1.5 -translate-y-1/2 rounded-full bg-grey-100/45 shadow-[0_0_18px_color-mix(in_oklab,var(--color-grey-50)_32%,transparent)] md:block"></div>
 
         <div
           :class="circleClasses[step.tone]"
           class="relative z-10 flex size-20 items-center justify-center rounded-full border bg-slate-50/95 text-xl font-semibold shadow-2xl ring-1 ring-slate-200/80 transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 dark:bg-slate-950/95 dark:ring-grey-100/10"
         >
-          <span
-            aria-hidden="true"
-            class="absolute inset-2 rounded-full border border-slate-200 bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.7),transparent_45%)] dark:border-grey-100/10 dark:bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.18),transparent_45%)]"
-          ></span>
+          <span aria-hidden="true" class="absolute inset-2 rounded-full border border-slate-200 bg-(image:--app-landing-timeline-highlight) dark:border-grey-100/10"></span>
           <span class="relative flex flex-col items-center gap-0.5">
             <UIcon :name="step.icon" aria-hidden="true" class="size-5" />
             <span class="text-xs tracking-[0.2em]">{{ index + 1 }}</span>

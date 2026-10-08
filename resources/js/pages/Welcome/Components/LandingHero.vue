@@ -15,11 +15,8 @@ defineProps<{
 <template>
   <section id="hero" class="relative min-h-screen scroll-mt-28 overflow-hidden px-5 pt-32 pb-16 sm:px-8 lg:pt-36">
     <LandingHeroPicture :appearance="appearance" :dark-hero="darkHero" fetch-priority="high" image-class="absolute inset-0 size-full object-cover object-center" :light-hero="lightHero" picture-class="absolute inset-0 block size-full" />
-    <div
-      aria-hidden="true"
-      class="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,11,16,0.86)_0%,rgba(1,11,16,0.54)_38%,rgba(1,11,16,0.14)_72%,rgba(1,11,16,0.3)_100%)] dark:bg-[linear-gradient(90deg,rgba(1,11,16,0.94)_0%,rgba(1,11,16,0.66)_38%,rgba(1,11,16,0.22)_72%,rgba(1,11,16,0.42)_100%)]"
-    ></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(110,104,182,0.26),transparent_22rem),radial-gradient(circle_at_22%_70%,rgba(208,57,120,0.18),transparent_24rem),linear-gradient(180deg,rgba(1,11,16,0.08),rgba(1,11,16,0.88))]" aria-hidden="true"></div>
+    <div aria-hidden="true" class="absolute inset-0 bg-(image:--app-landing-hero-overlay)"></div>
+    <div class="absolute inset-0 bg-(image:--app-landing-hero-glow)" aria-hidden="true"></div>
 
     <div class="relative mx-auto grid max-w-7xl gap-10 lg:min-h-[calc(100vh-9rem)] lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
       <Motion :animate="{ opacity: 1, x: 0 }" :initial="{ opacity: 0, x: -34 }" :transition="{ duration: 0.8, ease: 'easeOut' }" as="div" class="max-w-2xl">

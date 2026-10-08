@@ -38,16 +38,7 @@ setLayoutProps({ footerColumns });
     <main>
       <LandingHero :appearance="appearance" :dark-hero="darkHero" :light-hero="lightHero" />
       <LandingCardGridSection centered class="border-y border-brand-accent-500/15 bg-slate-100/90 dark:bg-slate-950/95" id="reality" :items="realityCards" kicker="The reality" title="The workarounds are costing more than time." tone="accent" />
-      <LandingCardGridSection
-        class="bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.12),transparent_34rem)] dark:bg-[radial-gradient(circle_at_center,rgba(110,104,182,0.14),transparent_34rem)]"
-        grid-class="lg:grid-cols-3"
-        id="transformation"
-        :items="transformationCards"
-        kicker="The transformation"
-        ordered
-        title="From scattered data to operational control."
-        tone="secondary"
-      />
+      <LandingCardGridSection class="bg-(image:--app-landing-welcome-glow)" grid-class="lg:grid-cols-3" id="transformation" :items="transformationCards" kicker="The transformation" ordered title="From scattered data to operational control." tone="secondary" />
       <LandingCardGridSection grid-class="lg:grid-cols-3" id="services" :items="services" kicker="Our services" title="Software shaped around the operation." tone="primary" />
       <LandingProcessSection :steps="processSteps" />
       <LandingOperationsSection :appearance="appearance" :dark-hero="darkHero" :light-hero="lightHero" />

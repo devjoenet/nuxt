@@ -15,10 +15,7 @@ const props = defineProps<{
 
 <template>
   <section id="operations" :class="cn('relative scroll-mt-28 border-y border-secondary-500/15 px-5 py-16 sm:px-8 lg:py-20', props.class)">
-    <div
-      aria-hidden="true"
-      class="absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(110,104,182,0.18),transparent_26rem),radial-gradient(circle_at_82%_55%,rgba(208,57,120,0.14),transparent_24rem)] dark:bg-[radial-gradient(circle_at_18%_10%,rgba(110,104,182,0.16),transparent_26rem),radial-gradient(circle_at_82%_55%,rgba(208,57,120,0.12),transparent_24rem)]"
-    />
+    <div aria-hidden="true" class="absolute inset-0 bg-(image:--app-landing-operations-glow)" />
 
     <div class="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
       <Motion as="div" :initial="{ opacity: 0, y: 24 }" :transition="{ duration: 0.7, ease: 'easeOut' }" :viewport="{ once: true, amount: 0.3 }" :while-in-view="{ opacity: 1, y: 0 }">

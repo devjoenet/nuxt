@@ -11,15 +11,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <section
-    id="contact"
-    :class="
-      cn(
-        'scroll-mt-28 border-y border-brand-accent-500/15 bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.13),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.13),transparent_26rem)] px-5 py-16 sm:px-8 lg:py-20 dark:bg-[radial-gradient(circle_at_center,rgba(208,57,120,0.16),transparent_38rem),radial-gradient(circle_at_78%_50%,rgba(110,104,182,0.16),transparent_26rem)]',
-        props.class,
-      )
-    "
-  >
+  <section id="contact" :class="cn('scroll-mt-28 border-y border-brand-accent-500/15 bg-(image:--app-landing-contact-glow) px-5 py-16 sm:px-8 lg:py-20', props.class)">
     <Motion
       as="div"
       :initial="{ opacity: 0, y: 30, scale: 0.98 }"
