@@ -47,7 +47,7 @@ const transformForm = (data: Record<string, FormDataConvertible>): Record<string
     <DevelopmentTaskSummaryField :editable="editable" :editing="activeEditor === 'assignee'" edit-label="Edit assignee" label="Assignee" @edit="activeEditor = 'assignee'">
       {{ task.assignee ?? "Unassigned" }}
       <template #editor>
-        <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" :transform="transformForm" class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2" v-bind="updateRoadmap.form(task.id)" @success="closeEditor">
+        <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" :transform="transformForm" class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2" :action="updateRoadmap(task.id)" @success="closeEditor">
           <FormSelect :default-value="task.assignee_id ?? unassignedAssigneeValue" :error="errors.assignee_id" :items="assigneeOptions" aria-label="Assignee" class="min-w-0" name="assignee_id" />
           <InlineEditActions :loading="processing" cancel-label="Cancel assignee edit" @cancel="closeEditor" />
         </Form>
@@ -57,7 +57,7 @@ const transformForm = (data: Record<string, FormDataConvertible>): Record<string
     <DevelopmentTaskSummaryField :editable="editable" :editing="activeEditor === 'priority'" edit-label="Edit priority" label="Priority" @edit="activeEditor = 'priority'">
       {{ task.priority_label }}
       <template #editor>
-        <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" :transform="transformForm" class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2" v-bind="updateRoadmap.form(task.id)" @success="closeEditor">
+        <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" :transform="transformForm" class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2" :action="updateRoadmap(task.id)" @success="closeEditor">
           <FormSelect :default-value="task.priority" :error="errors.priority" :items="priorities" aria-label="Priority" class="min-w-0" name="priority" required />
           <InlineEditActions :loading="processing" cancel-label="Cancel priority edit" @cancel="closeEditor" />
         </Form>
@@ -74,7 +74,7 @@ const transformForm = (data: Record<string, FormDataConvertible>): Record<string
     >
       {{ task.roadmap_position ? `#${task.roadmap_position}` : "Not scheduled" }}
       <template #editor>
-        <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" :transform="transformForm" class="grid min-w-0 gap-3" v-bind="updateRoadmap.form(task.id)" @success="closeEditor">
+        <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" :transform="transformForm" class="grid min-w-0 gap-3" :action="updateRoadmap(task.id)" @success="closeEditor">
           <div class="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-start gap-2">
             <FormInput :default-value="task.roadmap_position ?? plannedTaskCount" :error="errors.roadmap_position" :max="plannedTaskCount" aria-label="Roadmap position" class="min-w-0" min="1" name="roadmap_position" required type="number" />
             <InlineEditActions :loading="processing" cancel-label="Cancel roadmap position edit" @cancel="closeEditor" />

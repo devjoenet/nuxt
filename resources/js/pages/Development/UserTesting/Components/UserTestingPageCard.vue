@@ -38,7 +38,7 @@ const statusColor = computed(() => statusColors[props.page.status]);
 
 <template>
   <AppPageCard :variant="statusColor" class="h-full">
-    <Form #default="{ errors, processing }" class="flex h-full flex-col gap-4" v-bind="update.form(page.id)">
+    <Form #default="{ errors, processing }" class="flex h-full flex-col gap-4" :action="update(page.id)">
       <div class="flex items-start justify-between gap-4">
         <div>
           <a v-if="page.url" :href="page.url" class="text-sm font-semibold text-highlighted hover:text-primary hover:underline" rel="noopener noreferrer" target="_blank">

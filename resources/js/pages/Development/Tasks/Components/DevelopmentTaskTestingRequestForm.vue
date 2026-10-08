@@ -21,7 +21,7 @@ const props = defineProps<{
       <h3 id="request-testing-heading" class="font-medium text-highlighted">Request user testing</h3>
       <p class="text-base/7 text-pretty text-muted sm:text-sm/6">Assign a tester and describe the exact build and behavior they should verify.</p>
     </div>
-    <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" v-bind="requestTesting.form(taskId)">
+    <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" :action="requestTesting(taskId)">
       <input :value="taskId" name="development_task_id" type="hidden" />
       <FormSelect :default-value="defaultTesterId ?? ''" :error="errors.tester_id" :items="testers" label="Tester" name="tester_id" required />
       <FormTextarea :error="errors.instructions" label="Testing instructions" name="instructions" required />

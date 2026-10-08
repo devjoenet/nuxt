@@ -20,7 +20,7 @@ const noteAudiences = [
 
 <template>
   <DevelopmentTaskSectionCard :class="$props.class" description="Participant notes are shared with the requester. Internal notes stay with the development team." eyebrow="02 / Discussion" heading-id="task-notes-heading" title="Clarification and planning notes" tone="info">
-    <Form v-if="task.can.add_participant_note || task.can.add_internal_note" #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3 rounded-lg bg-default/70 p-4 ring ring-accented sm:p-5" reset-on-success v-bind="storeNote.form(task.id)">
+    <Form v-if="task.can.add_participant_note || task.can.add_internal_note" #default="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3 rounded-lg bg-default/70 p-4 ring ring-accented sm:p-5" reset-on-success :action="storeNote(task.id)">
       <FormTextarea :error="errors.body" label="Add a note" name="body" required />
       <FormSelect v-if="task.can.add_internal_note" :error="errors.audience" :items="noteAudiences" default-value="participants" label="Audience" name="audience" required />
       <input v-else name="audience" type="hidden" value="participants" />

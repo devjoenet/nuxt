@@ -17,7 +17,7 @@ const props = defineProps<{
       <h3 id="implementation-progress-heading" class="font-medium text-highlighted">Implementation progress</h3>
       <p class="text-base/7 text-pretty text-muted sm:text-sm/6">Move the task to its next meaningful implementation state.</p>
     </div>
-    <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" v-bind="updateProgress.form(taskId)">
+    <Form v-slot="{ errors, processing }" :options="{ preserveScroll: true }" class="grid gap-3" :action="updateProgress(taskId)">
       <input :value="action.status" name="status" type="hidden" />
       <UAlert v-if="errors.assignee_id || errors.status" :description="errors.assignee_id || errors.status" color="error" variant="subtle" />
       <UButton :color="action.color" :label="action.label" :loading="processing" block size="sm" type="submit" />

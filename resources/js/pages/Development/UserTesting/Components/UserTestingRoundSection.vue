@@ -63,7 +63,7 @@ const props = defineProps<{
         <UButton v-if="testRun.task" :to="show(testRun.task.id).url" class="justify-self-start" color="neutral" label="Open task workspace" variant="ghost" />
       </div>
 
-      <Form v-if="testRun.can.record_result" #default="{ errors, processing }" class="grid content-start gap-4 rounded-lg bg-elevated p-5" v-bind="updateTestRun.form(testRun.id)">
+      <Form v-if="testRun.can.record_result" #default="{ errors, processing }" class="grid content-start gap-4 rounded-lg bg-elevated p-5" :action="updateTestRun(testRun.id)">
         <input :value="testRun.task?.id" name="development_task_id" type="hidden" />
         <div>
           <h3 class="font-semibold text-highlighted">Record this round</h3>

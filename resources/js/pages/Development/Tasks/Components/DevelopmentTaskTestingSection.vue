@@ -55,7 +55,7 @@ const testRunStatusColor = (status: string): "success" | "warning" | "info" => {
 
         <UAlert v-if="testRun.feedback" color="info" :description="testRun.feedback" title="Feedback" :ui="{ description: 'whitespace-pre-wrap text-base/7 text-pretty sm:text-sm/6', icon: 'size-4' }" variant="subtle" />
 
-        <Form v-if="testRun.can.record_result" #default="{ errors, processing }" class="grid gap-3 border-t border-default pt-5" v-bind="updateTestRun.form(testRun.id)">
+        <Form v-if="testRun.can.record_result" #default="{ errors, processing }" class="grid gap-3 border-t border-default pt-5" :action="updateTestRun(testRun.id)">
           <input :value="task.id" name="development_task_id" type="hidden" />
           <FormTextarea :error="errors.feedback" label="Testing feedback" name="feedback" />
           <UAlert v-if="errors.development_task_id || errors.status" :description="errors.development_task_id || errors.status" color="error" variant="subtle" />

@@ -3,7 +3,7 @@ import ts from "typescript";
 
 const configUrl = new URL("./vite.config.ts", import.meta.url);
 const paletteUrl = new URL("./resources/css/theme/palette.css", import.meta.url);
-const outputUrl = new URL("./resources/css/theme/nuxt-ui-colors.ide.css", import.meta.url);
+const outputUrl = new URL("./stubs/nuxt-ui-colors.ide.css", import.meta.url);
 const config = ts.createSourceFile("vite.config.ts", await readFile(configUrl, "utf8"), ts.ScriptTarget.Latest, true);
 const palette = await readFile(paletteUrl, "utf8");
 const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
