@@ -104,20 +104,13 @@ test('core visual primitives expose typed public APIs and CVA variants', functio
         ->filter(fn (SplFileInfo $file): bool => preg_match('/(?:#[0-9a-f]{3,8}\b|rgba?\()/i', File::get($file->getPathname())) === 1)
         ->map(fn (SplFileInfo $file): string => Str::after($file->getPathname(), resource_path().DIRECTORY_SEPARATOR))
         ->reject(fn (string $path): bool => in_array($path, [
-            'css/theme/foundations.css',
             'css/theme/palette.css',
         ], true))
         ->sort()
         ->values()
         ->all();
 
-    expect($rawValueFiles)->toBe([
-        'js/pages/Welcome.vue',
-        'js/pages/Welcome/Components/LandingContactSection.vue',
-        'js/pages/Welcome/Components/LandingHero.vue',
-        'js/pages/Welcome/Components/LandingOperationsSection.vue',
-        'js/pages/Welcome/Components/ProcessTimeline.vue',
-    ]);
+    expect($rawValueFiles)->toBe([]);
 });
 
 test('application navigation shells share semantic chrome and accessible overlays', function (): void {

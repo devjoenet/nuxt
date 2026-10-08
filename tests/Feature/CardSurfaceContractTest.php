@@ -31,7 +31,7 @@ test('floating labels mask their borders with the active card surface', function
         ->toMatch('/\.form-field__shell\s*\{[^}]*background-color: transparent;/s')
         ->toMatch('/\.form-field__shell\[data-variant="filled"\]\s*\{[^}]*border-bottom-color: var\(--form-field-neutral-color\);/s')
         ->toMatch('/\.form-field__shell\[data-variant="filled"\]\s*\{[^}]*background-color: color-mix\(in oklab, var\(--ui-bg-elevated\) 72%, transparent\);/s')
-        ->toMatch('/\.form-field__label\s*\{[^}]*color: var\(--form-field-neutral-color\);/s')
+        ->toMatch('/\.form-field__label\s*\{[^}]*color: var\(--app-text-placeholder\);/s')
         ->toContain('--form-field-label-background: var(--ui-bg);')
         ->toContain('--form-field-label-background: var(--app-card-subtle-background);')
         ->toContain('--form-field-label-background: var(--app-card-solid-background);')

@@ -45,7 +45,7 @@ class DashboardController extends Controller
             'upcomingTasks' => $canViewCrm ? FollowUpTask::query()->visibleTo($user)
                 ->with('lead.contact')
                 ->where('status', FollowUpTaskStatus::Open)
-                ->orderBy('due_at')
+                ->oldest('due_at')
                 ->limit(5)
                 ->get()
                 ->map(function (FollowUpTask $task): array {
