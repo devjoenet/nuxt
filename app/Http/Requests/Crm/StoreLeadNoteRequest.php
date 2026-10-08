@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Crm;
 
-use App\Enums\TaskPriority;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreFollowUpTaskRequest extends FormRequest
+class StoreLeadNoteRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -28,11 +26,6 @@ class StoreFollowUpTaskRequest extends FormRequest
     /** @return array<string, mixed> */
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:5000'],
-            'priority' => ['required', Rule::enum(TaskPriority::class)],
-            'due_at' => ['required', 'date', 'after:now'],
-        ];
+        return ['body' => ['required', 'string', 'max:5000']];
     }
 }

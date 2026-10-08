@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Development;
 use App\Actions\UpdateUserTestingPage;
 use App\Data\UserTestingPageData;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateUserTestingPageRequest;
+use App\Http\Requests\Development\UpdateUserTestingPageRequest;
 use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\Organization;

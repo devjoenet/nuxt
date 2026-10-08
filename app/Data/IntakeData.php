@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use App\Http\Requests\StorePublicIntakeRequest;
+use App\Http\Requests\PublicIntake\StorePublicIntakeRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Dto;

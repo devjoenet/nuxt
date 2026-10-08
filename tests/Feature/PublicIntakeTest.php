@@ -7,7 +7,7 @@ use App\Data\IntakeData;
 use App\Enums\CrmActivityType;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
-use App\Http\Requests\StorePublicIntakeRequest;
+use App\Http\Requests\PublicIntake\StorePublicIntakeRequest;
 use App\Models\BusinessSetting;
 use App\Models\Contact;
 use App\Models\CrmActivity;

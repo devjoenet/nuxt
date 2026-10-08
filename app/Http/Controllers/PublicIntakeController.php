@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\SubmitPublicIntake;
 use App\Data\IntakeData;
-use App\Http\Requests\StorePublicIntakeRequest;
+use App\Http\Requests\PublicIntake\StorePublicIntakeRequest;
 use Illuminate\Http\RedirectResponse;
 
 use function to_route;

@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Crm;
 use App\Actions\CreateLeadNote;
 use App\Data\LeadNoteData;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreLeadNoteRequest;
+use App\Http\Requests\Crm\StoreLeadNoteRequest;
 use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
 

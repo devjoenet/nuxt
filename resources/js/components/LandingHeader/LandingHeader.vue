@@ -28,8 +28,8 @@ function closeMobileNavigation(): void {
       :class="navigationHasSurface ? 'border-content-border bg-surface-translucent shadow-lg backdrop-blur-app' : 'border-transparent bg-transparent shadow-none'"
       class="mx-auto flex min-h-16 w-full max-w-7xl items-center gap-4 rounded-2xl border px-4 transition duration-300 sm:px-6"
     >
-      <Link :href="isLandingPage ? '#hero' : home()" aria-label="Southeast Code home" class="w-44 shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-        <AppLogo aria-hidden="true" :southeast-variant-class="navigationHasSurface ? 'fill-content-heading' : 'fill-white'" code-variant-class="fill-secondary" hr-variant-class="stroke-secondary" icon-class="w-full" logo-variant-class="fill-primary" />
+      <Link :href="isLandingPage ? '#hero' : home()" aria-label="Southeast Code home" class="flex min-h-11 shrink-0 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+        <AppLogo aria-hidden="true" :southeast-variant-class="navigationHasSurface ? 'fill-content-heading' : 'fill-white'" code-variant-class="fill-secondary" hr-variant-class="stroke-secondary" icon-class="h-8 w-auto sm:h-9" logo-variant-class="fill-primary" />
       </Link>
 
       <nav aria-label="Primary navigation" class="mx-auto hidden items-center gap-6 lg:flex">
