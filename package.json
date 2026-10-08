@@ -4,6 +4,7 @@
   "scripts": {
     "build": "vp build && vp build --ssr",
     "dev": "vp dev",
+    "ide:css": "node generate-ui-color-hints.mjs",
     "check": "vp check && yarn test:frontend-architecture && yarn typecheck",
     "check:fix": "vp check --fix && yarn test:frontend-architecture && yarn typecheck",
     "audit:production": "yarn npm audit --recursive --environment production --severity high --no-deprecations",

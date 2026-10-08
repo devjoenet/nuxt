@@ -53,6 +53,7 @@
   --app-text-body: var(--color-slate-600);
   --app-text-heading: var(--color-slate-800);
   --app-text-subtle: var(--color-grey-700);
+  --app-text-placeholder: var(--color-grey-600);
   --app-icon: var(--color-slate-600);
   --app-border: var(--color-grey-300);
   --app-divider: var(--color-grey-200);
@@ -110,6 +111,7 @@
   --app-text-body: var(--color-grey-300);
   --app-text-heading: var(--color-grey-50);
   --app-text-subtle: var(--color-grey-400);
+  --app-text-placeholder: var(--color-grey-500);
   --app-icon: var(--color-grey-300);
   --app-border: var(--color-slate-800);
   --app-divider: color-mix(in oklab, var(--color-slate-900) 70%, var(--color-slate-800));

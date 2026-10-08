@@ -161,9 +161,9 @@
     transform: translateY(-50%);
     transform-origin: left top;
     overflow: hidden;
-    color: var(--form-field-neutral-color);
+    color: var(--app-text-placeholder);
     font-size: 1rem;
-    line-height: 1rem;
+    line-height: 1.5;
     pointer-events: none;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -198,7 +198,7 @@
     transform: translateY(-50%) scale(0.75);
     transform-origin: left center;
     padding-inline: 0.25rem;
-    line-height: 1rem;
+    line-height: 1.5;
     background-color: var(--form-field-label-background, var(--ui-bg));
     color: var(--ui-primary);
   }
@@ -234,7 +234,7 @@
     transform: translateY(-50%) scale(0.75);
     transform-origin: left center;
     padding-inline: 0.25rem;
-    line-height: 1rem;
+    line-height: 1.5;
     background-color: var(--form-field-label-background, var(--ui-bg));
     color: var(--ui-primary);
   }
