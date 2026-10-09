@@ -9,7 +9,7 @@ import { PrivacyDialogLink } from "@/components/PrivacyDialogLink";
 import { useLandingAttribution } from "@/composables/useLandingAttribution";
 import { store } from "@/routes/contact";
 import { Form, usePage } from "@inertiajs/vue3";
-import { nextTick, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { Motion } from "motion-v";
 import type { AppPageProps } from "@/types";
 import type { Option } from "@/types/crm";
@@ -24,6 +24,11 @@ const budgetRange = ref<number | null>(null);
 const budgetOptions = { valueRange: { min: 0 } };
 const phoneNumber = ref("");
 const successMessage = ref<HTMLElement | null>(null);
+const isReady = ref(false);
+
+onMounted(() => {
+  isReady.value = true;
+});
 
 const resetCustomFields = (): void => {
   budgetRange.value = null;
@@ -39,7 +44,7 @@ const handleSuccess = async (): Promise<void> => {
 
 <template>
   <Motion as="div" :initial="{ opacity: 0, x: 24 }" :transition="{ duration: 0.7, delay: 0.16, ease: 'easeOut' }" :viewport="{ once: true, amount: 0.2 }" :while-in-view="{ opacity: 1, x: 0 }">
-    <Form #default="{ errors, processing, wasSuccessful }" aria-label="Project inquiry form" class="grid gap-5" reset-on-success v-bind="store.form()" @success="handleSuccess">
+    <Form #default="{ errors, processing, wasSuccessful }" :data-ready="isReady" aria-label="Project inquiry form" class="grid gap-5" reset-on-success v-bind="store.form()" @success="handleSuccess">
       <div v-if="wasSuccessful || page.props.flash.intakeSuccess" ref="successMessage" aria-live="polite" class="rounded-lg border border-success-500/30 bg-success-500/10 p-5 text-success-800 dark:text-success-200" role="status" tabindex="-1">
         <p class="font-semibold">Your message was sent successfully.</p>
         <p class="mt-1 text-sm">Thanks — we received your inquiry and will follow up shortly.</p>

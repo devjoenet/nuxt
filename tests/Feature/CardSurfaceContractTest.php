@@ -21,41 +21,26 @@ test('page cards expose the application style and color variant contract', funct
         ->toContain(':variant="props.style"');
 });
 
-test('floating labels mask their borders with the active card surface', function (): void {
+test('floating labels use transparent notched outlines across card surfaces', function (): void {
     $forms = File::get(resource_path('css/theme/forms.css'));
 
     expect($forms)
-        ->not->toContain('--form-field-label-background: transparent;')
+        ->not->toContain('--form-field-label-background')
         ->toMatch('/\.form-field__shell\s*\{[^}]*--form-field-neutral-color: var\(--ui-text-muted\);/s')
         ->toMatch('/\.form-field__shell\s*\{[^}]*border: 1px solid var\(--form-field-neutral-color\);/s')
         ->toMatch('/\.form-field__shell\s*\{[^}]*background-color: transparent;/s')
         ->toMatch('/\.form-field__shell\[data-variant="filled"\]\s*\{[^}]*border-bottom-color: var\(--form-field-neutral-color\);/s')
         ->toMatch('/\.form-field__shell\[data-variant="filled"\]\s*\{[^}]*background-color: color-mix\(in oklab, var\(--ui-bg-elevated\) 72%, transparent\);/s')
         ->toMatch('/\.form-field__label\s*\{[^}]*color: var\(--app-text-placeholder\);/s')
-        ->toContain('--form-field-label-background: var(--ui-bg);')
-        ->toContain('--form-field-label-background: var(--app-card-subtle-background);')
-        ->toContain('--form-field-label-background: var(--app-card-solid-background);')
-        ->toContain('background-color: var(--form-field-label-background, var(--ui-bg));')
-        ->toContain('background-color: var(--form-field-label-background, color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent));');
+        ->toMatch('/\.form-field__outline\s*\{[^}]*border-color: inherit;/s')
+        ->toMatch('/\.form-field__outline legend\s*\{[^}]*visibility: hidden;/s');
 
-    foreach ([
-        'primary' => '--ui-color-primary',
-        'secondary' => '--ui-color-secondary',
-        'muted' => '--color-slate',
-        'neutral' => '--color-grey',
-        'info' => '--ui-color-info',
-        'success' => '--ui-color-success',
-        'warning' => '--ui-color-warning',
-        'error' => '--ui-color-error',
-    ] as $variant => $color) {
-        expect($forms)
-            ->toContain(".app-card[data-card-variant=\"{$variant}\"]")
-            ->toContain(".dark .app-card[data-card-variant=\"{$variant}\"]")
-            ->toContain("--app-card-subtle-background: var({$color}-100);")
-            ->toContain("--app-card-subtle-background: var({$color}-800);")
-            ->toContain("--app-card-solid-background: var({$color}-800);")
-            ->toContain("--app-card-solid-background: var({$color}-200);");
-    }
+    $field = File::get(resource_path('js/components/Ui/FormField/FormField.vue'));
+
+    expect($field)
+        ->toContain('aria-hidden="true" class="form-field__outline"')
+        ->toContain('<legend v-if="label">')
+        ->toContain(':for="slotProps.id" class="form-field__label"');
 });
 
 test('neutral subtle cards use the requested light and dark colors', function (): void {

@@ -30,6 +30,11 @@ const rootClass = computed(() => cn("form-field grid gap-1.5", props.class));
       :data-variant="variant"
       class="form-field__shell group"
     >
+      <fieldset v-if="variant === 'outlined'" aria-hidden="true" class="form-field__outline">
+        <legend v-if="label">
+          <span>{{ label }}<span v-if="required" class="ms-0.5">*</span><span v-else-if="optional" class="ms-1 text-xs">Optional</span></span>
+        </legend>
+      </fieldset>
       <slot v-bind="slotProps" />
       <label v-if="label" :id="slotProps.labelId" :for="slotProps.id" class="form-field__label">{{ label }}<span v-if="required" aria-hidden="true" class="ms-0.5 text-error">*</span><span v-else-if="optional" class="ms-1 text-xs text-content-subtle normal-case">Optional</span></label>
     </div>

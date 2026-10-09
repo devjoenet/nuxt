@@ -1,101 +1,4 @@
 @layer components {
-  .app-card[data-card-variant="primary"] {
-    --app-card-subtle-background: var(--ui-color-primary-100);
-    --app-card-solid-background: var(--ui-color-primary-800);
-  }
-
-  .app-card[data-card-variant="secondary"] {
-    --app-card-subtle-background: var(--ui-color-secondary-100);
-    --app-card-solid-background: var(--ui-color-secondary-800);
-  }
-
-  .app-card[data-card-variant="muted"] {
-    --app-card-subtle-background: var(--color-slate-100);
-    --app-card-solid-background: var(--color-slate-800);
-  }
-
-  .app-card[data-card-variant="neutral"] {
-    --app-card-subtle-background: var(--color-grey-100);
-    --app-card-solid-background: var(--color-grey-800);
-  }
-
-  .app-card[data-card-variant="info"] {
-    --app-card-subtle-background: var(--ui-color-info-100);
-    --app-card-solid-background: var(--ui-color-info-800);
-  }
-
-  .app-card[data-card-variant="success"] {
-    --app-card-subtle-background: var(--ui-color-success-100);
-    --app-card-solid-background: var(--ui-color-success-800);
-  }
-
-  .app-card[data-card-variant="warning"] {
-    --app-card-subtle-background: var(--ui-color-warning-100);
-    --app-card-solid-background: var(--ui-color-warning-800);
-  }
-
-  .app-card[data-card-variant="error"] {
-    --app-card-subtle-background: var(--ui-color-error-100);
-    --app-card-solid-background: var(--ui-color-error-800);
-  }
-
-  .dark .app-card[data-card-variant="primary"] {
-    --app-card-subtle-background: var(--ui-color-primary-800);
-    --app-card-solid-background: var(--ui-color-primary-200);
-  }
-
-  .dark .app-card[data-card-variant="secondary"] {
-    --app-card-subtle-background: var(--ui-color-secondary-800);
-    --app-card-solid-background: var(--ui-color-secondary-200);
-  }
-
-  .dark .app-card[data-card-variant="muted"] {
-    --app-card-subtle-background: var(--color-slate-800);
-    --app-card-solid-background: var(--color-slate-200);
-  }
-
-  .dark .app-card[data-card-variant="neutral"] {
-    --app-card-subtle-background: var(--color-grey-800);
-    --app-card-solid-background: var(--color-grey-200);
-  }
-
-  .dark .app-card[data-card-variant="info"] {
-    --app-card-subtle-background: var(--ui-color-info-800);
-    --app-card-solid-background: var(--ui-color-info-200);
-  }
-
-  .dark .app-card[data-card-variant="success"] {
-    --app-card-subtle-background: var(--ui-color-success-800);
-    --app-card-solid-background: var(--ui-color-success-200);
-  }
-
-  .dark .app-card[data-card-variant="warning"] {
-    --app-card-subtle-background: var(--ui-color-warning-800);
-    --app-card-solid-background: var(--ui-color-warning-200);
-  }
-
-  .dark .app-card[data-card-variant="error"] {
-    --app-card-subtle-background: var(--ui-color-error-800);
-    --app-card-solid-background: var(--ui-color-error-200);
-  }
-
-  .app-card[data-card-style="outline"] {
-    --form-field-label-background: var(--ui-bg);
-  }
-
-  .app-card[data-card-style="soft"],
-  .app-card[data-card-style="subtle"] {
-    --form-field-label-background: var(--app-card-subtle-background);
-  }
-
-  .app-card[data-card-style="solid"] {
-    --form-field-label-background: var(--app-card-solid-background);
-  }
-
-  .app-card[data-card-style="ghost"]:hover {
-    --form-field-label-background: var(--app-card-subtle-background);
-  }
-
   .form-field__shell {
     --form-field-neutral-color: var(--ui-text-muted);
 
@@ -109,6 +12,55 @@
       border-bottom-width var(--app-motion-fast) var(--ease-app-standard),
       background-color var(--app-motion-fast) var(--ease-app-standard),
       outline-color var(--app-motion-fast) var(--ease-app-standard);
+  }
+
+  .form-field__shell[data-variant="outlined"],
+  .form-field__shell[data-variant="outlined"]:focus-within {
+    border-style: none;
+    padding: 1px;
+    outline: none;
+  }
+
+  .form-field__outline {
+    position: absolute;
+    inset: -0.5625rem 0 0;
+    min-width: 0;
+    margin: 0;
+    border: 1px solid;
+    border-color: inherit;
+    border-radius: inherit;
+    padding-inline: 0.75rem;
+    pointer-events: none;
+  }
+
+  .form-field__outline:not(:has(legend)) {
+    inset-block-start: 0;
+  }
+
+  .form-field__outline legend {
+    display: block;
+    width: auto;
+    max-width: 0;
+    height: 1.125rem;
+    padding: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    white-space: nowrap;
+    transition: max-width var(--app-motion-fast) var(--ease-app-standard);
+  }
+
+  .form-field__outline legend > span {
+    padding-inline: 0.25rem;
+  }
+
+  .form-field__shell:is([data-static-label="true"], [data-filled="true"], :focus-within, :has(input:not(:placeholder-shown)), :has(input:autofill), :has(input:-webkit-autofill), :has(textarea:not(:placeholder-shown))) .form-field__outline legend {
+    max-width: calc(100% - 1.5rem);
+  }
+
+  .form-field__shell:focus-within .form-field__outline {
+    border-width: 2px;
   }
 
   .form-field__shell[data-variant="filled"] {
@@ -199,7 +151,7 @@
     transform-origin: left center;
     padding-inline: 0.25rem;
     line-height: 1.5;
-    background-color: var(--form-field-label-background, var(--ui-bg));
+    background-color: transparent;
     color: var(--ui-primary);
   }
 
@@ -213,7 +165,7 @@
   .form-field__shell[data-variant="filled"]:has(input:autofill) .form-field__label,
   .form-field__shell[data-variant="filled"]:has(input:-webkit-autofill) .form-field__label,
   .form-field__shell[data-variant="filled"]:has(textarea:not(:placeholder-shown)) .form-field__label {
-    background-color: var(--form-field-label-background, color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent));
+    background-color: transparent;
   }
 
   .form-field__shell[data-variant="filled"][data-static-label="true"] .form-field__label,
@@ -235,7 +187,7 @@
     transform-origin: left center;
     padding-inline: 0.25rem;
     line-height: 1.5;
-    background-color: var(--form-field-label-background, var(--ui-bg));
+    background-color: transparent;
     color: var(--ui-primary);
   }
 
@@ -245,7 +197,7 @@
     transform: scale(0.75);
     transform-origin: left top;
     padding-inline: 0;
-    background-color: var(--form-field-label-background, color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent));
+    background-color: transparent;
   }
 
   .form-field__shell input:-webkit-autofill,
@@ -286,7 +238,7 @@
     transform: translateY(-50%) scale(0.75);
     transform-origin: left center;
     padding-inline: 0.25rem;
-    background-color: var(--form-field-label-background, var(--ui-bg));
+    background-color: transparent;
     color: var(--ui-primary);
   }
 
@@ -295,7 +247,7 @@
     transform: scale(0.75);
     transform-origin: left top;
     padding-inline: 0;
-    background-color: var(--form-field-label-background, color-mix(in oklab, var(--ui-bg-elevated) 72%, transparent));
+    background-color: transparent;
   }
 
   .form-field__shell[data-disabled="true"],
@@ -380,4 +332,9 @@
       line-height: 1.5rem;
     }
   }
+}
+
+/* The shell provides the focus indicator, including the label notch. */
+[data-app] .form-field__shell :is(input, textarea, [role="combobox"]):focus-visible {
+  outline: none;
 }

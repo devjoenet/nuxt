@@ -74,7 +74,7 @@ test('the workspace shell preserves CRM, admin, settings, and Development screen
     $page->assertPathIs('/settings/security');
 });
 
-test('the auth shell and floating labels use the specified light and dark surfaces', function (): void {
+test('the auth shell preserves its surfaces behind transparent notched floating labels', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -83,8 +83,13 @@ test('the auth shell and floating labels use the specified light and dark surfac
     $lightPage
         ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card]")).backgroundColor', 'rgb(255, 255, 255)')
         ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__shell[data-variant=outlined]")).backgroundColor', 'rgba(0, 0, 0, 0)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).backgroundColor', 'rgb(255, 255, 255)');
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).backgroundColor', 'rgba(0, 0, 0, 0)');
 
+    $lightPage->page()->locator('input[name="password"]')->focus();
+    $lightPage
+        ->assertScript('getComputedStyle(document.querySelector(".form-field__outline")).borderTopWidth', '2px')
+        ->assertScript('document.querySelector(".form-field__outline legend").getBoundingClientRect().width > 0', true)
+        ->assertAttribute('.form-field__outline', 'aria-hidden', 'true');
     $lightPage->page()->locator('input[name="password"]')->press('Tab');
 
     $lightPage
@@ -97,8 +102,13 @@ test('the auth shell and floating labels use the specified light and dark surfac
     $darkPage
         ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card]")).backgroundColor', 'rgb(23, 34, 58)')
         ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__shell[data-variant=outlined]")).backgroundColor', 'rgba(0, 0, 0, 0)')
-        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).backgroundColor', 'rgb(23, 34, 58)');
+        ->assertScript('getComputedStyle(document.querySelector("[data-testid=auth-shell-card] .form-field__label")).backgroundColor', 'rgba(0, 0, 0, 0)');
 
+    $darkPage->page()->locator('input[name="password"]')->focus();
+    $darkPage
+        ->assertScript('getComputedStyle(document.querySelector(".form-field__outline")).borderTopWidth', '2px')
+        ->assertScript('document.querySelector(".form-field__outline legend").getBoundingClientRect().width > 0', true)
+        ->assertAttribute('.form-field__outline', 'aria-hidden', 'true');
     $darkPage->page()->locator('input[name="password"]')->press('Tab');
 
     $darkPage
