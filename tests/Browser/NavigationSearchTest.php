@@ -5,6 +5,34 @@ declare(strict_types=1);
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 
+test('collapsed workspace groups release their height and restore their links', function (): void {
+    app(RolePermissionSeeder::class)->run();
+
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+    $this->actingAs($admin);
+
+    $this->withSession(['auth.password_confirmed_at' => now()->timestamp]);
+
+    visit('/dashboard')
+        ->assertScript('Boolean((window.adminGroup = Array.from(document.querySelectorAll(\'nav[aria-label="Primary workspace navigation"] button[data-slot="link"]\')).find(button => button.textContent.trim() === "Admin")?.closest(\'[data-slot="item"]\')))', true)
+        ->assertVisible('nav a[href="/admin/users"]')
+        ->click('nav button[data-slot="link"]:has-text("Admin")')
+        ->assertScript('window.adminGroup.querySelector(\'[data-slot="content"]\').getBoundingClientRect().height', 0)
+        ->assertMissing('nav a[href="/admin/users"]')
+        ->click('nav button[data-slot="link"]:has-text("Admin")')
+        ->assertVisible('nav a[href="/admin/users"]')
+        ->assertScript('window.adminGroup.querySelector(\'[data-slot="content"]\').getBoundingClientRect().height > 0', true)
+        ->assertPresent('nav[aria-label="Primary workspace navigation"] a[href="/settings/profile"]')
+        ->click('nav a[href="/settings/profile"]')
+        ->assertPathIs('/settings/profile')
+        ->assertAriaAttribute('nav[aria-label="Primary workspace navigation"] a[href="/settings/profile"]', 'current', 'page')
+        ->click('nav[aria-label="Primary workspace navigation"] a[href="/settings/security"]')
+        ->assertPathIs('/settings/security')
+        ->assertAriaAttribute('nav[aria-label="Primary workspace navigation"] a[href="/settings/security"]', 'current', 'page')
+        ->assertNoJavaScriptErrors();
+});
+
 test('authorized users can search nested navigation and page headings', function (): void {
     app(RolePermissionSeeder::class)->run();
 
@@ -87,19 +115,25 @@ test('mobile navigation closes after selecting a destination', function (): void
 
     $leadsPath = route('crm.leads.index', absolute: false);
 
+    $this->withSession(['auth.password_confirmed_at' => now()->timestamp]);
+
     visit(route('dashboard', absolute: false))
         ->resize(390, 844)
         ->click('button[aria-label="Open sidebar"]')
         ->assertVisible('[role="dialog"]')
         ->assertScript('document.activeElement?.closest("[role=dialog]") !== null', true)
         ->assertPresent('[role="dialog"] nav[aria-label="Primary workspace navigation"]')
-        ->assertPresent('[role="dialog"] nav[aria-label="Account navigation"]')
+        ->assertPresent('[role="dialog"] nav[aria-label="Primary workspace navigation"] a[href="/settings/profile"]')
         ->keys('[role="dialog"]', 'Escape')
         ->assertMissing('[role="dialog"]')
         ->assertScript('document.activeElement?.getAttribute("aria-label")', 'Open sidebar')
         ->click('button[aria-label="Open sidebar"]')
         ->click("[role=\"dialog\"] a[href=\"{$leadsPath}\"]")
         ->assertPathIs($leadsPath)
+        ->assertMissing('[role="dialog"]')
+        ->click('button[aria-label="Open sidebar"]')
+        ->click('[role="dialog"] nav a[href="/settings/security"]')
+        ->assertPathIs('/settings/security')
         ->assertMissing('[role="dialog"]')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs();

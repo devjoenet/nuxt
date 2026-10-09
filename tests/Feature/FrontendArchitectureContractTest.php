@@ -719,7 +719,6 @@ test('route families use shared client and server layout boundaries', function (
         ->toContain('securityShow.url()')
         ->and($workspaceSidebar)
         ->toContain('aria-label="Primary workspace navigation"')
-        ->toContain('aria-label="Account navigation"')
         ->toContain('<UserMenu :collapsed="collapsed" />')
         ->and($workspaceSearch)
         ->toContain('aria-label", "Workspace navigation search results"');
