@@ -15,7 +15,7 @@ const open = defineModel<boolean>("open", { default: false });
     id="default"
     v-model:open="open"
     :ui="{
-      root: 'lg:m-3 lg:mr-0 lg:h-[calc(100svh-1.5rem)] lg:rounded-2xl lg:border lg:border-content-border lg:bg-surface-elevated lg:shadow-lg dark:lg:shadow-none',
+      root: 'lg:h-svh lg:border-content-border',
       footer: 'lg:border-t lg:border-content-border',
     }"
     aria-label="Workspace sidebar"
@@ -31,9 +31,7 @@ const open = defineModel<boolean>("open", { default: false });
     <template #default="{ collapsed }">
       <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
 
-      <UNavigationMenu :collapsed="collapsed" :items="navigationGroups[0]" aria-label="Primary workspace navigation" orientation="vertical" popover tooltip />
-
-      <UNavigationMenu :collapsed="collapsed" :items="navigationGroups[1]" aria-label="Account navigation" class="mt-auto" orientation="vertical" popover tooltip />
+      <UNavigationMenu :collapsed="collapsed" :items="navigationGroups" :ui="{ content: collapsed ? undefined : 'data-[state=closed]:hidden' }" aria-label="Primary workspace navigation" orientation="vertical" popover tooltip />
     </template>
 
     <template #footer="{ collapsed }">

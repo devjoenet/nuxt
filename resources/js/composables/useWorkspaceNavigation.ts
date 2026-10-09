@@ -139,8 +139,6 @@ export function useWorkspaceNavigation(options: WorkspaceNavigationOptions = {})
             },
           ]
         : []),
-    ],
-    [
       {
         label: "Settings",
         to: profileEdit.url(),
