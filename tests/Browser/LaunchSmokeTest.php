@@ -6,8 +6,8 @@ use App\Models\User;
 
 test('public marketing and intake smoke cleanly in a dark browser session', function (): void {
     $page = visit('/#contact')
-        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->inDarkMode()
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->assertPresent('[data-app]')
         ->assertSee('Let’s map the workflow before anyone writes code.')
         ->assertSee('Send project details')
