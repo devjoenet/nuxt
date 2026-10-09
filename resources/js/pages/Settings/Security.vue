@@ -33,7 +33,7 @@ function handleSuccess() {
 
 <template>
   <div class="contents">
-    <AppPageCard description="Confirm your current password before setting a new one." title="Password">
+    <AppPageCard :style="'outline'" class="dark:bg-elevated dark:shadow-none" description="Confirm your current password before setting a new one." title="Password">
       <Form
         v-bind="PasswordController.update.form()"
         :options="{
@@ -57,7 +57,7 @@ function handleSuccess() {
 
     <TwoFactor :requiresConfirmation="requiresConfirmation" :twoFactorEnabled="twoFactorEnabled" />
 
-    <AppPageCard description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently." title="Account" variant="error">
+    <AppPageCard :style="'outline'" class="dark:bg-elevated dark:shadow-none" description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently." title="Account">
       <template #footer>
         <DeleteAccount />
       </template>

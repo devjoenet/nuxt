@@ -48,10 +48,9 @@ function finishSaving(): void {
           :description="selectedRole.protected ? 'Protected system role' : 'Review access by area, then save your changes.'"
           :title="selectedRole.name"
           :ui="{ description: 'text-base sm:text-sm mb-4 ', title: 'text-xl  font-bold mb-4' }"
-          :style="'subtle'"
+          :style="'outline'"
           data-testid="role-editor-card"
-          class="w-full"
-          variant="neutral"
+          class="w-full dark:bg-elevated dark:shadow-none"
         >
           <Form v-if="!selectedRole.protected" #default="{ errors, processing, recentlySuccessful }" class="grid gap-6" v-bind="update.form(selectedRole.id)" @finish="finishSaving" @start="beginSaving">
             <UFormField
@@ -69,7 +68,7 @@ function finishSaving(): void {
               <UButton :disabled="processing" :loading="processing" class="w-full sm:ml-auto sm:w-fit" label="Save permissions" type="submit" />
             </div>
           </Form>
-          <UAlert v-else :ui="{ description: 'text-cyan-900 dark:text-cyan-100' }" class="w-fit max-w-full" color="info" description="All permissions are granted to Super Admin by the server-side Gate bypass. This role is not editable from the UI." icon="i-ph-info" variant="subtle" />
+          <UAlert v-else class="w-fit max-w-full" color="info" description="All permissions are granted to Super Admin by the server-side Gate bypass. This role is not editable from the UI." icon="i-ph-info" variant="subtle" />
         </AppPageCard>
       </template>
     </div>
