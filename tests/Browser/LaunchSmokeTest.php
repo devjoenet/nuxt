@@ -6,6 +6,7 @@ use App\Models\User;
 
 test('public marketing and intake smoke cleanly in a dark browser session', function (): void {
     $page = visit('/#contact')
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->inDarkMode()
         ->assertPresent('[data-app]')
         ->assertSee('Let’s map the workflow before anyone writes code.')
@@ -40,6 +41,7 @@ test('public marketing and intake smoke cleanly in a dark browser session', func
 
 test('visitors can submit a valid inquiry from the browser', function (): void {
     visit('/#contact')
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->fill('#intake-name', 'Jordan Rivera')
         ->fill('#intake-email', 'jordan@example.com')
         ->fill('#intake-company', 'Rivera Logistics')
@@ -153,6 +155,7 @@ test('filled login inputs float their labels', function (): void {
 
 test('budget input stays empty until typed and formats on blur', function (): void {
     visit('/#contact')
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->assertScript('document.querySelector("#intake-budget")?.value', '')
         ->type('#intake-budget', '25000')
         ->assertScript('document.querySelector("#intake-budget")?.value', '25000')
@@ -163,6 +166,7 @@ test('budget input stays empty until typed and formats on blur', function (): vo
 
 test('landing form masks phone numbers and keeps service options readable', function (): void {
     visit('/#contact')
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->type('#intake-phone', '1112221234')
         ->assertScript('document.querySelector("#intake-phone")?.value', '111-222-1234')
         ->assertScript('document.querySelector("#intake-service")?.getBoundingClientRect().right > document.querySelector("#intake-service")?.closest(".form-field__shell")?.getBoundingClientRect().right - 8', true)
@@ -181,6 +185,7 @@ test('landing form masks phone numbers and keeps service options readable', func
 
 test('privacy consent link opens an accessible lazy modal without losing form state', function (): void {
     visit('/#contact')
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
         ->fill('#intake-name', 'Jordan Rivera')
         ->assertDontSee('Information we collect')
         ->keys('#intake-privacy-notice', 'Enter')
