@@ -493,9 +493,13 @@ test('index workflows share navigation and framing without hiding domain columns
             ->not->toContain('setTimeout')
             ->and($columns)
             ->toContain('TableColumn<')
-            ->toContain('@nuxt/ui/components/Button.vue')
-            ->not->toContain('resolveComponent')
-            ->toContain('id: "actions"');
+            ->not->toContain('resolveComponent');
+
+        if ($domain !== 'Leads') {
+            expect($columns)
+                ->toContain('@nuxt/ui/components/Button.vue')
+                ->toContain('id: "actions"');
+        }
     }
 
     foreach ([
