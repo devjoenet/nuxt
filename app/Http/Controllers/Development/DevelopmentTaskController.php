@@ -23,6 +23,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Activitylog\Models\Activity;
 
 class DevelopmentTaskController extends Controller
 {
@@ -122,6 +123,7 @@ class DevelopmentTaskController extends Controller
         $user = $this->authenticatedUser($request);
 
         return Inertia::render('Development/Tasks/Show', [
+            'canViewHistory' => $user->can('viewAny', Activity::class),
             'task' => DevelopmentTaskResource::make($developmentTask)->resolve($request),
             'assignees' => $user->can('manageRoadmap', $developmentTask)
                 ? User::query()

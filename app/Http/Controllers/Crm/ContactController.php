@@ -25,6 +25,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Activitylog\Models\Activity;
 
 class ContactController extends Controller
 {
@@ -83,6 +84,7 @@ class ContactController extends Controller
         return Inertia::render('Crm/Contacts/Show', [
             'contact' => ContactResource::make($contact)->resolve($request),
             'canManage' => $user->can('crm.manage'),
+            'canViewHistory' => $user->can('viewAny', Activity::class),
         ]);
     }
 

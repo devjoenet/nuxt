@@ -257,6 +257,7 @@ test('all baseline application pages are covered by the migrated route families'
         'Development/UserTesting/Index.vue',
         'Development/UserTesting/Legacy.vue',
         'ErrorPage.vue',
+        'History/Show.vue',
         'Privacy.vue',
         'Settings/Profile.vue',
         'Settings/Security.vue',
@@ -272,7 +273,7 @@ test('all baseline application routes remain registered', function (): void {
 
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR));
 
-    expect($routes)->toHaveCount(89);
+    expect($routes)->toHaveCount(92);
 });
 
 test('temporary frontend compatibility aliases cannot return', function (): void {

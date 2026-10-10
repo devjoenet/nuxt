@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import { Link, router } from "@inertiajs/vue3";
+import { RecordHistoryButton } from "@/components/RecordHistoryButton";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
 import { CrmDetailLayout } from "@/components/CrmDetailLayout";
 import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";
 import { CrmRecordStatusBadge } from "@/components/CrmRecordStatusBadge";
 import { formatDate } from "@/lib/dateFormatters";
 import { show as contactShow } from "@/routes/crm/contacts";
-import { archive, destroy, edit, index, restore } from "@/routes/crm/organizations";
+import { archive, destroy, edit, history, index, restore } from "@/routes/crm/organizations";
 import type { CrmDetailMetadataItem, Organization } from "@/types/crm";
 
-const props = defineProps<{ organization: Organization; canManage: boolean }>();
+const props = defineProps<{ organization: Organization; canManage: boolean; canViewHistory: boolean }>();
 
 const accountDetails = computed<CrmDetailMetadataItem[]>(() => [
   { label: "Owner", value: props.organization.owner?.name ?? "Unassigned" },
@@ -66,17 +67,20 @@ const deleteOrganization = (): void => router.delete(destroy(props.organization.
           <h2 id="organization-account-details-heading" class="text-lg font-semibold text-highlighted">Account details</h2>
           <CrmDetailMetadata :items="accountDetails" class="mt-4" />
         </section>
-        <div v-if="canManage" class="flex flex-wrap gap-2 border-t border-default pt-6">
-          <ConfirmActionButton v-if="!organization.archived_at" confirm-label="Archive organization" description="The organization will leave active CRM results and can be restored later." label="Archive" title="Archive this organization?" @confirm="archiveOrganization" />
-          <ConfirmActionButton v-else color="neutral" confirm-color="primary" confirm-label="Restore organization" description="The organization will return to active CRM results." label="Restore" title="Restore this organization?" variant="outline" @confirm="restoreOrganization" />
-          <ConfirmActionButton
-            confirm-label="Delete organization"
-            description="The organization will be removed from active CRM results. Related history remains available where required."
-            label="Delete"
-            title="Delete this organization?"
-            variant="ghost"
-            @confirm="deleteOrganization"
-          />
+        <div v-if="canManage || canViewHistory" class="flex flex-wrap gap-2 border-t border-default pt-6">
+          <RecordHistoryButton v-if="canViewHistory" :href="history(organization.id).url" />
+          <template v-if="canManage">
+            <ConfirmActionButton v-if="!organization.archived_at" confirm-label="Archive organization" description="The organization will leave active CRM results and can be restored later." label="Archive" title="Archive this organization?" @confirm="archiveOrganization" />
+            <ConfirmActionButton v-else color="neutral" confirm-color="primary" confirm-label="Restore organization" description="The organization will return to active CRM results." label="Restore" title="Restore this organization?" variant="outline" @confirm="restoreOrganization" />
+            <ConfirmActionButton
+              confirm-label="Delete organization"
+              description="The organization will be removed from active CRM results. Related history remains available where required."
+              label="Delete"
+              title="Delete this organization?"
+              variant="ghost"
+              @confirm="deleteOrganization"
+            />
+          </template>
         </div>
       </div>
     </template>
