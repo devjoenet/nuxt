@@ -34,6 +34,8 @@ test('CRM lead selectors search and select records from the keyboard', function 
     $page->assertSee("{$contact->name} — {$contact->email}");
     $page->page()->locator('[data-slot="input"] input[aria-expanded="true"]')->press('ArrowDown');
     $page->page()->locator('[data-slot="input"] input[aria-expanded="true"]')->press('Enter');
+    $page->assertValue('input[name="contact_id"]', $contact->uuid)
+        ->assertAttribute('#lead-contact', 'aria-expanded', 'false');
 
     $page->page()->locator('#lead-organization')->click();
     $page->assertSee($organization->name);
