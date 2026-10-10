@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 import { h } from "vue";
 import { LeadStatusBadge } from "@/components/LeadStatusBadge";
 import { show } from "@/routes/crm/leads";
-import { show as showContact } from "@/routes/crm/contacts";
+//import { show as showContact } from "@/routes/crm/contacts";
 import { show as showOrganization } from "@/routes/crm/organizations";
 import type { Lead } from "@/types/crm";
 
@@ -13,13 +13,11 @@ export function createLeadIndexColumns(): TableColumn<Lead>[] {
       accessorKey: "contact.name",
       header: "Contact",
       cell: ({ row }) =>
-        h("div", { class: "min-w-48" }, [
-          row.original.contact && !row.original.contact.deleted_at
-            ? h(Link, { href: showContact(row.original.contact.id).url, class: "font-medium text-primary underline underline-offset-4" }, () => row.original.contact?.name)
-            : h("p", { class: "font-medium text-highlighted" }, row.original.contact?.name ?? "Contact unavailable"),
-          h("p", { class: "text-muted" }, row.original.contact?.email ?? "Unavailable"),
-          h(Link, { href: show(row.original.id).url, class: "text-primary underline underline-offset-4", "aria-label": `Lead details for ${row.original.contact?.name ?? "unavailable contact"}` }, () => "Lead details"),
-          row.original.contact?.deleted_at ? h("p", { class: "text-warning" }, "Deleted contact") : null,
+        h("div", { class: "min-w-48 flex flex-col space-y-3" }, [
+          h(Link, { href: show(row.original.id).url, class: "block font-medium text-primary underline underline-offset-4" }, () => row.original.contact?.name ?? "Contact unavailable"),
+          //h("p", { class: "text-xs text-muted" }, row.original.contact?.email ?? "Unavailable"),
+          //row.original.contact && !row.original.contact.deleted_at ? h(Link, { href: showContact(row.original.contact.id).url, class: "block text-xs text-primary underline underline-offset-4", "aria-label": `View Contact: ${row.original.contact.name}` }, () => "View Contact") : null,
+          //row.original.contact?.deleted_at ? h("p", { class: "text-warning" }, "Deleted contact") : null,
         ]),
     },
     {

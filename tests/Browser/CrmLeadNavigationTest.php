@@ -21,7 +21,9 @@ test('lead list identities and lead details support keyboard navigation without 
             ->assertSee($contact->name)
             ->assertSee($organization->name)
             ->assertScript('document.querySelectorAll("tbody tr:first-child td").length', 5)
-            ->assertMissing('tbody a:has-text("View")');
+            ->assertMissing('tbody a:text-is("View")')
+            ->assertScript('document.querySelector(\'tbody a[href="'.route('crm.leads.show', $lead, false).'\"]\')?.textContent', $contact->name)
+            ->assertScript('document.querySelector(\'tbody a[href="'.route('crm.contacts.show', $contact, false).'\"]\')?.textContent', 'View Contact');
         $link = $page->page()->locator('tbody a[href="'.route($route, $record, false).'"]');
         $link->focus();
         $link->press('Enter');
