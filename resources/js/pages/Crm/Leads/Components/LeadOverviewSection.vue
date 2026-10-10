@@ -3,17 +3,19 @@ import { Link, router } from "@inertiajs/vue3";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
 import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";
 import { CrmRecordStatusBadge } from "@/components/CrmRecordStatusBadge";
+import { RecordHistoryButton } from "@/components/RecordHistoryButton";
 import { LeadStatusBadge } from "@/components/LeadStatusBadge";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { show as contactShow } from "@/routes/crm/contacts";
 import { show as organizationShow } from "@/routes/crm/organizations";
-import { archive, convert, restore } from "@/routes/crm/leads";
+import { archive, convert, history, restore } from "@/routes/crm/leads";
 import type { CrmDetailMetadataItem, Lead } from "@/types/crm";
 
 const props = defineProps<{
   lead: Lead;
   canManage: boolean;
+  canViewHistory: boolean;
   class?: string;
 }>();
 
@@ -49,9 +51,9 @@ const convertLead = (): void => router.post(convert(props.lead.id).url);
           · {{ sourceLabel }}
         </p>
       </div>
-      <div v-if="canManage" class="flex flex-wrap gap-2">
+      <div v-if="canManage || canViewHistory" class="flex flex-wrap gap-2">
         <ConfirmActionButton
-          v-if="!lead.converted_at"
+          v-if="canManage && !lead.converted_at"
           color="neutral"
           confirm-color="primary"
           confirm-label="Convert to client"
@@ -60,8 +62,9 @@ const convertLead = (): void => router.post(convert(props.lead.id).url);
           title="Convert this organization to a client?"
           @confirm="convertLead"
         />
-        <ConfirmActionButton v-if="!lead.archived_at" confirm-label="Archive lead" description="The lead will leave active CRM results and can be restored later." label="Archive" title="Archive this lead?" @confirm="archiveLead" />
-        <ConfirmActionButton v-else color="neutral" confirm-color="primary" confirm-label="Restore lead" description="The lead will return to active CRM results." label="Restore" title="Restore this lead?" variant="outline" @confirm="restoreLead" />
+        <RecordHistoryButton v-if="canViewHistory" :href="history(lead.id).url" />
+        <ConfirmActionButton v-if="canManage && !lead.archived_at" confirm-label="Archive lead" description="The lead will leave active CRM results and can be restored later." label="Archive" title="Archive this lead?" @confirm="archiveLead" />
+        <ConfirmActionButton v-else-if="canManage" color="neutral" confirm-color="primary" confirm-label="Restore lead" description="The lead will return to active CRM results." label="Restore" title="Restore this lead?" variant="outline" @confirm="restoreLead" />
       </div>
     </div>
     <CrmDetailMetadata :items="overviewMetadata" layout="rows" class="[&_dd]:min-w-0 [&_dd]:wrap-anywhere" />

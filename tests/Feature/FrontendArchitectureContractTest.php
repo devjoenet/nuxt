@@ -241,6 +241,7 @@ test('all baseline application pages are covered by the migrated route families'
         'Crm/Contacts/Index.vue',
         'Crm/Contacts/Show.vue',
         'Crm/Leads/Form.vue',
+        'Crm/Leads/History.vue',
         'Crm/Leads/Index.vue',
         'Crm/Leads/Show.vue',
         'Crm/Organizations/Form.vue',
@@ -271,7 +272,7 @@ test('all baseline application routes remain registered', function (): void {
 
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR));
 
-    expect($routes)->toHaveCount(88);
+    expect($routes)->toHaveCount(89);
 });
 
 test('temporary frontend compatibility aliases cannot return', function (): void {
