@@ -36,6 +36,10 @@ export function useWorkspaceBreadcrumbs(title: MaybeRefOrGetter<string>): Comput
       items.push({ label: section.label, href: section.href });
     }
 
+    if (/^\/crm\/leads\/[^/?]+/.test(page.url)) {
+      items.push({ label: "Leads", href: leadsIndex.url() });
+    }
+
     items.push({ label: currentTitle, current: true });
 
     return items;

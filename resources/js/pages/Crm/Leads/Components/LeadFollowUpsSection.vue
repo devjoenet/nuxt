@@ -22,10 +22,10 @@ const priorities = [
 
 <template>
   <section :class="cn('grid gap-4 border-b border-default pb-8', props.class)">
-    <h2 class="text-xl font-semibold text-highlighted">Follow-ups</h2>
+    <h2 class="text-xl font-semibold text-highlighted">{{ canManage ? "Add Follow-up" : "Follow-ups" }}</h2>
     <Form v-if="canManage" #default="{ errors, processing }" :action="storeTask(lead.id)" :options="{ preserveScroll: true }" class="grid gap-3" reset-on-success>
       <FormInput :error="errors.title" label="Follow-up title" name="title" />
-      <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+      <div class="grid min-w-0 gap-3">
         <FormInput :error="errors.due_at" label="Due date" name="due_at" type="datetime-local" />
         <FormSelect :error="errors.priority" :items="priorities" default-value="normal" label="Priority" name="priority" />
       </div>

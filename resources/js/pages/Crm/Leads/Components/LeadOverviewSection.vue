@@ -7,6 +7,7 @@ import { LeadStatusBadge } from "@/components/LeadStatusBadge";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { show as contactShow } from "@/routes/crm/contacts";
+import { show as organizationShow } from "@/routes/crm/organizations";
 import { archive, convert, restore } from "@/routes/crm/leads";
 import type { CrmDetailMetadataItem, Lead } from "@/types/crm";
 
@@ -15,6 +16,8 @@ const props = defineProps<{
   canManage: boolean;
   class?: string;
 }>();
+
+const sourceLabel = computed(() => props.lead.source.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase()));
 
 const overviewMetadata = computed<CrmDetailMetadataItem[]>(() => [
   { label: "Email", value: props.lead.contact?.email ?? "Unavailable" },
@@ -33,14 +36,18 @@ const convertLead = (): void => router.post(convert(props.lead.id).url);
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div>
         <div class="flex flex-wrap items-center gap-3">
-          <Link v-if="lead.contact && !lead.contact.deleted_at" :href="contactShow(lead.contact.id).url" class="text-2xl font-semibold tracking-tight text-balance text-highlighted hover:underline">
+          <Link v-if="lead.contact && !lead.contact.deleted_at" :href="contactShow(lead.contact.id).url" class="text-2xl font-semibold tracking-tight text-balance text-primary hover:underline">
             {{ lead.contact.name }}
           </Link>
           <h1 v-else class="text-2xl font-semibold tracking-tight text-balance text-highlighted">{{ lead.contact?.name ?? "Contact unavailable" }}</h1>
           <CrmRecordStatusBadge v-if="lead.contact?.deleted_at" data-testid="lead-deleted-contact-status" label="Deleted contact" status="deleted" />
           <LeadStatusBadge :status="lead.status" />
         </div>
-        <p class="text-base text-pretty text-muted sm:text-sm">{{ lead.organization?.name ?? "Independent contact" }} · {{ lead.source }}</p>
+        <p class="text-base text-pretty text-muted sm:text-sm">
+          <Link v-if="lead.organization" :href="organizationShow(lead.organization.id).url" class="text-primary hover:underline">{{ lead.organization.name }}</Link>
+          <span v-else>Independent contact</span>
+          · {{ sourceLabel }}
+        </p>
       </div>
       <div v-if="canManage" class="flex flex-wrap gap-2">
         <ConfirmActionButton
@@ -57,7 +64,7 @@ const convertLead = (): void => router.post(convert(props.lead.id).url);
         <ConfirmActionButton v-else color="neutral" confirm-color="primary" confirm-label="Restore lead" description="The lead will return to active CRM results." label="Restore" title="Restore this lead?" variant="outline" @confirm="restoreLead" />
       </div>
     </div>
-    <CrmDetailMetadata :items="overviewMetadata" layout="grid" />
+    <CrmDetailMetadata :items="overviewMetadata" layout="rows" class="[&_dd]:min-w-0 [&_dd]:wrap-anywhere" />
     <div>
       <h2 class="font-semibold text-highlighted">Project details</h2>
       <p class="mt-2 text-base text-pretty whitespace-pre-wrap text-muted sm:text-sm">{{ lead.project_details }}</p>

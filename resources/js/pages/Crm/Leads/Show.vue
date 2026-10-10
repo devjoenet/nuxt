@@ -4,7 +4,7 @@ import { edit, index } from "@/routes/crm/leads";
 import LeadFollowUpsSection from "@/pages/Crm/Leads/Components/LeadFollowUpsSection.vue";
 import LeadNotesSection from "@/pages/Crm/Leads/Components/LeadNotesSection.vue";
 import LeadOverviewSection from "@/pages/Crm/Leads/Components/LeadOverviewSection.vue";
-import LeadTimelineSection from "@/pages/Crm/Leads/Components/LeadTimelineSection.vue";
+import LeadNoteHistorySection from "@/pages/Crm/Leads/Components/LeadNoteHistorySection.vue";
 import type { Lead } from "@/types/crm";
 
 defineProps<{ lead: Lead; canManage: boolean }>();
@@ -16,12 +16,12 @@ defineProps<{ lead: Lead; canManage: boolean }>();
       <LeadOverviewSection :can-manage="canManage" :lead="lead" />
     </template>
 
-    <LeadTimelineSection :activities="lead.activities" />
+    <LeadNoteHistorySection :notes="lead.notes" />
 
     <template #aside>
       <div class="grid content-start gap-8">
         <LeadFollowUpsSection :can-manage="canManage" :lead="lead" />
-        <LeadNotesSection :can-manage="canManage" :lead="lead" />
+        <LeadNotesSection v-if="canManage" :can-manage="canManage" :lead="lead" />
       </div>
     </template>
   </CrmDetailLayout>
