@@ -19,7 +19,7 @@ test('the workspace shell preserves CRM, admin, settings, and Development screen
         ->assertDataAttribute('main[data-workspace-page-content]', 'content-width', 'full')
         ->assertSee('Admin')
         ->assertSee('Development')
-        ->assertSee('Recent activity')
+        ->assertSee('Recent changes')
         ->assertSee('Southeast Code')
         ->assertDontSee('Create team')
         ->assertDontSee('Manage teams')

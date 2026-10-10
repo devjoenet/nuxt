@@ -27,6 +27,7 @@ class InviteUser
                 'name' => $data->name,
                 'email' => $data->email,
                 'password' => Str::password(64),
+                'invited_at' => now(),
             ]);
             $user->syncRoles([$data->role]);
 

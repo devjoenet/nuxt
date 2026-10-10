@@ -22,12 +22,14 @@ const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ lab
 const { filters, hasActiveFilters, isLoading, reset, visitPage } = useInertiaFilters({
   url: () => index().url,
   initialFilters: () => ({
+    unassigned: String(props.filters.unassigned ?? ""),
+    overdue: String(props.filters.overdue ?? ""),
     search: String(props.filters.search ?? ""),
     status: String(props.filters.status ?? ""),
     source: String(props.filters.source ?? ""),
     owner: String(props.filters.owner ?? ""),
   }),
-  resetFilters: { search: "", status: "", source: "", owner: "" },
+  resetFilters: { unassigned: "", overdue: "", search: "", status: "", source: "", owner: "" },
   preservedQuery: () => props.filters,
   only: ["leads", "filters"],
 });
@@ -40,6 +42,11 @@ const columns = createLeadIndexColumns();
       <UButton v-if="canManage" :to="create().url" icon="i-ph-plus" label="New lead" />
     </template>
 
+    <div class="flex flex-wrap items-center gap-3">
+      <UButton :to="index({ query: { unassigned: 1 } }).url" color="neutral" :variant="filters.unassigned ? 'solid' : 'outline'" label="Unassigned leads" />
+      <UButton :to="index({ query: { overdue: 1 } }).url" color="neutral" :variant="filters.overdue ? 'solid' : 'outline'" label="Leads with overdue follow-ups" />
+      <UButton v-if="hasActiveFilters" color="neutral" variant="ghost" label="Clear filters" @click="reset" />
+    </div>
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
       <FormInput id="lead-search" v-model="filters.search" class="w-full sm:max-w-sm" icon="i-ph-magnifying-glass" label="Search contacts or organizations" />
       <FormSelect v-model="filters.status" :items="statuses" class="w-full sm:w-44" label="Status" placeholder="All statuses" />

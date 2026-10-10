@@ -15,19 +15,29 @@ use App\Http\Requests\Admin\StoreAdminUserRequest;
 use App\Http\Requests\Admin\UpdateAdminUserRequest;
 use App\Http\Resources\AdminUserResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
 
 class AdminUserController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $this->authorize('viewAny', User::class);
 
+        $filters = $request->validate(['status' => ['nullable', Rule::in(['pending', 'active'])]]);
+        $users = User::query()->with('roles')
+            ->when(($filters['status'] ?? null) === 'pending', fn (Builder $query): Builder => $query->pendingInvitation())
+            ->when(($filters['status'] ?? null) === 'active', fn (Builder $query): Builder => $query->where('is_active', true));
+
         return Inertia::render('Admin/Users/Index', [
-            'users' => AdminUserResource::collection(User::query()->with('roles')->latest()->paginate(20)->withQueryString()),
+            'filters' => $filters,
+            'hasUntrackedInvitations' => User::query()->untrackedInvitation()->exists(),
+            'users' => AdminUserResource::collection($users->latest()->paginate(20)->withQueryString()),
             'roles' => Role::query()->orderBy('name')->get(['name'])->map(fn (Role $role): array => [
                 'label' => $role->name,
                 'value' => $role->name,

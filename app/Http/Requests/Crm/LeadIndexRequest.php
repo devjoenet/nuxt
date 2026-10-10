@@ -25,6 +25,8 @@ class LeadIndexRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'unassigned' => ['nullable', 'boolean'],
+            'overdue' => ['nullable', 'boolean'],
             'search' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', Rule::enum(LeadStatus::class)],
             'source' => ['nullable', Rule::enum(LeadSource::class)],

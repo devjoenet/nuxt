@@ -21,6 +21,8 @@ final readonly class LeadIndexData
         public CrmSortDirection $direction,
         public bool $sortWasProvided,
         public bool $directionWasProvided,
+        public bool $unassigned = false,
+        public bool $overdue = false,
     ) {}
 
     /** @param array<string, mixed> $attributes */
@@ -34,6 +36,8 @@ final readonly class LeadIndexData
         $direction = $attributes['direction'] ?? null;
 
         return new self(
+            unassigned: filter_var($attributes['unassigned'] ?? false, FILTER_VALIDATE_BOOLEAN),
+            overdue: filter_var($attributes['overdue'] ?? false, FILTER_VALIDATE_BOOLEAN),
             search: is_string($search) ? $search : null,
             status: is_string($status) ? LeadStatus::from($status) : null,
             source: is_string($source) ? LeadSource::from($source) : null,
@@ -50,6 +54,8 @@ final readonly class LeadIndexData
     public function filters(): array
     {
         return array_filter([
+            'unassigned' => $this->unassigned ? '1' : null,
+            'overdue' => $this->overdue ? '1' : null,
             'search' => $this->search,
             'status' => $this->status?->value,
             'source' => $this->source?->value,
