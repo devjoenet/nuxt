@@ -31,7 +31,17 @@ const open = defineModel<boolean>("open", { default: false });
     <template #default="{ collapsed }">
       <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
 
-      <UNavigationMenu :collapsed="collapsed" :items="navigationGroups" :ui="{ content: collapsed ? undefined : 'data-[state=closed]:hidden' }" aria-label="Primary workspace navigation" orientation="vertical" popover tooltip />
+      <UNavigationMenu
+        :collapsed="collapsed"
+        :items="navigationGroups"
+        :ui="{
+          content: collapsed ? undefined : 'overflow-hidden data-[state=open]:animate-[collapsible-down_300ms_ease-out] data-[state=closed]:animate-[collapsible-up_240ms_ease-in-out_forwards] motion-reduce:data-[state=open]:animate-none motion-reduce:data-[state=closed]:animate-none',
+        }"
+        aria-label="Primary workspace navigation"
+        orientation="vertical"
+        popover
+        tooltip
+      />
     </template>
 
     <template #footer="{ collapsed }">
