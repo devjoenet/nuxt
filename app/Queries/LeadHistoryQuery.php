@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Queries;
 
+use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\Note;
@@ -17,6 +18,7 @@ final class LeadHistoryQuery
     {
         $noteType = (new Note)->getMorphClass();
         $taskType = (new FollowUpTask)->getMorphClass();
+        $activityType = (new CrmActivity)->getMorphClass();
         $leadType = $lead->getMorphClass();
 
         $noteAudits = Activity::query()->select('subject_id')
@@ -35,7 +37,7 @@ final class LeadHistoryQuery
                 ->orWhere('attribute_changes->old->lead_id', $lead->getKey()));
 
         return Activity::query()->with('causer')
-            ->where(function (Builder $query) use ($lead, $leadType, $noteType, $taskType, $noteAudits, $taskAudits): void {
+            ->where(function (Builder $query) use ($lead, $leadType, $noteType, $taskType, $noteAudits, $taskAudits, $activityType): void {
                 $query->where(fn (Builder $query): Builder => $query
                     ->where('subject_type', $leadType)->where('subject_id', $lead->getKey()))
                     ->orWhere(fn (Builder $query): Builder => $query
@@ -43,6 +45,9 @@ final class LeadHistoryQuery
                         ->where(fn (Builder $query): Builder => $query
                             ->whereIn('subject_id', Note::withTrashed()->select('id')->where('subject_type', $leadType)->where('subject_id', $lead->getKey()))
                             ->orWhereIn('subject_id', $noteAudits)))
+                    ->orWhere(fn (Builder $query): Builder => $query
+                        ->where('subject_type', $activityType)
+                        ->whereIn('subject_id', CrmActivity::query()->select('id')->where('lead_id', $lead->getKey())))
                     ->orWhere(fn (Builder $query): Builder => $query
                         ->where('subject_type', $taskType)
                         ->where(fn (Builder $query): Builder => $query

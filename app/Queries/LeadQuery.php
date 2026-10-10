@@ -36,6 +36,8 @@ class LeadQuery
                             ->select('id'));
                 });
             })
+            ->when($filters->unassigned, fn (Builder $query): Builder => $query->whereNull('owner_id'))
+            ->when($filters->overdue, fn (Builder $query): Builder => $query->whereHas('followUpTasks', fn (Builder $tasks): Builder => $tasks->overdue()))
             ->when($filters->status, fn (Builder $query): Builder => $query->where('status', $filters->status))
             ->when($filters->source, fn (Builder $query): Builder => $query->where('source', $filters->source))
             ->when($filters->ownerId, fn (Builder $query, int $ownerId): Builder => $query->where('owner_id', $ownerId))

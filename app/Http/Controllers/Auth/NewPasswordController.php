@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\AcceptUserInvitation;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
@@ -33,7 +34,7 @@ class NewPasswordController extends Controller
     }
 
     /** @throws ValidationException */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, AcceptUserInvitation $acceptInvitation): RedirectResponse
     {
         $request->validate([
             'token' => 'required',
@@ -46,10 +47,11 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user) use ($request): void {
+            function (User $user) use ($request, $acceptInvitation): void {
                 $user->password = $request->password;
                 $user->remember_token = $this->generateRememberToken();
                 $user->save();
+                $acceptInvitation->handle($user);
 
                 event(new PasswordReset($user));
             }
