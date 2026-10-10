@@ -94,6 +94,7 @@ class LeadController extends Controller
 
         return Inertia::render('Crm/Leads/Show', [
             'lead' => LeadResource::make($lead)->resolve($request),
+            'canViewHistory' => $user->can('audit.view'),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
