@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { RecordHistoryButton } from "@/components/RecordHistoryButton";
+import { history } from "@/routes/development/tasks";
 import { index as requestsIndex } from "@/routes/development/requests";
 import { index as roadmapIndex } from "@/routes/development/roadmap";
 import DevelopmentTaskBriefSection from "@/pages/Development/Tasks/Components/DevelopmentTaskBriefSection.vue";
@@ -11,6 +13,7 @@ import type { DevelopmentOption, DevelopmentTask } from "@/types/development";
 
 const props = defineProps<{
   task: DevelopmentTask;
+  canViewHistory: boolean;
   assignees: DevelopmentOption[];
   priorities: DevelopmentOption[];
   linkTypes: DevelopmentOption[];
@@ -24,6 +27,7 @@ const pageContextLabel = computed(() => (isRoadmapTask.value ? "Roadmap task" : 
 <template>
   <WorkspacePage id="development-task-detail" :document-title="task.title" :title="pageContextLabel">
     <template #actions>
+      <RecordHistoryButton v-if="canViewHistory" :href="history(task.id).url" />
       <UButton :label="isRoadmapTask ? 'Back to roadmap' : 'Back to my requests'" :to="isRoadmapTask ? roadmapIndex().url : requestsIndex().url" color="neutral" icon="i-ph-arrow-left" variant="ghost" />
     </template>
 

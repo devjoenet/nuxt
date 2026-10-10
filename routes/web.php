@@ -33,6 +33,7 @@ use App\Http\Controllers\Development\DevelopmentTaskRoadmapController;
 use App\Http\Controllers\Development\DevelopmentTestRunController;
 use App\Http\Controllers\Development\UserTestingPageController;
 use App\Http\Controllers\PublicIntakeController;
+use App\Http\Controllers\RecordHistoryController;
 use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,6 +57,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
         Route::get('options/organizations', [CrmRecordOptionController::class, 'organizations'])->name('options.organizations');
         Route::get('leads/{lead}/history', LeadHistoryController::class)->name('leads.history');
         Route::resource('leads', LeadController::class)->except('destroy');
+        Route::get('contacts/{contact}/history', [RecordHistoryController::class, 'contact'])->name('contacts.history');
+        Route::get('organizations/{organization}/history', [RecordHistoryController::class, 'organization'])->name('organizations.history');
         Route::resource('organizations', OrganizationController::class)->except('destroy');
         Route::post('organizations/{organization}/archive', [OrganizationController::class, 'archive'])->name('organizations.archive');
         Route::delete('organizations/{organization}/archive', [OrganizationController::class, 'restore'])->name('organizations.restore');
@@ -110,6 +113,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
         Route::get('requests/create', [DevelopmentTaskController::class, 'create'])->name('requests.create');
         Route::post('requests', [DevelopmentTaskController::class, 'store'])->name('requests.store');
         Route::get('review', [DevelopmentTaskReviewController::class, 'index'])->name('review.index');
+        Route::get('tasks/{developmentTask}/history', [RecordHistoryController::class, 'developmentTask'])->name('tasks.history');
         Route::get('tasks/{developmentTask}', [DevelopmentTaskController::class, 'show'])->name('tasks.show');
         Route::post('tasks/{developmentTask}/notes', [DevelopmentTaskNoteController::class, 'store'])->name('tasks.notes.store');
         Route::post('tasks/{developmentTask}/review', [DevelopmentTaskReviewController::class, 'store'])->name('tasks.review.store');

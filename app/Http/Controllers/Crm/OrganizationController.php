@@ -26,6 +26,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Activitylog\Models\Activity;
 
 class OrganizationController extends Controller
 {
@@ -90,6 +91,7 @@ class OrganizationController extends Controller
         return Inertia::render('Crm/Organizations/Show', [
             'organization' => OrganizationResource::make($organization)->resolve($request),
             'canManage' => $user->can('crm.manage'),
+            'canViewHistory' => $user->can('viewAny', Activity::class),
             'canAssign' => $user->isCrmAdministrator(),
         ]);
     }
