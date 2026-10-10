@@ -2,13 +2,19 @@ version: 2
 updates:
   - package-ecosystem: composer
     directory: /
+    # Temporarily pause version-update PRs; remove this limit to resume.
+    open-pull-requests-limit: 0
     schedule:
       interval: weekly
   - package-ecosystem: npm
     directory: /
+    # Temporarily pause version-update PRs; remove this limit to resume.
+    open-pull-requests-limit: 0
     schedule:
       interval: weekly
   - package-ecosystem: github-actions
     directory: /
+    # Temporarily pause version-update PRs; remove this limit to resume.
+    open-pull-requests-limit: 0
     schedule:
       interval: weekly
