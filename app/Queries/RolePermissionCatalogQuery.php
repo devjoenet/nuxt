@@ -25,10 +25,19 @@ final class RolePermissionCatalogQuery
             ->get(['id', 'name'])
             ->groupBy(fn (Permission $permission): string => $this->group($permission)->value);
 
-        return collect(PermissionGroup::cases())
-            ->map(function (PermissionGroup $group) use ($permissionsByGroup): ?array {
-                $permissions = $permissionsByGroup
-                    ->get($group->value, collect())
+        $groups = [];
+
+        foreach (PermissionGroup::cases() as $group) {
+            $permissions = $permissionsByGroup->get($group->value);
+
+            if ($permissions === null) {
+                continue;
+            }
+
+            $groups[] = [
+                'key' => $group->value,
+                'label' => $group->label(),
+                'permissions' => $permissions
                     ->sortBy(fn (Permission $permission): int => $this->order($permission))
                     ->map(fn (Permission $permission): array => [
                         'id' => (int) $permission->getKey(),
@@ -36,21 +45,11 @@ final class RolePermissionCatalogQuery
                         'label' => $this->label($permission),
                     ])
                     ->values()
-                    ->all();
+                    ->all(),
+            ];
+        }
 
-                if ($permissions === []) {
-                    return null;
-                }
-
-                return [
-                    'key' => $group->value,
-                    'label' => $group->label(),
-                    'permissions' => $permissions,
-                ];
-            })
-            ->filter()
-            ->values()
-            ->all();
+        return $groups;
     }
 
     private function group(Permission $permission): PermissionGroup

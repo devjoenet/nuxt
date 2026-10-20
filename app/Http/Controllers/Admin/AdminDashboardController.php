@@ -28,10 +28,12 @@ class AdminDashboardController extends Controller
         if ($user->can('jobs.view')) {
             $stats[] = $this->stat('Failed jobs', fn (): int => DB::connection(config('queue.failed.database'))->table(config()->string('queue.failed.table'))->count(), route('admin.jobs.index'));
         }
+
         if ($user->can('crm.view')) {
             $stats[] = $this->stat('Overdue follow-ups', fn (): int => FollowUpTask::query()->visibleTo($user)->whereHas('lead', fn (Builder $query): Builder => $query->whereNull('archived_at'))->overdue()->count(), route('crm.leads.index', ['overdue' => 1]));
             $stats[] = $this->stat('Unassigned leads', fn (): int => Lead::query()->visibleTo($user)->whereNull('archived_at')->whereNull('owner_id')->count(), route('crm.leads.index', ['unassigned' => 1]));
         }
+
         if ($user->can('admin.users.manage')) {
             $stats[] = $this->stat('Pending invitations', fn (): ?int => User::query()->untrackedInvitation()->exists() ? null : User::query()->pendingInvitation()->count(), route('admin.users.index', ['status' => 'pending']));
             $stats[] = $this->stat('Active users', fn (): int => User::query()->where('is_active', true)->count(), route('admin.users.index', ['status' => 'active']), attention: false);
@@ -49,8 +51,8 @@ class AdminDashboardController extends Controller
     {
         try {
             $value = $count();
-        } catch (Throwable $exception) {
-            report($exception);
+        } catch (Throwable $throwable) {
+            report($throwable);
             $value = null;
         }
 

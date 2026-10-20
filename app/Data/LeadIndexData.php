@@ -36,8 +36,6 @@ final readonly class LeadIndexData
         $direction = $attributes['direction'] ?? null;
 
         return new self(
-            unassigned: filter_var($attributes['unassigned'] ?? false, FILTER_VALIDATE_BOOLEAN),
-            overdue: filter_var($attributes['overdue'] ?? false, FILTER_VALIDATE_BOOLEAN),
             search: is_string($search) ? $search : null,
             status: is_string($status) ? LeadStatus::from($status) : null,
             source: is_string($source) ? LeadSource::from($source) : null,
@@ -47,6 +45,8 @@ final readonly class LeadIndexData
             direction: is_string($direction) ? CrmSortDirection::tryFrom($direction) ?? CrmSortDirection::Desc : CrmSortDirection::Desc,
             sortWasProvided: is_string($sort),
             directionWasProvided: is_string($direction),
+            unassigned: filter_var($attributes['unassigned'] ?? false, FILTER_VALIDATE_BOOLEAN),
+            overdue: filter_var($attributes['overdue'] ?? false, FILTER_VALIDATE_BOOLEAN),
         );
     }
 

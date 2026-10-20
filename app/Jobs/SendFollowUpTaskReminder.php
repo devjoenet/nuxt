@@ -91,7 +91,10 @@ class SendFollowUpTaskReminder implements ShouldBeUnique, ShouldQueue
     {
         Log::error('Follow-up reminder job failed.', [
             'task_uuid' => $this->taskUuid,
-            'exception' => $exception?->getMessage(),
+            'reminder_date' => $this->reminderDate,
+            'correlation_id' => $this->uniqueId(),
+            'job_id' => $this->job?->uuid() ?? $this->job?->getJobId(),
+            'exception_class' => $exception instanceof Throwable ? $exception::class : null,
         ]);
     }
 

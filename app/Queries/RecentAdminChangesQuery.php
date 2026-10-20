@@ -28,12 +28,15 @@ final class RecentAdminChangesQuery
         if ($user->can('admin.users.manage')) {
             $types[] = User::class;
         }
+
         if ($user->can('admin.roles.manage')) {
             $types[] = Role::class;
         }
+
         if ($user->can('settings.manage')) {
             $types[] = BusinessSetting::class;
         }
+
         $crmTypes = [Lead::class, Contact::class, Organization::class, FollowUpTask::class, Note::class, CrmActivity::class];
 
         return Activity::query()->with(['causer', 'subject'])
@@ -56,6 +59,7 @@ final class RecentAdminChangesQuery
                 if ($record === null) {
                     $label .= ' #'.$activity->subject_id.' (unavailable)';
                 }
+
                 $url = null;
                 if ($record instanceof Lead || $record instanceof Contact || $record instanceof Organization) {
                     $prefix = match (true) {
@@ -97,6 +101,7 @@ final class RecentAdminChangesQuery
             return Note::query()->where('subject_type', (new Lead)->getMorphClass())
                 ->whereIn('subject_id', Lead::query()->visibleTo($user)->select('id'));
         }
+
         if ($type === CrmActivity::class) {
             return CrmActivity::query()->whereIn('lead_id', Lead::query()->visibleTo($user)->select('id'));
         }

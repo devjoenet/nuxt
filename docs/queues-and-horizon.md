@@ -56,3 +56,9 @@ those schedules.
 7. After a Forge zero-downtime deployment, include Forge's `$RESTART_QUEUES()` macro after `$ACTIVATE_RELEASE()` so
    Horizon restarts on the new release. On a manual deployment, run `php artisan horizon:terminate` so Supervisor
    restarts workers with the new code.
+
+Reminder failure application logs include the task UUID, reminder date, a stable `correlation_id`, queued job ID when
+available, and exception class. They omit exception messages and exception objects. Use the job ID in the restricted
+Horizon failed-jobs view, or correlate the task UUID/reminder date with the stored failed-job payload, to inspect the
+original exception. Original failed-job details and operational alert mail may contain personal data or credentials;
+only authorized operators should access them, and they must not be copied into general logs or roadmap notes.

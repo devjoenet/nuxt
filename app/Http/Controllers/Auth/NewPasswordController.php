@@ -51,6 +51,7 @@ class NewPasswordController extends Controller
                 $user->password = $request->password;
                 $user->remember_token = $this->generateRememberToken();
                 $user->save();
+
                 $acceptInvitation->handle($user);
 
                 event(new PasswordReset($user));
