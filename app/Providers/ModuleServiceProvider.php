@@ -6,11 +6,28 @@ namespace App\Providers;
 
 use App\Enums\Permission;
 use App\Enums\RoleName;
+use App\Models\BusinessSetting;
+use App\Models\Contact;
+use App\Models\CrmActivity;
+use App\Models\DevelopmentTask;
+use App\Models\DevelopmentTaskLink;
+use App\Models\DevelopmentTaskNote;
+use App\Models\DevelopmentTestRun;
+use App\Models\FollowUpTask;
+use App\Models\Lead;
+use App\Models\Note;
+use App\Models\Organization;
+use App\Models\UserTestingPage;
 use App\Modules\ModuleManifest;
 use App\Modules\ModuleRegistry;
 use App\Modules\PermissionDefinition;
+use App\Support\WorkspaceUsers;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use LogicException;
 use Override;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Permission\PermissionRegistrar;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -44,10 +61,51 @@ class ModuleServiceProvider extends ServiceProvider
             );
         }
 
+        $maps = [
+            'foundation' => [
+                'user' => WorkspaceUsers::model(),
+                'business-setting' => BusinessSetting::class,
+                'role' => $this->morphModel(app(PermissionRegistrar::class)->getRoleClass()),
+                'permission' => $this->morphModel(app(PermissionRegistrar::class)->getPermissionClass()),
+            ],
+            'users' => [],
+            'audit' => ['audit-activity' => $this->morphModel(config('activitylog.activity_model', Activity::class))],
+            'crm' => [
+                'crm-organization' => Organization::class,
+                'crm-contact' => Contact::class,
+                'crm-lead' => Lead::class,
+                'crm-follow-up-task' => FollowUpTask::class,
+                'crm-note' => Note::class,
+                'crm-activity' => CrmActivity::class,
+            ],
+            'dev' => [
+                'development-task' => DevelopmentTask::class,
+                'development-task-link' => DevelopmentTaskLink::class,
+                'development-task-note' => DevelopmentTaskNote::class,
+                'development-test-run' => DevelopmentTestRun::class,
+                'user-testing-page' => UserTestingPage::class,
+            ],
+        ];
+
         foreach ($groups as $owner => $permissions) {
-            $registry->register(new ModuleManifest($owner, $permissions));
+            $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner]));
         }
 
-        $this->app->booted(fn () => $registry->freeze());
+        $this->app->booted(function () use ($registry): void {
+            $registry->freeze();
+            if (config('modules.stable_morphs')) {
+                $registry->enforceMorphMap();
+            }
+        });
+    }
+
+    /** @return class-string<Model> */
+    private function morphModel(mixed $class): string
+    {
+        if (! is_string($class) || ! is_subclass_of($class, Model::class)) {
+            throw new LogicException('Configured morph models must extend Eloquent Model.');
+        }
+
+        return $class;
     }
 }

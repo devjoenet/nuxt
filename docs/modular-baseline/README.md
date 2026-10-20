@@ -165,3 +165,32 @@ Source and validation identities are frozen above. Branch/PR identities and fina
 | `git diff --check` | Passed |
 
 **Pending / outside this gate:** hosted CI and remaining full browser suite/coverage aggregation, owner testing and merge. Package-only/external clean consumers are intentionally Tasks 05–07, after the registry/composition/morph follow-up tasks; no package distribution gate is claimed. Staging and production remain unverified. The owner explicitly owns hosted CI and merge; the task is handed off in user testing, not marked accepted/completed.
+
+
+### Task 03 — Stable aliases for clean installations (October 20, 2026)
+
+- Live task: `01a15abd-361d-720f-a36d-b6f48c8b64d6`; branch: `feature/stable-morph-history`.
+- Base: `0ed92161cb2faa2f28bc2d71549a7fbc8ad91c83` (Task 02 merged and completed). Implementation revision and PR are recorded on the live task after push.
+- [Alias inventory, bootstrap contract, reproduction and consumer boundaries](../stable-morph-history.md). All 16 active application/vendor types have stable aliases; role/permission infrastructure is available to foundation-only consumers. Registry enforcement rejects collisions and unknown writes.
+- Fixed factory/demo note writes; preserved correct morph lookups in history/filter queries; added safe batch loading and readable unavailable-type labels. Reference mode remains compatible and strict mode is explicitly enabled only for isolated fresh consumers. No operational database conversion, import, migration or grant reseeding occurred.
+
+**Verified locally:**
+
+| Check | Result |
+| --- | --- |
+| Reference-mode focused regression (contracts/configured user, history, Admin, Development testing) | 101 passed, 999 assertions |
+| Strict-alias SQLite bootstrap + history/Admin/authorization/testing | 86 passed, 977 assertions |
+| Strict-alias fresh MySQL schema + alias/history regression | 42 passed, 509 assertions; dedicated `nuxt_morph_task03_20261020` schema removed afterward |
+| Alias-specific tests in reference bootstrap mode | 32 passed, 238 assertions |
+| Final history/Admin regression after preserving scalar query results | 77 passed, 850 assertions; includes a direct query `pluck` regression |
+| Six installed-module registry combinations | Foundation, Audit, users, CRM, Development, full; included above |
+| PHPStan default and max | Both passed, zero errors |
+| PHP type coverage | 100.0% |
+| Client/SSR build and frontend type check | Passed |
+| Strict-alias browser history/navigation/audit filters | 3 passed, 90 assertions; light/dark, narrow/desktop, pagination and actor labels |
+| Frontend format check and Git whitespace check | Passed |
+| Pint and Rector dry run | Passed after formatting |
+
+The tests initialize disposable schemas and seed synthetic roles, grants and CRM records. They exercise provider-boot enforcement, not just runtime map mutation, when strict mode is selected. Existing source/reference persistence was kept on its original morph format.
+
+**Pending / outside this gate:** hosted CI, owner/user acceptance and merge; full PHP/browser suite and aggregate runtime coverage; independent Composer/absent-module route consumers at Tasks 05–07; staging, production and distribution. The owner explicitly owns CI and merge. Task handoff is user testing, not accepted/completed.

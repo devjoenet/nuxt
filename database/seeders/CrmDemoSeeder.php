@@ -37,7 +37,7 @@ class CrmDemoSeeder extends Seeder
                     CrmActivity::factory()->count(2)->recycle($lead)->create();
                     FollowUpTask::factory()->recycle($lead)->create();
                     Note::factory()->recycle([$lead, $author])->create([
-                        'subject_type' => Lead::class,
+                        'subject_type' => (new Lead)->getMorphClass(),
                         'subject_id' => $lead->id,
                         'user_id' => $author->id,
                     ]);

@@ -12,8 +12,10 @@ use App\Models\Lead;
 use App\Models\Note;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\AuditMorphs;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -40,7 +42,7 @@ final class RecentAdminChangesQuery
 
         $crmTypes = [Lead::class, Contact::class, Organization::class, FollowUpTask::class, Note::class, CrmActivity::class];
 
-        return Activity::query()->with(['causer', 'subject'])
+        return Activity::query()->afterQuery(fn (mixed $activities): mixed => $activities instanceof EloquentCollection ? AuditMorphs::load($activities, ['causer', 'subject']) : $activities)
             ->where(function (Builder $query) use ($user, $types, $crmTypes): void {
                 $query->whereIn('subject_type', array_map(fn (string $type): string => (new $type)->getMorphClass(), $types));
                 if ($user->can('crm.view')) {
@@ -56,7 +58,7 @@ final class RecentAdminChangesQuery
             ->loadMorph('subject', [Lead::class => ['contact'], FollowUpTask::class => ['lead.contact'], CrmActivity::class => ['lead.contact'], Note::class => ['subject.contact']])
             ->map(function (Activity $activity): array {
                 $record = $activity->subject;
-                $label = Str::headline(class_basename($activity->subject_type ?? 'Record'));
+                $label = AuditMorphs::label($activity->subject_type);
                 if ($record === null) {
                     $label .= ' #'.$activity->subject_id.' (unavailable)';
                 }

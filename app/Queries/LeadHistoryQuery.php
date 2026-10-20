@@ -8,7 +8,9 @@ use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\Note;
+use App\Support\AuditMorphs;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Spatie\Activitylog\Models\Activity;
 
 final class LeadHistoryQuery
@@ -36,7 +38,7 @@ final class LeadHistoryQuery
                 ->where('attribute_changes->attributes->lead_id', $lead->getKey())
                 ->orWhere('attribute_changes->old->lead_id', $lead->getKey()));
 
-        return Activity::query()->with('causer')
+        return Activity::query()->afterQuery(fn (mixed $activities): mixed => $activities instanceof EloquentCollection ? AuditMorphs::load($activities, ['causer']) : $activities)
             ->where(function (Builder $query) use ($lead, $leadType, $noteType, $taskType, $noteAudits, $taskAudits, $activityType): void {
                 $query->where(fn (Builder $query): Builder => $query
                     ->where('subject_type', $leadType)->where('subject_id', $lead->getKey()))

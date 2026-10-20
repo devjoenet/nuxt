@@ -421,12 +421,12 @@ test('audit filters cover notes and CRM activities without exposing sensitive va
         ->log('audit-filter-marker');
 
     $noteAudit = Activity::query()
-        ->where('subject_type', Note::class)
+        ->where('subject_type', (new Note)->getMorphClass())
         ->where('subject_id', $note->getKey())
         ->latest('id')
         ->firstOrFail();
     $crmActivityAudit = Activity::query()
-        ->where('subject_type', CrmActivity::class)
+        ->where('subject_type', (new CrmActivity)->getMorphClass())
         ->where('subject_id', $crmActivity->getKey())
         ->latest('id')
         ->firstOrFail();
@@ -442,14 +442,14 @@ test('audit filters cover notes and CRM activities without exposing sensitive va
 
     $this->get(route('admin.audit.index', [
         'search' => 'audit-filter-marker',
-        'subject' => [Note::class],
+        'subject' => [(new Note)->getMorphClass()],
         'from' => $auditDate,
         'to' => $auditDate,
     ]))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
             ->where('filters.search', 'audit-filter-marker')
-            ->where('filters.subject', [Note::class])
+            ->where('filters.subject', [(new Note)->getMorphClass()])
             ->where('filters.from', $auditDate)
             ->where('filters.to', $auditDate)
             ->where('activities.data.0.description', 'audit-filter-marker'));

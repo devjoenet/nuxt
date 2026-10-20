@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use LogicException;
 
 final class ModuleRegistry
@@ -30,6 +32,7 @@ final class ModuleRegistry
         $candidate = [...$this->modules, $module->id => $module];
         $claims = [];
         $groups = [];
+        $models = [];
         foreach ($candidate as $manifest) {
             foreach ($manifest->permissions as $permission) {
                 $this->claim($claims, 'permission', $permission->key, $manifest->id);
@@ -55,6 +58,16 @@ final class ModuleRegistry
                 if (! class_exists($class)) {
                     throw new LogicException("Missing morph model {$class} in {$manifest->id}.");
                 }
+
+                if (! is_subclass_of($class, Model::class)) {
+                    throw new LogicException("Morph model {$class} must extend Eloquent Model.");
+                }
+
+                if (isset($models[$class])) {
+                    throw new LogicException("Conflicting morph model {$class}: {$models[$class]} and {$alias}.");
+                }
+
+                $models[$class] = $alias;
             }
         }
 
@@ -64,6 +77,35 @@ final class ModuleRegistry
     public function freeze(): void
     {
         $this->frozen = true;
+    }
+
+    /** @return array<string, class-string<Model>> */
+    public function morphMap(): array
+    {
+        $map = [];
+        foreach ($this->modules as $module) {
+            foreach ($module->morphMap as $alias => $class) {
+                $map[$alias] = $class;
+            }
+        }
+
+        return $map;
+    }
+
+    public function enforceMorphMap(): void
+    {
+        $map = $this->morphMap();
+        foreach (Relation::morphMap() as $alias => $class) {
+            if (isset($map[$alias]) && $map[$alias] !== $class) {
+                throw new LogicException("Conflicting registered morph alias {$alias}.");
+            }
+
+            if (in_array($class, $map, true) && ($map[$alias] ?? null) !== $class) {
+                throw new LogicException("Conflicting registered morph model {$class}.");
+            }
+        }
+
+        Relation::enforceMorphMap($map);
     }
 
     public function has(string $id): bool

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Modules;
 
+use Illuminate\Database\Eloquent\Model;
+
 final readonly class ModuleManifest
 {
     /**
      * @param  list<PermissionDefinition>  $permissions
      * @param  list<string>  $routeNames
      * @param  list<string>  $navigationKeys
-     * @param  array<string, class-string>  $morphMap
+     * @param  array<string, class-string<Model>>  $morphMap
      * @param  list<string>  $frontendExports
      */
     public function __construct(

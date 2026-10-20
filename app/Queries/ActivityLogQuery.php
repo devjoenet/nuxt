@@ -6,8 +6,10 @@ namespace App\Queries;
 
 use App\Data\ActivityLogFiltersData;
 use App\Models\User;
+use App\Support\AuditMorphs;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -61,7 +63,7 @@ final class ActivityLogQuery
             }
 
             $subjects = Activity::query()->whereNotNull('subject_type')->distinct()->pluck('subject_type')->filter()->map(
-                fn (mixed $subject): array => ['label' => Str::headline(class_basename((string) $subject)), 'value' => (string) $subject],
+                fn (mixed $subject): array => ['label' => AuditMorphs::label((string) $subject), 'value' => (string) $subject],
             )->values()->all();
 
             if (Activity::query()->whereNull('subject_type')->exists()) {
@@ -94,7 +96,7 @@ final class ActivityLogQuery
     public function build(ActivityLogFiltersData $filters): Builder
     {
         $query = Activity::query()
-            ->with(['causer', 'subject'])
+            ->afterQuery(fn (mixed $activities): mixed => $activities instanceof EloquentCollection ? AuditMorphs::load($activities, ['causer', 'subject']) : $activities)
             ->when($filters->search, function (Builder $query, string $search): void {
                 $term = "%{$search}%";
 
