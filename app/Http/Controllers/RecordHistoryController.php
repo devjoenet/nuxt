@@ -9,6 +9,7 @@ use App\Models\DevelopmentTask;
 use App\Models\Organization;
 use App\Models\User;
 use App\Queries\RecordHistoryQuery;
+use App\Support\AuditMorphs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -53,7 +54,7 @@ class RecordHistoryController extends Controller
                 return [
                     'id' => $activity->getKey(),
                     'action' => Str::headline($activity->event ?? $activity->description),
-                    'subject' => Str::headline(class_basename($activity->subject_type ?? 'Record')),
+                    'subject' => AuditMorphs::label($activity->subject_type),
                     'actor' => $causer instanceof User ? $causer->name : ($activity->causer_id === null ? 'System' : 'Unavailable actor'),
                     'changes' => $activity->attribute_changes?->toArray() ?? [],
                     'created_at' => $activity->created_at?->toISOString(),

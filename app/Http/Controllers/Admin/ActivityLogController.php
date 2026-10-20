@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AuditIndexRequest;
 use App\Models\User;
 use App\Queries\ActivityLogQuery;
+use App\Support\AuditMorphs;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Activitylog\Models\Activity;
@@ -33,7 +34,7 @@ class ActivityLogController extends Controller
                     'event' => $activity->event,
                     'log_name' => $activity->log_name,
                     'causer' => $causer instanceof User ? $causer->name : null,
-                    'subject' => $activity->subject ? class_basename($activity->subject) : null,
+                    'subject' => $activity->subject_type === null ? null : AuditMorphs::label($activity->subject_type),
                     'changes' => $activity->attribute_changes?->toArray(),
                     'created_at' => $activity->created_at?->toISOString(),
                 ];

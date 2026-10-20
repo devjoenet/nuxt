@@ -17,7 +17,7 @@ class NoteFactory extends Factory
     public function definition(): array
     {
         return [
-            'subject_type' => Lead::class,
+            'subject_type' => (new Lead)->getMorphClass(),
             'subject_id' => Lead::factory(),
             'user_id' => WorkspaceUsers::model()::factory(),
             'body' => fake()->paragraph(),

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\User;
 use App\Queries\LeadHistoryQuery;
+use App\Support\AuditMorphs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -29,7 +30,7 @@ class LeadHistoryController extends Controller
                 return [
                     'id' => $activity->getKey(),
                     'action' => Str::headline($activity->event ?? $activity->description),
-                    'subject' => Str::headline(class_basename($activity->subject_type ?? 'Record')),
+                    'subject' => AuditMorphs::label($activity->subject_type),
                     'actor' => $causer instanceof User ? $causer->name : ($activity->causer_id === null ? 'System' : 'Unavailable actor'),
                     'changes' => $activity->attribute_changes?->toArray() ?? [],
                     'created_at' => $activity->created_at?->toISOString(),
