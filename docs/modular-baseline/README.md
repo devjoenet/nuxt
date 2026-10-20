@@ -170,7 +170,7 @@ Source and validation identities are frozen above. Branch/PR identities and fina
 ### Task 03 — Stable aliases for clean installations (October 20, 2026)
 
 - Live task: `01a15abd-361d-720f-a36d-b6f48c8b64d6`; branch: `feature/stable-morph-history`.
-- Base: `0ed92161cb2faa2f28bc2d71549a7fbc8ad91c83` (Task 02 merged and completed). Implementation revision and PR are recorded on the live task after push.
+- Base: `0ed92161cb2faa2f28bc2d71549a7fbc8ad91c83` (Task 02 merged and completed). Implementation: `add1fb3` (`Establish stable morph aliases for fresh module consumers`). The following evidence-only commit records this revision; final pushed head and PR are attached to the live task.
 - [Alias inventory, bootstrap contract, reproduction and consumer boundaries](../stable-morph-history.md). All 16 active application/vendor types have stable aliases; role/permission infrastructure is available to foundation-only consumers. Registry enforcement rejects collisions and unknown writes.
 - Fixed factory/demo note writes; preserved correct morph lookups in history/filter queries; added safe batch loading and readable unavailable-type labels. Reference mode remains compatible and strict mode is explicitly enabled only for isolated fresh consumers. No operational database conversion, import, migration or grant reseeding occurred.
 
