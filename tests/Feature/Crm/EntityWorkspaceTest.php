@@ -286,7 +286,7 @@ test('sales ops cannot assign or transfer ownership', function (): void {
 
 test('admins can transfer ownership and users can archive or delete visible entities', function (): void {
     $admin = entityCrmUser(admin: true);
-    expect($admin->isCrmAdministrator())->toBeTrue();
+    expect(App\Support\CrmAccess::administrator($admin))->toBeTrue();
     $owner = User::factory()->create();
     $organization = Organization::factory()->create(['owner_id' => $owner->id]);
     $contact = Contact::factory()->create(['owner_id' => $admin->id]);

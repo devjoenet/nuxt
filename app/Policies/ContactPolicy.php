@@ -6,6 +6,7 @@ namespace App\Policies;
 
 use App\Models\Contact;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class ContactPolicy
 {
@@ -46,6 +47,6 @@ class ContactPolicy
 
     public function assign(User $user, Contact $contact): bool
     {
-        return $user->can('crm.manage') && $user->isCrmAdministrator() && $contact->isVisibleTo($user);
+        return $user->can('crm.manage') && CrmAccess::administrator($user) && $contact->isVisibleTo($user);
     }
 }

@@ -11,6 +11,7 @@ use App\Enums\DevelopmentTestRunStatus;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTestRun;
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -47,7 +48,7 @@ class RequestDevelopmentTaskTesting
                 ]);
             }
 
-            $tester = User::query()
+            $tester = WorkspaceUsers::model()::query()
                 ->where('uuid', $data->testerId)
                 ->where('is_active', true)
                 ->firstOrFail();

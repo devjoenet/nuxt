@@ -301,6 +301,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   },
   resolve: {
     alias: {
+      "@southeastcode/host": path.resolve(import.meta.dirname, "./resources/js/host.ts"),
       "@": path.resolve(import.meta.dirname, "./resources/js"),
     },
   },

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\RoleName;
+use App\Modules\WorkspaceUser;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -29,7 +29,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 #[Fillable(['name', 'email', 'password', 'is_active', 'deactivated_at', 'invited_at', 'invitation_accepted_at'])]
 #[Hidden(['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'])]
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, WorkspaceUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -39,6 +39,11 @@ class User extends Authenticatable implements MustVerifyEmail
     use LogsActivity;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
 
     /** @param Builder<static> $query */
     #[Scope]
@@ -57,9 +62,40 @@ class User extends Authenticatable implements MustVerifyEmail
                 ->where('description', 'User invitation sent.'));
     }
 
-    public function isCrmAdministrator(): bool
+    public function workspaceId(): int
     {
-        return $this->hasAnyRole([RoleName::Admin->value, RoleName::SuperAdmin->value]);
+        return (int) $this->getKey();
+    }
+
+    public function workspaceUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function workspaceName(): string
+    {
+        return $this->name;
+    }
+
+    public function workspaceEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function workspaceActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    public function workspaceCan(string $ability, mixed $arguments = []): bool
+    {
+        return $this->can($ability, $arguments);
+    }
+
+    /** @param list<string> $roles */
+    public function workspaceHasAnyRole(array $roles): bool
+    {
+        return $this->hasAnyRole($roles);
     }
 
     public function getActivitylogOptions(): LogOptions

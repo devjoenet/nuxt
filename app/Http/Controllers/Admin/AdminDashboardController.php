@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
-use App\Models\User;
 use App\Queries\RecentAdminChangesQuery;
+use App\Support\WorkspaceUsers;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -35,8 +35,8 @@ class AdminDashboardController extends Controller
         }
 
         if ($user->can('admin.users.manage')) {
-            $stats[] = $this->stat('Pending invitations', fn (): ?int => User::query()->untrackedInvitation()->exists() ? null : User::query()->pendingInvitation()->count(), route('admin.users.index', ['status' => 'pending']));
-            $stats[] = $this->stat('Active users', fn (): int => User::query()->where('is_active', true)->count(), route('admin.users.index', ['status' => 'active']), attention: false);
+            $stats[] = $this->stat('Pending invitations', fn (): ?int => WorkspaceUsers::model()::query()->untrackedInvitation()->exists() ? null : WorkspaceUsers::model()::query()->pendingInvitation()->count(), route('admin.users.index', ['status' => 'pending']));
+            $stats[] = $this->stat('Active users', fn (): int => WorkspaceUsers::model()::query()->where('is_active', true)->count(), route('admin.users.index', ['status' => 'active']), attention: false);
         }
 
         return Inertia::render('Admin/Dashboard', [

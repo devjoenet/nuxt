@@ -24,10 +24,12 @@ use App\Policies\LeadPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use App\Support\WorkspaceUsers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ExceptionResponse;
 use Inertia\Inertia;
@@ -65,7 +67,12 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::before(fn (?User $user): ?bool => $user?->hasRole('Super Admin') ? true : null);
 
-        Gate::policy(User::class, UserPolicy::class);
+        Route::bind('user', function (string $value): User {
+            $user = (new (WorkspaceUsers::model()))->resolveRouteBinding($value);
+
+            return $user instanceof User ? $user : abort(404);
+        });
+        Gate::policy(WorkspaceUsers::model(), UserPolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Activity::class, ActivityPolicy::class);
         Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);

@@ -8,6 +8,8 @@ use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
 use App\Enums\ServiceInterest;
 use App\Models\Lead;
+use App\Support\CrmAccess;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -26,10 +28,10 @@ class StoreLeadRequest extends FormRequest
             'contact_id' => ['required', 'uuid'],
             'organization_id' => ['nullable', 'uuid'],
             'owner_id' => [
-                Rule::prohibitedIf(fn (): bool => ! $this->user()?->isCrmAdministrator()),
+                Rule::prohibitedIf(fn (): bool => ! CrmAccess::administrator($this->user())),
                 'nullable',
                 'integer',
-                Rule::exists('users', 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true)),
+                Rule::exists(WorkspaceUsers::model(), 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true)),
             ],
             'status' => ['required', Rule::enum(LeadStatus::class)],
             'source' => ['required', Rule::enum(LeadSource::class)],

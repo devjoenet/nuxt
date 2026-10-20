@@ -7,7 +7,7 @@ namespace Database\Factories;
 use App\Enums\DevelopmentTestRunStatus;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTestRun;
-use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use function fake;
@@ -21,8 +21,8 @@ class DevelopmentTestRunFactory extends Factory
     {
         return [
             'development_task_id' => DevelopmentTask::factory()->readyForTesting(),
-            'tester_id' => User::factory(),
-            'requested_by_id' => User::factory(),
+            'tester_id' => WorkspaceUsers::model()::factory(),
+            'requested_by_id' => WorkspaceUsers::model()::factory(),
             'instructions' => fake()->paragraph(),
             'build_reference' => fake()->url(),
             'status' => DevelopmentTestRunStatus::Pending,

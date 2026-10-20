@@ -4,47 +4,30 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Enums\Permission;
 use App\Enums\RoleName;
+use App\Modules\ModuleRegistry;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission as PermissionModel;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
+    public function __construct(private ModuleRegistry $registry) {}
+
     public function run(): void
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
+        foreach (RoleName::cases() as $role) {
+            Role::findOrCreate($role->value, 'web');
+        }
 
-        $permissions = collect(Permission::cases())
-            ->mapWithKeys(fn (Permission $permission): array => [
-                $permission->value => PermissionModel::findOrCreate($permission->value, 'web'),
-            ]);
-
-        Role::findOrCreate(RoleName::SuperAdmin->value, 'web')->syncPermissions($permissions->values());
-        Role::findOrCreate(RoleName::Admin->value, 'web')->syncPermissions($permissions->only([
-            Permission::AdminDashboardView->value,
-            Permission::AdminUsersManage->value,
-            Permission::AdminRolesManage->value,
-            Permission::AuditView->value,
-            Permission::CrmView->value,
-            Permission::CrmManage->value,
-            Permission::JobsView->value,
-            Permission::JobsManage->value,
-            Permission::SettingsManage->value,
-            Permission::DevelopmentRequestsCreate->value,
-            Permission::DevelopmentRequestsReview->value,
-            Permission::DevelopmentRoadmapManage->value,
-            Permission::DevelopmentUserTestingManage->value,
-        ])->values());
-        Role::findOrCreate(RoleName::SalesOps->value, 'web')->syncPermissions($permissions->only([
-            Permission::AdminDashboardView->value,
-            Permission::CrmView->value,
-            Permission::CrmManage->value,
-            Permission::JobsView->value,
-        ])->values());
-        Role::findOrCreate(RoleName::ClientViewer->value, 'web')->syncPermissions([]);
+        foreach ($this->registry->permissions() as $definition) {
+            $permission = Permission::findOrCreate($definition->key, 'web');
+            foreach ($definition->defaultRoles as $role) {
+                Role::findOrCreate($role, 'web')->givePermissionTo($permission);
+            }
+        }
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }

@@ -17,8 +17,9 @@ use App\Http\Requests\Crm\StoreLeadRequest;
 use App\Http\Requests\Crm\UpdateLeadRequest;
 use App\Http\Resources\LeadResource;
 use App\Models\Lead;
-use App\Models\User;
 use App\Queries\LeadQuery;
+use App\Support\CrmAccess;
+use App\Support\WorkspaceUsers;
 use BackedEnum;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
@@ -39,9 +40,9 @@ class LeadController extends Controller
             'filters' => $filters->filters(),
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
-            'owners' => User::query()->orderBy('name')->get(['id', 'name']),
+            'owners' => WorkspaceUsers::model()::query()->orderBy('name')->get(['id', 'name']),
             'canManage' => $user->can('crm.manage'),
-            'canAssign' => $user->isCrmAdministrator(),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 
@@ -67,8 +68,8 @@ class LeadController extends Controller
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'serviceInterests' => ServiceInterest::options(),
-            'owners' => User::query()->orderBy('name')->get(['id', 'name']),
-            'canAssign' => $user->isCrmAdministrator(),
+            'owners' => WorkspaceUsers::model()::query()->orderBy('name')->get(['id', 'name']),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 
@@ -96,7 +97,7 @@ class LeadController extends Controller
             'lead' => LeadResource::make($lead)->resolve($request),
             'canViewHistory' => $user->can('audit.view'),
             'canManage' => $user->can('crm.manage'),
-            'canAssign' => $user->isCrmAdministrator(),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 
@@ -112,8 +113,8 @@ class LeadController extends Controller
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'serviceInterests' => ServiceInterest::options(),
-            'owners' => User::query()->orderBy('name')->get(['id', 'name']),
-            'canAssign' => $user->isCrmAdministrator(),
+            'owners' => WorkspaceUsers::model()::query()->orderBy('name')->get(['id', 'name']),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 

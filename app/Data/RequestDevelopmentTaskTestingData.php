@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Dto;
@@ -55,7 +55,7 @@ final class RequestDevelopmentTaskTestingData extends Dto
             'tester_id' => [
                 'required',
                 'uuid',
-                Rule::exists(User::class, 'uuid')->where('is_active', true),
+                Rule::exists(WorkspaceUsers::model(), 'uuid')->where('is_active', true),
             ],
             'instructions' => ['required', 'string', 'max:20000'],
             'build_reference' => ['nullable', 'string', 'max:2048'],

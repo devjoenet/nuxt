@@ -8,6 +8,7 @@ use App\Data\ContactData;
 use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class CreateContact
 {
@@ -20,7 +21,7 @@ class CreateContact
             'email' => $data->email,
             'phone' => $data->phone,
             'organization_id' => $organization?->id,
-            'owner_id' => $user->isCrmAdministrator() ? ($data->ownerId ?? $user->id) : $user->id,
+            'owner_id' => CrmAccess::administrator($user) ? ($data->ownerId ?? $user->id) : $user->id,
         ]);
     }
 

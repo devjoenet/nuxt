@@ -8,6 +8,7 @@ use App\Data\ContactData;
 use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class UpdateContact
 {
@@ -20,7 +21,7 @@ class UpdateContact
             'email' => $data->email,
             'phone' => $data->phone,
             'organization_id' => $organization?->id,
-            ...($user->isCrmAdministrator() && $data->ownerIdWasProvided
+            ...(CrmAccess::administrator($user) && $data->ownerIdWasProvided
                 ? ['owner_id' => $data->ownerId]
                 : []),
         ]);

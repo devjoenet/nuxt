@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\DevelopmentTaskLinkType;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,7 +51,7 @@ class DevelopmentTaskLink extends Model
     /** @return BelongsTo<User, $this> */
     public function addedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'added_by_id');
+        return $this->belongsTo(WorkspaceUsers::model(), 'added_by_id');
     }
 
     /** @return array<string, string> */

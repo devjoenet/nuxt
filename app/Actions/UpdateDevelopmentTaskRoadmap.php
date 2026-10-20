@@ -8,6 +8,7 @@ use App\Data\UpdateDevelopmentTaskRoadmapData;
 use App\Enums\DevelopmentTaskStatus;
 use App\Models\DevelopmentTask;
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Spatie\Activitylog\Facades\Activity;
@@ -64,7 +65,7 @@ class UpdateDevelopmentTaskRoadmap
 
             $assignee = $data->assigneeId === null
                 ? null
-                : User::query()
+                : WorkspaceUsers::model()::query()
                     ->where('uuid', $data->assigneeId)
                     ->where('is_active', true)
                     ->firstOrFail();

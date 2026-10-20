@@ -8,6 +8,7 @@ use App\Enums\DevelopmentRequestType;
 use App\Enums\DevelopmentTaskArea;
 use App\Enums\DevelopmentTaskStatus;
 use App\Enums\TaskPriority;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -99,19 +100,19 @@ class DevelopmentTask extends Model
     /** @return BelongsTo<User, $this> */
     public function submitter(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'submitter_id');
+        return $this->belongsTo(WorkspaceUsers::model(), 'submitter_id');
     }
 
     /** @return BelongsTo<User, $this> */
     public function reviewer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'reviewer_id');
+        return $this->belongsTo(WorkspaceUsers::model(), 'reviewer_id');
     }
 
     /** @return BelongsTo<User, $this> */
     public function assignee(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assignee_id');
+        return $this->belongsTo(WorkspaceUsers::model(), 'assignee_id');
     }
 
     /** @return HasMany<DevelopmentTaskNote, $this> */

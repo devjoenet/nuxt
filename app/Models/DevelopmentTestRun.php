@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\DevelopmentTestRunStatus;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,13 +67,13 @@ class DevelopmentTestRun extends Model
     /** @return BelongsTo<User, $this> */
     public function tester(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'tester_id');
+        return $this->belongsTo(WorkspaceUsers::model(), 'tester_id');
     }
 
     /** @return BelongsTo<User, $this> */
     public function requestedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'requested_by_id');
+        return $this->belongsTo(WorkspaceUsers::model(), 'requested_by_id');
     }
 
     /** @return array<string, string> */

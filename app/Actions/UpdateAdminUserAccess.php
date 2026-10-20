@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Data\AdminUserAccessData;
 use App\Enums\RoleName;
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Spatie\Activitylog\Facades\Activity;
@@ -16,7 +17,7 @@ class UpdateAdminUserAccess
     public function handle(User $user, AdminUserAccessData $data, User $actor): User
     {
         return DB::transaction(function () use ($user, $data, $actor): User {
-            $user = User::query()->lockForUpdate()->findOrFail($user->id);
+            $user = WorkspaceUsers::model()::query()->lockForUpdate()->findOrFail($user->id);
 
             $this->ensureActorCanAssignRole($data, $actor);
             $this->ensureUserCanBeChanged($user, $data, $actor);

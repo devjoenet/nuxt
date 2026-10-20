@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Facades\Activity;
 
@@ -13,7 +14,7 @@ class AcceptUserInvitation
     public function handle(User $actor): void
     {
         DB::transaction(function () use ($actor): void {
-            $user = User::query()->whereKey($actor)->lockForUpdate()->firstOrFail();
+            $user = WorkspaceUsers::model()::query()->whereKey($actor)->lockForUpdate()->firstOrFail();
             if ($user->invited_at === null || $user->invitation_accepted_at !== null) {
                 return;
             }

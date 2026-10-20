@@ -7,7 +7,7 @@ namespace Database\Factories;
 use App\Enums\DevelopmentNoteAudience;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTaskNote;
-use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use function fake;
@@ -20,7 +20,7 @@ class DevelopmentTaskNoteFactory extends Factory
     {
         return [
             'development_task_id' => DevelopmentTask::factory(),
-            'author_id' => User::factory(),
+            'author_id' => WorkspaceUsers::model()::factory(),
             'audience' => DevelopmentNoteAudience::Participants,
             'body' => fake()->paragraph(),
         ];

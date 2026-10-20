@@ -18,6 +18,7 @@ use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use App\Queries\DevelopmentTaskQuery;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -126,7 +127,7 @@ class DevelopmentTaskController extends Controller
             'canViewHistory' => $user->can('viewAny', Activity::class),
             'task' => DevelopmentTaskResource::make($developmentTask)->resolve($request),
             'assignees' => $user->can('manageRoadmap', $developmentTask)
-                ? User::query()
+                ? WorkspaceUsers::model()::query()
                     ->where('is_active', true)
                     ->orderBy('name')
                     ->get(['uuid', 'name'])
@@ -152,7 +153,7 @@ class DevelopmentTaskController extends Controller
                 'value' => $type->value,
             ], DevelopmentTaskLinkType::cases()),
             'testers' => $user->can('create', [DevelopmentTestRun::class, $developmentTask])
-                ? User::query()
+                ? WorkspaceUsers::model()::query()
                     ->where('is_active', true)
                     ->orderBy('name')
                     ->get(['uuid', 'name'])
