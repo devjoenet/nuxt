@@ -187,11 +187,42 @@ After pushing an implementation branch, immediately attach the exact branch URL/
 
 Task evidence includes: source revisions, changed scope, checks run/results, pending checks, fresh schema/bootstrap results where applicable, and the next gate. Use a maintained extraction/rebuild/release ledger in the implementation documentation; it must survive repository resets and must not contain secrets or production personal data. Retain the working Development records while this extraction is being managed, but do not import them into the final application's fresh database. Record final delivery evidence outside that disposable database.
 
-The supplied agent guidance identifies existing generated redirect-route type failures and six `RolePermissionCatalogQuery` PHPStan diagnostics under Development task `01a12725-27e2-72e5-9687-cba9b933f629`. Recheck the actual baseline. Its exact documented exceptions may unblock unrelated early work, but moving or changing affected code requires investigation. Resolve the owning task before the final release gate; do not carry a blanket suppression into the new ecosystem.
+The pre-implementation gate is consolidated Development task `01a15aa2-61e4-7292-bad4-37c26d1b9e52`, **Prepare the application baseline for modular extraction**. It absorbs unused development-dependency removal, generated redirect/catalog type repairs, and reminder failure-log redaction. Complete its automated checks before starting extraction. The former temporary exception for redirect types and six `RolePermissionCatalogQuery` diagnostics must be removed from source guidance once fixed; never carry it into the new ecosystem.
+
+### Disposition of the local roadmap reviewed October 20, 2026
+
+All 14 planned records were reviewed by UUID and full acceptance criteria. Three become the single prerequisite above; the other eleven are incorporated into the implementation steps identified here. Original records are cancelled and soft-deleted through the Development Actions after their destination scope is durable, removing them from the active roadmap while retaining attribution/history. The separate task already awaiting testing is unchanged. This table is traceability for this implementation specification, not a second live executable queue.
+
+| Original task UUID | Scope | Destination | Reason |
+| --- | --- | --- | --- |
+| `01a12209-3dfb-715c-a5b7-55f439b75b3e` | Audit filter action label | Task 07 | Apply the copy change in the owning Audit package during extraction |
+| `01a12209-3dc3-728c-9372-8dbfb0b562e2` | Dashboard lead status Title Case | Task 04 | Normalize display labels while replacing dashboard composition |
+| `01a12719-5945-7075-a4a8-084699661974` | Remove DataLens/Laravel Rector dependencies | Consolidated prerequisite | Remove unused tooling and the abandoned transitive dependency before establishing package baselines |
+| `01a12719-5969-7114-9344-be42ce063e3d` | Pest upgrade and selective Rector rules | Task 14 | Upgrade the test toolchain once, with package and consumer CI coverage |
+| `01a0eeed-34c8-715d-9dcf-89b337a168ed` | Consistent active CRM owner choices | Tasks 10–12 | Establish one package-owned owner-options contract before wiring entity forms |
+| `01a0eeed-34bc-7065-9da6-4d987f1ae281` | Search public leads by submitted company | Task 12 | Implement and verify within the extracted lead query/intake slice |
+| `01a0eeed-34eb-7226-a90e-b0ae2e96ed4c` | Shared CRM filter normalization | Tasks 10–12 | Extract the narrow shared concern as CRM request ownership is established |
+| `01a0eeed-34d3-7383-9fb3-6cb7bccbab9f` | Redact reminder failure logs | Consolidated prerequisite | Stop persisting raw failure messages in the currently runnable app before reuse |
+| `01a0eeed-34df-738b-b47f-8e15465c373a` | Reminder delivery and retry guarantee | Task 12 | Resolve reliability at the package notification/job boundary |
+| `01a0eeed-3502-7074-8bb5-48d36af62075` | Scheduler docs and intake indirection | Tasks 12 and 15 | Define the host intake boundary and correct the final starter/runbooks together |
+| `01a0eeed-34f6-713f-b94f-92323e34c0fe` | Dependency policy and audit release gates | Tasks 14–15 | Set ecosystem-wide constraints and explicit release exceptions with verified dependencies |
+| `01a0eeed-3525-7345-ab66-adf8890bd4cd` | Focused workspace dashboard read model | Task 04 | Combine read-model extraction with modular dashboard providers rather than refactor twice |
+| `01a11722-65d4-7103-b941-d7d82f0abf09` | Forge tooling and MySQL/Redis/Horizon verification | Tasks 15 and 22 | Verify the rebuilt application's actual deployment stack, retaining fast SQLite checks |
+| `01a12725-27e2-72e5-9687-cba9b933f629` | Redirect types and role catalog analysis | Consolidated prerequisite | Restore reliable type/build/static-analysis gates before extraction |
 
 ## 6. Step-by-step implementation
 
 ### Phase A — Baseline and in-place preparation
+
+#### Prerequisite — Prepare the current application baseline
+
+Live Development task: `01a15aa2-61e4-7292-bad4-37c26d1b9e52`. Implementation branch: `feature/modular-extraction-prerequisites`. Complete before Task 01 establishes the extraction baseline.
+
+1. Reconfirm usage/graph; remove `laravel-egypt/datalens` and `driftingly/rector-laravel` from development requirements, remove obsolete DataLens config/source Boost references, and let Composer remove orphaned Livewire/transitive packages. Retain standalone Rector and its existing generic rules. Do not upgrade Pest here.
+2. Fix generated redirect route types at route-registration/generator inputs, regenerate Wayfinder including form helpers, and preserve redirect destinations/authentication/permission behavior. Do not hand-edit generated files.
+3. Repair role catalog collection/callback typing without changing group ordering, permission ordering, guard filtering, protected-role semantics, or uncatalogued permission support.
+4. Replace raw exception-message logging in reminder failures with safe task/job/correlation identifiers and exception class. Cover secret/email-bearing messages and absent exceptions, and document restricted original-exception inspection.
+5. Verify relevant regressions, frontend architecture/typecheck/client+SSR build, normal/max PHPStan, Rector dry-run, formatting, security audit, clean installation and production no-dev boot/discovery. Remove the resolved temporary validation exception from source guidance and regenerate guidance. Record full-suite/hosted/user-testing status precisely.
 
 #### Task 01 — Capture the baseline and repository inventory
 
@@ -241,6 +272,8 @@ Branch: `feature/modular-navigation-history`. Dependency: Tasks 02–03.
 4. Preserve the current authorization conjunction, filtering, chronological ordering, pagination, and unavailable-record behavior.
 5. Cover module-disabled navigation/dashboard states and make expensive summaries page-specific.
 
+Absorbed roadmap acceptance (`01a12209-3dc3-728c-9372-8dbfb0b562e2`, `01a0eeed-3525-7345-ab66-adf8890bd4cd`): use human-readable enum/display labels such as **Qualified** and **New** for every recent-lead badge; keep stored values and status colors unchanged. Move workspace CRM aggregates/recent-record retrieval and presentation into one focused authorized query/read model, contributed through the module dashboard contract. Keep workspace controller permission/Inertia coordination and admin overview retrieval separate. Preserve existing response props and visibility for ordinary CRM users, administrators, and users without CRM access; verify all three. Do not invent a shared dashboard abstraction just because the two pages both show counts.
+
 Acceptance: host composition does not statically query CRM or Development; history behavior and permission boundaries remain equivalent; navigation/dashboard/search/browser checks pass.
 
 ### Phase B — Prove the package runtime
@@ -286,6 +319,8 @@ Repositories: agency host, bridge, starter, `devjoenet/laravel-audit`. Branch: `
 6. Test cached and uncached routes/config, fresh database setup, authorization, UI/type/lint checks, client/SSR builds, asset budgets, package removal, and synthetic history fixtures.
 7. After removal, Audit navigation/routes disappear; underlying activity storage/logging remains available. Module removal must not delete history generated by a new installation.
 
+Absorbed roadmap acceptance (`01a12209-3dfb-715c-a5b7-55f439b75b3e`): change the Audit Log submission action on `/admin/audit` from **Filter** to **Apply**, retaining its filter submission behavior and matching accessible name.
+
 Acceptance — stop/go gate: base starter and base + Audit both pass from fresh external installs. No further domain extraction until package loading, private download auth, Wayfinder, source scanning, and SSR are demonstrated.
 
 #### Task 08 — Generate the reusable package skeleton
@@ -326,6 +361,8 @@ Repository: `devjoenet/laravel-crm`. Branch: `feature/extract-crm-foundation`. D
 5. Move option-search controller/query/request/DTO/resource into `Shared`.
 6. Register the configured user model relationships, aliases, policies, DTO directories, and selector routes. Preserve the reviewed storage design and key types; existing record IDs are not imported.
 
+Absorbed roadmap acceptance (`01a0eeed-34c8-715d-9dcf-89b337a168ed`, `01a0eeed-34eb-7226-a90e-b0ae2e96ed4c`): create one narrow backend owner-options query/presenter for leads, contacts, and organizations. New assignments offer only active users. Edit/filter views may show a clearly marked inactive existing owner for history, without making that person a valid new assignment; test option props and validation together. Share repeated frontend option mapping through a pure typed helper or a small component only when markup/behavior is truly shared; keep entity labels and route coordination in pages. Extract common string/archived input normalization into a small request concern or pure normalizer, with accepted filter keys explicit per Form Request. Keep entity authorization/rules distinct. Preserve blanks, false-like archived values, invalid booleans, scalar-versus-array handling, URL semantics, and existing filter-test behavior. Wire these contracts in Tasks 11 and 12 rather than reintroducing duplicate implementations.
+
 Acceptance: selector behavior, ownership, factories, fresh database creation, current permission seeding, and migration no-op reruns pass on SQLite and MySQL. No duplicate schema owners or obsolete data-correction prerequisites.
 
 #### Task 11 — Extract organizations and contacts
@@ -350,6 +387,13 @@ Branch: `feature/extract-crm-leads-intake`. Dependency: Task 11.
 5. Keep public validation, anti-abuse behavior, host `IntakeData` mapping, `ServiceInterest`, recipient selection, and `NewLeadReceived` dispatch in the agency host. Host orchestration calls the CRM Action and sends the notification with transaction/commit behavior tested.
 6. Preserve current service-interest and intake columns; do not migrate them into new generic metadata.
 7. Move tests for CRM behavior and retain public-intake integration tests in the agency app.
+
+Absorbed roadmap acceptance:
+
+- `01a0eeed-34bc-7065-9da6-4d987f1ae281`: authorized staff can search immutable submitted company from `intake_snapshot` before an Organization is linked. Preserve `visibleTo($user)` scoping; use MySQL/SQLite-compatible behavior and evaluate indexing only against expected list volume. Test finding an unassigned public inquiry and denying discovery of an out-of-scope lead using the same company search.
+- `01a0eeed-34df-738b-b47f-8e15465c373a`: choose and document best-effort versus provider-level idempotent reminder delivery before publishing CRM. Define sent/skipped/retry-eligible states, retry window, missing-recipient handling, repeated scheduler runs during mail failure, and provider acceptance followed by a crash before the local timestamp update. If duplicate-facing mail must be prevented, use a durable attempt/delivery key and reconciliation mechanism at the appropriate provider boundary. Test the chosen guarantee honestly; a temporary lock or unique job alone is not proof of exactly-once mail.
+- `01a0eeed-3502-7074-8bb5-48d36af62075`: make `SubmitPublicIntake` a meaningful host-owned validation/mapping/recipient/notification orchestration boundary, or collapse it with focused call-site changes if redundant. Do not retain an unexplained forwarding wrapper; preserve tested public behavior and the clean package DTO boundary.
+- Apply the owner-choice and filter-normalization acceptance from Task 10 across the extracted lead forms/index requests as well as contacts/organizations.
 
 Acceptance: lead conversion/history/notes, reminders, consent provenance, intake validation and delivery all pass; CRM installs with bridge + Audit and no user-management/Development package; the starter without CRM boots cleanly.
 
@@ -380,6 +424,10 @@ Repositories: all implementation repositories. Branch: `feature/modular-consumer
 5. Resolve baseline type/static-analysis defects before release. Keep security-audit policy and upstream exceptions explicit.
 6. Keep CI economical: Linux runners, cancel superseded runs, focused checks on ordinary changes, full consumer matrix on release candidates, bounded artifact retention, and measured minutes/storage. Do not assume private CI is unlimited.
 
+Absorbed roadmap acceptance (`01a12719-5969-7114-9344-be42ce063e3d`): after the prerequisite dependency cleanup, recheck current stable Pest requirements/upgrade guidance. Upgrade Pest and affected Laravel/browser/type-coverage/other plugins together, proving PHP/PHPUnit/parallel-runner/CI compatibility. Adopt a compatible stable `pestphp/pest-plugin-rector` with focused test paths and explicitly selected useful rules, preserving the application Rector scope and current conventions. Review the preview; avoid blanket assertion-style or semantic suite rewrites. Keep assertions equivalent or stronger and prove focused/full unit/feature/browser suites, coverage/type-coverage, clean installs, security audit, lint/static analysis, and durable local/CI scripts. Record any real compatibility blocker before selecting a version; do not assume historical package versions remain current.
+
+Absorbed roadmap acceptance (`01a0eeed-34f6-713f-b94f-92323e34c0fe`): inventory actual resolved preview/dev dependencies rather than repeating stale evidence that Vite+ is a release candidate. Prefer proven compatible stable constraints; document every intentional exception, reason, upgrade/rollback owner, and review condition. Triage the actual full-Node-tree advisory/impact. Make it a passing release gate when resolved or a scoped documented exception with an owner/review condition, not an indefinitely unexplained `continue-on-error`. Retain Composer and production Node audit gates; avoid an unrelated mass update.
+
 Acceptance: every required matrix row passes; hosted CI evidence identifies exact candidate revisions; no unexplained exclusions or local symlink dependency.
 
 #### Task 15 — Finalize foundation, package documentation, and licensing
@@ -393,6 +441,8 @@ Branch: `feature/modular-finalization`. Dependency: Task 14.
 4. Update source rules and skills for module conventions, then regenerate generated guidance. Do not directly edit generated guidance as the source of truth.
 5. Finalize agency deployment/recovery documentation and documentation contract tests. Include repository transfer, package access, history reset, clean database/bootstrap, queue isolation, and fresh-host reconstruction procedures.
 6. Verify package archives include PHP/frontend/config/migration/runtime factory files where needed and exclude secrets, real data, build caches, dependencies, and unlicensed reference content.
+
+Absorbed roadmap acceptance (`01a0eeed-3502-7074-8bb5-48d36af62075`, `01a11722-65d4-7103-b941-d7d82f0abf09`): correct README scheduler wording to a once-per-minute invocation, not `schedule:run` as a long-running daemon, and keep setup/runbooks consistent. Define one Node/Corepack/Yarn contract across local setup, CI, and Forge, with explicit Corepack availability, immutable installs, client/SSR builds, and queue/SSR restarts using committed commands. Revalidate the already-corrected Yarn wording before changing it. Retain the fast SQLite suite and either add focused MySQL/Redis integration CI or make staging a mandatory release gate covering fresh migrations, CRM ownership/company search, scheduled reminders, Horizon queue routing, and SSR health. Identify which evidence comes from CI versus staging; perform the actual Forge rehearsal in Task 22 rather than claiming documentation proves infrastructure.
 
 Acceptance: all planned initial library source changes are complete; legal notices remain; clean starter/skeleton setup is reproducible and documentation matches verified behavior.
 
@@ -495,6 +545,8 @@ Dependency: Task 21. Detailed procedure: Section 10.
 4. Deploy the final locked build, run its clean schema/bootstrap, activate it, restart supervised processes, and enable the new application's writes/dispatch only when checks pass. No legacy data conversion or queue migration occurs.
 5. Verify public intake, authentication with the new admin account, empty CRM/Development workspaces, creation/history of new records, invitations, roles, queue operations, scheduler, SSR, health, and alerting. Verify no connection reads or writes the old persistence/queue namespaces.
 6. Observe the agreed period, including at least one reminder/scheduled-work cycle, or perform a safe controlled equivalent and record it. Keep recovery materials available throughout.
+
+Absorbed deployment roadmap completion (`01a11722-65d4-7103-b941-d7d82f0abf09`): an actual new Forge site must follow the Task 15 runbook verbatim with the selected Node/Corepack/Yarn versions and immutable lockfiles. Record client/SSR build, queue/SSR restart, MySQL CRM ownership/search, scheduled reminder, Horizon routing, and SSR-health evidence. Retain the compatible normal zero-downtime release path while following Section 10's fresh-launch isolation and activation gates. Missing site access remains a named deployment blocker; do not invent a passing staging result.
 
 Acceptance: the agency app runs on final private tagged packages in production; critical workflows pass; owners record release acceptance and remaining follow-ups. Green CI alone does not complete this task.
 
