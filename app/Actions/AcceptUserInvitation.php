@@ -17,6 +17,7 @@ class AcceptUserInvitation
             if ($user->invited_at === null || $user->invitation_accepted_at !== null) {
                 return;
             }
+
             Activity::defaultCauser($actor, fn (): bool => $user->update(['invitation_accepted_at' => now()]));
         });
     }
