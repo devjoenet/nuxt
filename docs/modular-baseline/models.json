@@ -1,0 +1,130 @@
+[
+  {
+    "class": "App\\Models\\BusinessSetting",
+    "table": "business_settings",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "App\\Models\\BusinessSetting"
+  },
+  {
+    "class": "App\\Models\\Contact",
+    "table": "contacts",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\Contact"
+  },
+  {
+    "class": "App\\Models\\CrmActivity",
+    "table": "crm_activities",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "App\\Models\\CrmActivity"
+  },
+  {
+    "class": "App\\Models\\DevelopmentTask",
+    "table": "development_tasks",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\DevelopmentTask"
+  },
+  {
+    "class": "App\\Models\\DevelopmentTaskLink",
+    "table": "development_task_links",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\DevelopmentTaskLink"
+  },
+  {
+    "class": "App\\Models\\DevelopmentTaskNote",
+    "table": "development_task_notes",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\DevelopmentTaskNote"
+  },
+  {
+    "class": "App\\Models\\DevelopmentTestRun",
+    "table": "development_test_runs",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\DevelopmentTestRun"
+  },
+  {
+    "class": "App\\Models\\FollowUpTask",
+    "table": "follow_up_tasks",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\FollowUpTask"
+  },
+  {
+    "class": "App\\Models\\Lead",
+    "table": "leads",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\Lead"
+  },
+  {
+    "class": "App\\Models\\Note",
+    "table": "notes",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "App\\Models\\Note"
+  },
+  {
+    "class": "App\\Models\\Organization",
+    "table": "organizations",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "uuid",
+    "morph": "App\\Models\\Organization"
+  },
+  {
+    "class": "App\\Models\\User",
+    "table": "users",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "App\\Models\\User"
+  },
+  {
+    "class": "App\\Models\\UserTestingPage",
+    "table": "user_testing_pages",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "App\\Models\\UserTestingPage"
+  },
+  {
+    "class": "Spatie\\Permission\\Models\\Role",
+    "table": "roles",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "Spatie\\Permission\\Models\\Role"
+  },
+  {
+    "class": "Spatie\\Permission\\Models\\Permission",
+    "table": "permissions",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "Spatie\\Permission\\Models\\Permission"
+  },
+  {
+    "class": "Spatie\\Activitylog\\Models\\Activity",
+    "table": "activity_log",
+    "key": "id",
+    "key_type": "int",
+    "route_key": "id",
+    "morph": "Spatie\\Activitylog\\Models\\Activity"
+  }
+]

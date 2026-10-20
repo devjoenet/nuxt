@@ -1,0 +1,221 @@
+path	line	owner	source
+app/Http/Controllers/Admin/ActivityLogController.php	26	audit	return Inertia::render('Admin/Audit/Index', [
+app/Http/Controllers/Admin/AdminDashboardController.php	42	starter	return Inertia::render('Admin/Dashboard', [
+app/Http/Controllers/Admin/AdminUserController.php	37	user-management	return Inertia::render('Admin/Users/Index', [
+app/Http/Controllers/Admin/BusinessSettingController.php	23	starter	return Inertia::render('Admin/Settings/Index', ['setting' => $setting]);
+app/Http/Controllers/Admin/JobOperationsController.php	26	starter	return Inertia::render('Admin/Jobs/Index', [
+app/Http/Controllers/Admin/RoleController.php	27	user-management	return Inertia::render('Admin/Roles/Index', [
+app/Http/Controllers/Auth/AuthenticatedSessionController.php	27	starter	return Inertia::render('Auth/Login', [
+app/Http/Controllers/Auth/AuthenticatedSessionController.php	28	starter	'canResetPassword' => Route::has('password.request'),
+app/Http/Controllers/Auth/EmailVerificationPromptController.php	26	starter	: Inertia::render('Auth/VerifyEmail', ['status' => $request->session()->get('status')]);
+app/Http/Controllers/Auth/NewPasswordController.php	30	starter	return Inertia::render('Auth/ResetPassword', [
+app/Http/Controllers/Auth/PasswordResetLinkController.php	24	starter	return Inertia::render('Auth/ForgotPassword', [
+app/Http/Controllers/Auth/RegisteredUserController.php	28	starter	return Inertia::render('Auth/Register');
+app/Http/Controllers/Crm/ContactController.php	37	crm	return Inertia::render('Crm/Contacts/Index', [
+app/Http/Controllers/Crm/ContactController.php	60	crm	return Inertia::render('Crm/Contacts/Form', [
+app/Http/Controllers/Crm/ContactController.php	84	crm	return Inertia::render('Crm/Contacts/Show', [
+app/Http/Controllers/Crm/ContactController.php	97	crm	return Inertia::render('Crm/Contacts/Form', [
+app/Http/Controllers/Crm/LeadController.php	37	crm	return Inertia::render('Crm/Leads/Index', [
+app/Http/Controllers/Crm/LeadController.php	65	crm	return Inertia::render('Crm/Leads/Form', [
+app/Http/Controllers/Crm/LeadController.php	95	crm	return Inertia::render('Crm/Leads/Show', [
+app/Http/Controllers/Crm/LeadController.php	110	crm	return Inertia::render('Crm/Leads/Form', [
+app/Http/Controllers/Crm/LeadHistoryController.php	24	crm	return Inertia::render('Crm/Leads/History', [
+app/Http/Controllers/Crm/LeadHistoryController.php	32	crm	'subject' => Str::headline(class_basename($activity->subject_type ?? 'Record')),
+app/Http/Controllers/Crm/OrganizationController.php	38	crm	return Inertia::render('Crm/Organizations/Index', [
+app/Http/Controllers/Crm/OrganizationController.php	61	crm	return Inertia::render('Crm/Organizations/Form', [
+app/Http/Controllers/Crm/OrganizationController.php	91	crm	return Inertia::render('Crm/Organizations/Show', [
+app/Http/Controllers/Crm/OrganizationController.php	105	crm	return Inertia::render('Crm/Organizations/Form', [
+app/Http/Controllers/DashboardController.php	23	starter	return Inertia::render('Dashboard', [
+app/Http/Controllers/Development/DevelopmentRoadmapController.php	24	development	return Inertia::render('Development/Roadmap/Index', [
+app/Http/Controllers/Development/DevelopmentTaskController.php	35	development	return Inertia::render('Development/Overview', [
+app/Http/Controllers/Development/DevelopmentTaskController.php	60	development	return Inertia::render('Development/Requests/Index', [
+app/Http/Controllers/Development/DevelopmentTaskController.php	72	development	return Inertia::render('Development/Requests/Create', [
+app/Http/Controllers/Development/DevelopmentTaskController.php	125	development	return Inertia::render('Development/Tasks/Show', [
+app/Http/Controllers/Development/DevelopmentTaskReviewController.php	25	development	return Inertia::render('Development/Review/Index', [
+app/Http/Controllers/Development/DevelopmentTestRunController.php	29	development	return Inertia::render('Development/UserTesting/Index', [
+app/Http/Controllers/Development/UserTestingPageController.php	30	development	return Inertia::render('Development/UserTesting/Legacy', [
+app/Http/Controllers/RecordHistoryController.php	46	audit	return Inertia::render('History/Show', [
+app/Http/Controllers/RecordHistoryController.php	56	audit	'subject' => Str::headline(class_basename($activity->subject_type ?? 'Record')),
+app/Http/Controllers/Settings/ProfileController.php	24	starter	return Inertia::render('Settings/Profile', [
+app/Http/Controllers/Settings/SecurityController.php	29	starter	return Inertia::render('Settings/Security', [
+app/Models/Lead.php	16	crm	use Illuminate\Database\Eloquent\Relations\MorphMany;
+app/Models/Lead.php	99	crm	/** @return MorphMany<Note, $this> */
+app/Models/Lead.php	100	crm	public function notes(): MorphMany
+app/Models/Lead.php	102	crm	return $this->morphMany(Note::class, 'subject');
+app/Models/Note.php	12	crm	use Illuminate\Database\Eloquent\Relations\MorphTo;
+app/Models/Note.php	18	crm	#[Fillable(['subject_type', 'subject_id', 'user_id', 'body'])]
+app/Models/Note.php	32	crm	->logOnly(['subject_type', 'subject_id', 'user_id'])
+app/Models/Note.php	44	crm	/** @return MorphTo<Model, $this> */
+app/Models/Note.php	45	crm	public function subject(): MorphTo
+app/Models/Note.php	47	crm	return $this->morphTo();
+app/Models/User.php	56	starter	->where('subject_type', $this->getMorphClass())
+app/Providers/AppServiceProvider.php	68	starter	Gate::policy(User::class, UserPolicy::class);
+app/Providers/AppServiceProvider.php	69	starter	Gate::policy(Role::class, RolePolicy::class);
+app/Providers/AppServiceProvider.php	70	starter	Gate::policy(Activity::class, ActivityPolicy::class);
+app/Providers/AppServiceProvider.php	71	starter	Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);
+app/Providers/AppServiceProvider.php	72	starter	Gate::policy(Contact::class, ContactPolicy::class);
+app/Providers/AppServiceProvider.php	73	starter	Gate::policy(DevelopmentTask::class, DevelopmentTaskPolicy::class);
+app/Providers/AppServiceProvider.php	74	starter	Gate::policy(DevelopmentTaskNote::class, DevelopmentTaskNotePolicy::class);
+app/Providers/AppServiceProvider.php	75	starter	Gate::policy(DevelopmentTaskLink::class, DevelopmentTaskLinkPolicy::class);
+app/Providers/AppServiceProvider.php	76	starter	Gate::policy(DevelopmentTestRun::class, DevelopmentTestRunPolicy::class);
+app/Providers/AppServiceProvider.php	77	starter	Gate::policy(Lead::class, LeadPolicy::class);
+app/Providers/AppServiceProvider.php	78	starter	Gate::policy(Organization::class, OrganizationPolicy::class);
+app/Providers/FortifyServiceProvider.php	26	starter	Fortify::twoFactorChallengeView(fn () => Inertia::render('Auth/TwoFactorChallenge'));
+app/Providers/FortifyServiceProvider.php	27	starter	Fortify::confirmPasswordView(fn () => Inertia::render('Auth/ConfirmPassword'));
+app/Queries/ActivityLogQuery.php	45	audit	->where('causer_type', User::class)
+app/Queries/ActivityLogQuery.php	62	audit	$subjects = Activity::query()->whereNotNull('subject_type')->distinct()->pluck('subject_type')->filter()->map(
+app/Queries/ActivityLogQuery.php	66	audit	if (Activity::query()->whereNull('subject_type')->exists()) {
+app/Queries/ActivityLogQuery.php	104	audit	->orWhere('subject_type', 'like', $term)
+app/Queries/ActivityLogQuery.php	106	audit	->orWhere('causer_type', 'like', $term)
+app/Queries/ActivityLogQuery.php	108	audit	->orWhereHasMorph('causer', [User::class], fn (Builder $query): Builder => $query
+app/Queries/ActivityLogQuery.php	126	audit	$query->whereIn('causer_id', $causers)->where('causer_type', User::class);
+app/Queries/ActivityLogQuery.php	136	audit	$query->whereIn('subject_type', $subjects);
+app/Queries/ActivityLogQuery.php	139	audit	$query->orWhereNull('subject_type');
+app/Queries/LeadHistoryQuery.php	19	crm	$noteType = (new Note)->getMorphClass();
+app/Queries/LeadHistoryQuery.php	20	crm	$taskType = (new FollowUpTask)->getMorphClass();
+app/Queries/LeadHistoryQuery.php	21	crm	$activityType = (new CrmActivity)->getMorphClass();
+app/Queries/LeadHistoryQuery.php	22	crm	$leadType = $lead->getMorphClass();
+app/Queries/LeadHistoryQuery.php	25	crm	->where('subject_type', $noteType)
+app/Queries/LeadHistoryQuery.php	28	crm	->where('attribute_changes->attributes->subject_type', $leadType)
+app/Queries/LeadHistoryQuery.php	31	crm	->where('attribute_changes->old->subject_type', $leadType)
+app/Queries/LeadHistoryQuery.php	34	crm	->where('subject_type', $taskType)
+app/Queries/LeadHistoryQuery.php	42	crm	->where('subject_type', $leadType)->where('subject_id', $lead->getKey()))
+app/Queries/LeadHistoryQuery.php	44	crm	->where('subject_type', $noteType)
+app/Queries/LeadHistoryQuery.php	46	crm	->whereIn('subject_id', Note::withTrashed()->select('id')->where('subject_type', $leadType)->where('subject_id', $lead->getKey()))
+app/Queries/LeadHistoryQuery.php	49	crm	->where('subject_type', $activityType)
+app/Queries/LeadHistoryQuery.php	52	crm	->where('subject_type', $taskType)
+app/Queries/RecentAdminChangesQuery.php	44	starter	$query->whereIn('subject_type', array_map(fn (string $type): string => (new $type)->getMorphClass(), $types));
+app/Queries/RecentAdminChangesQuery.php	48	starter	$query->where('subject_type', (new $type)->getMorphClass())
+app/Queries/RecentAdminChangesQuery.php	55	starter	->loadMorph('subject', [Lead::class => ['contact'], FollowUpTask::class => ['lead.contact'], CrmActivity::class => ['lead.contact'], Note::class => ['subject.contact']])
+app/Queries/RecentAdminChangesQuery.php	58	starter	$label = Str::headline(class_basename($activity->subject_type ?? 'Record'));
+app/Queries/RecentAdminChangesQuery.php	78	starter	$url = route('admin.audit.index', ['subject' => [$record->getMorphClass()]]);
+app/Queries/RecentAdminChangesQuery.php	81	starter	$url = route('admin.audit.index', ['subject' => [$record->getMorphClass()]]);
+app/Queries/RecentAdminChangesQuery.php	101	starter	return Note::query()->where('subject_type', (new Lead)->getMorphClass())
+app/Queries/RecordHistoryQuery.php	17	audit	->where('subject_type', $record->getMorphClass())
+config/data.php	109	starter	'structure_caching' => [
+config/data.php	111	starter	'directories' => [app_path('Data')],
+config/permission.php	106	starter	'model_morph_key' => 'model_id',
+database/factories/NoteFactory.php	20	crm	'subject_type' => Lead::class,
+database/migrations/2026_06_15_165821_create_activity_log_table.php	17	starter	$table->nullableMorphs('subject', 'subject');
+database/migrations/2026_06_15_165821_create_activity_log_table.php	19	starter	$table->nullableMorphs('causer', 'causer');
+database/migrations/2026_06_15_165845_create_permission_tables.php	54	starter	$table->unsignedBigInteger($columnNames['model_morph_key']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	55	starter	$table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_permissions_model_id_model_type_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	65	starter	$table->primary([$columnNames['team_foreign_key'], $pivotPermission, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	68	starter	$table->primary([$pivotPermission, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	77	starter	$table->unsignedBigInteger($columnNames['model_morph_key']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	78	starter	$table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	88	starter	$table->primary([$columnNames['team_foreign_key'], $pivotRole, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	91	starter	$table->primary([$pivotRole, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	40	crm	$table->morphs('subject');
+database/seeders/CrmDemoSeeder.php	40	crm	'subject_type' => Lead::class,
+routes/auth.php	13	starter	Route::get('login', [AuthenticatedSessionController::class, 'create'])
+routes/auth.php	16	starter	Route::post('login', [AuthenticatedSessionController::class, 'store'])
+routes/auth.php	20	starter	Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+routes/auth.php	23	starter	Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+routes/auth.php	26	starter	Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+routes/auth.php	29	starter	Route::post('reset-password', [NewPasswordController::class, 'store'])
+routes/auth.php	32	starter	Route::get('verify-email', EmailVerificationPromptController::class)
+routes/auth.php	35	starter	Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+routes/auth.php	38	starter	Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+routes/auth.php	41	starter	Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+routes/console.php	13	starter	Schedule::command('horizon:snapshot')
+routes/console.php	18	starter	Schedule::command('crm:dispatch-follow-up-reminders')
+routes/console.php	23	starter	Schedule::command('activitylog:clean --force')
+routes/settings.php	11	starter	Route::middleware(['auth', EnsureUserIsActive::class])->group(function (): void {
+routes/settings.php	12	starter	Route::redirect('settings', '/settings/profile');
+routes/settings.php	14	starter	Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+routes/settings.php	15	starter	Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+routes/settings.php	16	starter	Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+routes/settings.php	18	starter	Route::get('settings/security', [SecurityController::class, 'show'])->name('security.show');
+routes/settings.php	20	starter	Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
+routes/web.php	41	starter	Route::get('/', fn () => Inertia::render('Welcome', [
+routes/web.php	45	starter	Route::get('privacy', fn () => Inertia::render('Privacy', [
+routes/web.php	48	starter	Route::post('contact', PublicIntakeController::class)
+routes/web.php	52	starter	Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(function (): void {
+routes/web.php	53	starter	Route::get('dashboard', DashboardController::class)->name('dashboard');
+routes/web.php	55	starter	Route::prefix('crm')->name('crm.')->middleware('can:crm.view')->group(function (): void {
+routes/web.php	56	starter	Route::get('options/contacts', [CrmRecordOptionController::class, 'contacts'])->name('options.contacts');
+routes/web.php	57	starter	Route::get('options/organizations', [CrmRecordOptionController::class, 'organizations'])->name('options.organizations');
+routes/web.php	58	starter	Route::get('leads/{lead}/history', LeadHistoryController::class)->name('leads.history');
+routes/web.php	59	starter	Route::resource('leads', LeadController::class)->except('destroy');
+routes/web.php	60	starter	Route::get('contacts/{contact}/history', [RecordHistoryController::class, 'contact'])->name('contacts.history');
+routes/web.php	61	starter	Route::get('organizations/{organization}/history', [RecordHistoryController::class, 'organization'])->name('organizations.history');
+routes/web.php	62	starter	Route::resource('organizations', OrganizationController::class)->except('destroy');
+routes/web.php	63	starter	Route::post('organizations/{organization}/archive', [OrganizationController::class, 'archive'])->name('organizations.archive');
+routes/web.php	64	starter	Route::delete('organizations/{organization}/archive', [OrganizationController::class, 'restore'])->name('organizations.restore');
+routes/web.php	65	starter	Route::delete('organizations/{organization}', [OrganizationController::class, 'destroy'])->name('organizations.destroy');
+routes/web.php	66	starter	Route::resource('contacts', ContactController::class)->except('destroy');
+routes/web.php	67	starter	Route::post('contacts/{contact}/archive', [ContactController::class, 'archive'])->name('contacts.archive');
+routes/web.php	68	starter	Route::delete('contacts/{contact}/archive', [ContactController::class, 'restore'])->name('contacts.restore');
+routes/web.php	69	starter	Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+routes/web.php	70	starter	Route::post('leads/{lead}/archive', [LeadArchiveController::class, 'store'])->name('leads.archive');
+routes/web.php	71	starter	Route::delete('leads/{lead}/archive', [LeadArchiveController::class, 'destroy'])->name('leads.restore');
+routes/web.php	72	starter	Route::post('leads/{lead}/convert', LeadConversionController::class)->name('leads.convert');
+routes/web.php	73	starter	Route::post('leads/{lead}/notes', [LeadNoteController::class, 'store'])->name('leads.notes.store');
+routes/web.php	74	starter	Route::post('leads/{lead}/tasks', [FollowUpTaskController::class, 'store'])->name('leads.tasks.store');
+routes/web.php	75	starter	Route::post('leads/{lead}/tasks/{task}/complete', FollowUpTaskCompletionController::class)->name('leads.tasks.complete');
+routes/web.php	78	starter	Route::prefix('admin')->name('admin.')->group(function (): void {
+routes/web.php	79	starter	Route::get('/', AdminDashboardController::class)->name('dashboard');
+routes/web.php	81	starter	Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+routes/web.php	82	starter	Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
+routes/web.php	83	starter	Route::patch('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+routes/web.php	84	starter	Route::post('users/{user}/resend-verification', [AdminUserController::class, 'resendVerification'])->name('users.resendVerification');
+routes/web.php	85	starter	Route::post('users/{user}/reset-two-factor', [AdminUserController::class, 'resetTwoFactor'])
+routes/web.php	89	starter	Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+routes/web.php	90	starter	Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
+routes/web.php	91	starter	Route::patch('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+routes/web.php	93	starter	Route::get('audit', [ActivityLogController::class, 'index'])->name('audit.index');
+routes/web.php	95	starter	Route::get('settings', [BusinessSettingController::class, 'edit'])->name('settings.edit');
+routes/web.php	96	starter	Route::patch('settings', [BusinessSettingController::class, 'update'])->name('settings.update');
+routes/web.php	98	starter	Route::get('jobs', [JobOperationsController::class, 'index'])
+routes/web.php	102	starter	Route::redirect('roadmap', '/development/roadmap')
+routes/web.php	105	starter	Route::redirect('user-testing', '/development/user-testing')
+routes/web.php	110	starter	Route::prefix('development')->name('development.')->group(function (): void {
+routes/web.php	111	starter	Route::get('/', [DevelopmentTaskController::class, 'overview'])->name('index');
+routes/web.php	112	starter	Route::get('requests', [DevelopmentTaskController::class, 'index'])->name('requests.index');
+routes/web.php	113	starter	Route::get('requests/create', [DevelopmentTaskController::class, 'create'])->name('requests.create');
+routes/web.php	114	starter	Route::post('requests', [DevelopmentTaskController::class, 'store'])->name('requests.store');
+routes/web.php	115	starter	Route::get('review', [DevelopmentTaskReviewController::class, 'index'])->name('review.index');
+routes/web.php	116	starter	Route::get('tasks/{developmentTask}/history', [RecordHistoryController::class, 'developmentTask'])->name('tasks.history');
+routes/web.php	117	starter	Route::get('tasks/{developmentTask}', [DevelopmentTaskController::class, 'show'])->name('tasks.show');
+routes/web.php	118	starter	Route::post('tasks/{developmentTask}/notes', [DevelopmentTaskNoteController::class, 'store'])->name('tasks.notes.store');
+routes/web.php	119	starter	Route::post('tasks/{developmentTask}/review', [DevelopmentTaskReviewController::class, 'store'])->name('tasks.review.store');
+routes/web.php	120	starter	Route::post('tasks/{developmentTask}/information-request', DevelopmentTaskInformationRequestController::class)
+routes/web.php	122	starter	Route::post('tasks/{developmentTask}/promote', DevelopmentTaskPromotionController::class)
+routes/web.php	124	starter	Route::post('tasks/{developmentTask}/reject', DevelopmentTaskRejectionController::class)
+routes/web.php	126	starter	Route::patch('tasks/{developmentTask}/roadmap', [DevelopmentTaskRoadmapController::class, 'update'])
+routes/web.php	128	starter	Route::patch('tasks/{developmentTask}/progress', [DevelopmentTaskProgressController::class, 'update'])
+routes/web.php	130	starter	Route::post('tasks/{developmentTask}/links', [DevelopmentTaskLinkController::class, 'store'])
+routes/web.php	132	starter	Route::post('tasks/{developmentTask}/test-runs', [DevelopmentTestRunController::class, 'store'])
+routes/web.php	134	starter	Route::patch('test-runs/{developmentTestRun}', [DevelopmentTestRunController::class, 'update'])
+routes/web.php	137	starter	Route::get('roadmap', DevelopmentRoadmapController::class)
+routes/web.php	141	starter	Route::get('user-testing', [DevelopmentTestRunController::class, 'index'])->name('userTesting.index');
+routes/web.php	143	starter	Route::middleware('can:development.user_testing.manage')->group(function (): void {
+routes/web.php	144	starter	Route::get('user-testing/legacy-checklist', [UserTestingPageController::class, 'index'])->name('userTesting.legacy');
+routes/web.php	145	starter	Route::get('user-testing/updates', [UserTestingPageController::class, 'updates'])->name('userTesting.updates');
+routes/web.php	146	starter	Route::patch('user-testing/{userTestingPage}', [UserTestingPageController::class, 'update'])->name('userTesting.update');
+routes/web.php	154	starter	foreach (Route::getRoutes()->getRoutes() as $route) {
+tests/Browser/ErrorPageTest.php	10	starter	Route::middleware('web')->get('/__task-16/browser-errors/{status}', function (int $status): Response {
+tests/Browser/ErrorPageTest.php	11	starter	return Inertia::render('ErrorPage', ['status' => $status])
+tests/Feature/Actions/CrmStateActionsTest.php	45	crm	->and(Activity::query()->where('subject_type', FollowUpTask::class)->where('subject_id', $task->id)->where('causer_id', $actor->id)->exists())->toBeTrue();
+tests/Feature/Actions/CrmStateActionsTest.php	76	crm	->and(Activity::query()->where('subject_type', FollowUpTask::class)->where('subject_id', $task->id)->where('causer_id', $actor->id)->exists())->toBeTrue();
+tests/Feature/AdminAuthorizationTest.php	424	user-management	->where('subject_type', Note::class)
+tests/Feature/AdminAuthorizationTest.php	429	user-management	->where('subject_type', CrmActivity::class)
+tests/Feature/DevelopmentRoadmapWorkflowTest.php	120	development	->where('subject_type', DevelopmentTask::class)
+tests/Feature/DevelopmentTaskLifecycleTest.php	63	development	->where('subject_type', DevelopmentTask::class)
+tests/Feature/DevelopmentTaskLifecycleTest.php	202	development	->where('subject_type', DevelopmentTask::class)
+tests/Feature/DomainBoundaryTest.php	221	agency	$note = Note::factory()->create(['subject_type' => Lead::class, 'subject_id' => $lead->id, 'user_id' => $admin->id]);
+tests/Feature/ErrorPageTest.php	18	starter	Route::middleware('web')->get('/__task-16/errors/{status}', function (int $status): never {
+tests/Feature/ErrorPageTest.php	22	starter	Route::middleware('web')->get('/__task-16/sensitive-error', function (): never {
+tests/Feature/ErrorPageTest.php	26	starter	Route::middleware('web')->get('/__task-16/unsupported-error', function (): Illuminate\Http\JsonResponse {
+tests/Feature/LeadHistoryTest.php	41	crm	$note = Note::factory()->create(['subject_type' => $lead->getMorphClass(), 'subject_id' => $lead->id]);
+tests/Feature/LeadHistoryTest.php	43	crm	Note::factory()->create(['subject_type' => $other->getMorphClass(), 'subject_id' => $other->id]);
+tests/Feature/LeadHistoryTest.php	51	crm	$query->where(fn ($query) => $query->where('subject_type', $lead->getMorphClass())->where('subject_id', $lead->id))
+tests/Feature/LeadHistoryTest.php	52	crm	->orWhere(fn ($query) => $query->where('subject_type', $note->getMorphClass())->where('subject_id', $note->id))
+tests/Feature/LeadHistoryTest.php	53	crm	->orWhere(fn ($query) => $query->where('subject_type', $task->getMorphClass())->where('subject_id', $task->id));
+tests/Feature/LeadHistoryTest.php	90	crm	'subject_type' => (new Note)->getMorphClass(), 'subject_id' => 9001,
+tests/Feature/LeadHistoryTest.php	92	crm	'attribute_changes' => ['old' => ['subject_type' => $lead->getMorphClass(), 'subject_id' => $lead->id]],
+tests/Feature/LeadHistoryTest.php	95	crm	'subject_type' => (new FollowUpTask)->getMorphClass(), 'subject_id' => 9002,
+tests/Feature/LeadHistoryTest.php	100	crm	'subject_type' => (new Note)->getMorphClass(), 'subject_id' => 9003,
+tests/Feature/PublicIntakeTest.php	84	agency	$activity = Activity::query()->where('subject_type', Lead::class)->where('subject_id', $lead->id)->sole();
+tests/Feature/RecordHistoryTest.php	61	audit	expect(Activity::query()->where('subject_type', $record->getMorphClass())->where('subject_id', $record->getKey())->exists())->toBeTrue();

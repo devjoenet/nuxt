@@ -1,0 +1,377 @@
+path	line	owner	source
+database/migrations/0001_01_01_000000_create_users_table.php	13	starter	Schema::create('users', function (Blueprint $table): void {
+database/migrations/0001_01_01_000000_create_users_table.php	14	starter	$table->id();
+database/migrations/0001_01_01_000000_create_users_table.php	15	starter	$table->string('name');
+database/migrations/0001_01_01_000000_create_users_table.php	16	starter	$table->string('email')->unique();
+database/migrations/0001_01_01_000000_create_users_table.php	17	starter	$table->timestamp('email_verified_at')->nullable();
+database/migrations/0001_01_01_000000_create_users_table.php	18	starter	$table->string('password');
+database/migrations/0001_01_01_000000_create_users_table.php	19	starter	$table->rememberToken();
+database/migrations/0001_01_01_000000_create_users_table.php	20	starter	$table->timestamps();
+database/migrations/0001_01_01_000000_create_users_table.php	23	starter	Schema::create('password_reset_tokens', function (Blueprint $table): void {
+database/migrations/0001_01_01_000000_create_users_table.php	24	starter	$table->string('email')->primary();
+database/migrations/0001_01_01_000000_create_users_table.php	25	starter	$table->string('token');
+database/migrations/0001_01_01_000000_create_users_table.php	26	starter	$table->timestamp('created_at')->nullable();
+database/migrations/0001_01_01_000000_create_users_table.php	29	starter	Schema::create('sessions', function (Blueprint $table): void {
+database/migrations/0001_01_01_000000_create_users_table.php	30	starter	$table->string('id')->primary();
+database/migrations/0001_01_01_000000_create_users_table.php	31	starter	$table->foreignId('user_id')->nullable()->index();
+database/migrations/0001_01_01_000000_create_users_table.php	32	starter	$table->string('ip_address', 45)->nullable();
+database/migrations/0001_01_01_000000_create_users_table.php	33	starter	$table->text('user_agent')->nullable();
+database/migrations/0001_01_01_000000_create_users_table.php	34	starter	$table->longText('payload');
+database/migrations/0001_01_01_000000_create_users_table.php	35	starter	$table->integer('last_activity')->index();
+database/migrations/0001_01_01_000000_create_users_table.php	41	starter	Schema::dropIfExists('users');
+database/migrations/0001_01_01_000000_create_users_table.php	42	starter	Schema::dropIfExists('password_reset_tokens');
+database/migrations/0001_01_01_000000_create_users_table.php	43	starter	Schema::dropIfExists('sessions');
+database/migrations/0001_01_01_000001_create_cache_table.php	13	starter	Schema::create('cache', function (Blueprint $table): void {
+database/migrations/0001_01_01_000001_create_cache_table.php	14	starter	$table->string('key')->primary();
+database/migrations/0001_01_01_000001_create_cache_table.php	15	starter	$table->mediumText('value');
+database/migrations/0001_01_01_000001_create_cache_table.php	16	starter	$table->integer('expiration');
+database/migrations/0001_01_01_000001_create_cache_table.php	19	starter	Schema::create('cache_locks', function (Blueprint $table): void {
+database/migrations/0001_01_01_000001_create_cache_table.php	20	starter	$table->string('key')->primary();
+database/migrations/0001_01_01_000001_create_cache_table.php	21	starter	$table->string('owner');
+database/migrations/0001_01_01_000001_create_cache_table.php	22	starter	$table->integer('expiration');
+database/migrations/0001_01_01_000001_create_cache_table.php	28	starter	Schema::dropIfExists('cache');
+database/migrations/0001_01_01_000001_create_cache_table.php	29	starter	Schema::dropIfExists('cache_locks');
+database/migrations/0001_01_01_000002_create_jobs_table.php	13	starter	Schema::create('jobs', function (Blueprint $table): void {
+database/migrations/0001_01_01_000002_create_jobs_table.php	14	starter	$table->id();
+database/migrations/0001_01_01_000002_create_jobs_table.php	15	starter	$table->string('queue')->index();
+database/migrations/0001_01_01_000002_create_jobs_table.php	16	starter	$table->longText('payload');
+database/migrations/0001_01_01_000002_create_jobs_table.php	17	starter	$table->unsignedTinyInteger('attempts');
+database/migrations/0001_01_01_000002_create_jobs_table.php	18	starter	$table->unsignedInteger('reserved_at')->nullable();
+database/migrations/0001_01_01_000002_create_jobs_table.php	19	starter	$table->unsignedInteger('available_at');
+database/migrations/0001_01_01_000002_create_jobs_table.php	20	starter	$table->unsignedInteger('created_at');
+database/migrations/0001_01_01_000002_create_jobs_table.php	23	starter	Schema::create('job_batches', function (Blueprint $table): void {
+database/migrations/0001_01_01_000002_create_jobs_table.php	24	starter	$table->string('id')->primary();
+database/migrations/0001_01_01_000002_create_jobs_table.php	25	starter	$table->string('name');
+database/migrations/0001_01_01_000002_create_jobs_table.php	26	starter	$table->integer('total_jobs');
+database/migrations/0001_01_01_000002_create_jobs_table.php	27	starter	$table->integer('pending_jobs');
+database/migrations/0001_01_01_000002_create_jobs_table.php	28	starter	$table->integer('failed_jobs');
+database/migrations/0001_01_01_000002_create_jobs_table.php	29	starter	$table->longText('failed_job_ids');
+database/migrations/0001_01_01_000002_create_jobs_table.php	30	starter	$table->mediumText('options')->nullable();
+database/migrations/0001_01_01_000002_create_jobs_table.php	31	starter	$table->integer('cancelled_at')->nullable();
+database/migrations/0001_01_01_000002_create_jobs_table.php	32	starter	$table->integer('created_at');
+database/migrations/0001_01_01_000002_create_jobs_table.php	33	starter	$table->integer('finished_at')->nullable();
+database/migrations/0001_01_01_000002_create_jobs_table.php	36	starter	Schema::create('failed_jobs', function (Blueprint $table): void {
+database/migrations/0001_01_01_000002_create_jobs_table.php	37	starter	$table->id();
+database/migrations/0001_01_01_000002_create_jobs_table.php	38	starter	$table->string('uuid')->unique();
+database/migrations/0001_01_01_000002_create_jobs_table.php	39	starter	$table->text('connection');
+database/migrations/0001_01_01_000002_create_jobs_table.php	40	starter	$table->text('queue');
+database/migrations/0001_01_01_000002_create_jobs_table.php	41	starter	$table->longText('payload');
+database/migrations/0001_01_01_000002_create_jobs_table.php	42	starter	$table->longText('exception');
+database/migrations/0001_01_01_000002_create_jobs_table.php	43	starter	$table->timestamp('failed_at')->useCurrent();
+database/migrations/0001_01_01_000002_create_jobs_table.php	49	starter	Schema::dropIfExists('jobs');
+database/migrations/0001_01_01_000002_create_jobs_table.php	50	starter	Schema::dropIfExists('job_batches');
+database/migrations/0001_01_01_000002_create_jobs_table.php	51	starter	Schema::dropIfExists('failed_jobs');
+database/migrations/2025_09_28_134841_add_uuid_to_users_table.php	14	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2025_09_28_134841_add_uuid_to_users_table.php	15	starter	$table->uuid('uuid')->unique()->after('id');
+database/migrations/2025_09_28_134841_add_uuid_to_users_table.php	26	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2025_10_07_022236_add_two_factor_columns_to_users_table.php	13	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2025_10_07_022236_add_two_factor_columns_to_users_table.php	14	starter	$table->text('two_factor_secret')
+database/migrations/2025_10_07_022236_add_two_factor_columns_to_users_table.php	18	starter	$table->text('two_factor_recovery_codes')
+database/migrations/2025_10_07_022236_add_two_factor_columns_to_users_table.php	22	starter	$table->timestamp('two_factor_confirmed_at')
+database/migrations/2025_10_07_022236_add_two_factor_columns_to_users_table.php	30	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2025_10_07_022236_add_two_factor_columns_to_users_table.php	31	starter	$table->dropColumn([
+database/migrations/2026_06_15_165821_create_activity_log_table.php	13	starter	Schema::create('activity_log', function (Blueprint $table): void {
+database/migrations/2026_06_15_165821_create_activity_log_table.php	14	starter	$table->id();
+database/migrations/2026_06_15_165821_create_activity_log_table.php	15	starter	$table->string('log_name')->nullable()->index();
+database/migrations/2026_06_15_165821_create_activity_log_table.php	16	starter	$table->text('description');
+database/migrations/2026_06_15_165821_create_activity_log_table.php	17	starter	$table->nullableMorphs('subject', 'subject');
+database/migrations/2026_06_15_165821_create_activity_log_table.php	18	starter	$table->string('event')->nullable();
+database/migrations/2026_06_15_165821_create_activity_log_table.php	19	starter	$table->nullableMorphs('causer', 'causer');
+database/migrations/2026_06_15_165821_create_activity_log_table.php	20	starter	$table->json('attribute_changes')->nullable();
+database/migrations/2026_06_15_165821_create_activity_log_table.php	21	starter	$table->json('properties')->nullable();
+database/migrations/2026_06_15_165821_create_activity_log_table.php	22	starter	$table->timestamps();
+database/migrations/2026_06_15_165845_create_permission_tables.php	23	starter	Schema::create($tableNames['permissions'], static function (Blueprint $table): void {
+database/migrations/2026_06_15_165845_create_permission_tables.php	24	starter	$table->id(); // permission id
+database/migrations/2026_06_15_165845_create_permission_tables.php	25	starter	$table->string('name');
+database/migrations/2026_06_15_165845_create_permission_tables.php	26	starter	$table->string('guard_name');
+database/migrations/2026_06_15_165845_create_permission_tables.php	27	starter	$table->timestamps();
+database/migrations/2026_06_15_165845_create_permission_tables.php	29	starter	$table->unique(['name', 'guard_name']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	33	starter	Schema::create($tableNames['roles'], static function (Blueprint $table) use ($teams, $columnNames): void {
+database/migrations/2026_06_15_165845_create_permission_tables.php	34	starter	$table->id(); // role id
+database/migrations/2026_06_15_165845_create_permission_tables.php	36	starter	$table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
+database/migrations/2026_06_15_165845_create_permission_tables.php	37	starter	$table->index($columnNames['team_foreign_key'], 'roles_team_foreign_key_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	40	starter	$table->string('name');
+database/migrations/2026_06_15_165845_create_permission_tables.php	41	starter	$table->string('guard_name');
+database/migrations/2026_06_15_165845_create_permission_tables.php	42	starter	$table->timestamps();
+database/migrations/2026_06_15_165845_create_permission_tables.php	44	starter	$table->unique([$columnNames['team_foreign_key'], 'name', 'guard_name']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	46	starter	$table->unique(['name', 'guard_name']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	50	starter	Schema::create($tableNames['model_has_permissions'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams): void {
+database/migrations/2026_06_15_165845_create_permission_tables.php	51	starter	$table->unsignedBigInteger($pivotPermission);
+database/migrations/2026_06_15_165845_create_permission_tables.php	53	starter	$table->string('model_type');
+database/migrations/2026_06_15_165845_create_permission_tables.php	54	starter	$table->unsignedBigInteger($columnNames['model_morph_key']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	55	starter	$table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_permissions_model_id_model_type_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	57	starter	$table->foreign($pivotPermission)
+database/migrations/2026_06_15_165845_create_permission_tables.php	62	starter	$table->unsignedBigInteger($columnNames['team_foreign_key']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	63	starter	$table->index($columnNames['team_foreign_key'], 'model_has_permissions_team_foreign_key_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	65	starter	$table->primary([$columnNames['team_foreign_key'], $pivotPermission, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	68	starter	$table->primary([$pivotPermission, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	73	starter	Schema::create($tableNames['model_has_roles'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotRole, $teams): void {
+database/migrations/2026_06_15_165845_create_permission_tables.php	74	starter	$table->unsignedBigInteger($pivotRole);
+database/migrations/2026_06_15_165845_create_permission_tables.php	76	starter	$table->string('model_type');
+database/migrations/2026_06_15_165845_create_permission_tables.php	77	starter	$table->unsignedBigInteger($columnNames['model_morph_key']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	78	starter	$table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	80	starter	$table->foreign($pivotRole)
+database/migrations/2026_06_15_165845_create_permission_tables.php	85	starter	$table->unsignedBigInteger($columnNames['team_foreign_key']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	86	starter	$table->index($columnNames['team_foreign_key'], 'model_has_roles_team_foreign_key_index');
+database/migrations/2026_06_15_165845_create_permission_tables.php	88	starter	$table->primary([$columnNames['team_foreign_key'], $pivotRole, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	91	starter	$table->primary([$pivotRole, $columnNames['model_morph_key'], 'model_type'],
+database/migrations/2026_06_15_165845_create_permission_tables.php	96	starter	Schema::create($tableNames['role_has_permissions'], static function (Blueprint $table) use ($tableNames, $pivotRole, $pivotPermission): void {
+database/migrations/2026_06_15_165845_create_permission_tables.php	97	starter	$table->unsignedBigInteger($pivotPermission);
+database/migrations/2026_06_15_165845_create_permission_tables.php	98	starter	$table->unsignedBigInteger($pivotRole);
+database/migrations/2026_06_15_165845_create_permission_tables.php	100	starter	$table->foreign($pivotPermission)
+database/migrations/2026_06_15_165845_create_permission_tables.php	105	starter	$table->foreign($pivotRole)
+database/migrations/2026_06_15_165845_create_permission_tables.php	110	starter	$table->primary([$pivotPermission, $pivotRole], 'role_has_permissions_permission_id_role_id_primary');
+database/migrations/2026_06_15_165845_create_permission_tables.php	124	starter	Schema::dropIfExists($tableNames['role_has_permissions']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	125	starter	Schema::dropIfExists($tableNames['model_has_roles']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	126	starter	Schema::dropIfExists($tableNames['model_has_permissions']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	127	starter	Schema::dropIfExists($tableNames['roles']);
+database/migrations/2026_06_15_165845_create_permission_tables.php	128	starter	Schema::dropIfExists($tableNames['permissions']);
+database/migrations/2026_07_13_153325_create_organizations_table.php	13	crm	Schema::create('organizations', function (Blueprint $table): void {
+database/migrations/2026_07_13_153325_create_organizations_table.php	14	crm	$table->id();
+database/migrations/2026_07_13_153325_create_organizations_table.php	15	crm	$table->uuid('uuid')->unique();
+database/migrations/2026_07_13_153325_create_organizations_table.php	16	crm	$table->string('name');
+database/migrations/2026_07_13_153325_create_organizations_table.php	17	crm	$table->string('website')->nullable()->unique();
+database/migrations/2026_07_13_153325_create_organizations_table.php	18	crm	$table->timestamps();
+database/migrations/2026_07_13_153325_create_organizations_table.php	24	crm	Schema::dropIfExists('organizations');
+database/migrations/2026_07_13_153326_create_contacts_table.php	13	crm	Schema::create('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_13_153326_create_contacts_table.php	14	crm	$table->id();
+database/migrations/2026_07_13_153326_create_contacts_table.php	15	crm	$table->uuid('uuid')->unique();
+database/migrations/2026_07_13_153326_create_contacts_table.php	16	crm	$table->foreignId('organization_id')->nullable()->constrained()->nullOnDelete();
+database/migrations/2026_07_13_153326_create_contacts_table.php	17	crm	$table->string('name');
+database/migrations/2026_07_13_153326_create_contacts_table.php	18	crm	$table->string('email')->unique();
+database/migrations/2026_07_13_153326_create_contacts_table.php	19	crm	$table->string('phone')->nullable();
+database/migrations/2026_07_13_153326_create_contacts_table.php	20	crm	$table->timestamps();
+database/migrations/2026_07_13_153326_create_contacts_table.php	26	crm	Schema::dropIfExists('contacts');
+database/migrations/2026_07_13_153327_create_leads_table.php	13	crm	Schema::create('leads', function (Blueprint $table): void {
+database/migrations/2026_07_13_153327_create_leads_table.php	14	crm	$table->id();
+database/migrations/2026_07_13_153327_create_leads_table.php	15	crm	$table->uuid('uuid')->unique();
+database/migrations/2026_07_13_153327_create_leads_table.php	16	crm	$table->foreignId('contact_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_13_153327_create_leads_table.php	17	crm	$table->foreignId('organization_id')->nullable()->constrained()->nullOnDelete();
+database/migrations/2026_07_13_153327_create_leads_table.php	18	crm	$table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_13_153327_create_leads_table.php	19	crm	$table->string('status')->default('new')->index();
+database/migrations/2026_07_13_153327_create_leads_table.php	20	crm	$table->string('source')->default('website')->index();
+database/migrations/2026_07_13_153327_create_leads_table.php	21	crm	$table->string('service_interest')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	22	crm	$table->string('budget_range')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	23	crm	$table->string('timeline')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	24	crm	$table->text('project_details');
+database/migrations/2026_07_13_153327_create_leads_table.php	25	crm	$table->string('referral_source')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	26	crm	$table->string('landing_page')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	27	crm	$table->text('referrer')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	28	crm	$table->string('utm_source')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	29	crm	$table->string('utm_medium')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	30	crm	$table->string('utm_campaign')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	31	crm	$table->string('utm_term')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	32	crm	$table->string('utm_content')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	33	crm	$table->string('ip_address', 45)->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	34	crm	$table->text('user_agent')->nullable();
+database/migrations/2026_07_13_153327_create_leads_table.php	35	crm	$table->timestamp('consented_at');
+database/migrations/2026_07_13_153327_create_leads_table.php	36	crm	$table->timestamps();
+database/migrations/2026_07_13_153327_create_leads_table.php	42	crm	Schema::dropIfExists('leads');
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	13	crm	Schema::create('crm_activities', function (Blueprint $table): void {
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	14	crm	$table->id();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	15	crm	$table->uuid('uuid')->unique();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	16	crm	$table->foreignId('lead_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	17	crm	$table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	18	crm	$table->string('type')->index();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	19	crm	$table->string('description');
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	20	crm	$table->json('properties')->nullable();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	21	crm	$table->timestamps();
+database/migrations/2026_07_13_153328_create_crm_activities_table.php	27	crm	Schema::dropIfExists('crm_activities');
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	13	crm	Schema::create('follow_up_tasks', function (Blueprint $table): void {
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	14	crm	$table->id();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	15	crm	$table->uuid('uuid')->unique();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	16	crm	$table->foreignId('lead_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	17	crm	$table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	18	crm	$table->string('title');
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	19	crm	$table->text('description')->nullable();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	20	crm	$table->string('status')->default('open')->index();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	21	crm	$table->timestamp('due_at')->index();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	22	crm	$table->timestamp('completed_at')->nullable();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	23	crm	$table->timestamps();
+database/migrations/2026_07_13_153329_create_follow_up_tasks_table.php	29	crm	Schema::dropIfExists('follow_up_tasks');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	13	crm	Schema::table('organizations', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	14	crm	$table->timestamp('client_since_at')->nullable()->index()->after('website');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	15	crm	$table->timestamp('archived_at')->nullable()->index()->after('client_since_at');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	16	crm	$table->softDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	19	crm	Schema::table('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	20	crm	$table->timestamp('archived_at')->nullable()->index()->after('phone');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	21	crm	$table->softDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	24	crm	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	25	crm	$table->timestamp('archived_at')->nullable()->index()->after('consented_at');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	26	crm	$table->timestamp('converted_at')->nullable()->index()->after('archived_at');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	27	crm	$table->softDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	28	crm	$table->index(['owner_id', 'status']);
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	29	crm	$table->index(['created_at', 'status']);
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	32	crm	Schema::table('follow_up_tasks', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	33	crm	$table->string('priority')->default('normal')->index()->after('status');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	34	crm	$table->softDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	37	crm	Schema::create('notes', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	38	crm	$table->id();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	39	crm	$table->uuid('uuid')->unique();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	40	crm	$table->morphs('subject');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	41	crm	$table->foreignId('user_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	42	crm	$table->text('body');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	43	crm	$table->timestamps();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	44	crm	$table->softDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	50	crm	Schema::dropIfExists('notes');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	52	crm	Schema::table('follow_up_tasks', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	53	crm	$table->dropSoftDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	54	crm	$table->dropColumn('priority');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	57	crm	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	58	crm	$table->dropIndex(['owner_id', 'status']);
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	59	crm	$table->dropIndex(['created_at', 'status']);
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	60	crm	$table->dropSoftDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	61	crm	$table->dropColumn(['archived_at', 'converted_at']);
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	64	crm	Schema::table('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	65	crm	$table->dropSoftDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	66	crm	$table->dropColumn('archived_at');
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	69	crm	Schema::table('organizations', function (Blueprint $table): void {
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	70	crm	$table->dropSoftDeletes();
+database/migrations/2026_07_13_180000_expand_crm_for_workspace.php	71	crm	$table->dropColumn(['client_since_at', 'archived_at']);
+database/migrations/2026_07_14_143924_add_admin_fields_to_users_table.php	13	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2026_07_14_143924_add_admin_fields_to_users_table.php	14	starter	$table->boolean('is_active')->default(true)->index()->after('email_verified_at');
+database/migrations/2026_07_14_143924_add_admin_fields_to_users_table.php	15	starter	$table->timestamp('deactivated_at')->nullable()->index()->after('is_active');
+database/migrations/2026_07_14_143924_add_admin_fields_to_users_table.php	21	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2026_07_14_143924_add_admin_fields_to_users_table.php	22	starter	$table->dropColumn(['is_active', 'deactivated_at']);
+database/migrations/2026_07_14_143925_create_business_settings_table.php	13	starter	Schema::create('business_settings', function (Blueprint $table): void {
+database/migrations/2026_07_14_143925_create_business_settings_table.php	14	starter	$table->id();
+database/migrations/2026_07_14_143925_create_business_settings_table.php	15	starter	$table->string('company_name')->nullable();
+database/migrations/2026_07_14_143925_create_business_settings_table.php	16	starter	$table->string('notification_email')->nullable();
+database/migrations/2026_07_14_143925_create_business_settings_table.php	17	starter	$table->unsignedTinyInteger('default_task_due_days')->default(3);
+database/migrations/2026_07_14_143925_create_business_settings_table.php	18	starter	$table->timestamps();
+database/migrations/2026_07_14_143925_create_business_settings_table.php	24	starter	Schema::dropIfExists('business_settings');
+database/migrations/2026_07_14_173347_add_reminder_sent_at_to_follow_up_tasks_table.php	13	crm	Schema::table('follow_up_tasks', function (Blueprint $table): void {
+database/migrations/2026_07_14_173347_add_reminder_sent_at_to_follow_up_tasks_table.php	14	crm	$table->timestamp('reminder_sent_at')->nullable()->after('completed_at')->index();
+database/migrations/2026_07_14_173347_add_reminder_sent_at_to_follow_up_tasks_table.php	20	crm	Schema::table('follow_up_tasks', function (Blueprint $table): void {
+database/migrations/2026_07_14_173347_add_reminder_sent_at_to_follow_up_tasks_table.php	21	crm	$table->dropColumn('reminder_sent_at');
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	13	crm	Schema::table('organizations', function (Blueprint $table): void {
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	14	crm	$table->foreignId('owner_id')->nullable()->after('website')->constrained('users')->nullOnDelete();
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	15	crm	$table->index(['owner_id', 'archived_at']);
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	18	crm	Schema::table('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	19	crm	$table->foreignId('owner_id')->nullable()->after('phone')->constrained('users')->nullOnDelete();
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	20	crm	$table->index(['owner_id', 'archived_at']);
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	26	crm	Schema::table('organizations', function (Blueprint $table): void {
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	27	crm	$table->dropIndex(['owner_id', 'archived_at']);
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	28	crm	$table->dropConstrainedForeignId('owner_id');
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	31	crm	Schema::table('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	32	crm	$table->dropIndex(['owner_id', 'archived_at']);
+database/migrations/2026_07_15_185042_add_owner_id_to_organizations_and_contacts_table.php	33	crm	$table->dropConstrainedForeignId('owner_id');
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	13	development	Schema::create('user_testing_pages', function (Blueprint $table): void {
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	14	development	$table->id();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	15	development	$table->string('slug')->unique();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	16	development	$table->string('category')->index();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	17	development	$table->string('title');
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	18	development	$table->string('route_name')->nullable();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	19	development	$table->string('path');
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	20	development	$table->unsignedInteger('sort_order')->index();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	21	development	$table->foreignId('tested_by')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	22	development	$table->timestamp('tested_at')->nullable()->index();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	23	development	$table->text('notes')->nullable();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	24	development	$table->timestamps();
+database/migrations/2026_07_17_175308_create_user_testing_pages_table.php	30	development	Schema::dropIfExists('user_testing_pages');
+database/migrations/2026_07_17_180000_add_service_interests_to_leads_table.php	13	crm	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_07_17_180000_add_service_interests_to_leads_table.php	14	crm	$table->json('service_interests')->nullable()->after('service_interest');
+database/migrations/2026_07_17_180000_add_service_interests_to_leads_table.php	20	crm	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_07_17_180000_add_service_interests_to_leads_table.php	21	crm	$table->dropColumn('service_interests');
+database/migrations/2026_07_17_201213_add_approved_at_to_user_testing_pages_table.php	13	development	Schema::table('user_testing_pages', function (Blueprint $table): void {
+database/migrations/2026_07_17_201213_add_approved_at_to_user_testing_pages_table.php	14	development	$table->timestamp('approved_at')->nullable()->after('tested_at')->index();
+database/migrations/2026_07_17_201213_add_approved_at_to_user_testing_pages_table.php	20	development	Schema::table('user_testing_pages', function (Blueprint $table): void {
+database/migrations/2026_07_17_201213_add_approved_at_to_user_testing_pages_table.php	21	development	$table->dropColumn('approved_at');
+database/migrations/2026_07_17_202945_add_roadmap_task_at_to_user_testing_pages_table.php	13	development	Schema::table('user_testing_pages', function (Blueprint $table): void {
+database/migrations/2026_07_17_202945_add_roadmap_task_at_to_user_testing_pages_table.php	14	development	$table->timestamp('roadmap_task_at')->nullable()->after('approved_at')->index();
+database/migrations/2026_07_17_202945_add_roadmap_task_at_to_user_testing_pages_table.php	20	development	Schema::table('user_testing_pages', function (Blueprint $table): void {
+database/migrations/2026_07_17_202945_add_roadmap_task_at_to_user_testing_pages_table.php	21	development	$table->dropColumn('roadmap_task_at');
+database/migrations/2026_07_23_190428_add_intake_snapshot_to_leads_table.php	13	crm	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_07_23_190428_add_intake_snapshot_to_leads_table.php	14	crm	$table->json('intake_snapshot')->nullable()->after('contact_id');
+database/migrations/2026_07_23_190428_add_intake_snapshot_to_leads_table.php	20	crm	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_07_23_190428_add_intake_snapshot_to_leads_table.php	21	crm	$table->dropColumn('intake_snapshot');
+database/migrations/2026_07_23_190443_allow_duplicate_contact_emails.php	13	crm	Schema::table('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_23_190443_allow_duplicate_contact_emails.php	14	crm	$table->dropUnique('contacts_email_unique');
+database/migrations/2026_07_23_190443_allow_duplicate_contact_emails.php	15	crm	$table->index('email');
+database/migrations/2026_07_23_190443_allow_duplicate_contact_emails.php	21	crm	Schema::table('contacts', function (Blueprint $table): void {
+database/migrations/2026_07_23_190443_allow_duplicate_contact_emails.php	22	crm	$table->dropIndex('contacts_email_index');
+database/migrations/2026_07_23_190443_allow_duplicate_contact_emails.php	23	crm	$table->unique('email');
+database/migrations/2026_07_23_194321_add_created_at_index_to_activity_log_table.php	13	starter	Schema::table('activity_log', function (Blueprint $table): void {
+database/migrations/2026_07_23_194321_add_created_at_index_to_activity_log_table.php	14	starter	$table->index('created_at', 'activity_log_created_at_index');
+database/migrations/2026_07_23_194321_add_created_at_index_to_activity_log_table.php	20	starter	Schema::table('activity_log', function (Blueprint $table): void {
+database/migrations/2026_07_23_194321_add_created_at_index_to_activity_log_table.php	21	starter	$table->dropIndex('activity_log_created_at_index');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	13	development	Schema::create('development_tasks', function (Blueprint $table): void {
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	14	development	$table->id();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	15	development	$table->uuid('uuid')->unique();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	16	development	$table->string('title');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	17	development	$table->string('request_type');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	18	development	$table->string('affected_area');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	19	development	$table->text('description');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	20	development	$table->text('desired_outcome');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	21	development	$table->text('acceptance_criteria');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	22	development	$table->string('status')->default('submitted');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	23	development	$table->string('priority')->default('normal');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	24	development	$table->unsignedInteger('roadmap_position')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	25	development	$table->foreignId('submitter_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	26	development	$table->foreignId('reviewer_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	27	development	$table->foreignId('assignee_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	28	development	$table->timestamp('submitted_at');
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	29	development	$table->timestamp('information_requested_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	30	development	$table->timestamp('review_started_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	31	development	$table->timestamp('planned_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	32	development	$table->timestamp('started_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	33	development	$table->timestamp('blocked_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	34	development	$table->timestamp('ready_for_testing_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	35	development	$table->timestamp('changes_requested_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	36	development	$table->timestamp('completed_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	37	development	$table->timestamp('rejected_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	38	development	$table->timestamp('cancelled_at')->nullable();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	39	development	$table->timestamps();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	40	development	$table->softDeletes();
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	42	development	$table->index(['status', 'created_at']);
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	43	development	$table->index(['status', 'priority', 'roadmap_position']);
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	44	development	$table->index(['submitter_id', 'status']);
+database/migrations/2026_07_29_173750_create_development_tasks_table.php	50	development	Schema::dropIfExists('development_tasks');
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	13	development	Schema::create('development_task_notes', function (Blueprint $table): void {
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	14	development	$table->id();
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	15	development	$table->uuid('uuid')->unique();
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	16	development	$table->foreignId('development_task_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	17	development	$table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	18	development	$table->string('audience')->default('participants');
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	19	development	$table->text('body');
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	20	development	$table->timestamps();
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	22	development	$table->index(
+database/migrations/2026_07_29_173751_create_development_task_notes_table.php	31	development	Schema::dropIfExists('development_task_notes');
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	13	development	Schema::create('development_task_links', function (Blueprint $table): void {
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	14	development	$table->id();
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	15	development	$table->uuid('uuid')->unique();
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	16	development	$table->foreignId('development_task_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	17	development	$table->foreignId('added_by_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	18	development	$table->string('type');
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	19	development	$table->string('label')->nullable();
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	20	development	$table->string('url', 2048);
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	21	development	$table->timestamps();
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	23	development	$table->index(['development_task_id', 'type']);
+database/migrations/2026_07_29_173752_create_development_task_links_table.php	29	development	Schema::dropIfExists('development_task_links');
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	13	development	Schema::create('development_test_runs', function (Blueprint $table): void {
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	14	development	$table->id();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	15	development	$table->uuid('uuid')->unique();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	16	development	$table->foreignId('development_task_id')->constrained()->cascadeOnDelete();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	17	development	$table->foreignId('tester_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	18	development	$table->foreignId('requested_by_id')->nullable()->constrained('users')->nullOnDelete();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	19	development	$table->text('instructions');
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	20	development	$table->string('build_reference', 2048)->nullable();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	21	development	$table->string('status')->default('pending');
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	22	development	$table->text('feedback')->nullable();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	23	development	$table->timestamp('requested_at');
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	24	development	$table->timestamp('completed_at')->nullable();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	25	development	$table->timestamps();
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	27	development	$table->index(['development_task_id', 'status']);
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	28	development	$table->index(['tester_id', 'status']);
+database/migrations/2026_07_29_173753_create_development_test_runs_table.php	34	development	Schema::dropIfExists('development_test_runs');
+database/migrations/2026_10_05_234002_add_column_comments_to_development_tables.php	47	development	Schema::table($tableName, function (Blueprint $table) use ($columns): void {
+database/migrations/2026_10_05_234002_add_column_comments_to_development_tables.php	49	development	$table->timestamp($columnName)
+database/migrations/2026_10_05_234002_add_column_comments_to_development_tables.php	79	development	Schema::table($tableName, function (Blueprint $table) use ($columns): void {
+database/migrations/2026_10_05_234002_add_column_comments_to_development_tables.php	81	development	$table->unsignedBigInteger($columnName)
+database/migrations/2026_10_06_123124_correct_staff_lead_consent.php	13	archive	Schema::table('leads', function (Blueprint $table): void {
+database/migrations/2026_10_06_123124_correct_staff_lead_consent.php	14	archive	$table->timestamp('consented_at')->nullable()
+database/migrations/2026_10_10_183851_add_invitation_tracking_to_users_table.php	13	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2026_10_10_183851_add_invitation_tracking_to_users_table.php	14	starter	$table->timestamp('invited_at')->nullable();
+database/migrations/2026_10_10_183851_add_invitation_tracking_to_users_table.php	15	starter	$table->timestamp('invitation_accepted_at')->nullable();
+database/migrations/2026_10_10_183851_add_invitation_tracking_to_users_table.php	21	starter	Schema::table('users', function (Blueprint $table): void {
+database/migrations/2026_10_10_183851_add_invitation_tracking_to_users_table.php	22	starter	$table->dropColumn(['invited_at', 'invitation_accepted_at']);

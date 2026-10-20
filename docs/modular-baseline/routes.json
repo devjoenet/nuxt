@@ -1,0 +1,1190 @@
+[
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "/",
+    "name": "home",
+    "action": "Closure",
+    "middleware": ["web"],
+    "path": "routes/web.php:41"
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "_boost/browser-logs",
+    "name": "boost.browser-logs",
+    "action": "Closure",
+    "middleware": [],
+    "path": "vendor/laravel/boost/src/BoostServiceProvider.php:106"
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "_inertia/devtools/entries",
+    "name": null,
+    "action": "Inertia\\DevTools\\Http\\EntriesController@index",
+    "middleware": ["Inertia\\DevTools\\Http\\PreventPreviousUrlTracking", "web", "Inertia\\DevTools\\Http\\PreserveFlashData", "Inertia\\DevTools\\Http\\Authorize"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "_inertia/devtools/entries/{id}",
+    "name": null,
+    "action": "Inertia\\DevTools\\Http\\EntriesController@show",
+    "middleware": ["Inertia\\DevTools\\Http\\PreventPreviousUrlTracking", "web", "Inertia\\DevTools\\Http\\PreserveFlashData", "Inertia\\DevTools\\Http\\Authorize"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "admin",
+    "name": "admin.dashboard",
+    "action": "App\\Http\\Controllers\\Admin\\AdminDashboardController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "admin/audit",
+    "name": "admin.audit.index",
+    "action": "App\\Http\\Controllers\\Admin\\ActivityLogController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "admin/jobs",
+    "name": "admin.jobs.index",
+    "action": "App\\Http\\Controllers\\Admin\\JobOperationsController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:jobs.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS|QUERY",
+    "uri": "admin/roadmap",
+    "name": "admin.roadmap.index",
+    "action": "Illuminate\\Routing\\RedirectController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:development.roadmap.manage"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "admin/roles",
+    "name": "admin.roles.index",
+    "action": "App\\Http\\Controllers\\Admin\\RoleController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "admin/roles",
+    "name": "admin.roles.store",
+    "action": "App\\Http\\Controllers\\Admin\\RoleController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "admin/roles/{role}",
+    "name": "admin.roles.update",
+    "action": "App\\Http\\Controllers\\Admin\\RoleController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "admin/settings",
+    "name": "admin.settings.edit",
+    "action": "App\\Http\\Controllers\\Admin\\BusinessSettingController@edit",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "admin/settings",
+    "name": "admin.settings.update",
+    "action": "App\\Http\\Controllers\\Admin\\BusinessSettingController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS|QUERY",
+    "uri": "admin/user-testing",
+    "name": "admin.userTesting.index",
+    "action": "Illuminate\\Routing\\RedirectController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:development.user_testing.manage"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "admin/users",
+    "name": "admin.users.index",
+    "action": "App\\Http\\Controllers\\Admin\\AdminUserController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "admin/users",
+    "name": "admin.users.store",
+    "action": "App\\Http\\Controllers\\Admin\\AdminUserController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "admin/users/{user}",
+    "name": "admin.users.update",
+    "action": "App\\Http\\Controllers\\Admin\\AdminUserController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "admin/users/{user}/resend-verification",
+    "name": "admin.users.resendVerification",
+    "action": "App\\Http\\Controllers\\Admin\\AdminUserController@resendVerification",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "admin/users/{user}/reset-two-factor",
+    "name": "admin.users.resetTwoFactor",
+    "action": "App\\Http\\Controllers\\Admin\\AdminUserController@resetTwoFactor",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "throttle:two-factor-management"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "contact",
+    "name": "contact.store",
+    "action": "App\\Http\\Controllers\\PublicIntakeController",
+    "middleware": ["web", "throttle:public-intake"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/contacts",
+    "name": "crm.contacts.index",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/contacts",
+    "name": "crm.contacts.store",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/contacts/create",
+    "name": "crm.contacts.create",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@create",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/contacts/{contact}",
+    "name": "crm.contacts.show",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@show",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PUT|PATCH",
+    "uri": "crm/contacts/{contact}",
+    "name": "crm.contacts.update",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "crm/contacts/{contact}",
+    "name": "crm.contacts.destroy",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@destroy",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/contacts/{contact}/archive",
+    "name": "crm.contacts.archive",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@archive",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "crm/contacts/{contact}/archive",
+    "name": "crm.contacts.restore",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@restore",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/contacts/{contact}/edit",
+    "name": "crm.contacts.edit",
+    "action": "App\\Http\\Controllers\\Crm\\ContactController@edit",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/contacts/{contact}/history",
+    "name": "crm.contacts.history",
+    "action": "App\\Http\\Controllers\\RecordHistoryController@contact",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/leads",
+    "name": "crm.leads.index",
+    "action": "App\\Http\\Controllers\\Crm\\LeadController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/leads",
+    "name": "crm.leads.store",
+    "action": "App\\Http\\Controllers\\Crm\\LeadController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/leads/create",
+    "name": "crm.leads.create",
+    "action": "App\\Http\\Controllers\\Crm\\LeadController@create",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/leads/{lead}",
+    "name": "crm.leads.show",
+    "action": "App\\Http\\Controllers\\Crm\\LeadController@show",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PUT|PATCH",
+    "uri": "crm/leads/{lead}",
+    "name": "crm.leads.update",
+    "action": "App\\Http\\Controllers\\Crm\\LeadController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/leads/{lead}/archive",
+    "name": "crm.leads.archive",
+    "action": "App\\Http\\Controllers\\Crm\\LeadArchiveController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "crm/leads/{lead}/archive",
+    "name": "crm.leads.restore",
+    "action": "App\\Http\\Controllers\\Crm\\LeadArchiveController@destroy",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/leads/{lead}/convert",
+    "name": "crm.leads.convert",
+    "action": "App\\Http\\Controllers\\Crm\\LeadConversionController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/leads/{lead}/edit",
+    "name": "crm.leads.edit",
+    "action": "App\\Http\\Controllers\\Crm\\LeadController@edit",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/leads/{lead}/history",
+    "name": "crm.leads.history",
+    "action": "App\\Http\\Controllers\\Crm\\LeadHistoryController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/leads/{lead}/notes",
+    "name": "crm.leads.notes.store",
+    "action": "App\\Http\\Controllers\\Crm\\LeadNoteController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/leads/{lead}/tasks",
+    "name": "crm.leads.tasks.store",
+    "action": "App\\Http\\Controllers\\Crm\\FollowUpTaskController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/leads/{lead}/tasks/{task}/complete",
+    "name": "crm.leads.tasks.complete",
+    "action": "App\\Http\\Controllers\\Crm\\FollowUpTaskCompletionController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/options/contacts",
+    "name": "crm.options.contacts",
+    "action": "App\\Http\\Controllers\\Crm\\CrmRecordOptionController@contacts",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/options/organizations",
+    "name": "crm.options.organizations",
+    "action": "App\\Http\\Controllers\\Crm\\CrmRecordOptionController@organizations",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/organizations",
+    "name": "crm.organizations.index",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/organizations",
+    "name": "crm.organizations.store",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/organizations/create",
+    "name": "crm.organizations.create",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@create",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/organizations/{organization}",
+    "name": "crm.organizations.show",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@show",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PUT|PATCH",
+    "uri": "crm/organizations/{organization}",
+    "name": "crm.organizations.update",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "crm/organizations/{organization}",
+    "name": "crm.organizations.destroy",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@destroy",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "crm/organizations/{organization}/archive",
+    "name": "crm.organizations.archive",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@archive",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "crm/organizations/{organization}/archive",
+    "name": "crm.organizations.restore",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@restore",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/organizations/{organization}/edit",
+    "name": "crm.organizations.edit",
+    "action": "App\\Http\\Controllers\\Crm\\OrganizationController@edit",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "crm/organizations/{organization}/history",
+    "name": "crm.organizations.history",
+    "action": "App\\Http\\Controllers\\RecordHistoryController@organization",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:crm.view"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "dashboard",
+    "name": "dashboard",
+    "action": "App\\Http\\Controllers\\DashboardController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development",
+    "name": "development.index",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskController@overview",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/requests",
+    "name": "development.requests.index",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/requests",
+    "name": "development.requests.store",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/requests/create",
+    "name": "development.requests.create",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskController@create",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/review",
+    "name": "development.review.index",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskReviewController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/roadmap",
+    "name": "development.roadmap.index",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentRoadmapController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:development.roadmap.manage"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/tasks/{developmentTask}",
+    "name": "development.tasks.show",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskController@show",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/tasks/{developmentTask}/history",
+    "name": "development.tasks.history",
+    "action": "App\\Http\\Controllers\\RecordHistoryController@developmentTask",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/information-request",
+    "name": "development.tasks.informationRequest.store",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskInformationRequestController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/links",
+    "name": "development.tasks.links.store",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskLinkController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/notes",
+    "name": "development.tasks.notes.store",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskNoteController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "development/tasks/{developmentTask}/progress",
+    "name": "development.tasks.progress.update",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskProgressController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/promote",
+    "name": "development.tasks.promote",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskPromotionController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/reject",
+    "name": "development.tasks.reject",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskRejectionController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/review",
+    "name": "development.tasks.review.store",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskReviewController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "development/tasks/{developmentTask}/roadmap",
+    "name": "development.tasks.roadmap.update",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTaskRoadmapController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "development/tasks/{developmentTask}/test-runs",
+    "name": "development.tasks.testRuns.store",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTestRunController@store",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "development/test-runs/{developmentTestRun}",
+    "name": "development.testRuns.update",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTestRunController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/user-testing",
+    "name": "development.userTesting.index",
+    "action": "App\\Http\\Controllers\\Development\\DevelopmentTestRunController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/user-testing/legacy-checklist",
+    "name": "development.userTesting.legacy",
+    "action": "App\\Http\\Controllers\\Development\\UserTestingPageController@index",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:development.user_testing.manage"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "development/user-testing/updates",
+    "name": "development.userTesting.updates",
+    "action": "App\\Http\\Controllers\\Development\\UserTestingPageController@updates",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:development.user_testing.manage"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "development/user-testing/{userTestingPage}",
+    "name": "development.userTesting.update",
+    "action": "App\\Http\\Controllers\\Development\\UserTestingPageController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "verified", "can:development.user_testing.manage"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "email/verification-notification",
+    "name": "verification.send",
+    "action": "App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController@store",
+    "middleware": ["web", "auth", "throttle:6,1"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "forgot-password",
+    "name": "password.request",
+    "action": "App\\Http\\Controllers\\Auth\\PasswordResetLinkController@create",
+    "middleware": ["web", "guest"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "forgot-password",
+    "name": "password.email",
+    "action": "App\\Http\\Controllers\\Auth\\PasswordResetLinkController@store",
+    "middleware": ["web", "guest"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/batches",
+    "name": "horizon.jobs-batches.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\BatchesController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "horizon/api/batches/retry/{id}",
+    "name": "horizon.jobs-batches.retry",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\BatchesController@retry",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/batches/{id}",
+    "name": "horizon.jobs-batches.show",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\BatchesController@show",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/jobs/completed",
+    "name": "horizon.completed-jobs.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\CompletedJobsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/jobs/failed",
+    "name": "horizon.failed-jobs.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\FailedJobsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/jobs/failed/{id}",
+    "name": "horizon.failed-jobs.show",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\FailedJobsController@show",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/jobs/pending",
+    "name": "horizon.pending-jobs.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\PendingJobsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "horizon/api/jobs/retry/{id}",
+    "name": "horizon.retry-jobs.show",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\RetryController@store",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/jobs/silenced",
+    "name": "horizon.silenced-jobs.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\SilencedJobsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/jobs/{id}",
+    "name": "horizon.jobs.show",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\JobsController@show",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/masters",
+    "name": "horizon.masters.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\MasterSupervisorController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/metrics/jobs",
+    "name": "horizon.jobs-metrics.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\JobMetricsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/metrics/jobs/{id}",
+    "name": "horizon.jobs-metrics.show",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\JobMetricsController@show",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/metrics/queues",
+    "name": "horizon.queues-metrics.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\QueueMetricsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/metrics/queues/{id}",
+    "name": "horizon.queues-metrics.show",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\QueueMetricsController@show",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/monitoring",
+    "name": "horizon.monitoring.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\MonitoringController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "horizon/api/monitoring",
+    "name": "horizon.monitoring.store",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\MonitoringController@store",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/monitoring/{tag}",
+    "name": "horizon.monitoring-tag.paginate",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\MonitoringController@paginate",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "horizon/api/monitoring/{tag}",
+    "name": "horizon.monitoring-tag.destroy",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\MonitoringController@destroy",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/stats",
+    "name": "horizon.stats.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\DashboardStatsController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/api/workload",
+    "name": "horizon.workload.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\WorkloadController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "horizon/{view?}",
+    "name": "horizon.index",
+    "action": "Laravel\\Horizon\\Http\\Controllers\\HomeController@index",
+    "middleware": ["horizon", "Laravel\\Horizon\\Http\\Middleware\\Authenticate"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "login",
+    "name": "login",
+    "action": "App\\Http\\Controllers\\Auth\\AuthenticatedSessionController@create",
+    "middleware": ["web", "guest"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "login",
+    "name": "login.store",
+    "action": "App\\Http\\Controllers\\Auth\\AuthenticatedSessionController@store",
+    "middleware": ["web", "throttle:login-route", "guest"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "logout",
+    "name": "logout",
+    "action": "App\\Http\\Controllers\\Auth\\AuthenticatedSessionController@destroy",
+    "middleware": ["web", "auth"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "privacy",
+    "name": "privacy",
+    "action": "Closure",
+    "middleware": ["web"],
+    "path": "routes/web.php:45"
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "reset-password",
+    "name": "password.store",
+    "action": "App\\Http\\Controllers\\Auth\\NewPasswordController@store",
+    "middleware": ["web", "guest"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "reset-password/{token}",
+    "name": "password.reset",
+    "action": "App\\Http\\Controllers\\Auth\\NewPasswordController@create",
+    "middleware": ["web", "guest"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS|QUERY",
+    "uri": "settings",
+    "name": null,
+    "action": "Illuminate\\Routing\\RedirectController",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PUT",
+    "uri": "settings/password",
+    "name": "password.update",
+    "action": "App\\Http\\Controllers\\Settings\\PasswordController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "throttle:6,1"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "settings/profile",
+    "name": "profile.edit",
+    "action": "App\\Http\\Controllers\\Settings\\ProfileController@edit",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "PATCH",
+    "uri": "settings/profile",
+    "name": "profile.update",
+    "action": "App\\Http\\Controllers\\Settings\\ProfileController@update",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "settings/profile",
+    "name": "profile.destroy",
+    "action": "App\\Http\\Controllers\\Settings\\ProfileController@destroy",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "settings/security",
+    "name": "security.show",
+    "action": "App\\Http\\Controllers\\Settings\\SecurityController@show",
+    "middleware": ["web", "auth", "App\\Http\\Middleware\\EnsureUserIsActive", "password.confirm"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "storage/{path}",
+    "name": "storage.local",
+    "action": "Closure",
+    "middleware": [],
+    "path": "vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:111"
+  },
+  {
+    "domain": null,
+    "method": "PUT",
+    "uri": "storage/{path}",
+    "name": "storage.local.upload",
+    "action": "Closure",
+    "middleware": [],
+    "path": "vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:119"
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "two-factor-challenge",
+    "name": "two-factor.login",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticatedSessionController@create",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "guest:web"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "two-factor-challenge",
+    "name": "two-factor.login.store",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticatedSessionController@store",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "guest:web", "throttle:two-factor"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "up",
+    "name": null,
+    "action": "Illuminate\\Foundation\\Http\\HealthCheck",
+    "middleware": [],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "user/confirm-password",
+    "name": "password.confirm",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmablePasswordController@show",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "user/confirm-password",
+    "name": "password.confirm.store",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmablePasswordController@store",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "user/confirmed-password-status",
+    "name": "password.confirmation",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmedPasswordStatusController@show",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "user/confirmed-two-factor-authentication",
+    "name": "two-factor.confirm",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmedTwoFactorAuthenticationController@store",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm", "throttle:two-factor-management"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "user/two-factor-authentication",
+    "name": "two-factor.enable",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticationController@store",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm", "throttle:two-factor-management"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "DELETE",
+    "uri": "user/two-factor-authentication",
+    "name": "two-factor.disable",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticationController@destroy",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm", "throttle:two-factor-management"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "user/two-factor-qr-code",
+    "name": "two-factor.qr-code",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorQrCodeController@show",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "user/two-factor-recovery-codes",
+    "name": "two-factor.recovery-codes",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\RecoveryCodeController@index",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "POST",
+    "uri": "user/two-factor-recovery-codes",
+    "name": "two-factor.regenerate-recovery-codes",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\RecoveryCodeController@store",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm", "throttle:two-factor-management"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "user/two-factor-secret-key",
+    "name": "two-factor.secret-key",
+    "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorSecretKeyController@show",
+    "middleware": ["web", "App\\Http\\Middleware\\EnsureUserIsActive", "auth:web", "password.confirm"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "verify-email",
+    "name": "verification.notice",
+    "action": "App\\Http\\Controllers\\Auth\\EmailVerificationPromptController",
+    "middleware": ["web", "auth"],
+    "path": null
+  },
+  {
+    "domain": null,
+    "method": "GET|HEAD",
+    "uri": "verify-email/{id}/{hash}",
+    "name": "verification.verify",
+    "action": "App\\Http\\Controllers\\Auth\\VerifyEmailController",
+    "middleware": ["web", "auth", "signed", "throttle:6,1"],
+    "path": null
+  }
+]
