@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Override;
 
 use function fake;
 use function now;
@@ -17,6 +19,13 @@ use function now;
 class UserFactory extends Factory
 {
     protected static ?string $password;
+
+    /** @return class-string<User> */
+    #[Override]
+    public function modelName(): string
+    {
+        return WorkspaceUsers::model();
+    }
 
     /** @return array<string, mixed> */
     public function definition(): array

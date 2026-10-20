@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,7 +21,7 @@ class StoreAdminUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'lowercase', 'max:255', Rule::unique(User::class)],
+            'email' => ['required', 'email', 'lowercase', 'max:255', Rule::unique(WorkspaceUsers::model())],
             'role' => ['required', 'string', 'exists:roles,name'],
         ];
     }

@@ -6,6 +6,7 @@ namespace App\Policies;
 
 use App\Models\Lead;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class LeadPolicy
 {
@@ -41,6 +42,6 @@ class LeadPolicy
 
     public function assign(User $user, Lead $lead): bool
     {
-        return $user->can('crm.manage') && $user->isCrmAdministrator() && $lead->isVisibleTo($user);
+        return $user->can('crm.manage') && CrmAccess::administrator($user) && $lead->isVisibleTo($user);
     }
 }

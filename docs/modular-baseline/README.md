@@ -141,3 +141,27 @@ Backup ID: `modular-baseline-2026-10-20`, stored outside the repository in the u
 ## Delivery ledger
 
 Source and validation identities are frozen above. Branch/PR identities and final hosted CI results are also recorded on the live task. Owner/user acceptance remains a separate testing round; completing this evidence capture does not complete the extraction program or authorize downstream transfers, resets, permanent releases or deployments.
+
+
+### Task 02 — Shared contracts and additive permissions (October 20, 2026)
+
+- Live task: `01a15abd-3613-7387-9806-d304d945c550`; branch: `feature/modular-contracts`.
+- Base: `3212e92` (merged Task 01 PR #136). Implementation: `76cb015` (`Establish module contracts and additive permission catalog`). The subsequent ledger commit changes only this evidence file. Final pushed revision and PR are recorded on the live task.
+- Established portable descriptors/registry, permission definitions and typed workspace-user identity methods in their temporary app home; added the explicit frontend host API and aligned Vite/TypeScript aliases. [Contract and user-consumer audit](../modular-contracts.md).
+- Catalog/seeding/capability consumers now use additive registrations. Seeding preserves existing grants, custom roles and absent-module permissions; explicit role-editor updates retain replacement/clearing behavior. CRM ownership/admin decisions live outside User. Configured host-user subclasses work across relationship resolution, factories, validation, invitations, route binding and activity actors. No domain extraction or operational schema/data rewrite occurred.
+
+**Verified locally** (disposable test persistence):
+
+| Check | Result |
+| --- | --- |
+| `vendor/bin/pest --testsuite=Unit,Feature --compact` | 479 passed, 4,419 assertions |
+| `vendor/bin/pest tests/Feature/ModuleContractsTest.php tests/Feature/ConfiguredWorkspaceUserTest.php --compact` | 15 passed, 54 assertions; focused route-binding recheck after final runtime type guard: 2 passed, 10 assertions |
+| `vendor/bin/pest tests/Browser/AdminRoleEditorTest.php --compact` | 4 passed, 47 assertions; keyboard operation, creation, dark/narrow/protected states |
+| `vendor/bin/pest --type-coverage --min=100` | 100.0% |
+| PHPStan default and `phpstan.max.neon`, 512M | Both passed, zero errors |
+| `vendor/bin/pint --dirty --test`; `vendor/bin/rector process --dry-run` | Passed; no pending changes |
+| `corepack yarn lint:check`; `corepack yarn typecheck`; `corepack yarn format:check` | Passed, including frontend architecture checks |
+| `corepack yarn build` | Client and SSR passed |
+| `git diff --check` | Passed |
+
+**Pending / outside this gate:** hosted CI and remaining full browser suite/coverage aggregation, owner testing and merge. Package-only/external clean consumers are intentionally Tasks 05–07, after the registry/composition/morph follow-up tasks; no package distribution gate is claimed. Staging and production remain unverified. The owner explicitly owns hosted CI and merge; the task is handed off in user testing, not marked accepted/completed.

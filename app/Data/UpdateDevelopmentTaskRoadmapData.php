@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Data;
 
 use App\Enums\TaskPriority;
-use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Dto;
@@ -63,7 +63,7 @@ final class UpdateDevelopmentTaskRoadmapData extends Dto
             'assignee_id' => [
                 'nullable',
                 'uuid',
-                Rule::exists(User::class, 'uuid')->where('is_active', true),
+                Rule::exists(WorkspaceUsers::model(), 'uuid')->where('is_active', true),
             ],
             'roadmap_position' => ['nullable', 'integer', 'min:1', 'max:9999'],
         ];

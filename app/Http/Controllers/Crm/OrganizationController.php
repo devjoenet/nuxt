@@ -21,6 +21,8 @@ use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
 use App\Queries\OrganizationQuery;
+use App\Support\CrmAccess;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,14 +42,14 @@ class OrganizationController extends Controller
             'filters' => $filters->filters(),
             'owners' => $this->owners(),
             'canManage' => $user->can('crm.manage'),
-            'canAssign' => $user->isCrmAdministrator(),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 
     /** @return array<int, array{id: int, name: string}> */
     private function owners(): array
     {
-        return User::query()->where('is_active', true)->orderBy('name')->get(['id', 'name'])->map(fn (User $user): array => [
+        return WorkspaceUsers::model()::query()->where('is_active', true)->orderBy('name')->get(['id', 'name'])->map(fn (User $user): array => [
             'id' => $user->id,
             'name' => $user->name,
         ])->all();
@@ -61,7 +63,7 @@ class OrganizationController extends Controller
         return Inertia::render('Crm/Organizations/Form', [
             'organization' => null,
             'owners' => $this->owners(),
-            'canAssign' => $user->isCrmAdministrator(),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 
@@ -92,7 +94,7 @@ class OrganizationController extends Controller
             'organization' => OrganizationResource::make($organization)->resolve($request),
             'canManage' => $user->can('crm.manage'),
             'canViewHistory' => $user->can('viewAny', Activity::class),
-            'canAssign' => $user->isCrmAdministrator(),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 
@@ -105,7 +107,7 @@ class OrganizationController extends Controller
         return Inertia::render('Crm/Organizations/Form', [
             'organization' => OrganizationResource::make($organization->load('owner'))->resolve($request),
             'owners' => $this->owners(),
-            'canAssign' => $user->isCrmAdministrator(),
+            'canAssign' => CrmAccess::administrator($user),
         ]);
     }
 

@@ -9,7 +9,7 @@ use App\Enums\DevelopmentTaskArea;
 use App\Enums\DevelopmentTaskStatus;
 use App\Enums\TaskPriority;
 use App\Models\DevelopmentTask;
-use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use function fake;
@@ -31,7 +31,7 @@ class DevelopmentTaskFactory extends Factory
             'status' => DevelopmentTaskStatus::Submitted,
             'priority' => TaskPriority::Normal,
             'roadmap_position' => null,
-            'submitter_id' => User::factory(),
+            'submitter_id' => WorkspaceUsers::model()::factory(),
             'reviewer_id' => null,
             'assignee_id' => null,
             'submitted_at' => now(),
@@ -58,7 +58,7 @@ class DevelopmentTaskFactory extends Factory
     {
         return $this->planned()->state([
             'status' => DevelopmentTaskStatus::InProgress,
-            'assignee_id' => User::factory(),
+            'assignee_id' => WorkspaceUsers::model()::factory(),
             'started_at' => now(),
         ]);
     }
@@ -75,7 +75,7 @@ class DevelopmentTaskFactory extends Factory
     {
         return $this->state([
             'status' => DevelopmentTaskStatus::UnderReview,
-            'reviewer_id' => User::factory(),
+            'reviewer_id' => WorkspaceUsers::model()::factory(),
             'review_started_at' => now(),
         ]);
     }

@@ -6,6 +6,7 @@ namespace App\Policies;
 
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class OrganizationPolicy
 {
@@ -46,6 +47,6 @@ class OrganizationPolicy
 
     public function assign(User $user, Organization $organization): bool
     {
-        return $user->can('crm.manage') && $user->isCrmAdministrator() && $organization->isVisibleTo($user);
+        return $user->can('crm.manage') && CrmAccess::administrator($user) && $organization->isVisibleTo($user);
     }
 }

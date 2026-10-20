@@ -15,6 +15,7 @@ use App\Http\Requests\Admin\StoreAdminUserRequest;
 use App\Http\Requests\Admin\UpdateAdminUserRequest;
 use App\Http\Resources\AdminUserResource;
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,16 +28,16 @@ class AdminUserController extends Controller
 {
     public function index(Request $request): Response
     {
-        $this->authorize('viewAny', User::class);
+        $this->authorize('viewAny', WorkspaceUsers::model());
 
         $filters = $request->validate(['status' => ['nullable', Rule::in(['pending', 'active'])]]);
-        $users = User::query()->with('roles')
+        $users = WorkspaceUsers::model()::query()->with('roles')
             ->when(($filters['status'] ?? null) === 'pending', fn (Builder $query): Builder => $query->pendingInvitation())
             ->when(($filters['status'] ?? null) === 'active', fn (Builder $query): Builder => $query->where('is_active', true));
 
         return Inertia::render('Admin/Users/Index', [
             'filters' => $filters,
-            'hasUntrackedInvitations' => User::query()->untrackedInvitation()->exists(),
+            'hasUntrackedInvitations' => WorkspaceUsers::model()::query()->untrackedInvitation()->exists(),
             'users' => AdminUserResource::collection($users->latest()->paginate(20)->withQueryString()),
             'roles' => Role::query()->orderBy('name')->get(['name'])->map(fn (Role $role): array => [
                 'label' => $role->name,
@@ -47,7 +48,7 @@ class AdminUserController extends Controller
 
     public function store(StoreAdminUserRequest $request, InviteUser $inviteUser): RedirectResponse
     {
-        $this->authorize('create', User::class);
+        $this->authorize('create', WorkspaceUsers::model());
 
         $inviteUser->handle(
             InviteUserData::fromValidated($request->validated()),

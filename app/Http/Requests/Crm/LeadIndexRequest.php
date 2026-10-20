@@ -9,6 +9,7 @@ use App\Enums\LeadSort;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
 use App\Models\Lead;
+use App\Support\WorkspaceUsers;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -30,7 +31,7 @@ class LeadIndexRequest extends FormRequest
             'search' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', Rule::enum(LeadStatus::class)],
             'source' => ['nullable', Rule::enum(LeadSource::class)],
-            'owner' => ['nullable', 'integer', Rule::exists('users', 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true))],
+            'owner' => ['nullable', 'integer', Rule::exists(WorkspaceUsers::model(), 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true))],
             'archived' => ['nullable', 'boolean'],
             'sort' => ['nullable', Rule::enum(LeadSort::class)],
             'direction' => ['nullable', Rule::enum(CrmSortDirection::class)],

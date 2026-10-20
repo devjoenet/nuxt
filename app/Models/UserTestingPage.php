@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,7 @@ class UserTestingPage extends Model
     /** @return BelongsTo<User, $this> */
     public function testedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'tested_by');
+        return $this->belongsTo(WorkspaceUsers::model(), 'tested_by');
     }
 
     #[Override]

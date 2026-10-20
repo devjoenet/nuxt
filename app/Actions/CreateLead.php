@@ -10,6 +10,7 @@ use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 use Illuminate\Support\Facades\DB;
 
 class CreateLead
@@ -19,7 +20,7 @@ class CreateLead
         return DB::transaction(function () use ($data, $user): Lead {
             $ownerId = $user->id;
 
-            if ($user->isCrmAdministrator() && $data->ownerId !== null) {
+            if (CrmAccess::administrator($user) && $data->ownerId !== null) {
                 $ownerId = $data->ownerId;
             }
 

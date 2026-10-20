@@ -8,6 +8,7 @@ use App\Data\InviteUserData;
 use App\Enums\RoleName;
 use App\Models\User;
 use App\Notifications\UserInvitationNotification;
+use App\Support\WorkspaceUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -23,7 +24,7 @@ class InviteUser
 
         /** @var array{0: User, 1: string} $invitation */
         $invitation = DB::transaction(function () use ($data): array {
-            $user = User::query()->create([
+            $user = WorkspaceUsers::model()::query()->create([
                 'name' => $data->name,
                 'email' => $data->email,
                 'password' => Str::password(64),

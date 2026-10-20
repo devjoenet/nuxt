@@ -6,6 +6,7 @@ namespace App\Queries;
 
 use App\Data\ActivityLogFiltersData;
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -42,13 +43,13 @@ final class ActivityLogQuery
             }
 
             $causerIds = Activity::query()
-                ->where('causer_type', User::class)
+                ->where('causer_type', WorkspaceUsers::morphClass())
                 ->whereNotNull('causer_id')
                 ->distinct()
                 ->pluck('causer_id')
                 ->map(fn (mixed $id): string => (string) $id)
                 ->values();
-            $users = User::query()->whereIn((new User)->getKeyName(), $causerIds->all())->get(['id', 'name']);
+            $users = WorkspaceUsers::model()::query()->whereIn((new (WorkspaceUsers::model()))->getKeyName(), $causerIds->all())->get(['id', 'name']);
             $nameCounts = $users->countBy('name');
             $causers = $users->map(fn (User $user): array => [
                 'label' => $nameCounts->get($user->name, 0) > 1 ? "{$user->name} (#{$user->getKey()})" : $user->name,
@@ -105,7 +106,7 @@ final class ActivityLogQuery
                         ->orWhere('subject_id', 'like', $term)
                         ->orWhere('causer_type', 'like', $term)
                         ->orWhere('causer_id', 'like', $term)
-                        ->orWhereHasMorph('causer', [User::class], fn (Builder $query): Builder => $query
+                        ->orWhereHasMorph('causer', [WorkspaceUsers::model()], fn (Builder $query): Builder => $query
                             ->where('name', 'like', $term)
                             ->orWhere('email', 'like', $term));
                 });
@@ -123,7 +124,7 @@ final class ActivityLogQuery
             ->when($filters->causers !== [], function (Builder $query) use ($filters): void {
                 $query->where(function (Builder $query) use ($filters): void {
                     $causers = array_values(array_diff($filters->causers, [self::SYSTEM_CAUSER]));
-                    $query->whereIn('causer_id', $causers)->where('causer_type', User::class);
+                    $query->whereIn('causer_id', $causers)->where('causer_type', WorkspaceUsers::morphClass());
 
                     if (in_array(self::SYSTEM_CAUSER, $filters->causers, true)) {
                         $query->orWhereNull('causer_id');

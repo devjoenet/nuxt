@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Data\OrganizationData;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class CreateOrganization
 {
@@ -15,7 +16,7 @@ class CreateOrganization
         return Organization::query()->create([
             'name' => $data->name,
             'website' => $data->website,
-            'owner_id' => $user->isCrmAdministrator() ? ($data->ownerId ?? $user->id) : $user->id,
+            'owner_id' => CrmAccess::administrator($user) ? ($data->ownerId ?? $user->id) : $user->id,
         ]);
     }
 }

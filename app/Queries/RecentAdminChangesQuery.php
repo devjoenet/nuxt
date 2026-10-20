@@ -12,6 +12,7 @@ use App\Models\Lead;
 use App\Models\Note;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -26,7 +27,7 @@ final class RecentAdminChangesQuery
     {
         $types = [];
         if ($user->can('admin.users.manage')) {
-            $types[] = User::class;
+            $types[] = WorkspaceUsers::model();
         }
 
         if ($user->can('admin.roles.manage')) {

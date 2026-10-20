@@ -7,6 +7,7 @@ namespace App\Http\Requests\Crm;
 use App\Enums\ContactSort;
 use App\Enums\CrmSortDirection;
 use App\Models\Contact;
+use App\Support\WorkspaceUsers;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +26,7 @@ class ContactIndexRequest extends FormRequest
         return [
             'search' => ['nullable', 'string', 'max:255'],
             'organization' => ['nullable', 'uuid'],
-            'owner' => ['nullable', 'integer', Rule::exists('users', 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true))],
+            'owner' => ['nullable', 'integer', Rule::exists(WorkspaceUsers::model(), 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true))],
             'archived' => ['nullable', 'boolean'],
             'sort' => ['nullable', Rule::enum(ContactSort::class)],
             'direction' => ['nullable', Rule::enum(CrmSortDirection::class)],

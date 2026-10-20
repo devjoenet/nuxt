@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\FollowUpTaskStatus;
 use App\Enums\TaskPriority;
+use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -69,7 +70,7 @@ class FollowUpTask extends Model
     /** @return BelongsTo<User, $this> */
     public function assignee(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(WorkspaceUsers::model(), 'assigned_to');
     }
 
     /** @param Builder<static> $query */

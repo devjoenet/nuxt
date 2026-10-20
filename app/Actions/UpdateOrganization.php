@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Data\OrganizationData;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 
 class UpdateOrganization
 {
@@ -15,7 +16,7 @@ class UpdateOrganization
         $organization->update([
             'name' => $data->name,
             'website' => $data->website,
-            ...($user->isCrmAdministrator() && $data->ownerIdWasProvided
+            ...(CrmAccess::administrator($user) && $data->ownerIdWasProvided
                 ? ['owner_id' => $data->ownerId]
                 : []),
         ]);

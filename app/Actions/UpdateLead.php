@@ -10,6 +10,7 @@ use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
+use App\Support\CrmAccess;
 use Illuminate\Support\Facades\DB;
 
 class UpdateLead
@@ -34,7 +35,7 @@ class UpdateLead
             $updates['service_interest'] = $serviceInterests[0] ?? null;
             $updates['service_interests'] = $serviceInterests;
 
-            if ($user->isCrmAdministrator() && $data->ownerIdWasProvided) {
+            if (CrmAccess::administrator($user) && $data->ownerIdWasProvided) {
                 $updates['owner_id'] = $data->ownerId;
             }
 
