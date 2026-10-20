@@ -1,0 +1,16 @@
+{
+  "revision": "6558f1ff027dfad29560334ab8c2251f83c35d62",
+  "tree": "b50ba9ad49caa25c9cbf0ebe79acf8462e388a9b",
+  "files": 968,
+  "owners": {
+    "agency": 81,
+    "archive": 8,
+    "audit": 17,
+    "crm": 141,
+    "development": 127,
+    "starter": 561,
+    "user-management": 33
+  },
+  "imports": 3894,
+  "contract_references": 220
+}

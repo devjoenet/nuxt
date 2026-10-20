@@ -1,0 +1,134 @@
+[
+  {
+    "name": "browser",
+    "command": ["composer", "test:browser"],
+    "exit": 0,
+    "seconds": 39.89
+  },
+  {
+    "name": "build",
+    "command": ["corepack", "yarn", "build"],
+    "exit": 0,
+    "seconds": 5.91
+  },
+  {
+    "name": "clean-boot",
+    "command": ["php", "artisan", "about", "--only=environment", "--no-ansi"],
+    "exit": 0,
+    "seconds": 0.21
+  },
+  {
+    "name": "clean-config-cache",
+    "command": ["php", "artisan", "config:cache"],
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "name": "clean-migrate-rerun",
+    "command": ["php", "artisan", "migrate", "--force", "--no-interaction"],
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "name": "clean-migrate",
+    "command": ["php", "artisan", "migrate", "--force", "--no-interaction"],
+    "exit": 0,
+    "seconds": 0.17
+  },
+  {
+    "name": "clean-no-dev-install",
+    "command": ["composer", "install", "--no-dev", "--no-interaction", "--prefer-dist"],
+    "exit": 0,
+    "seconds": 2.83
+  },
+  {
+    "name": "clean-route-cache",
+    "command": ["php", "artisan", "route:cache"],
+    "exit": 0,
+    "seconds": 0.1
+  },
+  {
+    "name": "composer-audit",
+    "command": ["composer", "audit", "--locked", "--no-interaction"],
+    "exit": 0,
+    "seconds": 0.74
+  },
+  {
+    "name": "composer-install",
+    "command": ["composer", "install", "--no-interaction", "--prefer-dist"],
+    "exit": 0,
+    "seconds": 2.74
+  },
+  {
+    "name": "composer-validate",
+    "command": ["composer", "validate", "--strict"],
+    "exit": 0,
+    "seconds": 0.18
+  },
+  {
+    "name": "format",
+    "command": ["corepack", "yarn", "format:check"],
+    "exit": 0,
+    "seconds": 0.99
+  },
+  {
+    "name": "frontend-check",
+    "command": ["corepack", "yarn", "check"],
+    "exit": 0,
+    "seconds": 5.86
+  },
+  {
+    "name": "node-audit-full",
+    "command": ["corepack", "yarn", "audit:full"],
+    "exit": 0,
+    "seconds": 0.64
+  },
+  {
+    "name": "node-audit-production",
+    "command": ["corepack", "yarn", "audit:production"],
+    "exit": 0,
+    "seconds": 1.37
+  },
+  {
+    "name": "phpstan-max",
+    "command": ["composer", "test:types:max"],
+    "exit": 0,
+    "seconds": 2.13
+  },
+  {
+    "name": "phpstan",
+    "command": ["composer", "test:types"],
+    "exit": 0,
+    "seconds": 0.97
+  },
+  {
+    "name": "pint",
+    "command": ["vendor/bin/pint", "--test"],
+    "exit": 0,
+    "seconds": 0.99
+  },
+  {
+    "name": "rector",
+    "command": ["vendor/bin/rector", "--dry-run"],
+    "exit": 0,
+    "seconds": 0.7
+  },
+  {
+    "name": "type-coverage",
+    "command": ["composer", "test:type-coverage"],
+    "exit": 0,
+    "seconds": 3.47
+  },
+  {
+    "name": "unit-feature",
+    "command": ["herd", "coverage", "./vendor/bin/pest", "--testsuite=Unit,Feature", "--parallel", "--coverage", "--min=80.0", "--compact"],
+    "exit": 0,
+    "seconds": 7.89
+  },
+  {
+    "name": "yarn-install",
+    "command": ["corepack", "yarn", "install", "--immutable"],
+    "exit": 0,
+    "seconds": 0.82
+  }
+]

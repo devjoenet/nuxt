@@ -228,6 +228,8 @@ Live Development task: `01a15aa2-61e4-7292-bad4-37c26d1b9e52`. Implementation br
 
 Branch: `feature/modular-baseline`. Dependency: none.
 
+Implementation evidence: [baseline inventory and delivery ledger](modular-baseline/README.md), captured against `6558f1f` on October 20, 2026. The ledger distinguishes verified local checks from deferred infrastructure and release gates.
+
 1. Record the current revision, clean/dirty state, default branch, remote URLs, installed dependency versions, and active work. Preserve unrelated changes.
 2. Inventory routes, policies, providers, jobs/notifications, schedules, models/morph types, migration files, DTO paths, frontend imports, generated transport, configuration, tests, and licensed assets.
 3. Map every affected file to the ownership table. Check legacy user-testing functionality, root-level CRM components/composables, reminder delivery, queue operations, public assets, and documentation contracts explicitly. Classify schemas/content/configuration needed for the rebuild separately from obsolete record-correction code.
