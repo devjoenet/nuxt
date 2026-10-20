@@ -104,15 +104,15 @@ export function useWorkspaceNavigation(options: WorkspaceNavigationOptions = {})
               defaultOpen: true,
               children: [
                 { label: "Overview", to: developmentIndex.url(), exact: true, searchDescription: "Development workspace · Roadmap work", onSelect: closeNavigation },
+                ...(can("development.roadmap.manage") ? [{ label: "Roadmap", to: roadmapIndex.url(), searchDescription: "Development roadmap · Planned active and blocked work", onSelect: closeNavigation }] : []),
+                ...(can("development.user_testing.manage") || auth.value.user?.has_pending_development_tests ? [{ label: "User testing", to: userTestingIndex.url(), searchDescription: "Task-specific testing · Testing queue", onSelect: closeNavigation }] : []),
+                ...(can("development.requests.review") ? [{ label: "Review queue", to: developmentReviewIndex.url(), searchDescription: "Development review queue", onSelect: closeNavigation }] : []),
                 ...(can("development.requests.create")
                   ? [
                       { label: "My requests", to: developmentRequestsIndex.url(), exact: true, searchDescription: "Development requests · Active requests", onSelect: closeNavigation },
                       { label: "Submit request", to: developmentRequestCreate.url(), searchDescription: "Submit a development request · Describe the problem", onSelect: closeNavigation },
                     ]
                   : []),
-                ...(can("development.requests.review") ? [{ label: "Review queue", to: developmentReviewIndex.url(), searchDescription: "Development review queue", onSelect: closeNavigation }] : []),
-                ...(can("development.roadmap.manage") ? [{ label: "Roadmap", to: roadmapIndex.url(), searchDescription: "Development roadmap · Planned active and blocked work", onSelect: closeNavigation }] : []),
-                ...(can("development.user_testing.manage") || auth.value.user?.has_pending_development_tests ? [{ label: "User testing", to: userTestingIndex.url(), searchDescription: "Task-specific testing · Testing queue", onSelect: closeNavigation }] : []),
               ],
               onSelect: closeNavigation,
             },
