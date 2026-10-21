@@ -35,7 +35,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Tests\Fixtures\StableMorphConfiguredUser;
 
 beforeEach(function (): void {
     $this->withoutVite();
@@ -229,6 +228,11 @@ test('consumer combinations register only installed module aliases before bootst
     'Development' => [['foundation', 'audit', 'dev']],
     'full' => [['foundation', 'audit', 'users', 'crm', 'dev']],
 ]);
+
+class StableMorphConfiguredUser extends User
+{
+    protected $table = 'users';
+}
 
 test('configured user classes share one stable actor and permission identity', function (): void {
     config(['auth.providers.users.model' => StableMorphConfiguredUser::class]);

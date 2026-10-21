@@ -21,7 +21,11 @@ use Illuminate\Support\Facades\Notification;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Tests\Fixtures\ConfiguredWorkspaceUser;
+
+class ConfiguredWorkspaceUser extends User
+{
+    protected $table = 'users';
+}
 
 test('an absent module preserves persisted grants and remains editable after repeated seeding', function (): void {
     $permission = Permission::findOrCreate('absent.export', 'web');
