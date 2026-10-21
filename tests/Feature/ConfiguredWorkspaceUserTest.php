@@ -3,15 +3,10 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
-use App\Models\User;
 use App\Support\WorkspaceUsers;
 use Database\Seeders\RolePermissionSeeder;
 use Spatie\Activitylog\Models\Activity;
-
-class AlternateWorkspaceUser extends User
-{
-    protected $table = 'users';
-}
+use Tests\Fixtures\AlternateWorkspaceUser;
 
 test('configured user route binding preserves the target model and actor on access updates', function (): void {
     config(['auth.providers.users.model' => AlternateWorkspaceUser::class]);

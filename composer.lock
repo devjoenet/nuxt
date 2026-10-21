@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ebc15519f56b8820eb6c22bfa587bf1",
+    "content-hash": "e78f8ad423d54fe020ed5da4a6894b05",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.401.4",
+            "version": "3.401.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "b5941e2da9fb860f06ad5046d96219c4288ab6b8"
+                "reference": "4d304660ba59e185e86a17946c6be6ab07bf8546"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b5941e2da9fb860f06ad5046d96219c4288ab6b8",
-                "reference": "b5941e2da9fb860f06ad5046d96219c4288ab6b8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4d304660ba59e185e86a17946c6be6ab07bf8546",
+                "reference": "4d304660ba59e185e86a17946c6be6ab07bf8546",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.401.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.401.5"
             },
-            "time": "2026-10-20T18:15:27+00:00"
+            "time": "2026-10-21T18:10:10+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -1365,16 +1365,16 @@
         },
         {
             "name": "inertiajs/inertia-laravel",
-            "version": "v3.5.1",
+            "version": "v3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inertiajs/inertia-laravel.git",
-                "reference": "35a27ea62b8a53ec40269c4c675db5d9d0e02426"
+                "reference": "4e91cf45cad5ef97862d1ede40fe41616d4e4f91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/35a27ea62b8a53ec40269c4c675db5d9d0e02426",
-                "reference": "35a27ea62b8a53ec40269c4c675db5d9d0e02426",
+                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/4e91cf45cad5ef97862d1ede40fe41616d4e4f91",
+                "reference": "4e91cf45cad5ef97862d1ede40fe41616d4e4f91",
                 "shasum": ""
             },
             "require": {
@@ -1431,9 +1431,9 @@
             ],
             "support": {
                 "issues": "https://github.com/inertiajs/inertia-laravel/issues",
-                "source": "https://github.com/inertiajs/inertia-laravel/tree/v3.5.1"
+                "source": "https://github.com/inertiajs/inertia-laravel/tree/v3.5.2"
             },
-            "time": "2026-10-01T10:38:10+00:00"
+            "time": "2026-10-21T19:41:00+00:00"
         },
         {
             "name": "laravel/fortify",
@@ -10982,16 +10982,16 @@
         },
         {
             "name": "laravel/mcp",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/mcp.git",
-                "reference": "a40cc388c11d5629977d159fd11ddda84885f639"
+                "reference": "e77af70cd009aaa31455626bd463b0e7e39cfcf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/mcp/zipball/a40cc388c11d5629977d159fd11ddda84885f639",
-                "reference": "a40cc388c11d5629977d159fd11ddda84885f639",
+                "url": "https://api.github.com/repos/laravel/mcp/zipball/e77af70cd009aaa31455626bd463b0e7e39cfcf9",
+                "reference": "e77af70cd009aaa31455626bd463b0e7e39cfcf9",
                 "shasum": ""
             },
             "require": {
@@ -11053,7 +11053,7 @@
                 "issues": "https://github.com/laravel/mcp/issues",
                 "source": "https://github.com/laravel/mcp"
             },
-            "time": "2026-10-20T13:58:04+00:00"
+            "time": "2026-10-21T11:50:42+00:00"
         },
         {
             "name": "laravel/pail",
