@@ -194,3 +194,31 @@ Source and validation identities are frozen above. Branch/PR identities and fina
 The tests initialize disposable schemas and seed synthetic roles, grants and CRM records. They exercise provider-boot enforcement, not just runtime map mutation, when strict mode is selected. Existing source/reference persistence was kept on its original morph format.
 
 **Pending / outside this gate:** hosted CI, owner/user acceptance and merge; full PHP/browser suite and aggregate runtime coverage; independent Composer/absent-module route consumers at Tasks 05–07; staging, production and distribution. The owner explicitly owns CI and merge. Task handoff is user testing, not accepted/completed.
+
+
+### Task 04 — Registered workspace composition (October 21, 2026)
+
+- Live task: `01a15abd-3627-721a-998e-2300f7d6058b`; branch: `feature/modular-navigation-history`.
+- Base: `fe53ed9d2b11965afeb764da97fff12eb59c2685` (Task 03 merged and accepted).
+- Implementation revision: `e1f5099797bdd86b34e2013695e273b0d85d9236`. This subsequent evidence-only commit records the implementation identity; final branch/PR head is attached to the live task.
+- [Composition contracts and extraction boundary](../modular-composition.md). Navigation, breadcrumbs and command search consume registered authorized descriptors. Workspace CRM metrics/recent records live in one focused query and lazy widget; Admin summaries retain a separate query/contract. Shared props do not execute those summaries. Badge display labels are title-cased while stored statuses and colors remain unchanged.
+- Audit owns presentation contracts; domain adapters supply visibility predicates, labels, links and eager loads. Recent Admin changes retain one globally ordered/limited query and the same contributing domains. Thin domain history endpoints retain record access plus audit authorization and delegate to shared rendering/query primitives.
+- Source handoff guidance now requires branch push, linked PR, fresh user-testing round and stop; hosted CI and merge belong to the owner. `php artisan boost:update --no-interaction` completed before the implementation commit; regenerated `AGENTS.md` was verified. Included the owner's `composer dev` stream-mode default and updated its existing contract assertion. No dependency upgrade, schema conversion or operational data import occurred.
+
+**Verified locally** (synthetic fixtures/disposable SQLite test persistence):
+
+| Check | Result |
+| --- | --- |
+| Full unit/feature suite | 525 passed, 4,808 assertions |
+| Additional host-composition architecture guard | 1 passed, 16 assertions |
+| Strict-alias composition/dashboard/history/Admin regression | 34 passed, 596 assertions |
+| Six installed-registration combinations | Foundation, Audit, users, CRM, Development, full; covered in composition regression |
+| Navigation search/mobile/theme, shared history and Admin overview browser regression | 10 passed, 117 assertions |
+| CRM contributed dashboard labels, light/dark, narrow/desktop, CRM link | 1 passed, 14 assertions |
+| PHPStan default and max | Both passed, zero errors |
+| PHP type coverage after staging new source | 100.0% |
+| Frontend lint/architecture, types and format | Passed |
+| Client and SSR builds, including generated Wayfinder/form helpers | Passed |
+| Pint, Rector dry run, Composer strict validation, Git whitespace | Passed |
+
+**Pending / outside this gate:** hosted CI, owner/user acceptance and merge; remaining full browser suite and aggregate runtime coverage. No schema/dependency changes required repeating Task 03's MySQL bootstrap; no live infrastructure/deployment result is claimed. Physically absent Composer packages and generated package frontend registrations remain the Tasks 05–07 consumer gates. Registry-disabled composition is verified in this source checkout; it is not proof of an extracted package install. Staging, Redis/Horizon and production remain later gates. Per owner instruction, delivery stops after PR creation/linking and a new pending user-testing round; the task is not marked accepted/completed.
