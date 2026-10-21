@@ -5,14 +5,14 @@ import type { UiTone } from "@/lib/uiTone";
 const props = defineProps<{ status: string }>();
 const color = computed(
   () =>
-    (({
+    ({
       new: "info",
       contacted: "warning",
       qualified: "primary",
       proposal: "secondary",
       won: "success",
       lost: "error",
-    })[props.status] ?? "neutral") as UiTone,
+    }[props.status] ?? "neutral") as UiTone,
 );
 </script>
 
