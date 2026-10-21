@@ -89,7 +89,7 @@
     ],
     "dev": [
       "Composer\\Config::disableProcessTimeout",
-      "@php artisan dev"
+      "@php artisan dev -s"
     ],
     "format": [
       "pint --parallel",

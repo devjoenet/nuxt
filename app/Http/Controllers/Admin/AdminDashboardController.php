@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
+use App\Modules\WorkspaceComposition;
 use App\Queries\RecentAdminChangesQuery;
 use App\Support\WorkspaceUsers;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -29,10 +27,7 @@ class AdminDashboardController extends Controller
             $stats[] = $this->stat('Failed jobs', fn (): int => DB::connection(config('queue.failed.database'))->table(config()->string('queue.failed.table'))->count(), route('admin.jobs.index'));
         }
 
-        if ($user->can('crm.view')) {
-            $stats[] = $this->stat('Overdue follow-ups', fn (): int => FollowUpTask::query()->visibleTo($user)->whereHas('lead', fn (Builder $query): Builder => $query->whereNull('archived_at'))->overdue()->count(), route('crm.leads.index', ['overdue' => 1]));
-            $stats[] = $this->stat('Unassigned leads', fn (): int => Lead::query()->visibleTo($user)->whereNull('archived_at')->whereNull('owner_id')->count(), route('crm.leads.index', ['unassigned' => 1]));
-        }
+        array_push($stats, ...app(WorkspaceComposition::class)->adminStats($user));
 
         if ($user->can('admin.users.manage')) {
             $stats[] = $this->stat('Pending invitations', fn (): ?int => WorkspaceUsers::model()::query()->untrackedInvitation()->exists() ? null : WorkspaceUsers::model()::query()->pendingInvitation()->count(), route('admin.users.index', ['status' => 'pending']));

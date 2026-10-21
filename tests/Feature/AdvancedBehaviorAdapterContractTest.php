@@ -96,7 +96,7 @@ test('Vite Plus owns development and build commands without removing project qua
         ->toContain('"**/.agents/**"')
         ->toContain('"**/vendor/**"')
         ->and($composer)
-        ->toContain('"@php artisan dev"')
+        ->toContain('"@php artisan dev -s"')
         ->toContain('yarn install --immutable')
         ->toContain('corepack yarn update:requirements')
         ->and($package['scripts']['update:requirements'])

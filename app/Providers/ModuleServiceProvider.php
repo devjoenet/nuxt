@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Audit\Presenters\CrmActivityPresenter;
+use App\Audit\Presenters\DevelopmentActivityPresenter;
+use App\Audit\Presenters\FoundationActivityPresenter;
+use App\Audit\Presenters\UserActivityPresenter;
 use App\Enums\Permission;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
@@ -18,9 +22,17 @@ use App\Models\Lead;
 use App\Models\Note;
 use App\Models\Organization;
 use App\Models\UserTestingPage;
+use App\Modules\Contributions\AuditNavigation;
+use App\Modules\Contributions\CrmNavigation;
+use App\Modules\Contributions\DevelopmentNavigation;
+use App\Modules\Contributions\FoundationNavigation;
+use App\Modules\Contributions\UserManagementNavigation;
 use App\Modules\ModuleManifest;
 use App\Modules\ModuleRegistry;
 use App\Modules\PermissionDefinition;
+use App\Queries\CrmAdminSummaryQuery;
+use App\Queries\CrmWorkspaceDashboardQuery;
+use App\Queries\PendingDevelopmentTestsQuery;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
@@ -88,7 +100,31 @@ class ModuleServiceProvider extends ServiceProvider
         ];
 
         foreach ($groups as $owner => $permissions) {
-            $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner]));
+            if (! in_array($owner, config('modules.enabled', ['foundation', 'users', 'audit', 'crm', 'dev']), true)) {
+                continue;
+            }
+
+            $navigation = match ($owner) {
+                'foundation' => FoundationNavigation::class,
+                'users' => UserManagementNavigation::class,
+                'audit' => AuditNavigation::class,
+                'crm' => CrmNavigation::class,
+                'dev' => DevelopmentNavigation::class,
+            };
+            $presenters = match ($owner) {
+                'foundation' => [FoundationActivityPresenter::class],
+                'users' => [UserActivityPresenter::class],
+                'crm' => [CrmActivityPresenter::class],
+                'dev' => [DevelopmentActivityPresenter::class],
+                default => [],
+            };
+            $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner],
+                navigation: [$navigation],
+                workspaceDashboard: $owner === 'crm' ? CrmWorkspaceDashboardQuery::class : null,
+                adminSummary: $owner === 'crm' ? CrmAdminSummaryQuery::class : null,
+                userContext: $owner === 'dev' ? PendingDevelopmentTestsQuery::class : null,
+                extensions: ['audit.presenters' => $presenters, 'audit.admin-presenters' => $owner === 'dev' ? [] : $presenters],
+            ));
         }
 
         $this->app->booted(function () use ($registry): void {

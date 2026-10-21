@@ -13,6 +13,10 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
   auth: Auth;
   flash: { intakeSuccess: boolean; success?: string };
   sidebarOpen: boolean;
+  workspace: {
+    navigation: import("@/composables/useWorkspaceNavigation").SearchableNavigationItem[];
+    breadcrumbs: { label: string; href: string }[];
+  };
 };
 
 export type BreadcrumbItemType = BreadcrumbItem;
@@ -27,7 +31,7 @@ export interface User {
   is_active: boolean;
   roles: string[];
   can: Record<string, boolean>;
-  has_pending_development_tests: boolean;
+  has_pending_development_tests?: boolean;
   email_verified_at: string | null;
   avatar?: AvatarProps;
   status: UserStatus;
