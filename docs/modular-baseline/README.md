@@ -222,3 +222,16 @@ The tests initialize disposable schemas and seed synthetic roles, grants and CRM
 | Pint, Rector dry run, Composer strict validation, Git whitespace | Passed |
 
 **Pending / outside this gate:** hosted CI, owner/user acceptance and merge; remaining full browser suite and aggregate runtime coverage. No schema/dependency changes required repeating Task 03's MySQL bootstrap; no live infrastructure/deployment result is claimed. Physically absent Composer packages and generated package frontend registrations remain the Tasks 05–07 consumer gates. Registry-disabled composition is verified in this source checkout; it is not proof of an extracted package install. Staging, Redis/Horizon and production remain later gates. Per owner instruction, delivery stops after PR creation/linking and a new pending user-testing round; the task is not marked accepted/completed.
+
+
+Task 04 CI follow-up (October 21, 2026): hosted unit/feature testing exposed that
+Boost intentionally skips provider registration during tests, so the documentation
+contract could not find its valid development-only update command. The contract
+now verifies that exact command against the installed `UpdateCommand` definition;
+all other documented commands still require runtime registration. The failure was
+reproduced with `APP_ENV=testing APP_DEBUG=false` before the fix. Afterward, the
+focused documentation tests passed (2 tests, 37 assertions), and all 526 unit/feature
+tests passed with debug disabled and four parallel workers (4,825 assertions).
+Pint passed and Boost update ran before committing. Coverage instrumentation was
+not repeated locally; hosted CI and the existing pending user-testing round remain
+owner gates.
