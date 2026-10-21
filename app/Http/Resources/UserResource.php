@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Enums\DevelopmentTestRunStatus;
-use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use App\Modules\ModuleRegistry;
 use App\Modules\PermissionDefinition;
+use App\Modules\WorkspaceComposition;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
@@ -29,10 +28,7 @@ class UserResource extends JsonResource
             'can' => collect(app(ModuleRegistry::class)->permissions())->mapWithKeys(fn (PermissionDefinition $permission): array => [
                 $permission->key => $this->can($permission->key),
             ])->all(),
-            'has_pending_development_tests' => DevelopmentTestRun::query()
-                ->whereBelongsTo($this->resource, 'tester')
-                ->where('status', DevelopmentTestRunStatus::Pending)
-                ->exists(),
+            ...app(WorkspaceComposition::class)->userContext($this->resource),
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

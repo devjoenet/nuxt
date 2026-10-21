@@ -29,6 +29,16 @@ final class ModuleRegistry
             throw new LogicException("Unsupported manifest or host API version for {$module->id}.");
         }
 
+        foreach (['workspaceDashboard' => WorkspaceDashboardContribution::class, 'adminSummary' => AdminSummaryContribution::class, 'userContext' => UserContextContribution::class] as $property => $contract) {
+            if ($module->{$property} !== null && ! is_a($module->{$property}, $contract, true)) {
+                throw new LogicException("Invalid {$property} contribution in {$module->id}.");
+            }
+        }
+
+        foreach ($module->navigation as $class) {
+            $this->validateContribution($class, NavigationContribution::class, "navigation contribution in {$module->id}");
+        }
+
         $candidate = [...$this->modules, $module->id => $module];
         $claims = [];
         $groups = [];
@@ -130,6 +140,13 @@ final class ModuleRegistry
         }
 
         return $permissions;
+    }
+
+    private function validateContribution(string $class, string $contract, string $description): void
+    {
+        if (! is_a($class, $contract, true)) {
+            throw new LogicException("Invalid {$description}.");
+        }
     }
 
     /** @param array<string, string> $claims */

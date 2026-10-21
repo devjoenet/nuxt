@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Laravel\Boost\Console\UpdateCommand;
 
 test('the database workflow replaces markdown task queues', function (): void {
     $workflow = File::get(base_path('docs/development/workflow.md'));
@@ -54,14 +55,16 @@ test('the database workflow replaces markdown task queues', function (): void {
     }
 });
 
-test('maintained deployment documentation only names registered artisan commands', function (): void {
+test('maintained documentation names runtime or installed development artisan commands', function (): void {
     $commands = collect(File::allFiles(base_path('docs')))
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'md')
         ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
         ->implode("\n");
     preg_match_all('/php artisan ([a-z0-9:_-]+)/', $commands, $matches);
 
-    $registered = array_keys(Artisan::all());
+    // Boost intentionally does not register its provider while running unit tests.
+    // Validate its documented development command against the installed definition.
+    $registered = [...array_keys(Artisan::all()), (new UpdateCommand)->getName()];
 
     foreach (array_unique($matches[1]) as $command) {
         expect($registered)->toContain($command);

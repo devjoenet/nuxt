@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Http\Resources\UserResource;
+use App\Modules\WorkspaceComposition;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -41,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                 'intakeSuccess' => fn (): bool => $request->hasSession() && $request->session()->get('intakeSuccess', false),
                 'success' => fn (): ?string => $request->hasSession() ? $request->session()->get('success') : null,
             ],
+            'workspace' => fn (): array => $request->user() ? app(WorkspaceComposition::class)->navigation($request->user(), $request) : ['navigation' => [], 'breadcrumbs' => []],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
