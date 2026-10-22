@@ -10,7 +10,7 @@ import LandingOperationsSection from "@/pages/Welcome/Components/LandingOperatio
 import LandingProcessSection from "@/pages/Welcome/Components/LandingProcessSection.vue";
 import { footerColumns, processSteps, realityCards, services, transformationCards } from "@/pages/Welcome/Components/landingContent";
 import type { Appearance } from "@/types";
-import type { Option } from "@/types/crm";
+import type { Option } from "@southeastcode/crm/public";
 
 const props = defineProps<{ appearance: Appearance; canonicalUrl: string; serviceInterestOptions: Option[] }>();
 const socialImage = computed(() => new URL(socialImageAsset, props.canonicalUrl).href);

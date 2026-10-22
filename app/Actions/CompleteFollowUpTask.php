@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Enums\CrmActivityType;
-use App\Enums\FollowUpTaskStatus;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Enums\CrmActivityType;
 use Spatie\Activitylog\Facades\Activity;
 
 class CompleteFollowUpTask

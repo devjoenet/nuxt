@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\LeadNoteData;
-use App\Enums\CrmActivityType;
-use App\Models\Lead;
-use App\Models\Note;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use LogicException;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Enums\CrmActivityType;
+use SoutheastCode\Crm\Shared\Models\Note;
 use Spatie\Activitylog\Facades\Activity;
 
 class CreateLeadNote

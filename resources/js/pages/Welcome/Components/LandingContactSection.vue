@@ -2,7 +2,7 @@
 import { Motion } from "motion-v";
 import LandingContactForm from "@/pages/Welcome/Components/LandingContactForm.vue";
 import { cn } from "@/lib/utils";
-import type { Option } from "@/types/crm";
+import type { Option } from "@southeastcode/crm/public";
 
 const props = defineProps<{
   serviceInterestOptions: Option[];

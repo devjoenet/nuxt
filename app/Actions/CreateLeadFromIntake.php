@@ -6,11 +6,11 @@ namespace App\Actions;
 
 use App\Data\IntakeData;
 use App\Models\BusinessSetting;
-use App\Models\Contact;
-use App\Models\Lead;
 use App\Notifications\NewLeadReceived;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 use function now;
 

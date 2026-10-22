@@ -2,7 +2,7 @@ import type { TableColumn } from "@nuxt/ui";
 import UButton from "@nuxt/ui/components/Button.vue";
 import { h } from "vue";
 import { show } from "@/routes/crm/organizations";
-import type { Organization } from "@/types/crm";
+import type { Organization } from "@southeastcode/crm/public";
 
 export function createOrganizationIndexColumns(): TableColumn<Organization>[] {
   return [

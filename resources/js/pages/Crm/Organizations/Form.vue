@@ -1,13 +1,14 @@
 <script lang="ts" setup>
+import { ownerOptions as mapOwnerOptions, type OwnerOption } from "@southeastcode/crm/public";
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormSelect } from "@/components/Ui/FormSelect";
 import { index, show, store, update } from "@/routes/crm/organizations";
-import type { Option, Organization, Owner } from "@/types/crm";
+import type { Option, Organization } from "@southeastcode/crm/public";
 
-const props = defineProps<{ organization: Organization | null; owners: Owner[]; canAssign: boolean }>();
+const props = defineProps<{ organization: Organization | null; owners: OwnerOption[]; canAssign: boolean }>();
 const action = computed(() => (props.organization ? update(props.organization.id) : store()));
 const cancelTo = computed(() => (props.organization ? show(props.organization.id).url : index().url));
-const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+const ownerOptions = computed<Option[]>(() => mapOwnerOptions(props.owners));
 </script>
 
 <template>

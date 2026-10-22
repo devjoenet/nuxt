@@ -16,17 +16,16 @@ use App\Http\Requests\Crm\ContactIndexRequest;
 use App\Http\Requests\Crm\StoreContactRequest;
 use App\Http\Requests\Crm\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\User;
 use App\Queries\ContactQuery;
-use App\Support\CrmAccess;
-use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Queries\CrmOwnerOptions;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 use Spatie\Activitylog\Models\Activity;
 
 class ContactController extends Controller
@@ -39,19 +38,10 @@ class ContactController extends Controller
         return Inertia::render('Crm/Contacts/Index', [
             'contacts' => ContactResource::collection($query->build($user, $filters)->paginate(15)->withQueryString()),
             'filters' => $filters->filters(),
-            'owners' => $this->owners(),
+            'owners' => app(CrmOwnerOptions::class)->get($request->filled('owner') ? $request->integer('owner') : null),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => CrmAccess::administrator($user),
         ]);
-    }
-
-    /** @return array<int, array{id: int, name: string}> */
-    private function owners(): array
-    {
-        return WorkspaceUsers::model()::query()->where('is_active', true)->orderBy('name')->get(['id', 'name'])->map(fn (User $user): array => [
-            'id' => $user->id,
-            'name' => $user->name,
-        ])->all();
     }
 
     public function create(Request $request): Response
@@ -61,7 +51,7 @@ class ContactController extends Controller
 
         return Inertia::render('Crm/Contacts/Form', [
             'contact' => null,
-            'owners' => $this->owners(),
+            'owners' => app(CrmOwnerOptions::class)->get(),
             'canAssign' => CrmAccess::administrator($user),
         ]);
     }
@@ -98,7 +88,7 @@ class ContactController extends Controller
 
         return Inertia::render('Crm/Contacts/Form', [
             'contact' => ContactResource::make($contact->load(['organization', 'owner']))->resolve($request),
-            'owners' => $this->owners(),
+            'owners' => app(CrmOwnerOptions::class)->get($contact->owner_id),
             'canAssign' => CrmAccess::administrator($user),
         ]);
     }

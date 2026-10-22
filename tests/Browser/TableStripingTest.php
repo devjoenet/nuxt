@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 test('operational tables use alternating row backgrounds in both color modes', function (): void {
     app(RolePermissionSeeder::class)->run();

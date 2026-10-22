@@ -20,12 +20,12 @@ test('host composition cannot import optional domain persistence', function (): 
         WorkspaceComposition::class,
         RecentAdminChangesQuery::class,
     ])->not->toUse([
-        App\Models\Lead::class,
-        App\Models\Contact::class,
-        App\Models\Organization::class,
-        App\Models\FollowUpTask::class,
-        App\Models\CrmActivity::class,
-        App\Models\Note::class,
+        SoutheastCode\Crm\Leads\Models\Lead::class,
+        SoutheastCode\Crm\Contacts\Models\Contact::class,
+        SoutheastCode\Crm\Organizations\Models\Organization::class,
+        SoutheastCode\Crm\FollowUps\Models\FollowUpTask::class,
+        SoutheastCode\Crm\Shared\Models\CrmActivity::class,
+        SoutheastCode\Crm\Shared\Models\Note::class,
         App\Models\DevelopmentTask::class,
         App\Models\DevelopmentTestRun::class,
     ]);

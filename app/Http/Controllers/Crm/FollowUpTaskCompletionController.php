@@ -6,10 +6,10 @@ namespace App\Http\Controllers\Crm;
 
 use App\Actions\CompleteFollowUpTask;
 use App\Http\Controllers\Controller;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 class FollowUpTaskCompletionController extends Controller
 {

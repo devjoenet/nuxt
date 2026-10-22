@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use App\Enums\ContactSort;
-use App\Enums\CrmSortDirection;
+use SoutheastCode\Crm\Contacts\Enums\ContactSort;
+use SoutheastCode\Crm\Shared\Enums\CrmSortDirection;
 
 final readonly class ContactIndexData
 {

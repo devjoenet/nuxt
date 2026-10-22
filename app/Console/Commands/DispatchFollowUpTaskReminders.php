@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Enums\FollowUpTaskStatus;
 use App\Jobs\SendFollowUpTaskReminder;
-use App\Models\FollowUpTask;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
 
 #[Signature('crm:dispatch-follow-up-reminders')]
 #[Description('Dispatch due CRM follow-up reminder jobs.')]

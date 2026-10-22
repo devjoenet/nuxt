@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\LeadData;
-use App\Enums\CrmActivityType;
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
-use App\Support\CrmAccess;
 use Illuminate\Support\Facades\DB;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Enums\CrmActivityType;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 
 class UpdateLead
 {

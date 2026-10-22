@@ -16,17 +16,17 @@ use App\Actions\RestoreLead;
 use App\Actions\RestoreOrganization;
 use App\Data\FollowUpTaskData;
 use App\Data\LeadNoteData;
-use App\Enums\CrmActivityType;
-use App\Enums\FollowUpTaskStatus;
 use App\Enums\TaskPriority;
-use App\Models\Contact;
-use App\Models\CrmActivity;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Enums\CrmActivityType;
+use SoutheastCode\Crm\Shared\Models\CrmActivity;
 use Spatie\Activitylog\Models\Activity;
 
 test('completing a follow-up is atomic, idempotent, and attributed to its actor', function (): void {

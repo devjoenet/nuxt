@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 

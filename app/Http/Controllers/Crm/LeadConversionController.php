@@ -6,9 +6,9 @@ namespace App\Http\Controllers\Crm;
 
 use App\Actions\ConvertLead;
 use App\Http\Controllers\Controller;
-use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 class LeadConversionController extends Controller
 {

@@ -5,7 +5,7 @@ import { FormSelect } from "@/components/Ui/FormSelect";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { complete as completeTask, store as storeTask } from "@/routes/crm/leads/tasks";
-import type { Lead } from "@/types/crm";
+import type { Lead } from "@southeastcode/crm/public";
 
 const props = defineProps<{
   lead: Lead;

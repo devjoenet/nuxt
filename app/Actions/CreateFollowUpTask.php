@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\FollowUpTaskData;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use LogicException;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
 use Spatie\Activitylog\Facades\Activity;
 
 class CreateFollowUpTask
@@ -20,7 +20,7 @@ class CreateFollowUpTask
             $task = Activity::defaultCauser($actor, fn (): FollowUpTask => $lead->followUpTasks()->create([
                 'title' => $data->title,
                 'description' => $data->description,
-                'priority' => $data->priority,
+                'priority' => $data->priority->value,
                 'due_at' => $data->dueAt,
                 'assigned_to' => $lead->owner_id,
             ]));

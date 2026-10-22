@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Requests\Crm;
 
 use App\Enums\TaskPriority;
-use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 class StoreFollowUpTaskRequest extends FormRequest
 {

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ownerOptions as mapOwnerOptions, type OwnerOption } from "@southeastcode/crm/public";
 import { IndexEmptyState } from "@/components/IndexEmptyState";
 import { IndexPagination } from "@/components/IndexPagination";
 import { IndexTableFrame } from "@/components/IndexTableFrame";
@@ -7,18 +8,18 @@ import { FormSelect } from "@/components/Ui/FormSelect";
 import { useInertiaFilters } from "@/composables/useInertiaFilters";
 import { create, index } from "@/routes/crm/leads";
 import { createLeadIndexColumns } from "@/pages/Crm/Leads/Components/leadIndexColumns";
-import type { Lead, Option, Owner, Paginated } from "@/types/crm";
+import type { Lead, Option, Paginated } from "@southeastcode/crm/public";
 
 const props = defineProps<{
   leads: Paginated<Lead>;
   filters: Record<string, string | number>;
   statuses: Option[];
   sources: Option[];
-  owners: Owner[];
+  owners: OwnerOption[];
   canManage: boolean;
   canAssign: boolean;
 }>();
-const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+const ownerOptions = computed<Option[]>(() => mapOwnerOptions(props.owners, true));
 const { filters, hasActiveFilters, isLoading, reset, visitPage } = useInertiaFilters({
   url: () => index().url,
   initialFilters: () => ({

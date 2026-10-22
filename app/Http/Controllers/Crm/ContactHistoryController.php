@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Crm;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use SoutheastCode\Audit\Http\Controllers\RecordHistoryController;
 use SoutheastCode\Audit\Queries\RecordHistoryQuery;
+use SoutheastCode\Crm\Contacts\Models\Contact;
 
 class ContactHistoryController extends Controller
 {

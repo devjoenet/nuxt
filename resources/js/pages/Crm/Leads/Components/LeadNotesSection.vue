@@ -3,7 +3,7 @@ import { Form } from "@inertiajs/vue3";
 import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { cn } from "@/lib/utils";
 import { store as storeNote } from "@/routes/crm/leads/notes";
-import type { Lead } from "@/types/crm";
+import type { Lead } from "@southeastcode/crm/public";
 
 const props = defineProps<{
   lead: Lead;

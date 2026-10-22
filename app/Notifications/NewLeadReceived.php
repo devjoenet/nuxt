@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
-use App\Models\Lead;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\Attributes\Backoff;
 use Illuminate\Queue\Attributes\Timeout;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 #[Backoff([60, 300, 900])]
 #[Timeout(60)]

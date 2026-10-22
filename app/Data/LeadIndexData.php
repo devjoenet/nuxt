@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use App\Enums\CrmSortDirection;
-use App\Enums\LeadSort;
-use App\Enums\LeadSource;
-use App\Enums\LeadStatus;
+use SoutheastCode\Crm\Leads\Enums\LeadSort;
+use SoutheastCode\Crm\Leads\Enums\LeadSource;
+use SoutheastCode\Crm\Leads\Enums\LeadStatus;
+use SoutheastCode\Crm\Shared\Enums\CrmSortDirection;
 
 final readonly class LeadIndexData
 {

@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\JobOperationsController;
 use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\ContactHistoryController;
-use App\Http\Controllers\Crm\CrmRecordOptionController;
 use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
 use App\Http\Controllers\Crm\FollowUpTaskController;
 use App\Http\Controllers\Crm\LeadArchiveController;
@@ -52,8 +51,6 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('crm')->name('crm.')->middleware('can:crm.view')->group(function (): void {
-        Route::get('options/contacts', [CrmRecordOptionController::class, 'contacts'])->name('options.contacts');
-        Route::get('options/organizations', [CrmRecordOptionController::class, 'organizations'])->name('options.organizations');
         Route::get('leads/{lead}/history', LeadHistoryController::class)->name('leads.history');
         Route::resource('leads', LeadController::class)->except('destroy');
         Route::get('contacts/{contact}/history', ContactHistoryController::class)->name('contacts.history');

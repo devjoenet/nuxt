@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\Contact;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 /** @mixin Contact */
 class ContactResource extends JsonResource
@@ -34,7 +34,7 @@ class ContactResource extends JsonResource
                 'id' => $organization->uuid,
                 'name' => $organization->name,
             ] : null,
-            'owner' => $this->owner ? ['id' => $this->owner->id, 'name' => $this->owner->name] : null,
+            'owner' => $this->owner ? ['id' => $this->owner->workspaceId(), 'name' => $this->owner->workspaceName()] : null,
         ];
     }
 }

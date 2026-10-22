@@ -6,21 +6,18 @@ use App\Enums\Permission as PermissionName;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-test('retiring the gallery removes its access grants while preserving other permissions', function (): void {
-    $galleryPermission = Permission::findOrCreate('component.gallery.view', 'web');
+test('fresh permission seeding omits retired gallery defaults and preserves unrelated grants', function (): void {
+
     $workspacePermission = Permission::findOrCreate(PermissionName::AdminDashboardView->value, 'web');
     $otherGuardPermission = Permission::findOrCreate('component.gallery.view', 'api');
     $role = Role::findOrCreate('Gallery reviewer', 'web');
-    $role->givePermissionTo([$galleryPermission, $workspacePermission]);
-    $migration = require database_path('migrations/2026_10_07_171940_retire_component_gallery_permissions.php');
+    $role->givePermissionTo($workspacePermission);
+    app(Database\Seeders\RolePermissionSeeder::class)->run();
+    app(Database\Seeders\RolePermissionSeeder::class)->run();
 
-    $migration->up();
-    $migration->up();
-
-    $this->assertModelMissing($galleryPermission);
+    $this->assertDatabaseMissing('permissions', ['name' => 'component.gallery.view', 'guard_name' => 'web']);
     $this->assertModelExists($workspacePermission);
     $this->assertModelExists($otherGuardPermission);
-    $this->assertDatabaseMissing('role_has_permissions', ['permission_id' => $galleryPermission->getKey()]);
     $this->assertDatabaseHas('role_has_permissions', [
         'permission_id' => $workspacePermission->getKey(),
         'role_id' => $role->getKey(),

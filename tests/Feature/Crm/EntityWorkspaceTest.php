@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -286,7 +286,7 @@ test('sales ops cannot assign or transfer ownership', function (): void {
 
 test('admins can transfer ownership and users can archive or delete visible entities', function (): void {
     $admin = entityCrmUser(admin: true);
-    expect(App\Support\CrmAccess::administrator($admin))->toBeTrue();
+    expect(SoutheastCode\Crm\Shared\Support\CrmAccess::administrator($admin))->toBeTrue();
     $owner = User::factory()->create();
     $organization = Organization::factory()->create(['owner_id' => $owner->id]);
     $contact = Contact::factory()->create(['owner_id' => $admin->id]);

@@ -10,16 +10,10 @@ use App\Audit\Presenters\FoundationActivityPresenter;
 use App\Enums\Permission;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
-use App\Models\Contact;
-use App\Models\CrmActivity;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTaskLink;
 use App\Models\DevelopmentTaskNote;
 use App\Models\DevelopmentTestRun;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Note;
-use App\Models\Organization;
 use App\Models\UserTestingPage;
 use App\Modules\Contributions\CrmNavigation;
 use App\Modules\Contributions\DevelopmentNavigation;
@@ -52,7 +46,7 @@ class ModuleServiceProvider extends ServiceProvider
                 Permission::DevelopmentRoadmapManage, Permission::DevelopmentUserTestingManage => 'dev',
                 default => 'foundation',
             };
-            if (in_array($owner, ['audit', 'users'], true)) {
+            if (in_array($owner, ['audit', 'users', 'crm'], true)) {
                 continue;
             }
 
@@ -75,14 +69,6 @@ class ModuleServiceProvider extends ServiceProvider
                 'permission' => $this->morphModel(app(PermissionRegistrar::class)->getPermissionClass()),
                 'audit-activity' => $this->morphModel(config('activitylog.activity_model', Activity::class)),
             ],
-            'crm' => [
-                'crm-organization' => Organization::class,
-                'crm-contact' => Contact::class,
-                'crm-lead' => Lead::class,
-                'crm-follow-up-task' => FollowUpTask::class,
-                'crm-note' => Note::class,
-                'crm-activity' => CrmActivity::class,
-            ],
             'dev' => [
                 'development-task' => DevelopmentTask::class,
                 'development-task-link' => DevelopmentTaskLink::class,
@@ -91,6 +77,8 @@ class ModuleServiceProvider extends ServiceProvider
                 'user-testing-page' => UserTestingPage::class,
             ],
         ];
+
+        $groups['crm'] = [];
 
         foreach ($groups as $owner => $permissions) {
             if (! in_array($owner, config('modules.enabled', ['foundation', 'users', 'audit', 'crm', 'dev']), true)) {
@@ -107,7 +95,7 @@ class ModuleServiceProvider extends ServiceProvider
                 'crm' => [CrmActivityPresenter::class],
                 'dev' => [DevelopmentActivityPresenter::class],
             };
-            $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner],
+            $registry->register(new ModuleManifest($owner === 'crm' ? 'crm-host' : $owner, $permissions, morphMap: $maps[$owner] ?? [],
                 navigation: [$navigation],
                 workspaceDashboard: $owner === 'crm' ? CrmWorkspaceDashboardQuery::class : null,
                 adminSummary: $owner === 'crm' ? CrmAdminSummaryQuery::class : null,

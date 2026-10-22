@@ -16,18 +16,17 @@ use App\Http\Requests\Crm\OrganizationIndexRequest;
 use App\Http\Requests\Crm\StoreOrganizationRequest;
 use App\Http\Requests\Crm\UpdateOrganizationRequest;
 use App\Http\Resources\OrganizationResource;
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Organization;
-use App\Models\User;
 use App\Queries\OrganizationQuery;
-use App\Support\CrmAccess;
-use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Queries\CrmOwnerOptions;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 use Spatie\Activitylog\Models\Activity;
 
 class OrganizationController extends Controller
@@ -40,19 +39,10 @@ class OrganizationController extends Controller
         return Inertia::render('Crm/Organizations/Index', [
             'organizations' => OrganizationResource::collection($query->build($user, $filters)->paginate(15)->withQueryString()),
             'filters' => $filters->filters(),
-            'owners' => $this->owners(),
+            'owners' => app(CrmOwnerOptions::class)->get($request->filled('owner') ? $request->integer('owner') : null),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => CrmAccess::administrator($user),
         ]);
-    }
-
-    /** @return array<int, array{id: int, name: string}> */
-    private function owners(): array
-    {
-        return WorkspaceUsers::model()::query()->where('is_active', true)->orderBy('name')->get(['id', 'name'])->map(fn (User $user): array => [
-            'id' => $user->id,
-            'name' => $user->name,
-        ])->all();
     }
 
     public function create(Request $request): Response
@@ -62,7 +52,7 @@ class OrganizationController extends Controller
 
         return Inertia::render('Crm/Organizations/Form', [
             'organization' => null,
-            'owners' => $this->owners(),
+            'owners' => app(CrmOwnerOptions::class)->get(),
             'canAssign' => CrmAccess::administrator($user),
         ]);
     }
@@ -106,7 +96,7 @@ class OrganizationController extends Controller
 
         return Inertia::render('Crm/Organizations/Form', [
             'organization' => OrganizationResource::make($organization->load('owner'))->resolve($request),
-            'owners' => $this->owners(),
+            'owners' => app(CrmOwnerOptions::class)->get($organization->owner_id),
             'canAssign' => CrmAccess::administrator($user),
         ]);
     }

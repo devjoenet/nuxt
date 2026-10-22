@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\BusinessSetting;
-use App\Models\Contact;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTaskLink;
 use App\Models\DevelopmentTaskNote;
 use App\Models\DevelopmentTestRun;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use App\Policies\BusinessSettingPolicy;
-use App\Policies\ContactPolicy;
 use App\Policies\DevelopmentTaskLinkPolicy;
 use App\Policies\DevelopmentTaskNotePolicy;
 use App\Policies\DevelopmentTaskPolicy;
 use App\Policies\DevelopmentTestRunPolicy;
-use App\Policies\LeadPolicy;
-use App\Policies\OrganizationPolicy;
 use App\Support\WorkspaceUsers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -68,12 +62,9 @@ class AppServiceProvider extends ServiceProvider
             return $user instanceof User ? $user : abort(404);
         });
         Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);
-        Gate::policy(Contact::class, ContactPolicy::class);
         Gate::policy(DevelopmentTask::class, DevelopmentTaskPolicy::class);
         Gate::policy(DevelopmentTaskNote::class, DevelopmentTaskNotePolicy::class);
         Gate::policy(DevelopmentTaskLink::class, DevelopmentTaskLinkPolicy::class);
         Gate::policy(DevelopmentTestRun::class, DevelopmentTestRunPolicy::class);
-        Gate::policy(Lead::class, LeadPolicy::class);
-        Gate::policy(Organization::class, OrganizationPolicy::class);
     }
 }

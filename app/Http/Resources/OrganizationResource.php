@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\Contact;
-use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 /** @mixin Organization */
 class OrganizationResource extends JsonResource
@@ -26,13 +26,13 @@ class OrganizationResource extends JsonResource
             'created_at' => $this->created_at->toISOString(),
             'contacts_count' => $this->when(isset($this->contacts_count), $this->contacts_count),
             'leads_count' => $this->when(isset($this->leads_count), $this->leads_count),
-            'owner' => $this->owner ? ['id' => $this->owner->id, 'name' => $this->owner->name] : null,
+            'owner' => $this->owner ? ['id' => $this->owner->workspaceId(), 'name' => $this->owner->workspaceName()] : null,
             'contacts' => $this->whenLoaded('contacts', fn (): array => $this->contacts->map(fn (Contact $contact): array => [
                 'id' => $contact->uuid,
                 'name' => $contact->name,
                 'email' => $contact->email,
                 'phone' => $contact->phone,
-                'owner' => $contact->owner ? ['id' => $contact->owner->id, 'name' => $contact->owner->name] : null,
+                'owner' => $contact->owner ? ['id' => $contact->owner->workspaceId(), 'name' => $contact->owner->workspaceName()] : null,
             ])->all()),
         ];
     }

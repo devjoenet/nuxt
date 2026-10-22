@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Crm;
 
-use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 class StoreLeadNoteRequest extends FormRequest
 {

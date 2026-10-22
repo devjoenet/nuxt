@@ -1,11 +1,11 @@
 import type { TableColumn } from "@nuxt/ui";
 import { Link } from "@inertiajs/vue3";
 import { h } from "vue";
-import { LeadStatusBadge } from "@/components/LeadStatusBadge";
+import { LeadStatusBadge } from "@southeastcode/crm/public";
 import { show } from "@/routes/crm/leads";
 //import { show as showContact } from "@/routes/crm/contacts";
 import { show as showOrganization } from "@/routes/crm/organizations";
-import type { Lead } from "@/types/crm";
+import type { Lead } from "@southeastcode/crm/public";
 
 export function createLeadIndexColumns(): TableColumn<Lead>[] {
   return [

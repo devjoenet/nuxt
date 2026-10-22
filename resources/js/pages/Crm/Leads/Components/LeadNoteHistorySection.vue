@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/dateFormatters";
-import type { Lead } from "@/types/crm";
+import type { Lead } from "@southeastcode/crm/public";
 
 const props = defineProps<{
   notes: Lead["notes"];

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
-use App\Models\FollowUpTask;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
 
 class FollowUpTaskReminder extends Notification
 {

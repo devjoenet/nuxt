@@ -77,6 +77,10 @@ test('route pages keep mutable state instance scoped', function (): void {
 });
 
 test('Vite Plus enforces frontend dependency direction and component public APIs', function (): void {
+    foreach (['AsyncCrmSelect/AsyncCrmSelect.vue', 'CrmDetailLayout/CrmDetailLayout.vue'] as $component) {
+        expect(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/components/'.$component))->toBeTrue();
+    }
+
     $viteConfig = File::get(base_path('vite.config.ts'));
 
     expect($viteConfig)
@@ -270,9 +274,13 @@ test('all baseline application routes remain registered', function (): void {
     ]);
 
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR))
-        ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\'));
+        ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\') || str_starts_with($route['action'], 'SoutheastCode\\Crm\\'));
 
-    expect($routes)->toHaveCount(83);
+    expect($routes)->toHaveCount(81);
+    $crmRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
+        ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\Crm\\'));
+    expect($crmRoutes->map(fn (Illuminate\Routing\Route $route): ?string => $route->getName())->values()->all())
+        ->toEqualCanonicalizing(['crm.options.contacts', 'crm.options.organizations']);
     $userRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\UserManagement\\'));
     expect($userRoutes)->toHaveCount(8)
@@ -447,12 +455,14 @@ test('the current application components and Nuxt UI foundation remain explicit'
         'resources/js/components/Ui/FormSelect/FormSelect.vue',
         'resources/js/components/Ui/FormMultiSelect/FormMultiSelect.vue',
         'resources/js/components/Ui/FormTextarea/FormTextarea.vue',
-        'resources/js/components/AsyncCrmSelect/AsyncCrmSelect.vue',
         'resources/js/components/WorkspacePage/WorkspacePage.vue',
-        'resources/js/components/CrmDetailLayout/CrmDetailLayout.vue',
         'resources/js/lib/utils.ts',
     ] as $foundationPath) {
         expect(File::exists(base_path($foundationPath)))->toBeTrue("Missing frontend foundation: {$foundationPath}");
+    }
+
+    foreach (['AsyncCrmSelect/AsyncCrmSelect.vue', 'CrmDetailLayout/CrmDetailLayout.vue'] as $component) {
+        expect(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/components/'.$component))->toBeTrue();
     }
 
     $viteConfig = File::get(base_path('vite.config.ts'));
@@ -466,7 +476,7 @@ test('the current application components and Nuxt UI foundation remain explicit'
 
 test('index workflows share navigation and framing without hiding domain columns', function (): void {
     $filterComposable = File::get(resource_path('js/composables/useInertiaFilters.ts'));
-    $asyncCrmSelect = File::get(resource_path('js/components/AsyncCrmSelect/useCrmOptions.ts'));
+    $asyncCrmSelect = File::get(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/components/AsyncCrmSelect/useCrmOptions.ts');
 
     expect($filterComposable)
         ->toContain('watchDebounced(filters, visitFilters')
@@ -526,7 +536,7 @@ test('index workflows share navigation and framing without hiding domain columns
 
 test('authenticated pages compose the product workspace shell', function (): void {
     $workspacePage = File::get(resource_path('js/components/WorkspacePage/WorkspacePage.vue'));
-    $crmDetailLayout = File::get(resource_path('js/components/CrmDetailLayout/CrmDetailLayout.vue'));
+    $crmDetailLayout = File::get(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/components/CrmDetailLayout/CrmDetailLayout.vue');
     $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
     $workspaceShellOptOuts = [];
 
@@ -683,6 +693,10 @@ test('route families use shared client and server layout boundaries', function (
     $appEntry = File::get(resource_path('js/app.ts'));
     $serverEntry = File::get(resource_path('js/ssr.ts'));
     $layoutResolver = File::get(resource_path('js/layouts/resolveAppLayout.ts'));
+    foreach (['AsyncCrmSelect/AsyncCrmSelect.vue', 'CrmDetailLayout/CrmDetailLayout.vue'] as $component) {
+        expect(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/components/'.$component))->toBeTrue();
+    }
+
     $viteConfig = File::get(base_path('vite.config.ts'));
     $applicationLayout = File::get(resource_path('js/layouts/ApplicationLayout.vue'));
     $authLayout = File::get(resource_path('js/layouts/AuthLayout.vue'));

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 beforeEach(function (): void {
     app(RolePermissionSeeder::class)->run();

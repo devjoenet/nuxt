@@ -8,8 +8,8 @@ use App\Actions\CreateLeadNote;
 use App\Data\LeadNoteData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\StoreLeadNoteRequest;
-use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 class LeadNoteController extends Controller
 {

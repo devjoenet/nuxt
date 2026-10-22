@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
-use App\Models\Contact;
 use App\Models\DevelopmentTask;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use App\Models\UserTestingPage;
 use Database\Seeders\RolePermissionSeeder;
 use Database\Seeders\UserTestingPageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 uses(RefreshDatabase::class);
 
