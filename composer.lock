@@ -4470,12 +4470,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-audit.git",
-                "reference": "37f6232e95a731431c367cce583f9ded0eda1aaa"
+                "reference": "70807924553e44e5d8a7c000c0f4600e338582cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/37f6232e95a731431c367cce583f9ded0eda1aaa",
-                "reference": "37f6232e95a731431c367cce583f9ded0eda1aaa",
+                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/70807924553e44e5d8a7c000c0f4600e338582cb",
+                "reference": "70807924553e44e5d8a7c000c0f4600e338582cb",
                 "shasum": ""
             },
             "require": {
@@ -4609,7 +4609,7 @@
                 "source": "https://github.com/devjoenet/laravel-audit/tree/feature/extract-audit",
                 "issues": "https://github.com/devjoenet/laravel-audit/issues"
             },
-            "time": "2026-10-22T03:50:02+00:00"
+            "time": "2026-10-22T12:29:12+00:00"
         },
         {
             "name": "southeastcode/inertia-modules",
