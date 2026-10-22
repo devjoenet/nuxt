@@ -25,7 +25,8 @@
     "spatie/laravel-data": "^4.23",
     "spatie/laravel-permission": "^8.3",
     "southeastcode/inertia-modules": "dev-main as 0.1.0",
-    "southeastcode/audit": "dev-main as 0.1.0"
+    "southeastcode/audit": "dev-main as 0.1.0",
+    "southeastcode/user-management": "dev-feature/extract-user-management as 0.1.0"
   },
   "require-dev": {
     "fakerphp/faker": "^1.24.1",
@@ -154,6 +155,10 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/devjoenet/laravel-user-management"
+    },
     {
       "type": "vcs",
       "url": "https://github.com/devjoenet/laravel-audit"

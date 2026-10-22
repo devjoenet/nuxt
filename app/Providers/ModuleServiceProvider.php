@@ -7,7 +7,6 @@ namespace App\Providers;
 use App\Audit\Presenters\CrmActivityPresenter;
 use App\Audit\Presenters\DevelopmentActivityPresenter;
 use App\Audit\Presenters\FoundationActivityPresenter;
-use App\Audit\Presenters\UserActivityPresenter;
 use App\Enums\Permission;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
@@ -25,7 +24,6 @@ use App\Models\UserTestingPage;
 use App\Modules\Contributions\CrmNavigation;
 use App\Modules\Contributions\DevelopmentNavigation;
 use App\Modules\Contributions\FoundationNavigation;
-use App\Modules\Contributions\UserManagementNavigation;
 use App\Queries\CrmAdminSummaryQuery;
 use App\Queries\CrmWorkspaceDashboardQuery;
 use App\Queries\PendingDevelopmentTestsQuery;
@@ -54,7 +52,7 @@ class ModuleServiceProvider extends ServiceProvider
                 Permission::DevelopmentRoadmapManage, Permission::DevelopmentUserTestingManage => 'dev',
                 default => 'foundation',
             };
-            if ($owner === 'audit') {
+            if (in_array($owner, ['audit', 'users'], true)) {
                 continue;
             }
 
@@ -77,7 +75,6 @@ class ModuleServiceProvider extends ServiceProvider
                 'permission' => $this->morphModel(app(PermissionRegistrar::class)->getPermissionClass()),
                 'audit-activity' => $this->morphModel(config('activitylog.activity_model', Activity::class)),
             ],
-            'users' => [],
             'crm' => [
                 'crm-organization' => Organization::class,
                 'crm-contact' => Contact::class,
@@ -102,13 +99,11 @@ class ModuleServiceProvider extends ServiceProvider
 
             $navigation = match ($owner) {
                 'foundation' => FoundationNavigation::class,
-                'users' => UserManagementNavigation::class,
                 'crm' => CrmNavigation::class,
                 'dev' => DevelopmentNavigation::class,
             };
             $presenters = match ($owner) {
                 'foundation' => [FoundationActivityPresenter::class],
-                'users' => [UserActivityPresenter::class],
                 'crm' => [CrmActivityPresenter::class],
                 'dev' => [DevelopmentActivityPresenter::class],
             };

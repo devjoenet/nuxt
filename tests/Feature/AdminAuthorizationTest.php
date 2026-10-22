@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Actions\CreateRole;
-use App\Actions\UpdateRolePermissions;
-use App\Data\CreateRoleData;
-use App\Data\RolePermissionsData;
 use App\Enums\Permission as PermissionName;
 use App\Enums\PermissionGroup;
 use App\Enums\RoleName;
@@ -15,7 +11,6 @@ use App\Models\CrmActivity;
 use App\Models\Lead;
 use App\Models\Note;
 use App\Models\User;
-use App\Notifications\UserInvitationNotification;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -25,6 +20,11 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\UserManagement\Actions\CreateRole;
+use SoutheastCode\UserManagement\Actions\UpdateRolePermissions;
+use SoutheastCode\UserManagement\Data\CreateRoleData;
+use SoutheastCode\UserManagement\Data\RolePermissionsData;
+use SoutheastCode\UserManagement\Notifications\UserInvitationNotification;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -68,7 +68,7 @@ test('admins can view the dashboard and protected admin screens', function (): v
     $user = adminUser();
 
     $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Dashboard'));
-    $this->actingAs($user)->get(route('admin.users.index'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('Admin/Users/Index'));
+    $this->actingAs($user)->get(route('admin.users.index'))->assertOk()->assertInertia(fn (Assert $page): Assert => $page->component('users::Admin/Users/Index', false));
     $this->actingAs($user)->get(route('admin.roles.index'))->assertOk();
     $this->actingAs($user)->get(route('admin.audit.index'))->assertOk();
 });
@@ -80,7 +80,7 @@ test('role management exposes the role and permission payload for a focused edit
         ->get(route('admin.roles.index'))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Admin/Roles/Index')
+            ->component('users::Admin/Roles/Index', false)
             ->where('roles', fn (mixed $roles): bool => collect($roles)->contains(fn (mixed $role): bool => data_get($role, 'name') === RoleName::Admin->value
                 && data_get($role, 'protected') === false
                 && is_array(data_get($role, 'permission_ids'))))
@@ -572,6 +572,7 @@ test('the role permission action protects Super Admin outside the controller', f
     expect(fn (): mixed => app(UpdateRolePermissions::class)->handle(
         $protectedRole,
         RolePermissionsData::fromValidated(['permission_ids' => []]),
+        adminUser(),
     ))->toThrow(ValidationException::class);
 
     expect($protectedRole->refresh()->permissions->pluck('id')->all())->toBe($permissionIds)

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77ff2e86e8befd18055c9864212873dc",
+    "content-hash": "c49c92f1b304b69d0961cec4d026cde2",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4744,6 +4744,160 @@
                 "issues": "https://github.com/devjoenet/laravel-inertia-modules/issues"
             },
             "time": "2026-10-22T03:05:17+00:00"
+        },
+        {
+            "name": "southeastcode/user-management",
+            "version": "dev-feature/extract-user-management",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:devjoenet/laravel-user-management.git",
+                "reference": "8c8eeb39e1b870d0b521caf8bc47ff10e7cf6a1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/devjoenet/laravel-user-management/zipball/8c8eeb39e1b870d0b521caf8bc47ff10e7cf6a1e",
+                "reference": "8c8eeb39e1b870d0b521caf8bc47ff10e7cf6a1e",
+                "shasum": ""
+            },
+            "require": {
+                "inertiajs/inertia-laravel": "^3.5.1",
+                "laravel/fortify": "^1.41",
+                "laravel/framework": "^13.35.0",
+                "php": "^8.5",
+                "southeastcode/audit": "dev-main as 0.1.0",
+                "southeastcode/inertia-modules": "dev-main as 0.1.0",
+                "spatie/laravel-activitylog": "^5.1.1",
+                "spatie/laravel-data": "^4.23",
+                "spatie/laravel-permission": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.9",
+                "laravel/pao": "^1.0",
+                "laravel/pint": "^1.29",
+                "orchestra/testbench": "^11.0",
+                "pestphp/pest": "^4.6||^5.0",
+                "pestphp/pest-plugin-laravel": "^4.1||^5.0",
+                "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
+                "phpstan/extension-installer": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "SoutheastCode\\UserManagement\\UserManagementServiceProvider"
+                    ]
+                },
+                "southeastcode-module": {
+                    "manifestVersion": 1,
+                    "hostApiVersion": 1,
+                    "id": "users",
+                    "provider": "SoutheastCode\\UserManagement\\UserManagementServiceProvider",
+                    "pageNamespace": "users",
+                    "pageRoots": [
+                        "resources/js/pages"
+                    ],
+                    "frontendExports": {
+                        "public": "resources/js/public.ts"
+                    },
+                    "frontendDependencies": {
+                        "vue": "^3.5",
+                        "@inertiajs/vue3": "^3.8",
+                        "@nuxt/ui": "^4.11"
+                    },
+                    "layout": "application",
+                    "dtoDirectories": [
+                        "src/Data"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-feature/extract-user-management": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SoutheastCode\\UserManagement\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "SoutheastCode\\UserManagement\\Tests\\": "tests/",
+                    "Workbench\\App\\": "workbench/app/",
+                    "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+                    "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+                }
+            },
+            "archive": {
+                "exclude": [
+                    "/vendor",
+                    "/build",
+                    "/composer.lock",
+                    "/.phpunit.cache",
+                    "**/.DS_Store"
+                ]
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@clear",
+                    "@prepare"
+                ],
+                "prepare": [
+                    "@php vendor/bin/testbench package:discover --ansi"
+                ],
+                "build": [
+                    "@php vendor/bin/testbench workbench:build --ansi"
+                ],
+                "serve": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@build",
+                    "@php vendor/bin/testbench serve --ansi"
+                ],
+                "lint": [
+                    "vendor/bin/pint --parallel"
+                ],
+                "lint:check": [
+                    "vendor/bin/pint --parallel --test"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse --memory-limit=512M"
+                ],
+                "test:types": [
+                    "@php -d memory_limit=512M vendor/bin/pest --type-coverage --min=100"
+                ],
+                "test:unit": [
+                    "vendor/bin/pest --parallel"
+                ],
+                "test": [
+                    "@analyse",
+                    "@lint:check",
+                    "@test:types",
+                    "@test:unit"
+                ],
+                "clear": [
+                    "@php vendor/bin/testbench package:purge-skeleton --ansi"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joey Harris",
+                    "email": "devjoenet@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "User and role administration for modular Laravel Inertia applications.",
+            "homepage": "https://github.com/devjoenet/laravel-user-management",
+            "keywords": [
+                "laravel",
+                "southeastcode",
+                "user-management"
+            ],
+            "support": {
+                "source": "https://github.com/devjoenet/laravel-user-management/tree/feature/extract-user-management",
+                "issues": "https://github.com/devjoenet/laravel-user-management/issues"
+            },
+            "time": "2026-10-22T18:33:54+00:00"
         },
         {
             "name": "spatie/laravel-activitylog",
@@ -14783,12 +14937,19 @@
             "version": "dev-main",
             "alias": "0.1.0",
             "alias_normalized": "0.1.0.0"
+        },
+        {
+            "package": "southeastcode/user-management",
+            "version": "dev-feature/extract-user-management",
+            "alias": "0.1.0",
+            "alias_normalized": "0.1.0.0"
         }
     ],
     "minimum-stability": "dev",
     "stability-flags": {
         "southeastcode/audit": 20,
-        "southeastcode/inertia-modules": 20
+        "southeastcode/inertia-modules": 20,
+        "southeastcode/user-management": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

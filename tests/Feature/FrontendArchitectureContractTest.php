@@ -63,7 +63,7 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
 });
 
 test('route pages keep mutable state instance scoped', function (): void {
-    $pageFilesWithModuleScripts = collect(File::allFiles(resource_path('js/pages')))
+    $pageFilesWithModuleScripts = collect([...File::allFiles(resource_path('js/pages')), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages')])
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->filter(fn (SplFileInfo $file): bool => preg_match(
             '/<script(?=[\s>])(?![^>]*\bsetup\b)[^>]*>/',
@@ -207,14 +207,14 @@ test('legacy sections are retired into page-family component homes', function ()
 
     expect(File::isDirectory(resource_path('js/sections')))->toBeFalse()
         ->and(File::exists(resource_path('js/pages/Welcome/Components/LandingContactSection.vue')))->toBeTrue()
-        ->and(File::exists(resource_path('js/pages/Admin/Users/Components/AdminUsersTableSection.vue')))->toBeTrue()
+        ->and(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages/Admin/Users/Components/AdminUsersTableSection.vue'))->toBeTrue()
         ->and(File::exists(resource_path('js/pages/Crm/Leads/Components/LeadOverviewSection.vue')))->toBeTrue()
         ->and(File::exists(resource_path('js/pages/Development/Tasks/Components/DevelopmentTaskWorkflowSection.vue')))->toBeTrue()
         ->and($misnamedColocationDirectories)->toBe([]);
 });
 
 test('all baseline application pages are covered by the migrated route families', function (): void {
-    $applicationPages = collect(File::allFiles(resource_path('js/pages')))
+    $applicationPages = collect([...File::allFiles(resource_path('js/pages')), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages')])
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->reject(fn (SplFileInfo $file): bool => Str::contains($file->getRelativePathname(), [
             '/Components/',
@@ -269,9 +269,14 @@ test('all baseline application routes remain registered', function (): void {
         '--json' => true,
     ]);
 
-    $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR));
+    $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR))
+        ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\'));
 
-    expect($routes)->toHaveCount(91);
+    expect($routes)->toHaveCount(83);
+    $userRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
+        ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\UserManagement\\'));
+    expect($userRoutes)->toHaveCount(8)
+        ->and($userRoutes->map(fn (Illuminate\Routing\Route $route): ?string => $route->getName())->unique())->toHaveCount(8);
     $auditRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => $route->getName() === 'admin.audit.index');
     expect($auditRoutes)->toHaveCount(1)
@@ -514,7 +519,7 @@ test('index workflows share navigation and framing without hiding domain columns
         'pages/Development/Requests/Index.vue',
         'pages/Development/Review/Index.vue',
     ] as $indexSurface) {
-        expect(File::get(resource_path("js/{$indexSurface}")))
+        expect(File::get(str_starts_with($indexSurface, 'pages/Admin/Users/') ? Composer\InstalledVersions::getInstallPath('southeastcode/user-management')."/resources/js/{$indexSurface}" : resource_path("js/{$indexSurface}")))
             ->toContain('<IndexPagination');
     }
 });
