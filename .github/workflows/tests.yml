@@ -49,13 +49,6 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Pest Type Coverage Cache
-        uses: actions/cache@v5
-        with:
-          path: vendor/pestphp/pest-plugin-type-coverage/.temp
-          key: ${{ runner.os }}-pest-type-coverage-${{ hashFiles('composer.lock') }}-${{ hashFiles('app/**/*.php') }}
-          restore-keys: ${{ runner.os }}-pest-type-coverage-${{ hashFiles('composer.lock') }}-
-
       - name: Audit Composer dependencies
         run: composer audit --locked --no-interaction
 
