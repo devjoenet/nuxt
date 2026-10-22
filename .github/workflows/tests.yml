@@ -120,6 +120,7 @@ jobs:
           XDEBUG_MODE: coverage
 
       - name: Browser Tests
+        timeout-minutes: 10
         run: composer test:browser
 
       - name: PHP Code Style
