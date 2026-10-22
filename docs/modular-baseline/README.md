@@ -337,3 +337,23 @@ The regression now creates its mobile browser context before navigation, waits f
 The same workflow moves the artifact upload action from v4 to v7 (verified Node 24 runtime and compatible path/retention inputs) and pins the runner to `ubuntu-24.04`, the image used by the failing run. This removes the deprecated action runtime and prevents an implicit Ubuntu 26 migration while debugging browser behavior. These annotations were separate from the test's exit code.
 
 Verification: the corrected focus test passes three fresh local runs, and the full CI-style two-worker browser command passes 67 tests / 877 assertions with 2 existing skips in 35.2 seconds. A temporary 1.5-second pointerdown delay reproduces the exact timeout with the retrying helper (drawer already open), while the single-action version passes the same delayed interaction in 3.2 seconds. The diagnostic delay was removed and the real test restored. Workflow YAML parses; the hosted rerun, owner acceptance and existing testing round remain pending.
+
+
+### Task 08 — reusable package skeleton — October 22, 2026
+
+Task `01a15abd-364c-71e3-9fd1-63db337320d1`; predecessor Task 07 was confirmed completed in the live task database before implementation.
+
+Private template: [devjoenet/laravel-package-skeleton](https://github.com/devjoenet/laravel-package-skeleton), branch `feature/package-skeleton`, [PR #1](https://github.com/devjoenet/laravel-package-skeleton/pull/1). Implementation `952505ffb6fb700eea5c61f1f9cbb7ed7d8811ec`; merged identity-only bootstrap main as `127cdf43f7e33fe9cd34bfbadd8e37cab4b7905f` (same implementation tree). The generic local package-skeleton source at `338754d` was preserved. Proven inputs: Audit `2fa2eb663541840bc97f328270c504363cffeda6`, bridge `44a2498`, starter consumer `2575bb68a43a6078fa0027fd5b83e80e7ae5f0e6`.
+
+The template is a Composer project; generated packages become libraries. It includes matching PHP/frontend module registration, the bridge v1 manifest schema, explicit public imports, a minimal namespaced page, synthetic factory/model/migration examples, existing provider capabilities, namespace replacement, contributor guidance and CI generation validation. Authoring files remain in template archives. PHP 8.5 and Laravel 13.35+ are the owner-confirmed development floor. Original license notices remain intact; no agency assets or operational records were copied.
+
+Local evidence:
+
+- Template Composer validation, security audit, analysis, Pint, 100% type coverage, 13 tests / 18 assertions pass.
+- Authenticated private GitHub `composer create-project` at `952505f` downloads/extracts successfully with `--no-install`; an independent `composer install --no-scripts` then non-interactive configuration generates `example/records`, namespace `Example\Records`, without namespace repairs. Optimized strict PSR autoloading, analysis, Pint, 100% type coverage and 13 tests / 18 assertions pass in that fresh generated project.
+- Copied (symlink disabled) generated-package installation in a disposable external starter consumer passes module preparation, module type/lint/format checks, and client/SSR builds. Frontend dependencies are supplied by the host's existing locked node_modules; this is not a cold Yarn install claim. All databases/operational environments remain untouched; the synthetic factory test uses Testbench's isolated database.
+- Consumer installation reports the starter's existing FoundationQueueProbe PSR-4 warning; this is outside the template source and is not represented as resolved.
+
+The private VCS discovery test exposed that Composer uses the default branch's package identity for all branches. The new remote's main received only its project identity bootstrap; the feature implementation remains in PR #1. The consumer checks also caught and corrected an empty declared page root and frontend formatting before handoff.
+
+Pending gates: owner configures COMPOSER_AUTH for the template Actions runner with private bridge read access; hosted Linux/Windows and minimum-dependency lanes, full consumer suite, owner acceptance, permanent template release, staging/production and history-collapse checkpoints remain unverified. No tags, transfers, history resets or deployments occurred. Task handoff is ready for testing, not accepted/completed.
