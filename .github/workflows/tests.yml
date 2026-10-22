@@ -60,10 +60,16 @@ jobs:
 
       - name: Audit production Node dependencies
         run: yarn audit:production
+        env:
+          YARN_NPM_AUDIT_REGISTRY: https://registry.npmjs.org
+          YARN_HTTP_TIMEOUT: 180000
 
       - name: Audit full Node dependency tree
         if: github.event_name == 'push'
         run: yarn audit:full
+        env:
+          YARN_NPM_AUDIT_REGISTRY: https://registry.npmjs.org
+          YARN_HTTP_TIMEOUT: 180000
         continue-on-error: true
 
       - name: Install Playwright Chromium
