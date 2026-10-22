@@ -1,3 +1,11 @@
+# Development task startup and prior-work closeout
+
+- Before every new Development task, inspect the application and relevant local package repositories, their working trees, branches, worktrees, disposable consumers, and temporary extraction checkouts. Read the live task and confirm its prerequisite gates before implementation.
+- Close out prior-task leftovers before creating new feature branches. Preserve uncommitted changes and unmerged commits in a recoverable archive or verified Git bundle outside active checkouts before removing obsolete consumers, worktrees, or branches. Carry required undelivered evidence forward explicitly; never discard unrelated work or silently treat an open PR as merged.
+- Fetch all updates and prune stale remote-tracking refs in each relevant repository. Return maintained checkouts to `main` and fast-forward to `origin/main`; resolve divergence deliberately without overwriting local work. Remove obsolete non-`main` local and remote branches after their work is merged or durably preserved. Keep active work belonging to another task intact, and report anything that prevents safe closeout.
+- Start each new implementation branch from the resulting current `main`, using the task's required `feature/` name in each repository that needs changes. Keep the compatible reference application and its working Development database isolated from disposable extraction consumers.
+- When a task needs a new private remote repository, create the empty repository first. Then give the owner its URL and Actions-secrets settings link, and pause before the first push, PR, workflow dispatch, or other action that could trigger hosted CI until the owner confirms the required private Composer authentication secret is configured. Use `MODULES_COMPOSER_AUTH` for this ecosystem, wired to `COMPOSER_AUTH` in CI; never request or print its value. Local preparation and checks may continue while awaiting confirmation. Reuse confirmation already supplied for that repository in the current session.
+
 # Development task links
 
 - Immediately after creating a Development task's implementation branch and successfully pushing it to the remote repository, add a link to that same Development task with the remote branch URL, type `branch`, and the exact branch name as its label.

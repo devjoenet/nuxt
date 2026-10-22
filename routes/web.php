@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 use App\Enums\ServiceInterest;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\JobOperationsController;
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\ContactHistoryController;
 use App\Http\Controllers\Crm\CrmRecordOptionController;
@@ -78,18 +76,6 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
 
     Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
-
-        Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
-        Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
-        Route::patch('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
-        Route::post('users/{user}/resend-verification', [AdminUserController::class, 'resendVerification'])->name('users.resendVerification');
-        Route::post('users/{user}/reset-two-factor', [AdminUserController::class, 'resetTwoFactor'])
-            ->middleware('throttle:two-factor-management')
-            ->name('users.resetTwoFactor');
-
-        Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-        Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
-        Route::patch('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
 
         Route::get('settings', [BusinessSettingController::class, 'edit'])->name('settings.edit');
         Route::patch('settings', [BusinessSettingController::class, 'update'])->name('settings.update');

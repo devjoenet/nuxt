@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Actions\InviteUser;
-use App\Data\InviteUserData;
 use App\Models\Contact;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
@@ -12,6 +10,8 @@ use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\UserManagement\Actions\InviteUser;
+use SoutheastCode\UserManagement\Data\InviteUserData;
 
 beforeEach(function (): void {
     app(RolePermissionSeeder::class)->run();

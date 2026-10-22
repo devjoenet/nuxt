@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Queries\RolePermissionCatalogQuery;
+use SoutheastCode\UserManagement\Queries\RolePermissionCatalogQuery;
 use Spatie\Permission\Models\Permission;
 
 test('the permission catalog omits absent groups and retains ordered web permissions', function (): void {

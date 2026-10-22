@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use App\Actions\CreateLeadNote;
-use App\Actions\CreateRole;
-use App\Data\CreateRoleData;
 use App\Data\LeadNoteData;
 use App\Models\BusinessSetting;
 use App\Models\Contact;
@@ -32,6 +30,8 @@ use SoutheastCode\Audit\Queries\RecordHistoryQuery;
 use SoutheastCode\Audit\Support\AuditMorphs;
 use SoutheastCode\Modules\ModuleManifest;
 use SoutheastCode\Modules\ModuleRegistry;
+use SoutheastCode\UserManagement\Actions\CreateRole;
+use SoutheastCode\UserManagement\Data\CreateRoleData;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;

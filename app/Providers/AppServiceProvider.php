@@ -21,8 +21,6 @@ use App\Policies\DevelopmentTaskPolicy;
 use App\Policies\DevelopmentTestRunPolicy;
 use App\Policies\LeadPolicy;
 use App\Policies\OrganizationPolicy;
-use App\Policies\RolePolicy;
-use App\Policies\UserPolicy;
 use App\Support\WorkspaceUsers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -33,7 +31,6 @@ use Illuminate\Support\ServiceProvider;
 use Inertia\ExceptionResponse;
 use Inertia\Inertia;
 use Override;
-use Spatie\Permission\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -70,8 +67,6 @@ class AppServiceProvider extends ServiceProvider
 
             return $user instanceof User ? $user : abort(404);
         });
-        Gate::policy(WorkspaceUsers::model(), UserPolicy::class);
-        Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);
         Gate::policy(Contact::class, ContactPolicy::class);
         Gate::policy(DevelopmentTask::class, DevelopmentTaskPolicy::class);

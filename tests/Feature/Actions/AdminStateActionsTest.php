@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Actions\UpdateAdminUserAccess;
 use App\Actions\UpdateBusinessSetting;
-use App\Data\AdminUserAccessData;
 use App\Data\BusinessSettingData;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
+use SoutheastCode\UserManagement\Actions\UpdateAdminUserAccess;
+use SoutheastCode\UserManagement\Data\AdminUserAccessData;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Role;

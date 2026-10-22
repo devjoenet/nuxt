@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-use App\Actions\AcceptUserInvitation;
 use App\Actions\CreateLeadNote;
-use App\Actions\InviteUser;
-use App\Data\InviteUserData;
 use App\Data\LeadNoteData;
 use App\Enums\RoleName;
 use App\Models\Lead;
 use App\Models\User;
-use App\Notifications\UserInvitationNotification;
-use App\Queries\RolePermissionCatalogQuery;
 use App\Support\WorkspaceUsers;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\Notification;
 use SoutheastCode\Modules\ModuleManifest;
 use SoutheastCode\Modules\ModuleRegistry;
 use SoutheastCode\Modules\PermissionDefinition;
+use SoutheastCode\UserManagement\Actions\AcceptUserInvitation;
+use SoutheastCode\UserManagement\Actions\InviteUser;
+use SoutheastCode\UserManagement\Data\InviteUserData;
+use SoutheastCode\UserManagement\Notifications\UserInvitationNotification;
+use SoutheastCode\UserManagement\Queries\RolePermissionCatalogQuery;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
