@@ -18,10 +18,7 @@ final class CrmNavigation implements NavigationContribution
         }
 
         return [
-            new NavigationItem('crm', 'CRM', 'crm.leads.index', icon: 'i-ph-users', order: 10),
             new NavigationItem('crm.leads', 'Leads', 'crm.leads.index', 'crm', searchDescription: 'CRM leads'),
-            new NavigationItem('crm.organizations', 'Organizations', 'crm.organizations.index', 'crm', searchDescription: 'CRM organizations'),
-            new NavigationItem('crm.contacts', 'Contacts', 'crm.contacts.index', 'crm', searchDescription: 'CRM contacts'),
         ];
     }
 }

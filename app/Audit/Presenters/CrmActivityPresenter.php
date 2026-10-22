@@ -11,10 +11,8 @@ use LogicException;
 use SoutheastCode\Audit\Contracts\ActivityPresentation;
 use SoutheastCode\Audit\Contracts\ActivityPresenter;
 use SoutheastCode\Audit\Support\AuditMorphs;
-use SoutheastCode\Crm\Contacts\Models\Contact;
 use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
 use SoutheastCode\Crm\Leads\Models\Lead;
-use SoutheastCode\Crm\Organizations\Models\Organization;
 use SoutheastCode\Crm\Shared\Models\CrmActivity;
 use SoutheastCode\Crm\Shared\Models\Note;
 use SoutheastCode\Modules\WorkspaceUser;
@@ -22,10 +20,10 @@ use Spatie\Activitylog\Models\Activity;
 
 final class CrmActivityPresenter implements ActivityPresenter
 {
-    /** @return list<class-string<Lead|Contact|Organization|FollowUpTask|Note|CrmActivity>> */
+    /** @return list<class-string<Lead|FollowUpTask|Note|CrmActivity>> */
     public function models(): array
     {
-        return [Lead::class, Contact::class, Organization::class, FollowUpTask::class, Note::class, CrmActivity::class];
+        return [Lead::class, FollowUpTask::class, Note::class, CrmActivity::class];
     }
 
     public function constrain(Builder $query, WorkspaceUser $user): void
@@ -59,15 +57,8 @@ final class CrmActivityPresenter implements ActivityPresenter
             return new ActivityPresentation($label.' #'.$activity->subject_id.' (unavailable)');
         }
 
-        if ($record instanceof Lead || $record instanceof Contact || $record instanceof Organization) {
-            $prefix = match (true) {
-                $record instanceof Lead => 'crm.leads',
-                $record instanceof Contact => 'crm.contacts',
-                default => 'crm.organizations',
-            };
-            $label .= ' · '.($record instanceof Lead ? $record->contact->name : $record->name);
-
-            return new ActivityPresentation($label, route("{$prefix}.history", $record));
+        if ($record instanceof Lead) {
+            return new ActivityPresentation($label.' · '.$record->contact->name, route('crm.leads.history', $record));
         }
 
         if (! $record instanceof FollowUpTask && ! $record instanceof Note && ! $record instanceof CrmActivity) {
@@ -80,8 +71,8 @@ final class CrmActivityPresenter implements ActivityPresenter
         return new ActivityPresentation($label, $lead instanceof Lead ? route('crm.leads.history', $lead) : null);
     }
 
-    /** @param class-string<Lead|Contact|Organization|FollowUpTask|Note|CrmActivity> $type
-     * @return Builder<Lead>|Builder<Contact>|Builder<Organization>|Builder<FollowUpTask>|Builder<Note>|Builder<CrmActivity>
+    /** @param class-string<Lead|FollowUpTask|Note|CrmActivity> $type
+     * @return Builder<Lead>|Builder<FollowUpTask>|Builder<Note>|Builder<CrmActivity>
      */
     private function visibleRecords(string $type, User $user): Builder
     {
@@ -96,8 +87,6 @@ final class CrmActivityPresenter implements ActivityPresenter
 
         return match ($type) {
             Lead::class => Lead::withTrashed()->visibleTo($user),
-            Contact::class => Contact::withTrashed()->visibleTo($user),
-            Organization::class => Organization::withTrashed()->visibleTo($user),
             FollowUpTask::class => FollowUpTask::withTrashed()->visibleTo($user),
             default => throw new InvalidArgumentException('Unsupported recent-change record type.'),
         };

@@ -91,7 +91,7 @@ test('sales ops can view an organization with scoped contacts', function (): voi
     $this->actingAs($user)
         ->get(route('crm.organizations.show', $organization))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Organizations/Show')
+            ->component('crm::Organizations/Show', false)
             ->where('organization.id', $organization->uuid)
             ->where('organization.name', $organization->name)
             ->where('organization.website', $organization->website)
@@ -115,7 +115,7 @@ test('sales ops can view a contact with flat resource props', function (): void 
     $this->actingAs($user)
         ->get(route('crm.contacts.show', $contact))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Contacts/Show')
+            ->component('crm::Contacts/Show', false)
             ->where('contact.id', $contact->uuid)
             ->where('contact.email', $contact->email)
             ->where('contact.organization.id', $organization->uuid)
@@ -317,24 +317,24 @@ test('CRM managers can open entity forms and complete the remaining lifecycle pa
     $this->actingAs($admin)
         ->get(route('crm.organizations.create'))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Organizations/Form')
+            ->component('crm::Organizations/Form', false)
             ->where('organization', null)
             ->where('canAssign', true));
     $this->actingAs($admin)
         ->get(route('crm.organizations.edit', $organization))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Organizations/Form')
+            ->component('crm::Organizations/Form', false)
             ->where('organization.id', $organization->uuid));
     $this->actingAs($admin)
         ->get(route('crm.contacts.create'))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Contacts/Form')
+            ->component('crm::Contacts/Form', false)
             ->where('contact', null)
             ->where('canAssign', true));
     $this->actingAs($admin)
         ->get(route('crm.contacts.edit', $contact))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Contacts/Form')
+            ->component('crm::Contacts/Form', false)
             ->where('contact.id', $contact->uuid));
 
     $this->actingAs($admin)
