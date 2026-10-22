@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd7f9b7d11dc5f5002d6635fba30abb9",
+    "content-hash": "0e621c43a86f47b6d2dc309e74291c8b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.401.5",
+            "version": "3.402.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4d304660ba59e185e86a17946c6be6ab07bf8546"
+                "reference": "661f6a54f2a63ac5137390c291535c74cfe6019e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4d304660ba59e185e86a17946c6be6ab07bf8546",
-                "reference": "4d304660ba59e185e86a17946c6be6ab07bf8546",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/661f6a54f2a63ac5137390c291535c74cfe6019e",
+                "reference": "661f6a54f2a63ac5137390c291535c74cfe6019e",
                 "shasum": ""
             },
             "require": {
@@ -83,7 +83,7 @@
                 "guzzlehttp/promises": "^2.0.3 || ^3.0",
                 "guzzlehttp/psr7": "^2.6.3 || ^3.0",
                 "mtdowling/jmespath.php": "^2.9.1",
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "psr/http-message": "^1.0 || ^2.0",
                 "symfony/filesystem": "^v5.4.45 || ^v6.4.3 || ^v7.1.0 || ^v8.0.0"
             },
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.401.5"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.402.0"
             },
-            "time": "2026-10-21T18:10:10+00:00"
+            "time": "2026-10-22T18:09:05+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -4614,16 +4614,16 @@
         },
         {
             "name": "southeastcode/crm",
-            "version": "dev-feature/extract-crm-foundation",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-crm.git",
-                "reference": "d5f2fff2221bda797b2c2c56bb2eb5132974f918"
+                "reference": "ae96801eb9c17d98b20380ecc8f8085e4df3b8dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/d5f2fff2221bda797b2c2c56bb2eb5132974f918",
-                "reference": "d5f2fff2221bda797b2c2c56bb2eb5132974f918",
+                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/ae96801eb9c17d98b20380ecc8f8085e4df3b8dc",
+                "reference": "ae96801eb9c17d98b20380ecc8f8085e4df3b8dc",
                 "shasum": ""
             },
             "require": {
@@ -4646,6 +4646,7 @@
                 "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
                 "phpstan/extension-installer": "^1.4"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -4746,10 +4747,10 @@
                 "southeastcode"
             ],
             "support": {
-                "source": "https://github.com/devjoenet/laravel-crm/tree/feature/extract-crm-foundation",
+                "source": "https://github.com/devjoenet/laravel-crm/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-crm/issues"
             },
-            "time": "2026-10-22T19:20:11+00:00"
+            "time": "2026-10-22T22:51:57+00:00"
         },
         {
             "name": "southeastcode/inertia-modules",
@@ -4886,16 +4887,16 @@
         },
         {
             "name": "southeastcode/user-management",
-            "version": "dev-feature/extract-user-management",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-user-management.git",
-                "reference": "8c8eeb39e1b870d0b521caf8bc47ff10e7cf6a1e"
+                "reference": "7eeee615916d279339ae745df1c41f0bd58e01d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-user-management/zipball/8c8eeb39e1b870d0b521caf8bc47ff10e7cf6a1e",
-                "reference": "8c8eeb39e1b870d0b521caf8bc47ff10e7cf6a1e",
+                "url": "https://api.github.com/repos/devjoenet/laravel-user-management/zipball/7eeee615916d279339ae745df1c41f0bd58e01d7",
+                "reference": "7eeee615916d279339ae745df1c41f0bd58e01d7",
                 "shasum": ""
             },
             "require": {
@@ -4919,6 +4920,7 @@
                 "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
                 "phpstan/extension-installer": "^1.4"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -5033,10 +5035,10 @@
                 "user-management"
             ],
             "support": {
-                "source": "https://github.com/devjoenet/laravel-user-management/tree/feature/extract-user-management",
+                "source": "https://github.com/devjoenet/laravel-user-management/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-user-management/issues"
             },
-            "time": "2026-10-22T18:33:54+00:00"
+            "time": "2026-10-22T18:57:41+00:00"
         },
         {
             "name": "spatie/laravel-activitylog",
@@ -11338,16 +11340,16 @@
         },
         {
             "name": "larastan/larastan",
-            "version": "v3.13.0",
+            "version": "v3.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "24ee69a7705ffc7c2cd8a3c96a5f498a4c2de5e3"
+                "reference": "043139b9829917363086d6b10f916772420a6102"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/24ee69a7705ffc7c2cd8a3c96a5f498a4c2de5e3",
-                "reference": "24ee69a7705ffc7c2cd8a3c96a5f498a4c2de5e3",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/043139b9829917363086d6b10f916772420a6102",
+                "reference": "043139b9829917363086d6b10f916772420a6102",
                 "shasum": ""
             },
             "require": {
@@ -11415,7 +11417,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v3.13.0"
+                "source": "https://github.com/larastan/larastan/tree/v3.13.1"
             },
             "funding": [
                 {
@@ -11423,7 +11425,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-07T14:14:28+00:00"
+            "time": "2026-10-16T23:32:31+00:00"
         },
         {
             "name": "laravel/agent-detector",
@@ -15073,7 +15075,7 @@
         },
         {
             "package": "southeastcode/crm",
-            "version": "dev-feature/extract-crm-foundation",
+            "version": "dev-main",
             "alias": "0.1.0",
             "alias_normalized": "0.1.0.0"
         },
@@ -15085,7 +15087,7 @@
         },
         {
             "package": "southeastcode/user-management",
-            "version": "dev-feature/extract-user-management",
+            "version": "dev-main",
             "alias": "0.1.0",
             "alias_normalized": "0.1.0.0"
         }
