@@ -259,3 +259,32 @@ The reported seven `WorkspaceComposition::navigation()` errors were reproduced i
 Bridge correction: `3749f4687917c6a74680640892ace1c1cc9c56e8`, delivered on existing bridge PR #2. The analysis script sets a 512 MiB allowance because the local lowest dependency run exceeded the default 128 MiB before reporting the original errors. Both lowest and current local configurations pass full Composer checks: max analysis, Pint, 100% type coverage, 30 PHP tests / 120 assertions, and 8 Node generator tests. Lowest transitive dependencies retain their upstream PHP 8.5 deprecation messages.
 
 Starter PR #3 had already merged as `4b81091b7412380180f915459e80d5eefc3d9b93`, so its lock refresh is a separate `feature/bridge-navigation-compatibility` branch from current main. Only the bridge dependency is refreshed, to `3749f46`; no path repository or unrelated dependency update is committed. Starter regressions pass: 122 PHP tests / 957 assertions, default/max PHPStan and strict Composer validation. Hosted reruns and owner acceptance remain pending; the original user-testing round remains pending and is not represented as accepted or as a failed UI test.
+
+
+### Task 07 — Audit extraction and first real external consumer gate
+
+Live task `01a15abd-3643-70eb-b2af-5a8e15f4cceb`; Task 06 was confirmed completed. `feature/extract-audit` branches exist in agency, starter and new private `devjoenet/laravel-audit`. Bridge source needs no change. This checkout is an isolated extraction candidate; `/Users/joey/sites/nuxt` stays on compatible main with its working Development database. No operational data is imported or migrated.
+
+- Host implementation: `d2d203d`; following evidence-only commit records delivery. Final host head/PR is attached to the live task.
+- Audit: `37f6232e95a731431c367cce583f9ded0eda1aaa`, [Audit PR #1](https://github.com/devjoenet/laravel-audit/pull/1), Composer `dev-feature/extract-audit as 0.1.0`.
+- Starter: `742ca3c`, [starter PR #5](https://github.com/devjoenet/laravel-starter/pull/5). Bridge archive: `44a2498f540a0f5c775fbceda92b98f7ac1d4752`, `dev-main as 0.1.0`.
+- Full consumer reproduction/evidence is preserved in the starter's `docs/development/extraction-ledger.md`, Task 07 entry.
+
+The host consumes real private Composer archives for the bridge and Audit, removes duplicate temporary implementations, and preserves domain-owned presenters/record visibility. Audit owns browsing/filter DTO/request/query/policy, shared history UI/query/rendering, safe morph resolution and globally ordered activity aggregation. `/admin/audit`, `admin.audit.index` and `audit.view` remain unchanged; the accessible form action is **Apply**. Activitylog schema/logging and `audit-activity` alias stay with the foundation. Client/SSR page resolution, generated Wayfinder transport aliases, CSS/type/source preparation and first-party PHP/frontend checks are installed in the agency host. The explicit host API exports only the concrete primitives used by Audit.
+
+| Local verification | Result |
+| --- | --- |
+| Host full unit/feature coverage run | 526 tests / 4,812 assertions; 96.9% host line coverage |
+| Host history browsers | 2 tests / 66 assertions |
+| Final affected provider/morph/composition/source contracts | 80 tests / 895 assertions |
+| Host quality/dependencies | Frontend check/types/architecture, client/SSR builds, default/max PHPStan including copied modules, Rector/Pint, 100% type coverage, immutable Yarn, strict Composer validation/audit, production Node audit pass |
+| Audit standalone | Max analysis, Pint, 100% type coverage, 11 tests / 46 assertions; archive includes runtime PHP/frontend and excludes dependencies/library lock |
+| Real external base starter | Private GitHub clone at `6b18ab6`, empty runtime directories/own environment; 122 tests / 957 assertions, immutable Yarn/check and client/SSR builds pass |
+| Real external Audit | Authenticated VCS/ZIP install using fresh Composer cache; final Audit and bridge directories are physical copies without symlinks; 4 HTTP/browser tests / 55 assertions pass (both themes, Apply behavior, no JS errors, accessibility) |
+| Fresh databases | SQLite setup/seeding plus disposable MySQL 9.4 `codex_audit_consumer_task07`; 11 migrations and seed pass, 2 MySQL consumer tests / 31 assertions pass |
+| Runtime gates | Cached/uncached config/routes, Laravel Data cache, production no-dev boot, both built `audit::` pages rendered through actual SSR HTTP service; temporary SSR workers stopped |
+| Removal/reinstallation | Composer removal + regeneration/rebuild: 1 persistent test / 8 assertions verifies no route/registered module/generated page/CSS/transport, retained new-history sentinel and continuing foundation logging. Base 122 tests/check/build pass again; private archive reinstall + rebuild restores 4 tests / 55 assertions |
+
+The working starter separately exercised a local symlink and was restored to its base remote dependency installation. Copied private packages, not that symlink, satisfy the external gate. Rebuilding after physical removal/reinstallation is required: generation alone does not replace an already compiled bundle. Base consumer CSS measured 298.16 kB (39.46 kB gzip), with Audit 298.53 kB (39.53 kB gzip); package asset budgets pass. Existing Vite+ peer warnings and inherited test-fixture PSR-4 warnings were observed rather than silently relabelled as fixes.
+
+Pending: hosted CI/OS/dependency lanes, owner/user acceptance/merge, full browser matrix and Forge/staging/production/Redis/Horizon gates. Agency and Audit workflows now consume `MODULES_COMPOSER_AUTH`; repository-secret inventory found it absent from those two repositories and present in the starter. The owner must provide those read credentials. Local authenticated downloads do not prove runner or Forge auth. Keep provisional implementation refs until consumers move to replacement releases. No further domain extraction, permanent release/tag, transfer, history reset, deployment or paid service was performed. Delivery ends at a fresh task-specific user-testing handoff.
