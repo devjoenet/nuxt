@@ -114,7 +114,18 @@ jobs:
 
       - name: Browser Tests
         timeout-minutes: 10
-        run: composer test:browser
+        run: composer test:browser -- --log-junit storage/logs/browser-junit.xml
+
+      - name: Upload browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failures
+          path: |
+            tests/Browser/Screenshots
+            storage/logs/browser-junit.xml
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: PHP Code Style
         run: composer test:lint
