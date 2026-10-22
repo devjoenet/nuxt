@@ -10,6 +10,3 @@ parameters:
     - bootstrap
     - database/factories
     - routes
-
-  excludePaths:
-    - vendor/

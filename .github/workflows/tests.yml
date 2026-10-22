@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       XDEBUG_MODE: off
+      COMPOSER_AUTH: ${{ secrets.MODULES_COMPOSER_AUTH }}
 
     steps:
       - name: Checkout

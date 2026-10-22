@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Modules\WorkspaceComposition;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Modules\WorkspaceComposition;
 
 class DashboardController extends Controller
 {

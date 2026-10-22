@@ -8,9 +8,9 @@ use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\Note;
-use App\Support\AuditMorphs;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use SoutheastCode\Audit\Support\AuditMorphs;
 use Spatie\Activitylog\Models\Activity;
 
 final class LeadHistoryQuery

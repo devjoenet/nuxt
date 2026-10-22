@@ -61,8 +61,6 @@ declare module 'vue' {
     PrivacyDialogLink: typeof import('./resources/js/components/PrivacyDialogLink/PrivacyDialogLink.vue')['default']
     PrivacyPolicyContent: typeof import('./resources/js/components/PrivacyPolicyContent/PrivacyPolicyContent.vue')['default']
     Progress: typeof import('./resources/js/components/Ui/Progress/Progress.vue')['default']
-    RecordHistoryButton: typeof import('./resources/js/components/RecordHistoryButton/RecordHistoryButton.vue')['default']
-    RecordHistoryTable: typeof import('./resources/js/components/RecordHistoryTable/RecordHistoryTable.vue')['default']
     Skeleton: typeof import('./resources/js/components/Ui/Skeleton/Skeleton.vue')['default']
     Spinner: typeof import('./resources/js/components/Ui/Spinner/Spinner.vue')['default']
     Stat: typeof import('./resources/js/components/Ui/Stat/Stat.vue')['default']

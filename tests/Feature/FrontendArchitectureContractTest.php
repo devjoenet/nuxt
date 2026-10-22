@@ -48,7 +48,7 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
         expect(File::exists(base_path($retiredPath)))->toBeFalse("Retired frontend file returned: {$retiredPath}");
     }
 
-    $vueFilesWithInlineDateFormatters = collect(File::allFiles(resource_path('js')))
+    $vueFilesWithInlineDateFormatters = collect(frontendContractFiles())
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->filter(fn (SplFileInfo $file): bool => Str::contains(File::get($file->getPathname()), 'new Intl.DateTimeFormat'))
         ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())
@@ -162,7 +162,7 @@ test('callers cannot deep import component-directory internals', function (): vo
         ->reject(fn (string $directory): bool => $directory === 'Ui')
         ->values();
 
-    $deepImports = collect(File::allFiles(resource_path('js')))
+    $deepImports = collect(frontendContractFiles())
         ->filter(fn (SplFileInfo $file): bool => in_array($file->getExtension(), ['ts', 'tsx', 'vue'], true))
         ->reject(fn (SplFileInfo $file): bool => Str::startsWith($file->getRelativePathname(), [
             'actions/',
@@ -225,7 +225,6 @@ test('all baseline application pages are covered by the migrated route families'
         ->all();
 
     expect($applicationPages)->toBe([
-        'Admin/Audit/Index.vue',
         'Admin/Dashboard.vue',
         'Admin/Jobs/Index.vue',
         'Admin/Roles/Index.vue',
@@ -257,7 +256,6 @@ test('all baseline application pages are covered by the migrated route families'
         'Development/UserTesting/Index.vue',
         'Development/UserTesting/Legacy.vue',
         'ErrorPage.vue',
-        'History/Show.vue',
         'Privacy.vue',
         'Settings/Profile.vue',
         'Settings/Security.vue',
@@ -273,7 +271,14 @@ test('all baseline application routes remain registered', function (): void {
 
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR));
 
-    expect($routes)->toHaveCount(92);
+    expect($routes)->toHaveCount(91);
+    $auditRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
+        ->filter(fn (Illuminate\Routing\Route $route): bool => $route->getName() === 'admin.audit.index');
+    expect($auditRoutes)->toHaveCount(1)
+        ->and($auditRoutes->first()->uri())->toBe('admin/audit');
+    $auditPath = Composer\InstalledVersions::getInstallPath('southeastcode/audit');
+    expect(collect(File::allFiles($auditPath.'/resources/js/pages'))->map(fn (SplFileInfo $file): string => $file->getRelativePathname())->sort()->values()->all())
+        ->toBe(['History/Show.vue', 'Index.vue']);
 });
 
 test('temporary frontend compatibility aliases cannot return', function (): void {
@@ -319,7 +324,7 @@ test('the frontend source follows the documented naming convention', function ()
         ->values()
         ->all();
 
-    $frontendFiles = collect(File::allFiles(resource_path('js')));
+    $frontendFiles = collect(frontendContractFiles());
 
     $invalidVueFiles = $frontendFiles
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
@@ -396,7 +401,7 @@ test('sfc script budgets reject undocumented responsibility exceptions', functio
         return $count;
     };
 
-    $violations = collect(File::allFiles(resource_path('js')))
+    $violations = collect(frontendContractFiles())
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->filter(fn (SplFileInfo $file): bool => Str::startsWith($file->getRelativePathname(), [
             'components/',
@@ -505,7 +510,6 @@ test('index workflows share navigation and framing without hiding domain columns
     }
 
     foreach ([
-        'pages/Admin/Audit/Index.vue',
         'pages/Admin/Users/Components/AdminUsersTableSection.vue',
         'pages/Development/Requests/Index.vue',
         'pages/Development/Review/Index.vue',
@@ -521,7 +525,7 @@ test('authenticated pages compose the product workspace shell', function (): voi
     $settingsLayout = File::get(resource_path('js/layouts/SettingsLayout.vue'));
     $workspaceShellOptOuts = [];
 
-    $rawDashboardPanels = collect(File::allFiles(resource_path('js')))
+    $rawDashboardPanels = collect(frontendContractFiles())
         ->reject(fn (SplFileInfo $file): bool => $file->getRelativePathname() === 'components/WorkspacePage/WorkspacePage.vue')
         ->filter(fn (SplFileInfo $file): bool => Str::contains(File::get($file->getPathname()), '<UDashboardPanel'))
         ->map(fn (SplFileInfo $file): string => $file->getRelativePathname())

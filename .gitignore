@@ -40,3 +40,5 @@ GEMINI.md
 resources/js/types/generated.d.ts
 ./local-test.sh
 /storage/time-machine/
+
+/build/modules/

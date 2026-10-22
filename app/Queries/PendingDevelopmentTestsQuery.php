@@ -6,8 +6,8 @@ namespace App\Queries;
 
 use App\Enums\DevelopmentTestRunStatus;
 use App\Models\DevelopmentTestRun;
-use App\Modules\UserContextContribution;
-use App\Modules\WorkspaceUser;
+use SoutheastCode\Modules\UserContextContribution;
+use SoutheastCode\Modules\WorkspaceUser;
 
 final class PendingDevelopmentTestsQuery implements UserContextContribution
 {

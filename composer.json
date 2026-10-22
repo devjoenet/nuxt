@@ -23,7 +23,9 @@
     "league/flysystem-aws-s3-v3": "^3.35.3",
     "spatie/laravel-activitylog": "^5.1.1",
     "spatie/laravel-data": "^4.23",
-    "spatie/laravel-permission": "^8.3"
+    "spatie/laravel-permission": "^8.3",
+    "southeastcode/inertia-modules": "dev-main as 0.1.0",
+    "southeastcode/audit": "dev-feature/extract-audit as 0.1.0"
   },
   "require-dev": {
     "fakerphp/faker": "^1.24.1",
@@ -100,10 +102,14 @@
       "pint --parallel",
       "yarn lint"
     ],
-    "test:type-coverage": "pest --type-coverage --min=100",
+    "test:type-coverage": "@php -d memory_limit=512M vendor/bin/pest --type-coverage --min=100",
     "coverage": "herd coverage ./vendor/bin/pest",
-    "test:types:max": "phpstan --configuration=phpstan.max.neon --memory-limit=512M",
+    "test:types:max": [
+      "corepack yarn modules:prepare",
+      "@php vendor/bin/phpstan --configuration=build/modules/phpstan.max.neon --memory-limit=512M"
+    ],
     "test:lint": [
+      "@modules:php",
       "pint --parallel --test",
       "rector --dry-run",
       "yarn format:check"
@@ -113,14 +119,22 @@
       "@php artisan config:clear --ansi",
       "pest --testsuite=Unit,Feature --parallel --coverage --min=80.0"
     ],
-    "test:types": "phpstan --memory-limit=512M",
+    "test:types": [
+      "corepack yarn modules:prepare",
+      "@php vendor/bin/phpstan --configuration=build/modules/phpstan.neon --memory-limit=512M"
+    ],
     "test": [
+      "@modules:php",
       "@test:type-coverage",
       "@test:unit",
       "@test:browser",
       "@test:lint",
       "@test:types",
       "@test:types:max"
+    ],
+    "modules:php": [
+      "corepack yarn modules:prepare",
+      "@php vendor/southeastcode/inertia-modules/tooling/php-check.php"
     ]
   },
   "extra": {
@@ -138,5 +152,15 @@
     }
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/devjoenet/laravel-audit"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/devjoenet/laravel-inertia-modules"
+    }
+  ]
 }

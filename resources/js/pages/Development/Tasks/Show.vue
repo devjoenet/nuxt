@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { RecordHistoryButton } from "@/components/RecordHistoryButton";
+import { RecordHistoryButton } from "@southeastcode/audit/public";
 import { history } from "@/routes/development/tasks";
 import { index as requestsIndex } from "@/routes/development/requests";
 import { index as roadmapIndex } from "@/routes/development/roadmap";

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Enums\ServiceInterest;
-use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BusinessSettingController;
@@ -91,8 +90,6 @@ Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(functi
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
         Route::patch('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
-
-        Route::get('audit', [ActivityLogController::class, 'index'])->name('audit.index');
 
         Route::get('settings', [BusinessSettingController::class, 'edit'])->name('settings.edit');
         Route::patch('settings', [BusinessSettingController::class, 'update'])->name('settings.update');

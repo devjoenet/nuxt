@@ -55,3 +55,20 @@ function something(): void
 {
     // ..
 }
+
+/** @return array<int, Symfony\Component\Finder\SplFileInfo> */
+function frontendContractFiles(): array
+{
+    $files = Illuminate\Support\Facades\File::allFiles(resource_path('js'));
+    foreach (Composer\InstalledVersions::getInstalledPackages() as $name) {
+        if (! str_starts_with($name, 'southeastcode/') || $name === Composer\InstalledVersions::getRootPackage()['name']) {
+            continue;
+        }
+        $path = Composer\InstalledVersions::getInstallPath($name);
+        if ($path !== null && is_dir($path.'/resources/js')) {
+            array_push($files, ...Illuminate\Support\Facades\File::allFiles($path.'/resources/js'));
+        }
+    }
+
+    return $files;
+}

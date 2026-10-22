@@ -78,11 +78,11 @@ test('Vite Plus owns development and build commands without removing project qua
 
     expect($package['scripts'])
         ->toMatchArray([
-            'build' => 'vp build && vp build --ssr',
-            'dev' => 'vp dev',
-            'check:fix' => 'vp check --fix && yarn test:frontend-architecture && yarn typecheck',
-            'lint:check' => 'vp lint && yarn test:frontend-architecture',
-            'typecheck' => 'vue-tsc --noEmit',
+            'build' => 'yarn modules:prepare && vp build && vp build --ssr',
+            'dev' => 'yarn modules:prepare && vp dev',
+            'check:fix' => 'yarn modules:prepare && vp check --fix && yarn test:frontend-architecture && yarn typecheck',
+            'lint:check' => 'yarn modules:prepare && vp lint && yarn test:frontend-architecture && yarn modules:check',
+            'typecheck' => 'yarn modules:prepare && vue-tsc --noEmit',
         ])
         ->and($package['scripts']['check'])
         ->toContain('vp check')

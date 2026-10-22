@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\User;
 use App\Queries\LeadHistoryQuery;
-use App\Support\AuditMorphs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Audit\Support\AuditMorphs;
 use Spatie\Activitylog\Models\Activity;
 
 class LeadHistoryController extends Controller

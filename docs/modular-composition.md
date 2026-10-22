@@ -1,5 +1,7 @@
 # Module composition contract (Task 04)
 
+Current integration (Task 07): the host now installs the public `SoutheastCode\Modules` bridge and `SoutheastCode\Audit` package instead of their temporary host copies. Audit owns its permission/navigation, `audit::` pages, browsing, record-history primitives and aggregation; host/domain adapters retain their own visibility and presentation. Shared Activitylog storage remains foundation-owned. `resources/js/host.ts` also exports the concrete shared UI primitives used by Audit. The historical Task 02/04 evidence below describes the original in-place phase; current revisions and external-consumer/removal checks are in the Task 07 delivery ledger.
+
 Live task: `01a15abd-3627-721a-998e-2300f7d6058b`. This documents the in-place
 contracts established before package extraction; it is not a parallel task queue.
 

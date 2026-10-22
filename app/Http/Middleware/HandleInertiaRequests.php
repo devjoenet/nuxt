@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Http\Resources\UserResource;
-use App\Modules\WorkspaceComposition;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Override;
+use SoutheastCode\Modules\WorkspaceComposition;
 
 use function config;
 use function mb_trim;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Enums\RoleName;
-use App\Modules\ModuleRegistry;
 use Illuminate\Database\Seeder;
+use SoutheastCode\Modules\ModuleRegistry;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;

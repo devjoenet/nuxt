@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router } from "@inertiajs/vue3";
-import { RecordHistoryTable } from "@/components/RecordHistoryTable";
-import type { HistoryPage } from "@/components/RecordHistoryTable";
+import { RecordHistoryTable } from "@southeastcode/audit/public";
+import type { HistoryPage } from "@southeastcode/audit/public";
 import { history, show } from "@/routes/crm/leads";
 
 const props = defineProps<{ lead: { id: string }; activities: HistoryPage }>();

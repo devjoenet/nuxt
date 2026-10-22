@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Queries;
 
 use App\Enums\PermissionGroup;
-use App\Modules\ModuleRegistry;
+use SoutheastCode\Modules\ModuleRegistry;
 use Spatie\Permission\Models\Permission;
 
 final class RolePermissionCatalogQuery

@@ -1,3 +1,4 @@
+import { moduleBridge } from "./vendor/southeastcode/inertia-modules/tooling/vite.mjs";
 import { wayfinder } from "@laravel/vite-plugin-wayfinder";
 import inertia from "@inertiajs/vite";
 import vue from "@vitejs/plugin-vue";
@@ -19,6 +20,7 @@ const applicationComponentDeepImport = {
 
 export default defineConfig(({ isSsrBuild }) => ({
   plugins: lazyPlugins(() => [
+    moduleBridge(),
     laravel({
       input: ["resources/js/app.ts"],
       refresh: true,
@@ -124,6 +126,7 @@ export default defineConfig(({ isSsrBuild }) => ({
     vueDevTools(),
   ]),
   lint: {
+    globals: { defineProps: "readonly", defineEmits: "readonly", defineExpose: "readonly", defineOptions: "readonly", defineSlots: "readonly", defineModel: "readonly", withDefaults: "readonly" },
     ignorePatterns: [".yarn/**", "bootstrap/ssr/**", "node_modules/**", "public/**", "resources/js/actions/**", "resources/js/routes/**", "resources/js/wayfinder/**", "vendor/**"],
     plugins: ["eslint", "typescript", "unicorn", "oxc", "vue"],
     rules: {

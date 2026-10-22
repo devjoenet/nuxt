@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Resources;
 
 use App\Models\User;
-use App\Modules\ModuleRegistry;
-use App\Modules\PermissionDefinition;
-use App\Modules\WorkspaceComposition;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
+use SoutheastCode\Modules\ModuleRegistry;
+use SoutheastCode\Modules\PermissionDefinition;
+use SoutheastCode\Modules\WorkspaceComposition;
 
 /** @mixin User */
 class UserResource extends JsonResource

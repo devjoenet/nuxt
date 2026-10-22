@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Audit\Presenters;
 
-use App\Audit\ActivityPresentation;
-use App\Audit\ActivityPresenter;
 use App\Models\Contact;
 use App\Models\CrmActivity;
 use App\Models\FollowUpTask;
@@ -13,11 +11,13 @@ use App\Models\Lead;
 use App\Models\Note;
 use App\Models\Organization;
 use App\Models\User;
-use App\Modules\WorkspaceUser;
-use App\Support\AuditMorphs;
 use Illuminate\Database\Eloquent\Builder;
 use InvalidArgumentException;
 use LogicException;
+use SoutheastCode\Audit\Contracts\ActivityPresentation;
+use SoutheastCode\Audit\Contracts\ActivityPresenter;
+use SoutheastCode\Audit\Support\AuditMorphs;
+use SoutheastCode\Modules\WorkspaceUser;
 use Spatie\Activitylog\Models\Activity;
 
 final class CrmActivityPresenter implements ActivityPresenter

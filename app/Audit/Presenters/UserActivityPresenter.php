@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Audit\Presenters;
 
-use App\Audit\ActivityPresentation;
-use App\Audit\ActivityPresenter;
 use App\Models\User;
-use App\Modules\WorkspaceUser;
-use App\Support\AuditMorphs;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Builder;
 use LogicException;
+use SoutheastCode\Audit\Contracts\ActivityPresentation;
+use SoutheastCode\Audit\Contracts\ActivityPresenter;
+use SoutheastCode\Audit\Support\AuditMorphs;
+use SoutheastCode\Modules\WorkspaceUser;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
