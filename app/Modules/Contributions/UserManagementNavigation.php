@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Modules\Contributions;
 
-use App\Modules\NavigationContribution;
-use App\Modules\NavigationItem;
-use App\Modules\WorkspaceUser;
+use SoutheastCode\Modules\NavigationContribution;
+use SoutheastCode\Modules\NavigationItem;
+use SoutheastCode\Modules\WorkspaceUser;
 
 final class UserManagementNavigation implements NavigationContribution
 {

@@ -10,10 +10,10 @@ use App\Enums\Permission;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\User;
-use App\Modules\WorkspaceDashboardContribution;
-use App\Modules\WorkspaceUser;
 use Illuminate\Support\Str;
 use LogicException;
+use SoutheastCode\Modules\WorkspaceDashboardContribution;
+use SoutheastCode\Modules\WorkspaceUser;
 
 final class CrmWorkspaceDashboardQuery implements WorkspaceDashboardContribution
 {

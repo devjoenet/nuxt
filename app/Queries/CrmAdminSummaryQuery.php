@@ -7,11 +7,11 @@ namespace App\Queries;
 use App\Models\FollowUpTask;
 use App\Models\Lead;
 use App\Models\User;
-use App\Modules\AdminSummaryContribution;
-use App\Modules\WorkspaceUser;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use LogicException;
+use SoutheastCode\Modules\AdminSummaryContribution;
+use SoutheastCode\Modules\WorkspaceUser;
 use Throwable;
 
 final class CrmAdminSummaryQuery implements AdminSummaryContribution

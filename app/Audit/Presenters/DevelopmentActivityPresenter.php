@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Audit\Presenters;
 
-use App\Audit\ActivityPresentation;
-use App\Audit\ActivityPresenter;
 use App\Models\DevelopmentTask;
-use App\Modules\WorkspaceUser;
 use Illuminate\Database\Eloquent\Builder;
+use SoutheastCode\Audit\Contracts\ActivityPresentation;
+use SoutheastCode\Audit\Contracts\ActivityPresenter;
+use SoutheastCode\Modules\WorkspaceUser;
 use Spatie\Activitylog\Models\Activity;
 
 final class DevelopmentActivityPresenter implements ActivityPresenter

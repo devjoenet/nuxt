@@ -91,9 +91,16 @@ test('landing anchors and logo naming stay connected to real sections', function
 });
 
 test('mobile public navigation traps focus and restores it when dismissed', function (): void {
-    visit('/')
-        ->resize(390, 844)
-        ->click('[data-testid="public-navigation-trigger"]')
+    $page = visit('/')
+        ->on()->iPhone15Pro()
+        ->assertAttribute('form[aria-label="Project inquiry form"]', 'data-ready', 'true')
+        ->assertVisible('[data-testid="public-navigation-trigger"]')
+        ->assertAttribute('[data-testid="public-navigation-trigger"]', 'aria-expanded', 'false');
+
+    // A retried click can target the trigger after the open drawer covers it.
+    $page->page()->getByRole('button', ['name' => 'Open navigation', 'exact' => true])->click();
+
+    $page
         ->assertVisible('[role="dialog"]')
         ->assertPresent('[role="dialog"] nav[aria-label="Mobile navigation"]')
         ->assertScript('document.activeElement?.closest("[role=dialog]") !== null', true)

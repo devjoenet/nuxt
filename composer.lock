@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ebc15519f56b8820eb6c22bfa587bf1",
+    "content-hash": "d65a85d7b4c3943c36e8bbb08350166f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4463,6 +4463,286 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.4"
             },
             "time": "2026-09-16T11:39:30+00:00"
+        },
+        {
+            "name": "southeastcode/audit",
+            "version": "dev-feature/extract-audit",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:devjoenet/laravel-audit.git",
+                "reference": "70807924553e44e5d8a7c000c0f4600e338582cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/70807924553e44e5d8a7c000c0f4600e338582cb",
+                "reference": "70807924553e44e5d8a7c000c0f4600e338582cb",
+                "shasum": ""
+            },
+            "require": {
+                "inertiajs/inertia-laravel": "^3.5.1",
+                "laravel/framework": "^13.35.0",
+                "php": "^8.5",
+                "southeastcode/inertia-modules": "dev-main as 0.1.0",
+                "spatie/laravel-activitylog": "^5.1.1"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.9",
+                "laravel/pao": "^1.0",
+                "laravel/pint": "^1.29",
+                "orchestra/testbench": "^11.0",
+                "pestphp/pest": "^4.6||^5.0",
+                "pestphp/pest-plugin-laravel": "^4.1||^5.0",
+                "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
+                "phpstan/extension-installer": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "SoutheastCode\\Audit\\AuditServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-feature/extract-audit": "0.1.x-dev"
+                },
+                "southeastcode-module": {
+                    "manifestVersion": 1,
+                    "hostApiVersion": 1,
+                    "id": "audit",
+                    "provider": "SoutheastCode\\Audit\\AuditServiceProvider",
+                    "pageNamespace": "audit",
+                    "pageRoots": [
+                        "resources/js/pages"
+                    ],
+                    "frontendExports": {
+                        "public": "resources/js/public.ts"
+                    },
+                    "frontendDependencies": {
+                        "vue": "^3.5",
+                        "@inertiajs/vue3": "^3.8",
+                        "@nuxt/ui": "^4.11"
+                    },
+                    "layout": "application"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SoutheastCode\\Audit\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "SoutheastCode\\Audit\\Tests\\": "tests/",
+                    "Workbench\\App\\": "workbench/app/",
+                    "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+                    "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+                }
+            },
+            "archive": {
+                "exclude": [
+                    "/vendor",
+                    "/build",
+                    "/composer.lock",
+                    "/.phpunit.cache",
+                    "**/.DS_Store"
+                ]
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@clear",
+                    "@prepare"
+                ],
+                "prepare": [
+                    "@php vendor/bin/testbench package:discover --ansi"
+                ],
+                "build": [
+                    "@php vendor/bin/testbench workbench:build --ansi"
+                ],
+                "serve": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@build",
+                    "@php vendor/bin/testbench serve --ansi"
+                ],
+                "lint": [
+                    "vendor/bin/pint --parallel"
+                ],
+                "lint:check": [
+                    "vendor/bin/pint --parallel --test"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse --memory-limit=512M"
+                ],
+                "test:types": [
+                    "@php -d memory_limit=512M vendor/bin/pest --type-coverage --min=100"
+                ],
+                "test:unit": [
+                    "vendor/bin/pest --parallel"
+                ],
+                "test": [
+                    "@analyse",
+                    "@lint:check",
+                    "@test:types",
+                    "@test:unit"
+                ],
+                "clear": [
+                    "@php vendor/bin/testbench package:purge-skeleton --ansi"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joey Harris",
+                    "email": "devjoenet@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Authorized audit browsing and reusable record history for Laravel Inertia applications.",
+            "homepage": "https://github.com/devjoenet/laravel-audit",
+            "keywords": [
+                "audit",
+                "laravel",
+                "southeastcode"
+            ],
+            "support": {
+                "source": "https://github.com/devjoenet/laravel-audit/tree/feature/extract-audit",
+                "issues": "https://github.com/devjoenet/laravel-audit/issues"
+            },
+            "time": "2026-10-22T12:29:12+00:00"
+        },
+        {
+            "name": "southeastcode/inertia-modules",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:devjoenet/laravel-inertia-modules.git",
+                "reference": "44a2498f540a0f5c775fbceda92b98f7ac1d4752"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/devjoenet/laravel-inertia-modules/zipball/44a2498f540a0f5c775fbceda92b98f7ac1d4752",
+                "reference": "44a2498f540a0f5c775fbceda92b98f7ac1d4752",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^13.35.0",
+                "php": "^8.5"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.9",
+                "laravel/pao": "^1.0",
+                "laravel/pint": "^1.29",
+                "orchestra/testbench": "^11.0",
+                "pestphp/pest": "^4.6||^5.0",
+                "pestphp/pest-plugin-laravel": "^4.1||^5.0",
+                "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
+                "phpstan/extension-installer": "^1.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "SoutheastCode\\Modules\\ModulesServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-feature/module-runtime": "0.1.x-dev",
+                    "dev-feature/module-frontend-bridge": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SoutheastCode\\Modules\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "SoutheastCode\\Modules\\Tests\\": "tests/",
+                    "Workbench\\App\\": "workbench/app/",
+                    "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+                    "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+                }
+            },
+            "archive": {
+                "exclude": [
+                    "/vendor",
+                    "/build",
+                    "/composer.lock",
+                    "/.phpunit.cache",
+                    "/.phpunit.result.cache",
+                    "**/.DS_Store",
+                    "/.DS_Store"
+                ]
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@clear",
+                    "@prepare"
+                ],
+                "prepare": [
+                    "@php vendor/bin/testbench package:discover --ansi"
+                ],
+                "build": [
+                    "@php vendor/bin/testbench workbench:build --ansi"
+                ],
+                "serve": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@build",
+                    "@php vendor/bin/testbench serve --ansi"
+                ],
+                "lint": [
+                    "vendor/bin/pint --parallel"
+                ],
+                "lint:check": [
+                    "vendor/bin/pint --parallel --test"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse --memory-limit=512M"
+                ],
+                "test:types": [
+                    "vendor/bin/pest --type-coverage --min=100"
+                ],
+                "test:unit": [
+                    "vendor/bin/pest --parallel"
+                ],
+                "test": [
+                    "@analyse",
+                    "@lint:check",
+                    "@test:types",
+                    "@test:unit",
+                    "@test:frontend"
+                ],
+                "clear": [
+                    "@php vendor/bin/testbench package:purge-skeleton --ansi"
+                ],
+                "test:frontend": [
+                    "node --test tests/Frontend/bridge.test.mjs"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joey Harris",
+                    "email": "devjoenet@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Portable module contracts and composition runtime for Laravel Inertia applications.",
+            "homepage": "https://github.com/devjoenet/laravel-inertia-modules",
+            "keywords": [
+                "inertia-modules",
+                "laravel",
+                "southeastcode"
+            ],
+            "support": {
+                "source": "https://github.com/devjoenet/laravel-inertia-modules/tree/main",
+                "issues": "https://github.com/devjoenet/laravel-inertia-modules/issues"
+            },
+            "time": "2026-10-22T03:05:17+00:00"
         },
         {
             "name": "spatie/laravel-activitylog",
@@ -14490,9 +14770,25 @@
             "time": "2026-10-09T19:09:05+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "southeastcode/audit",
+            "version": "dev-feature/extract-audit",
+            "alias": "0.1.0",
+            "alias_normalized": "0.1.0.0"
+        },
+        {
+            "package": "southeastcode/inertia-modules",
+            "version": "dev-main",
+            "alias": "0.1.0",
+            "alias_normalized": "0.1.0.0"
+        }
+    ],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "southeastcode/audit": 20,
+        "southeastcode/inertia-modules": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

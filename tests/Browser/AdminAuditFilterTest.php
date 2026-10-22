@@ -36,13 +36,20 @@ test('audit filters remain usable across themes and narrow widths', function ():
         ->keys('#audit-event', 'Escape')
         ->assertAttribute('#audit-event', 'aria-expanded', 'false')
         ->click('#audit-causer')
-        ->assertAttribute('#audit-causer', 'aria-expanded', 'true')
-        ->click($admin->name)
+        ->assertAttribute('#audit-causer', 'aria-expanded', 'true');
+
+    $page->page()->getByRole('option', ['name' => $admin->name, 'exact' => true])->click();
+    $page->assertValue('input[name="causer[]"]', (string) $admin->id)
         ->keys('#audit-causer', 'Escape')
         ->click('#audit-subject')
-        ->assertAttribute('#audit-subject', 'aria-expanded', 'true')
-        ->click('Lead')
-        ->pressAndWaitFor('Filter')
+        ->assertAttribute('#audit-subject', 'aria-expanded', 'true');
+    $page->page()->getByRole('option', ['name' => 'Lead', 'exact' => true])->click();
+    $page->assertValue('input[name="subject[]"]', $lead->getMorphClass())
+        ->keys('#audit-subject', 'Escape')
+        ->click('Apply')
+        ->assertQueryStringHas('subject')
+        ->assertQueryStringHas('causer')
+        ->assertDontSee('Browser updated record')
         ->assertSee('Browser audit record')
         ->assertSee('Created')
         ->assertScript('document.documentElement.scrollWidth <= window.innerWidth', true)

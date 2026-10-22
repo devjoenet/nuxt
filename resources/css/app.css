@@ -1,3 +1,4 @@
+@import "../../build/modules/sources.css";
 @import "tailwindcss";
 @import "@nuxt/ui";
 @import "./theme/palette.css";

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Contributions;
 
-use App\Modules\NavigationContribution;
-use App\Modules\NavigationItem;
-use App\Modules\WorkspaceUser;
 use App\Queries\PendingDevelopmentTestsQuery;
+use SoutheastCode\Modules\NavigationContribution;
+use SoutheastCode\Modules\NavigationItem;
+use SoutheastCode\Modules\WorkspaceUser;
 
 final class DevelopmentNavigation implements NavigationContribution
 {

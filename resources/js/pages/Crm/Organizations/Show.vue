@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Link, router } from "@inertiajs/vue3";
-import { RecordHistoryButton } from "@/components/RecordHistoryButton";
+import { RecordHistoryButton } from "@southeastcode/audit/public";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
 import { CrmDetailLayout } from "@/components/CrmDetailLayout";
 import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";

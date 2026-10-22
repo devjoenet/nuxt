@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\RecordHistoryController;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Resources\UserResource;
-use App\Modules\WorkspaceComposition;
-use App\Queries\RecentAdminChangesQuery;
+use SoutheastCode\Audit\Http\Controllers\RecordHistoryController;
+use SoutheastCode\Audit\Queries\RecentAdminChangesQuery;
+use SoutheastCode\Modules\WorkspaceComposition;
 
 test('host composition cannot import optional domain persistence', function (): void {
     expect([

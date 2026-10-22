@@ -22,14 +22,10 @@ use App\Models\Lead;
 use App\Models\Note;
 use App\Models\Organization;
 use App\Models\UserTestingPage;
-use App\Modules\Contributions\AuditNavigation;
 use App\Modules\Contributions\CrmNavigation;
 use App\Modules\Contributions\DevelopmentNavigation;
 use App\Modules\Contributions\FoundationNavigation;
 use App\Modules\Contributions\UserManagementNavigation;
-use App\Modules\ModuleManifest;
-use App\Modules\ModuleRegistry;
-use App\Modules\PermissionDefinition;
 use App\Queries\CrmAdminSummaryQuery;
 use App\Queries\CrmWorkspaceDashboardQuery;
 use App\Queries\PendingDevelopmentTestsQuery;
@@ -37,18 +33,14 @@ use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
-use Override;
+use SoutheastCode\Modules\ModuleManifest;
+use SoutheastCode\Modules\ModuleRegistry;
+use SoutheastCode\Modules\PermissionDefinition;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\PermissionRegistrar;
 
 class ModuleServiceProvider extends ServiceProvider
 {
-    #[Override]
-    public function register(): void
-    {
-        $this->app->singleton(ModuleRegistry::class);
-    }
-
     public function boot(ModuleRegistry $registry): void
     {
         // In-place adapters: move each contribution with its owner during extraction.
@@ -62,6 +54,10 @@ class ModuleServiceProvider extends ServiceProvider
                 Permission::DevelopmentRoadmapManage, Permission::DevelopmentUserTestingManage => 'dev',
                 default => 'foundation',
             };
+            if ($owner === 'audit') {
+                continue;
+            }
+
             $roles = [RoleName::SuperAdmin->value, RoleName::Admin->value];
             if (in_array($permission, [Permission::AdminDashboardView, Permission::CrmView, Permission::CrmManage, Permission::JobsView], true)) {
                 $roles[] = RoleName::SalesOps->value;
@@ -79,9 +75,9 @@ class ModuleServiceProvider extends ServiceProvider
                 'business-setting' => BusinessSetting::class,
                 'role' => $this->morphModel(app(PermissionRegistrar::class)->getRoleClass()),
                 'permission' => $this->morphModel(app(PermissionRegistrar::class)->getPermissionClass()),
+                'audit-activity' => $this->morphModel(config('activitylog.activity_model', Activity::class)),
             ],
             'users' => [],
-            'audit' => ['audit-activity' => $this->morphModel(config('activitylog.activity_model', Activity::class))],
             'crm' => [
                 'crm-organization' => Organization::class,
                 'crm-contact' => Contact::class,
@@ -107,7 +103,6 @@ class ModuleServiceProvider extends ServiceProvider
             $navigation = match ($owner) {
                 'foundation' => FoundationNavigation::class,
                 'users' => UserManagementNavigation::class,
-                'audit' => AuditNavigation::class,
                 'crm' => CrmNavigation::class,
                 'dev' => DevelopmentNavigation::class,
             };
@@ -116,7 +111,6 @@ class ModuleServiceProvider extends ServiceProvider
                 'users' => [UserActivityPresenter::class],
                 'crm' => [CrmActivityPresenter::class],
                 'dev' => [DevelopmentActivityPresenter::class],
-                default => [],
             };
             $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner],
                 navigation: [$navigation],
@@ -126,13 +120,6 @@ class ModuleServiceProvider extends ServiceProvider
                 extensions: ['audit.presenters' => $presenters, 'audit.admin-presenters' => $owner === 'dev' ? [] : $presenters],
             ));
         }
-
-        $this->app->booted(function () use ($registry): void {
-            $registry->freeze();
-            if (config('modules.stable_morphs')) {
-                $registry->enforceMorphMap();
-            }
-        });
     }
 
     /** @return class-string<Model> */

@@ -3,7 +3,7 @@ import { Link, router } from "@inertiajs/vue3";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
 import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";
 import { CrmRecordStatusBadge } from "@/components/CrmRecordStatusBadge";
-import { RecordHistoryButton } from "@/components/RecordHistoryButton";
+import { RecordHistoryButton } from "@southeastcode/audit/public";
 import { LeadStatusBadge } from "@/components/LeadStatusBadge";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";

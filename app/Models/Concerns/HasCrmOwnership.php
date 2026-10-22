@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Models\Concerns;
 
 use App\Models\User;
-use App\Modules\WorkspaceUser;
 use App\Support\CrmAccess;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use SoutheastCode\Modules\WorkspaceUser;
 
 trait HasCrmOwnership
 {

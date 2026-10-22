@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Development;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\RecordHistoryController;
 use App\Models\DevelopmentTask;
-use App\Queries\RecordHistoryQuery;
 use Illuminate\Http\Request;
 use Inertia\Response;
+use SoutheastCode\Audit\Http\Controllers\RecordHistoryController;
+use SoutheastCode\Audit\Queries\RecordHistoryQuery;
 
 class DevelopmentTaskHistoryController extends Controller
 {

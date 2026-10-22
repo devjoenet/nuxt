@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use App\Audit\ActivityPresenterRegistry;
 use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\User;
-use App\Modules\ModuleManifest;
-use App\Modules\ModuleRegistry;
-use App\Modules\WorkspaceComposition;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Audit\Contracts\ActivityPresenterRegistry;
+use SoutheastCode\Modules\ModuleManifest;
+use SoutheastCode\Modules\ModuleRegistry;
+use SoutheastCode\Modules\WorkspaceComposition;
 use Spatie\Activitylog\Models\Activity;
 
 beforeEach(function (): void {
@@ -97,7 +97,7 @@ test('recent changes retain a global limit and deterministic order across domain
         activity()->causedBy($admin)->performedOn($number % 2 === 0 ? $contact : $admin)->event('updated')->log('Updated');
     }
     $expected = Activity::query()->orderByDesc('created_at')->orderByDesc('id')->limit(8)->pluck('id')->all();
-    expect(app(App\Queries\RecentAdminChangesQuery::class)->forUser($admin)->pluck('id')->all())->toBe($expected);
+    expect(app(SoutheastCode\Audit\Queries\RecentAdminChangesQuery::class)->forUser($admin)->pluck('id')->all())->toBe($expected);
 });
 
 test('disabled activity providers hide domain changes even when the user retains grants', function (): void {
@@ -107,7 +107,7 @@ test('disabled activity providers hide domain changes even when the user retains
     $registry = new ModuleRegistry;
     $registry->register(app(ModuleRegistry::class)->all()['foundation']);
     app()->instance(ModuleRegistry::class, $registry);
-    expect(app(App\Queries\RecentAdminChangesQuery::class)->forUser($admin))->toBeEmpty();
+    expect(app(SoutheastCode\Audit\Queries\RecentAdminChangesQuery::class)->forUser($admin))->toBeEmpty();
     $entry = Activity::query()->where('subject_type', $contact->getMorphClass())->latest('id')->firstOrFail();
     $entry->setRelation('subject', null);
     $presentation = app(ActivityPresenterRegistry::class)->present($entry, $admin);
@@ -155,5 +155,5 @@ test('Development activity visibility includes participants and reviewers withou
     $owned->forceDelete();
     $entry->unsetRelation('subject');
     expect($presenter->present($entry, $participant)->url)->toBeNull();
-    expect(app(App\Queries\RecentAdminChangesQuery::class)->forUser($participant))->toBeEmpty();
+    expect(app(SoutheastCode\Audit\Queries\RecentAdminChangesQuery::class)->forUser($participant))->toBeEmpty();
 });

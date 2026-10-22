@@ -259,3 +259,81 @@ The reported seven `WorkspaceComposition::navigation()` errors were reproduced i
 Bridge correction: `3749f4687917c6a74680640892ace1c1cc9c56e8`, delivered on existing bridge PR #2. The analysis script sets a 512 MiB allowance because the local lowest dependency run exceeded the default 128 MiB before reporting the original errors. Both lowest and current local configurations pass full Composer checks: max analysis, Pint, 100% type coverage, 30 PHP tests / 120 assertions, and 8 Node generator tests. Lowest transitive dependencies retain their upstream PHP 8.5 deprecation messages.
 
 Starter PR #3 had already merged as `4b81091b7412380180f915459e80d5eefc3d9b93`, so its lock refresh is a separate `feature/bridge-navigation-compatibility` branch from current main. Only the bridge dependency is refreshed, to `3749f46`; no path repository or unrelated dependency update is committed. Starter regressions pass: 122 PHP tests / 957 assertions, default/max PHPStan and strict Composer validation. Hosted reruns and owner acceptance remain pending; the original user-testing round remains pending and is not represented as accepted or as a failed UI test.
+
+
+### Task 07 — Audit extraction and first real external consumer gate
+
+Live task `01a15abd-3643-70eb-b2af-5a8e15f4cceb`; Task 06 was confirmed completed. `feature/extract-audit` branches exist in agency, starter and new private `devjoenet/laravel-audit`. Bridge source needs no change. This checkout is an isolated extraction candidate; `/Users/joey/sites/nuxt` stays on compatible main with its working Development database. No operational data is imported or migrated.
+
+- Host implementation: `d2d203d`; following evidence-only commit records delivery. Final host head/PR is attached to the live task.
+- Audit: `37f6232e95a731431c367cce583f9ded0eda1aaa`, [Audit PR #1](https://github.com/devjoenet/laravel-audit/pull/1), Composer `dev-feature/extract-audit as 0.1.0`.
+- Starter: `742ca3c`, [starter PR #5](https://github.com/devjoenet/laravel-starter/pull/5). Bridge archive: `44a2498f540a0f5c775fbceda92b98f7ac1d4752`, `dev-main as 0.1.0`.
+- Full consumer reproduction/evidence is preserved in the starter's `docs/development/extraction-ledger.md`, Task 07 entry.
+
+The host consumes real private Composer archives for the bridge and Audit, removes duplicate temporary implementations, and preserves domain-owned presenters/record visibility. Audit owns browsing/filter DTO/request/query/policy, shared history UI/query/rendering, safe morph resolution and globally ordered activity aggregation. `/admin/audit`, `admin.audit.index` and `audit.view` remain unchanged; the accessible form action is **Apply**. Activitylog schema/logging and `audit-activity` alias stay with the foundation. Client/SSR page resolution, generated Wayfinder transport aliases, CSS/type/source preparation and first-party PHP/frontend checks are installed in the agency host. The explicit host API exports only the concrete primitives used by Audit.
+
+| Local verification | Result |
+| --- | --- |
+| Host full unit/feature coverage run | 526 tests / 4,812 assertions; 96.9% host line coverage |
+| Host history browsers | 2 tests / 66 assertions |
+| Final affected provider/morph/composition/source contracts | 80 tests / 895 assertions |
+| Host quality/dependencies | Frontend check/types/architecture, client/SSR builds, default/max PHPStan including copied modules, Rector/Pint, 100% type coverage, immutable Yarn, strict Composer validation/audit, production Node audit pass |
+| Audit standalone | Max analysis, Pint, 100% type coverage, 11 tests / 46 assertions; archive includes runtime PHP/frontend and excludes dependencies/library lock |
+| Real external base starter | Private GitHub clone at `6b18ab6`, empty runtime directories/own environment; 122 tests / 957 assertions, immutable Yarn/check and client/SSR builds pass |
+| Real external Audit | Authenticated VCS/ZIP install using fresh Composer cache; final Audit and bridge directories are physical copies without symlinks; 4 HTTP/browser tests / 55 assertions pass (both themes, Apply behavior, no JS errors, accessibility) |
+| Fresh databases | SQLite setup/seeding plus disposable MySQL 9.4 `codex_audit_consumer_task07`; 11 migrations and seed pass, 2 MySQL consumer tests / 31 assertions pass |
+| Runtime gates | Cached/uncached config/routes, Laravel Data cache, production no-dev boot, both built `audit::` pages rendered through actual SSR HTTP service; temporary SSR workers stopped |
+| Removal/reinstallation | Composer removal + regeneration/rebuild: 1 persistent test / 8 assertions verifies no route/registered module/generated page/CSS/transport, retained new-history sentinel and continuing foundation logging. Base 122 tests/check/build pass again; private archive reinstall + rebuild restores 4 tests / 55 assertions |
+
+The working starter separately exercised a local symlink and was restored to its base remote dependency installation. Copied private packages, not that symlink, satisfy the external gate. Rebuilding after physical removal/reinstallation is required: generation alone does not replace an already compiled bundle. Base consumer CSS measured 298.16 kB (39.46 kB gzip), with Audit 298.53 kB (39.53 kB gzip); package asset budgets pass. Existing Vite+ peer warnings and inherited test-fixture PSR-4 warnings were observed rather than silently relabelled as fixes.
+
+Pending: hosted CI/OS/dependency lanes, owner/user acceptance/merge, full browser matrix and Forge/staging/production/Redis/Horizon gates. Agency and Audit workflows now consume `MODULES_COMPOSER_AUTH`; repository-secret inventory found it absent from those two repositories and present in the starter. The owner must provide those read credentials. Local authenticated downloads do not prove runner or Forge auth. Keep provisional implementation refs until consumers move to replacement releases. No further domain extraction, permanent release/tag, transfer, history reset, deployment or paid service was performed. Delivery ends at a fresh task-specific user-testing handoff.
+
+
+#### Task 07 hosted CI follow-up — October 22, 2026
+
+The reported private Audit archive 404 is from agency run `39719878974`. The locked `37f6232` commit exists and is accessible with the local authenticated account. The workflow received `COMPOSER_AUTH`; nuxt and Audit now both have the repository secret, but the nuxt credential could not read the new private Audit archive. Its read token must include both private Audit and bridge repositories; replacing a secret alone does not expand token repository access. Credential contents are not inspected or changed.
+
+Audit run `39719538388` has a separate minimum-dependency failure: older Larastan/PHPStan loses the configured user's intersection type on Eloquent query results, rejecting WorkspaceUser-typed countBy/map callbacks. Reproduced both exact errors in a disposable prefer-lowest checkout. Audit `7080792` projects configured models through a checked typed identity boundary into plain id/name rows; duplicate-name labels and filter values remain unchanged. A regression verifies disambiguation for configured users. Full Composer checks pass with lowest and current dependencies: maximum analysis, Pint, 100% type coverage and 12 tests / 49 assertions. Oldest transitive dependencies still emit upstream PHP 8.5 deprecations. No suppressions or dependency-floor changes.
+
+The agency lock now selects Audit `7080792`; focused admin/audit regressions and max package-aware analysis pass. The existing PRs/testing round remain open; hosted reruns and token permissions are owner gates, not claimed passed here.
+
+
+#### Task 07 hosted browser stall — October 22, 2026
+
+Run `39778895580` reached Browser Tests after successful dependency installation, assets, frontend checks, type coverage and unit/feature tests. The browser step ran from 12:37:00 UTC to its cancellation at 14:10:49 UTC without test results. This confirms the earlier private-package access gate is now passing; no credential change is part of this correction.
+
+A bounded local replay reproduced the stall: the other 16 browser files completed while `AdminAuditFilterTest` remained unfinished, and the run was stopped after 150 seconds. That host regression still pressed the removed **Filter** button. It now chooses the exact causer/subject option roles, asserts their hidden input values, closes the subject menu, clicks **Apply**, and verifies the submitted query and filtered records. The focused test passes (1 test / 31 assertions). The existing CI browser step now has a ten-minute hard limit; no browser coverage is removed and parallelism remains unchanged.
+
+A fully isolated replay of the exact CI-style `composer test:browser` command with CI enabled, debug disabled and Xdebug off passes: 69 tests total, 67 passed / 2 existing skips, 874 assertions, 33.3 seconds. An intermediate replay reported missing shared Playwright metadata while other project tooling was running; the isolated replay passed without that error. Pint and diff checks pass. Hosted rerun remains the owner gate; no claim of hosted completion or acceptance is made.
+
+
+#### Task 07 type-coverage cache parse failure — October 22, 2026
+
+Hosted run `39794568188` had a type-coverage cache miss, then failed during fresh analysis with malformed generated `vendor/pestphp/pest-plugin-type-coverage/.temp/v3.php` (`);  ),` on line 12). This was not an application PHP syntax error or a bad restored cache. Installed plugin 4.0.4 falls back to executing its cache callback without a lock after 100 ms, allowing parallel writers to corrupt the same PHP file. The upstream change [ca80eb3](https://github.com/pestphp/pest-plugin-type-coverage/commit/ca80eb3a96e9a647f467894c0d54011df7e846d7) replaces that fallback with a blocking lock in the newer plugin line. Upgrading the whole Pest toolchain remains a separate gate.
+
+`composer test:type-coverage` now runs through the small `tools/type-coverage.php` entry point. It sets the installed plugin's `__PEST_PLUGIN_ENV` marker only inside that PHP process, disabling its forks, and invokes the same type-coverage command with the unchanged 100% threshold plus `--no-cache` to clear existing generated state. The Actions cache step for this generated PHP cache is removed. Unit/browser parallelism and other caches remain unchanged. No vendor source or dependency versions are modified. Remove the compatibility marker when the planned plugin upgrade includes the upstream fix.
+
+Verification deliberately seeded a malformed disposable generated cache: the original command reproduced an Unmatched ')' parse failure, and the corrected entry point rebuilt cleanly and passed 100% analysis. Two additional fresh-cache serial runs pass; generated v3.php parses with php -l. Strict Composer validation, Pint, affected documentation/toolchain contracts and diff checks pass. Hosted rerun remains the owner gate; the task retains its existing user-testing round.
+
+
+#### Task 07 hosted browser timeout / Playwright protocol — October 22, 2026
+
+Run `39796549310` passed the corrected type coverage and unit/feature steps, then hit the browser step's ten-minute limit without a result. The earlier local browser pass did not establish hosted readiness. Installed Pest Browser 4 sends action deadlines in Playwright params; Playwright 1.62+ moved those deadlines to protocol metadata. The pinned 1.64.0 server can therefore leave a missing-selector action waiting indefinitely. This matches the installed client and the [upstream timeout correction](https://github.com/pestphp/pest-plugin-browser/pull/241); no vendor patch or Pest major upgrade is included here.
+
+A disposable browser probe loaded the page then clicked an intentionally absent selector. With 1.64.0 it remained blocked and was terminated after 25 seconds. With 1.61.1 it failed normally with `Timeout 5000ms exceeded`, the selector's test line and a screenshot (13.7 seconds including startup/retry/reporting). The probe was removed afterward. Pinning exact Playwright 1.61.1 keeps the installed Pest client's timeout protocol compatible; the lock changes only Playwright/core and its optional macOS watcher. Keep that exact version until the Pest client supports the newer protocol.
+
+CI retains the ten-minute cap and two browser workers, writes JUnit results and uploads failure screenshots/results for seven days. No test, assertion or acceptance gate is removed. Production Node audit passes; full-tree audit reports the already-selected Vite+ 1.0.0 high-severity Windows editor advisory GHSA-587h-7wmj-h5pm, with no Playwright advisory. That separate existing tooling finding is not represented as a passing full audit.
+
+The complete CI-style browser command with the pinned runtime and JUnit output passes locally: 69 tests total, 67 passed / 2 existing skips, 874 assertions, 34.6 seconds. Immutable Yarn installation, production dependency audit and affected toolchain/documentation contracts (7 tests / 151 assertions) pass. Hosted rerun is pending and may expose a selector failure that the old protocol hid; no hosted success is claimed.
+
+
+#### Task 07 mobile navigation CI follow-up — October 22, 2026
+
+Run `39808143401` completed the browser suite instead of hanging: 66 passed / 2 existing skips / 1 failure, 867 assertions. The remaining timeout is `LaunchSmokeTest` clicking the public mobile navigation trigger. The uploaded screenshot shows the navigation drawer already open, so this is not evidence of a missing trigger or a failed drawer-opening handler. Pest 4's awaitable helper wraps clicks in the assertion retry loop, shortening each attempt to one second; an attempt that opens the drawer before timing out can be retried against its now-covered trigger.
+
+The regression now creates its mobile browser context before navigation, waits for the existing hydration-ready form signal plus the visible/collapsed trigger, and performs one exact-role Playwright click with the ordinary action timeout. Dialog, initial focus, Escape dismissal, restored trigger focus and JavaScript/console assertions remain intact. No application UI change, fixed sleep, forced click or global timeout increase.
+
+The same workflow moves the artifact upload action from v4 to v7 (verified Node 24 runtime and compatible path/retention inputs) and pins the runner to `ubuntu-24.04`, the image used by the failing run. This removes the deprecated action runtime and prevents an implicit Ubuntu 26 migration while debugging browser behavior. These annotations were separate from the test's exit code.
+
+Verification: the corrected focus test passes three fresh local runs, and the full CI-style two-worker browser command passes 67 tests / 877 assertions with 2 existing skips in 35.2 seconds. A temporary 1.5-second pointerdown delay reproduces the exact timeout with the retrying helper (drawer already open), while the single-action version passes the same delayed interaction in 3.2 seconds. The diagnostic delay was removed and the real test restored. Workflow YAML parses; the hosted rerun, owner acceptance and existing testing round remain pending.

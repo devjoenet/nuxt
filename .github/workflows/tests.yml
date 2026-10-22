@@ -12,9 +12,10 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       XDEBUG_MODE: off
+      COMPOSER_AUTH: ${{ secrets.MODULES_COMPOSER_AUTH }}
 
     steps:
       - name: Checkout
@@ -47,13 +48,6 @@ jobs:
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Pest Type Coverage Cache
-        uses: actions/cache@v5
-        with:
-          path: vendor/pestphp/pest-plugin-type-coverage/.temp
-          key: ${{ runner.os }}-pest-type-coverage-${{ hashFiles('composer.lock') }}-${{ hashFiles('app/**/*.php') }}
-          restore-keys: ${{ runner.os }}-pest-type-coverage-${{ hashFiles('composer.lock') }}-
 
       - name: Audit Composer dependencies
         run: composer audit --locked --no-interaction
@@ -119,7 +113,19 @@ jobs:
           XDEBUG_MODE: coverage
 
       - name: Browser Tests
-        run: composer test:browser
+        timeout-minutes: 10
+        run: composer test:browser -- --log-junit storage/logs/browser-junit.xml
+
+      - name: Upload browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-failures
+          path: |
+            tests/Browser/Screenshots
+            storage/logs/browser-junit.xml
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: PHP Code Style
         run: composer test:lint

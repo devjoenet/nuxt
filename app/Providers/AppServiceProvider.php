@@ -13,7 +13,6 @@ use App\Models\DevelopmentTestRun;
 use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\User;
-use App\Policies\ActivityPolicy;
 use App\Policies\BusinessSettingPolicy;
 use App\Policies\ContactPolicy;
 use App\Policies\DevelopmentTaskLinkPolicy;
@@ -34,7 +33,6 @@ use Illuminate\Support\ServiceProvider;
 use Inertia\ExceptionResponse;
 use Inertia\Inertia;
 use Override;
-use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
@@ -74,7 +72,6 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::policy(WorkspaceUsers::model(), UserPolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
-        Gate::policy(Activity::class, ActivityPolicy::class);
         Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);
         Gate::policy(Contact::class, ContactPolicy::class);
         Gate::policy(DevelopmentTask::class, DevelopmentTaskPolicy::class);

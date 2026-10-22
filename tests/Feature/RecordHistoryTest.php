@@ -49,7 +49,7 @@ test('record history isolates subjects paginates and preserves archived record p
     activity()->performedOn($other)->log('Unrelated record');
     activity()->performedOn($user)->log('Unrelated subject type');
     $this->actingAs($user)->get(route("{$prefix}.history", $record))->assertInertia(fn (Assert $page): Assert => $page
-        ->component('History/Show')->where('backUrl', route("{$prefix}.show", $record))
+        ->component('audit::History/Show', false)->where('backUrl', route("{$prefix}.show", $record))
         ->where('activities.total', 16)->has('activities.data', 15)
         ->where('activities.data.0.id', $latest->id)->where('activities.data.0.actor', $user->name)
         ->where('activities.data.0.changes.old.status', 'old'));

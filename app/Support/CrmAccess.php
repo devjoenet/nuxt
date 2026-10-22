@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Support;
 
 use App\Enums\RoleName;
-use App\Modules\WorkspaceUser;
+use SoutheastCode\Modules\WorkspaceUser;
 
 final class CrmAccess
 {

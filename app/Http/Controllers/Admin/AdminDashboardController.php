@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Modules\WorkspaceComposition;
-use App\Queries\RecentAdminChangesQuery;
 use App\Support\WorkspaceUsers;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Audit\Queries\RecentAdminChangesQuery;
+use SoutheastCode\Modules\WorkspaceComposition;
 use Throwable;
 
 class AdminDashboardController extends Controller
