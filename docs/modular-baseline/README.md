@@ -326,3 +326,14 @@ A disposable browser probe loaded the page then clicked an intentionally absent 
 CI retains the ten-minute cap and two browser workers, writes JUnit results and uploads failure screenshots/results for seven days. No test, assertion or acceptance gate is removed. Production Node audit passes; full-tree audit reports the already-selected Vite+ 1.0.0 high-severity Windows editor advisory GHSA-587h-7wmj-h5pm, with no Playwright advisory. That separate existing tooling finding is not represented as a passing full audit.
 
 The complete CI-style browser command with the pinned runtime and JUnit output passes locally: 69 tests total, 67 passed / 2 existing skips, 874 assertions, 34.6 seconds. Immutable Yarn installation, production dependency audit and affected toolchain/documentation contracts (7 tests / 151 assertions) pass. Hosted rerun is pending and may expose a selector failure that the old protocol hid; no hosted success is claimed.
+
+
+#### Task 07 mobile navigation CI follow-up — October 22, 2026
+
+Run `39808143401` completed the browser suite instead of hanging: 66 passed / 2 existing skips / 1 failure, 867 assertions. The remaining timeout is `LaunchSmokeTest` clicking the public mobile navigation trigger. The uploaded screenshot shows the navigation drawer already open, so this is not evidence of a missing trigger or a failed drawer-opening handler. Pest 4's awaitable helper wraps clicks in the assertion retry loop, shortening each attempt to one second; an attempt that opens the drawer before timing out can be retried against its now-covered trigger.
+
+The regression now creates its mobile browser context before navigation, waits for the existing hydration-ready form signal plus the visible/collapsed trigger, and performs one exact-role Playwright click with the ordinary action timeout. Dialog, initial focus, Escape dismissal, restored trigger focus and JavaScript/console assertions remain intact. No application UI change, fixed sleep, forced click or global timeout increase.
+
+The same workflow moves the artifact upload action from v4 to v7 (verified Node 24 runtime and compatible path/retention inputs) and pins the runner to `ubuntu-24.04`, the image used by the failing run. This removes the deprecated action runtime and prevents an implicit Ubuntu 26 migration while debugging browser behavior. These annotations were separate from the test's exit code.
+
+Verification: the corrected focus test passes three fresh local runs, and the full CI-style two-worker browser command passes 67 tests / 877 assertions with 2 existing skips in 35.2 seconds. A temporary 1.5-second pointerdown delay reproduces the exact timeout with the retrying helper (drawer already open), while the single-action version passes the same delayed interaction in 3.2 seconds. The diagnostic delay was removed and the real test restored. Workflow YAML parses; the hosted rerun, owner acceptance and existing testing round remain pending.
