@@ -357,3 +357,10 @@ Local evidence:
 The private VCS discovery test exposed that Composer uses the default branch's package identity for all branches. The new remote's main received only its project identity bootstrap; the feature implementation remains in PR #1. The consumer checks also caught and corrected an empty declared page root and frontend formatting before handoff.
 
 Pending gates: owner configures COMPOSER_AUTH for the template Actions runner with private bridge read access; hosted Linux/Windows and minimum-dependency lanes, full consumer suite, owner acceptance, permanent template release, staging/production and history-collapse checkpoints remain unverified. No tags, transfers, history resets or deployments occurred. Task handoff is ready for testing, not accepted/completed.
+
+
+#### Task 08 private dependency CI follow-up — October 22, 2026
+
+Run `39823229157` failed before dependency installation because private bridge authentication was unavailable/rejected. The current repository secret inventory contains `MODULES_COMPOSER_AUTH` (added at 17:36 UTC, after that run started at 17:30 UTC), while both workflow steps referenced `secrets.COMPOSER_AUTH`. Skeleton `356c7e7` maps the existing secret into Composer's `COMPOSER_AUTH` environment variable for dependency installation and renamed-package generation. Secret contents were not read or changed; token validity/access remains unverified until hosted execution.
+
+The same change splits runtime framework selection from `composer require --dev` for Testbench, preventing Composer from moving Testbench into runtime dependencies. Workflow YAML parsing, diff checks, and both manifest-selection commands pass locally; Testbench remains under require-dev. README secret instructions now match the repository. Existing PRs/testing round remain open; hosted CI and owner acceptance remain pending.
