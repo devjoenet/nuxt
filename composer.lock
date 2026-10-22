@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d65a85d7b4c3943c36e8bbb08350166f",
+    "content-hash": "77ff2e86e8befd18055c9864212873dc",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4466,16 +4466,16 @@
         },
         {
             "name": "southeastcode/audit",
-            "version": "dev-feature/extract-audit",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-audit.git",
-                "reference": "70807924553e44e5d8a7c000c0f4600e338582cb"
+                "reference": "2fa2eb663541840bc97f328270c504363cffeda6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/70807924553e44e5d8a7c000c0f4600e338582cb",
-                "reference": "70807924553e44e5d8a7c000c0f4600e338582cb",
+                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/2fa2eb663541840bc97f328270c504363cffeda6",
+                "reference": "2fa2eb663541840bc97f328270c504363cffeda6",
                 "shasum": ""
             },
             "require": {
@@ -4495,6 +4495,7 @@
                 "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
                 "phpstan/extension-installer": "^1.4"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -4606,10 +4607,10 @@
                 "southeastcode"
             ],
             "support": {
-                "source": "https://github.com/devjoenet/laravel-audit/tree/feature/extract-audit",
+                "source": "https://github.com/devjoenet/laravel-audit/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-audit/issues"
             },
-            "time": "2026-10-22T12:29:12+00:00"
+            "time": "2026-10-22T12:34:33+00:00"
         },
         {
             "name": "southeastcode/inertia-modules",
@@ -14773,7 +14774,7 @@
     "aliases": [
         {
             "package": "southeastcode/audit",
-            "version": "dev-feature/extract-audit",
+            "version": "dev-main",
             "alias": "0.1.0",
             "alias_normalized": "0.1.0.0"
         },
