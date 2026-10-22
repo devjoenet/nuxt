@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Models\Contact;
-use App\Models\Lead;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
 use SoutheastCode\Audit\Contracts\ActivityPresenterRegistry;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\Modules\ModuleManifest;
 use SoutheastCode\Modules\ModuleRegistry;
 use SoutheastCode\Modules\WorkspaceComposition;
@@ -32,7 +32,7 @@ test('registered modules determine navigation dashboard summaries and user conte
     $admin = User::factory()->create()->assignRole('Admin');
     $registry = new ModuleRegistry;
     foreach (app(ModuleRegistry::class)->all() as $module) {
-        if (in_array($module->id, $enabled, true)) {
+        if (in_array($module->id === 'crm-host' ? 'crm' : $module->id, $enabled, true)) {
             $registry->register($module);
         }
     }

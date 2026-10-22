@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Queries;
 
 use App\Data\OrganizationIndexData;
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 class OrganizationQuery
 {

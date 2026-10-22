@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace App\Audit\Presenters;
 
-use App\Models\Contact;
-use App\Models\CrmActivity;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Note;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use InvalidArgumentException;
@@ -17,6 +11,12 @@ use LogicException;
 use SoutheastCode\Audit\Contracts\ActivityPresentation;
 use SoutheastCode\Audit\Contracts\ActivityPresenter;
 use SoutheastCode\Audit\Support\AuditMorphs;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Models\CrmActivity;
+use SoutheastCode\Crm\Shared\Models\Note;
 use SoutheastCode\Modules\WorkspaceUser;
 use Spatie\Activitylog\Models\Activity;
 

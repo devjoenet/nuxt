@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Queries;
 
-use App\Enums\FollowUpTaskStatus;
-use App\Enums\LeadStatus;
 use App\Enums\Permission;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Support\Str;
 use LogicException;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Enums\LeadStatus;
+use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\Modules\WorkspaceDashboardContribution;
 use SoutheastCode\Modules\WorkspaceUser;
 

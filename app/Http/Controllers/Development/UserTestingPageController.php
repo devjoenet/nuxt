@@ -8,9 +8,6 @@ use App\Actions\UpdateUserTestingPage;
 use App\Data\UserTestingPageData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Development\UpdateUserTestingPageRequest;
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Organization;
 use App\Models\User;
 use App\Models\UserTestingPage;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +17,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 class UserTestingPageController extends Controller
 {

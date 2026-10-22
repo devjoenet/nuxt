@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ownerOptions as mapOwnerOptions, type OwnerOption } from "@southeastcode/crm/public";
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormSelect } from "@/components/Ui/FormSelect";
 import { IndexEmptyState } from "@/components/IndexEmptyState";
@@ -7,10 +8,10 @@ import { IndexTableFrame } from "@/components/IndexTableFrame";
 import { useInertiaFilters } from "@/composables/useInertiaFilters";
 import { create, index } from "@/routes/crm/organizations";
 import { createOrganizationIndexColumns } from "@/pages/Crm/Organizations/Components/organizationIndexColumns";
-import type { Option, Organization, Owner, Paginated } from "@/types/crm";
+import type { Option, Organization, Paginated } from "@southeastcode/crm/public";
 
-const props = defineProps<{ organizations: Paginated<Organization>; filters: Record<string, string | number>; owners: Owner[]; canManage: boolean; canAssign: boolean }>();
-const ownerOptions = computed<Option[]>(() => props.owners.map((item) => ({ label: item.name, value: String(item.id) })));
+const props = defineProps<{ organizations: Paginated<Organization>; filters: Record<string, string | number>; owners: OwnerOption[]; canManage: boolean; canAssign: boolean }>();
+const ownerOptions = computed<Option[]>(() => mapOwnerOptions(props.owners, true));
 const { filters, hasActiveFilters, isLoading, reset, resetFilter, visitPage } = useInertiaFilters({
   url: () => index().url,
   initialFilters: () => ({

@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Enums\RoleName;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use SoutheastCode\Crm\Shared\Database\Seeders\CrmDemoSeeder;
 
 class DatabaseSeeder extends Seeder
 {

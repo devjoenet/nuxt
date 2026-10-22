@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Models\Contact;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\UserManagement\Actions\InviteUser;
 use SoutheastCode\UserManagement\Data\InviteUserData;
 
@@ -101,7 +101,7 @@ test('recent access settings and CRM changes are readable and lead activity link
     $admin = User::factory()->create();
     $admin->assignRole('Admin');
     $lead = Lead::factory()->create();
-    $crmActivity = App\Models\CrmActivity::factory()->create(['lead_id' => $lead->id]);
+    $crmActivity = SoutheastCode\Crm\Shared\Models\CrmActivity::factory()->create(['lead_id' => $lead->id]);
     $setting = App\Models\BusinessSetting::current();
     $role = Spatie\Permission\Models\Role::findByName('Admin');
     activity()->causedBy($admin)->performedOn($crmActivity)->event('updated')->log('updated');

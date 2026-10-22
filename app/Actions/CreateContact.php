@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\ContactData;
-use App\Models\Contact;
-use App\Models\Organization;
 use App\Models\User;
-use App\Support\CrmAccess;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 
 class CreateContact
 {

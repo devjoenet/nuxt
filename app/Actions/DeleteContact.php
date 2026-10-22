@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Models\Contact;
 use App\Models\User;
+use SoutheastCode\Crm\Contacts\Models\Contact;
 use Spatie\Activitylog\Facades\Activity;
 
 class DeleteContact

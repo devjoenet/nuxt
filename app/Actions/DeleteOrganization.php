@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Models\Organization;
 use App\Models\User;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 use Spatie\Activitylog\Facades\Activity;
 
 class DeleteOrganization

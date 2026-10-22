@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Queries;
 
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use App\Models\User;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use LogicException;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\Modules\AdminSummaryContribution;
 use SoutheastCode\Modules\WorkspaceUser;
 use Throwable;

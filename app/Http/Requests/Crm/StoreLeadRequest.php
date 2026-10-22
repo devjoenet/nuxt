@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Crm;
 
-use App\Enums\LeadSource;
-use App\Enums\LeadStatus;
 use App\Enums\ServiceInterest;
-use App\Models\Lead;
-use App\Support\CrmAccess;
-use App\Support\WorkspaceUsers;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use SoutheastCode\Crm\Leads\Enums\LeadSource;
+use SoutheastCode\Crm\Leads\Enums\LeadStatus;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Queries\CrmOwnerOptions;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 
 class StoreLeadRequest extends FormRequest
 {
@@ -31,7 +30,7 @@ class StoreLeadRequest extends FormRequest
                 Rule::prohibitedIf(fn (): bool => ! CrmAccess::administrator($this->user())),
                 'nullable',
                 'integer',
-                Rule::exists(WorkspaceUsers::model(), 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true)),
+                CrmOwnerOptions::assignmentRule(),
             ],
             'status' => ['required', Rule::enum(LeadStatus::class)],
             'source' => ['required', Rule::enum(LeadSource::class)],

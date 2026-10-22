@@ -12,7 +12,7 @@ import { Form, usePage } from "@inertiajs/vue3";
 import { nextTick, onMounted, ref } from "vue";
 import { Motion } from "motion-v";
 import type { AppPageProps } from "@/types";
-import type { Option } from "@/types/crm";
+import type { Option } from "@southeastcode/crm/public";
 
 defineProps<{ serviceInterestOptions: Option[] }>();
 

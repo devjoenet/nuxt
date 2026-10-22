@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Lead;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 test('contributed CRM dashboard shows display labels across themes and mobile widths', function (): void {
     app(RolePermissionSeeder::class)->run();

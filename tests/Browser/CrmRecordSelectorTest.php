@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
-use App\Models\Contact;
-use App\Models\Organization;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 test('CRM lead selectors search and select records from the keyboard', function (): void {
     app(RolePermissionSeeder::class)->run();

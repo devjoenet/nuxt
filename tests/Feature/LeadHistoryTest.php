@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Note;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Models\Note;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 

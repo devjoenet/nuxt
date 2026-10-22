@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { AsyncCrmSelect } from "@/components/AsyncCrmSelect";
+import { ownerOptions as mapOwnerOptions, type OwnerOption } from "@southeastcode/crm/public";
+import { AsyncCrmSelect } from "@southeastcode/crm/public";
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormMultiSelect } from "@/components/Ui/FormMultiSelect";
 import { FormSelect } from "@/components/Ui/FormSelect";
@@ -7,12 +8,12 @@ import { FormTextarea } from "@/components/Ui/FormTextarea";
 import { create as createContact } from "@/routes/crm/contacts";
 import { index, show, store, update } from "@/routes/crm/leads";
 import { create as createOrganization } from "@/routes/crm/organizations";
-import type { Lead, Option, Owner } from "@/types/crm";
+import type { Lead, Option } from "@southeastcode/crm/public";
 
-const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: Owner[]; canAssign: boolean }>();
+const props = defineProps<{ lead: Lead | null; statuses: Option[]; sources: Option[]; serviceInterests: Option[]; owners: OwnerOption[]; canAssign: boolean }>();
 const action = computed(() => (props.lead ? update(props.lead.id) : store()));
 const cancelTo = computed(() => (props.lead ? show(props.lead.id).url : index().url));
-const ownerOptions = computed(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+const ownerOptions = computed(() => mapOwnerOptions(props.owners));
 const contactId = ref<string | null>(props.lead?.contact?.id ?? null);
 const organizationId = ref<string | null>(props.lead?.organization?.id ?? null);
 </script>

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use App\Enums\CrmSortDirection;
-use App\Enums\OrganizationSort;
+use SoutheastCode\Crm\Organizations\Enums\OrganizationSort;
+use SoutheastCode\Crm\Shared\Enums\CrmSortDirection;
 
 final readonly class OrganizationIndexData
 {

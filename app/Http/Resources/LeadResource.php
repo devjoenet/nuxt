@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\Contact;
-use App\Models\CrmActivity;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Note;
-use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Models\CrmActivity;
+use SoutheastCode\Crm\Shared\Models\Note;
 
 /** @mixin Lead */
 class LeadResource extends JsonResource
@@ -52,12 +52,12 @@ class LeadResource extends JsonResource
                 'website' => $organization->website,
                 'client_since_at' => $organization->client_since_at?->toISOString(),
             ] : null,
-            'owner' => $this->owner ? ['id' => $this->owner->id, 'name' => $this->owner->name] : null,
+            'owner' => $this->owner ? ['id' => $this->owner->workspaceId(), 'name' => $this->owner->workspaceName()] : null,
             'notes' => $this->whenLoaded('notes', fn (): array => $this->notes->map(fn (Note $note): array => [
                 'id' => $note->uuid,
                 'body' => $note->body,
-                'author' => $note->user === null ? 'Unknown user' : $note->user->name,
-                'created_at' => $note->created_at?->toISOString(),
+                'author' => $note->user === null ? 'Unknown user' : $note->user->workspaceName(),
+                'created_at' => $note->created_at->toISOString(),
             ])->all()),
             'activities' => $this->whenLoaded('activities', fn (): array => $this->activities->map(fn (CrmActivity $activity): array => [
                 'id' => $activity->uuid,

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Crm;
 
-use App\Models\Organization;
 use App\Models\User;
-use App\Support\CrmAccess;
-use App\Support\WorkspaceUsers;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Queries\CrmOwnerOptions;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 
 class UpdateOrganizationRequest extends FormRequest
 {
@@ -40,7 +39,7 @@ class UpdateOrganizationRequest extends FormRequest
                 Rule::prohibitedIf(fn (): bool => ! CrmAccess::administrator($this->user())),
                 'nullable',
                 'integer',
-                Rule::exists(WorkspaceUsers::model(), 'id')->where(fn (Builder $query): Builder => $query->where('is_active', true)),
+                CrmOwnerOptions::assignmentRule($this->route('organization') instanceof Organization ? $this->route('organization')->owner_id : null),
             ],
         ];
     }

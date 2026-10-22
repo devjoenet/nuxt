@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\IntakeData;
-use App\Models\Lead;
+use SoutheastCode\Crm\Leads\Models\Lead;
 
 class SubmitPublicIntake
 {

@@ -8,21 +8,16 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-test('client viewer CRM access migration is idempotent and preserves other grants', function (): void {
+test('fresh permission seeding excludes CRM from Client Viewer and preserves explicit unrelated grants', function (): void {
     app(RolePermissionSeeder::class)->run();
     $role = Role::findByName(RoleName::ClientViewer->value, 'web');
-    $crm = Permission::findOrCreate('crm.view', 'web');
-    $jobs = Permission::findOrCreate('jobs.view', 'web');
-    $role->syncPermissions([$crm, $jobs]);
+    $role->givePermissionTo(Permission::findOrCreate('jobs.view', 'web'));
 
-    $migration = require base_path('database/migrations/2026_07_28_224147_revoke_crm_view_from_client_viewer_role.php');
-    $migration->up();
-    $migration->up();
-
+    app(RolePermissionSeeder::class)->run();
+    app(RolePermissionSeeder::class)->run();
     app(PermissionRegistrar::class)->forgetCachedPermissions();
-    $role->refresh();
 
-    expect($role->hasPermissionTo('crm.view'))->toBeFalse()
+    expect($role->refresh()->hasPermissionTo('crm.view'))->toBeFalse()
         ->and($role->hasPermissionTo('jobs.view'))->toBeTrue();
 });
 

@@ -6,7 +6,6 @@ use App\Enums\RoleName;
 use App\Jobs\SendFollowUpTaskReminder;
 use App\Listeners\SendFailedJobAlert;
 use App\Models\BusinessSetting;
-use App\Models\FollowUpTask;
 use App\Models\User;
 use App\Notifications\FollowUpTaskReminder;
 use Database\Seeders\RolePermissionSeeder;
@@ -25,6 +24,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
 use Spatie\Activitylog\Models\Activity;
 
 beforeEach(function (): void {

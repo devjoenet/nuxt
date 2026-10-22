@@ -24,3 +24,6 @@ export { formatDateTime } from "@/lib/dateFormatters";
 export { FormSelect } from "@/components/Ui/FormSelect";
 export { cn } from "@/lib/utils";
 export { getNestedFieldError } from "@/lib/formErrors";
+export { FormAsyncSelect } from "@/components/Ui/FormAsyncSelect";
+export { Badge } from "@/components/Ui/Badge";
+export type { UiTone } from "@/lib/uiTone";

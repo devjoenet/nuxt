@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Note;
-use App\Models\Organization;
 use App\Models\User;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Models\Note;
 use Spatie\Permission\Models\Permission;
 
 test('lead list identities and lead details support keyboard navigation without a View column', function (): void {

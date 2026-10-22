@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\FollowUpTaskStatus;
 use App\Models\BusinessSetting;
-use App\Models\FollowUpTask;
 use App\Notifications\FollowUpTaskReminder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -21,6 +19,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
 use Throwable;
 
 #[Backoff([60, 300, 900])]

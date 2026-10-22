@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
-use App\Models\Organization;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use SoutheastCode\Crm\Organizations\Models\Organization;
 
 test('admins can clear the organization owner filter on a narrow viewport', function (): void {
     app(RolePermissionSeeder::class)->run();

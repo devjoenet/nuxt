@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { Link, router } from "@inertiajs/vue3";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
-import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";
-import { CrmRecordStatusBadge } from "@/components/CrmRecordStatusBadge";
+import { CrmDetailMetadata } from "@southeastcode/crm/public";
+import { CrmRecordStatusBadge } from "@southeastcode/crm/public";
 import { RecordHistoryButton } from "@southeastcode/audit/public";
-import { LeadStatusBadge } from "@/components/LeadStatusBadge";
+import { LeadStatusBadge } from "@southeastcode/crm/public";
 import { formatDateTime } from "@/lib/dateFormatters";
 import { cn } from "@/lib/utils";
 import { show as contactShow } from "@/routes/crm/contacts";
 import { show as organizationShow } from "@/routes/crm/organizations";
 import { archive, convert, history, restore } from "@/routes/crm/leads";
-import type { CrmDetailMetadataItem, Lead } from "@/types/crm";
+import type { CrmDetailMetadataItem, Lead } from "@southeastcode/crm/public";
 
 const props = defineProps<{
   lead: Lead;

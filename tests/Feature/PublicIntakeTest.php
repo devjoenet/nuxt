@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 use App\Actions\SubmitPublicIntake;
 use App\Data\IntakeData;
-use App\Enums\CrmActivityType;
-use App\Enums\LeadSource;
-use App\Enums\LeadStatus;
 use App\Http\Requests\PublicIntake\StorePublicIntakeRequest;
 use App\Models\BusinessSetting;
-use App\Models\Contact;
-use App\Models\CrmActivity;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
 use App\Notifications\NewLeadReceived;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Enums\LeadSource;
+use SoutheastCode\Crm\Leads\Enums\LeadStatus;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Enums\CrmActivityType;
+use SoutheastCode\Crm\Shared\Models\CrmActivity;
 use Spatie\Activitylog\Models\Activity;
 
 afterEach(function (): void {
@@ -97,7 +97,7 @@ test('a guest can submit a public inquiry and create the complete lead chain', f
 
 test('public intake never creates or matches an organization', function (): void {
     Notification::fake();
-    $organization = App\Models\Organization::factory()->create([
+    $organization = SoutheastCode\Crm\Organizations\Models\Organization::factory()->create([
         'name' => 'Rivera Logistics',
         'website' => 'https://rivera-logistics.example',
     ]);

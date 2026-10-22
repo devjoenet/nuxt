@@ -2,13 +2,13 @@
 import { router } from "@inertiajs/vue3";
 import { RecordHistoryButton } from "@southeastcode/audit/public";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
-import { CrmDetailLayout } from "@/components/CrmDetailLayout";
-import { CrmDetailMetadata } from "@/components/CrmDetailMetadata";
-import { CrmRecordStatusBadge } from "@/components/CrmRecordStatusBadge";
+import { CrmDetailLayout } from "@southeastcode/crm/public";
+import { CrmDetailMetadata } from "@southeastcode/crm/public";
+import { CrmRecordStatusBadge } from "@southeastcode/crm/public";
 import { formatDate } from "@/lib/dateFormatters";
 import { archive, destroy, edit, history, index, restore } from "@/routes/crm/contacts";
 import { show as organizationShow } from "@/routes/crm/organizations";
-import type { Contact, CrmDetailMetadataItem } from "@/types/crm";
+import type { Contact, CrmDetailMetadataItem } from "@southeastcode/crm/public";
 
 const props = defineProps<{ contact: Contact; canManage: boolean; canViewHistory: boolean }>();
 

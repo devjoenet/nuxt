@@ -1,15 +1,16 @@
 <script lang="ts" setup>
-import { AsyncCrmSelect } from "@/components/AsyncCrmSelect";
+import { ownerOptions as mapOwnerOptions, type OwnerOption } from "@southeastcode/crm/public";
+import { AsyncCrmSelect } from "@southeastcode/crm/public";
 import { FormInput } from "@/components/Ui/FormInput";
 import { FormSelect } from "@/components/Ui/FormSelect";
 import { index, show, store, update } from "@/routes/crm/contacts";
 import { create as createOrganization } from "@/routes/crm/organizations";
-import type { Contact, Option, Owner } from "@/types/crm";
+import type { Contact, Option } from "@southeastcode/crm/public";
 
-const props = defineProps<{ contact: Contact | null; owners: Owner[]; canAssign: boolean }>();
+const props = defineProps<{ contact: Contact | null; owners: OwnerOption[]; canAssign: boolean }>();
 const action = computed(() => (props.contact ? update(props.contact.id) : store()));
 const cancelTo = computed(() => (props.contact ? show(props.contact.id).url : index().url));
-const ownerOptions = computed<Option[]>(() => props.owners.map((owner) => ({ label: owner.name, value: String(owner.id) })));
+const ownerOptions = computed<Option[]>(() => mapOwnerOptions(props.owners));
 const organizationId = ref<string | null>(props.contact?.organization?.id ?? null);
 </script>
 

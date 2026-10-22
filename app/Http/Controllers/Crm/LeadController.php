@@ -8,24 +8,24 @@ use App\Actions\CreateLead;
 use App\Actions\UpdateLead;
 use App\Data\LeadData;
 use App\Data\LeadIndexData;
-use App\Enums\LeadSource;
-use App\Enums\LeadStatus;
 use App\Enums\ServiceInterest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\LeadIndexRequest;
 use App\Http\Requests\Crm\StoreLeadRequest;
 use App\Http\Requests\Crm\UpdateLeadRequest;
 use App\Http\Resources\LeadResource;
-use App\Models\Lead;
 use App\Queries\LeadQuery;
-use App\Support\CrmAccess;
-use App\Support\WorkspaceUsers;
 use BackedEnum;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use SoutheastCode\Crm\Leads\Enums\LeadSource;
+use SoutheastCode\Crm\Leads\Enums\LeadStatus;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Shared\Queries\CrmOwnerOptions;
+use SoutheastCode\Crm\Shared\Support\CrmAccess;
 
 class LeadController extends Controller
 {
@@ -40,7 +40,7 @@ class LeadController extends Controller
             'filters' => $filters->filters(),
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
-            'owners' => WorkspaceUsers::model()::query()->orderBy('name')->get(['id', 'name']),
+            'owners' => app(CrmOwnerOptions::class)->get($request->filled('owner') ? $request->integer('owner') : null),
             'canManage' => $user->can('crm.manage'),
             'canAssign' => CrmAccess::administrator($user),
         ]);
@@ -68,7 +68,7 @@ class LeadController extends Controller
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'serviceInterests' => ServiceInterest::options(),
-            'owners' => WorkspaceUsers::model()::query()->orderBy('name')->get(['id', 'name']),
+            'owners' => app(CrmOwnerOptions::class)->get(),
             'canAssign' => CrmAccess::administrator($user),
         ]);
     }
@@ -113,7 +113,7 @@ class LeadController extends Controller
             'statuses' => $this->options(LeadStatus::cases()),
             'sources' => $this->options(LeadSource::cases()),
             'serviceInterests' => ServiceInterest::options(),
-            'owners' => WorkspaceUsers::model()::query()->orderBy('name')->get(['id', 'name']),
+            'owners' => app(CrmOwnerOptions::class)->get($lead->owner_id),
             'canAssign' => CrmAccess::administrator($user),
         ]);
     }

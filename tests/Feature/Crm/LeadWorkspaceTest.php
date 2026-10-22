@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Enums\FollowUpTaskStatus;
-use App\Enums\LeadStatus;
 use App\Enums\ServiceInterest;
-use App\Models\Contact;
-use App\Models\CrmActivity;
-use App\Models\FollowUpTask;
-use App\Models\Lead;
-use App\Models\Note;
-use App\Models\Organization;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
+use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Enums\LeadStatus;
+use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\Crm\Shared\Models\CrmActivity;
+use SoutheastCode\Crm\Shared\Models\Note;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
