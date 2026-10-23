@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Actions\ArchiveLead;
-use App\Actions\CompleteFollowUpTask;
-use App\Actions\ConvertLead;
-use App\Actions\CreateFollowUpTask;
-use App\Actions\CreateLeadNote;
-use App\Actions\RestoreLead;
-use App\Data\FollowUpTaskData;
-use App\Data\LeadNoteData;
-use App\Enums\TaskPriority;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
@@ -18,8 +9,17 @@ use SoutheastCode\Crm\Contacts\Actions\ArchiveContact;
 use SoutheastCode\Crm\Contacts\Actions\DeleteContact;
 use SoutheastCode\Crm\Contacts\Actions\RestoreContact;
 use SoutheastCode\Crm\Contacts\Models\Contact;
+use SoutheastCode\Crm\FollowUps\Actions\CompleteFollowUpTask;
+use SoutheastCode\Crm\FollowUps\Actions\CreateFollowUpTask;
+use SoutheastCode\Crm\FollowUps\Data\FollowUpTaskData;
+use SoutheastCode\Crm\FollowUps\Enums\FollowUpPriority;
 use SoutheastCode\Crm\FollowUps\Enums\FollowUpTaskStatus;
 use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Actions\ArchiveLead;
+use SoutheastCode\Crm\Leads\Actions\ConvertLead;
+use SoutheastCode\Crm\Leads\Actions\CreateLeadNote;
+use SoutheastCode\Crm\Leads\Actions\RestoreLead;
+use SoutheastCode\Crm\Leads\Data\LeadNoteData;
 use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\Crm\Organizations\Actions\ArchiveOrganization;
 use SoutheastCode\Crm\Organizations\Actions\DeleteOrganization;
@@ -66,7 +66,7 @@ test('lead note and follow-up actions persist paired CRM records with their expl
     $task = app(CreateFollowUpTask::class)->handle($lead, new FollowUpTaskData(
         title: 'Schedule implementation review',
         description: null,
-        priority: TaskPriority::High,
+        priority: FollowUpPriority::High,
         dueAt: Carbon::now()->addDay(),
     ), $actor);
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e621c43a86f47b6d2dc309e74291c8b",
+    "content-hash": "09cee7b407eb3d9d0bd9b0803edb4937",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4614,16 +4614,16 @@
         },
         {
             "name": "southeastcode/crm",
-            "version": "dev-main",
+            "version": "dev-feature/extract-crm-leads-intake",
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-crm.git",
-                "reference": "974ca0e574078b546fb85794211d0aae02b468c2"
+                "reference": "dc48bf823e0058d6327fe696d6a260f9af26c757"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/974ca0e574078b546fb85794211d0aae02b468c2",
-                "reference": "974ca0e574078b546fb85794211d0aae02b468c2",
+                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/dc48bf823e0058d6327fe696d6a260f9af26c757",
+                "reference": "dc48bf823e0058d6327fe696d6a260f9af26c757",
                 "shasum": ""
             },
             "require": {
@@ -4646,7 +4646,6 @@
                 "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
                 "phpstan/extension-installer": "^1.4"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -4747,10 +4746,10 @@
                 "southeastcode"
             ],
             "support": {
-                "source": "https://github.com/devjoenet/laravel-crm/tree/main",
+                "source": "https://github.com/devjoenet/laravel-crm/tree/feature/extract-crm-leads-intake",
                 "issues": "https://github.com/devjoenet/laravel-crm/issues"
             },
-            "time": "2026-10-22T23:34:24+00:00"
+            "time": "2026-10-23T00:23:56+00:00"
         },
         {
             "name": "southeastcode/inertia-modules",
@@ -15075,7 +15074,7 @@
         },
         {
             "package": "southeastcode/crm",
-            "version": "dev-main",
+            "version": "dev-feature/extract-crm-leads-intake",
             "alias": "0.1.0",
             "alias_normalized": "0.1.0.0"
         },

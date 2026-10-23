@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Jobs\SendFollowUpTaskReminder;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Support\Facades\Log;
+use SoutheastCode\Crm\FollowUps\Jobs\SendFollowUpTaskReminder;
 
 test('reminder failure logs contain safe correlation metadata without exception text', function (): void {
     Log::spy();

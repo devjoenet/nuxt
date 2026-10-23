@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Actions\CreateLeadNote;
-use App\Data\LeadNoteData;
 use App\Enums\RoleName;
 use App\Models\User;
 use App\Support\WorkspaceUsers;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\Notification;
+use SoutheastCode\Crm\Leads\Actions\CreateLeadNote;
+use SoutheastCode\Crm\Leads\Data\LeadNoteData;
 use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\Modules\ModuleManifest;
 use SoutheastCode\Modules\ModuleRegistry;

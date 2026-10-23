@@ -15,6 +15,7 @@ use App\Policies\DevelopmentTaskLinkPolicy;
 use App\Policies\DevelopmentTaskNotePolicy;
 use App\Policies\DevelopmentTaskPolicy;
 use App\Policies\DevelopmentTestRunPolicy;
+use App\Support\AgencyReminderRecipient;
 use App\Support\WorkspaceUsers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -25,13 +26,14 @@ use Illuminate\Support\ServiceProvider;
 use Inertia\ExceptionResponse;
 use Inertia\Inertia;
 use Override;
+use SoutheastCode\Crm\FollowUps\Contracts\ReminderRecipient;
 
 class AppServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
-        //
+        $this->app->bind(ReminderRecipient::class, AgencyReminderRecipient::class);
     }
 
     public function boot(): void

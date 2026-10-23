@@ -47,7 +47,7 @@ test('CRM viewers can search and filter the paginated lead list', function (): v
         ->get(route('crm.leads.index', ['search' => 'Searchable', 'status' => 'qualified']))
         ->assertOk()
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Leads/Index')
+            ->component('crm::Leads/Index', false)
             ->has('leads.data', 1)
             ->where('leads.data.0.id', $match->uuid));
 });
@@ -86,7 +86,7 @@ test('CRM viewers can view a lead with flat resource props', function (): void {
     $this->actingAs($user)
         ->get(route('crm.leads.show', $lead))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Leads/Show')
+            ->component('crm::Leads/Show', false)
             ->where('lead.id', $lead->uuid));
 });
 
@@ -200,14 +200,14 @@ test('CRM managers can open lead forms and archive then restore a visible lead',
     $this->actingAs($user)
         ->get(route('crm.leads.create'))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Leads/Form')
+            ->component('crm::Leads/Form', false)
             ->where('lead', null)
             ->where('serviceInterests', ServiceInterest::options())
             ->where('canAssign', true));
     $this->actingAs($user)
         ->get(route('crm.leads.edit', $lead))
         ->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Crm/Leads/Form')
+            ->component('crm::Leads/Form', false)
             ->where('lead.id', $lead->uuid)
             ->where('serviceInterests', ServiceInterest::options()));
 

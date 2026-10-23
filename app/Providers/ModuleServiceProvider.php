@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Audit\Presenters\CrmActivityPresenter;
 use App\Audit\Presenters\DevelopmentActivityPresenter;
 use App\Audit\Presenters\FoundationActivityPresenter;
 use App\Enums\Permission;
@@ -15,11 +14,8 @@ use App\Models\DevelopmentTaskLink;
 use App\Models\DevelopmentTaskNote;
 use App\Models\DevelopmentTestRun;
 use App\Models\UserTestingPage;
-use App\Modules\Contributions\CrmNavigation;
 use App\Modules\Contributions\DevelopmentNavigation;
 use App\Modules\Contributions\FoundationNavigation;
-use App\Queries\CrmAdminSummaryQuery;
-use App\Queries\CrmWorkspaceDashboardQuery;
 use App\Queries\PendingDevelopmentTestsQuery;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Model;
@@ -78,8 +74,6 @@ class ModuleServiceProvider extends ServiceProvider
             ],
         ];
 
-        $groups['crm'] = [];
-
         foreach ($groups as $owner => $permissions) {
             if (! in_array($owner, config('modules.enabled', ['foundation', 'users', 'audit', 'crm', 'dev']), true)) {
                 continue;
@@ -87,18 +81,14 @@ class ModuleServiceProvider extends ServiceProvider
 
             $navigation = match ($owner) {
                 'foundation' => FoundationNavigation::class,
-                'crm' => CrmNavigation::class,
                 'dev' => DevelopmentNavigation::class,
             };
             $presenters = match ($owner) {
                 'foundation' => [FoundationActivityPresenter::class],
-                'crm' => [CrmActivityPresenter::class],
                 'dev' => [DevelopmentActivityPresenter::class],
             };
-            $registry->register(new ModuleManifest($owner === 'crm' ? 'crm-host' : $owner, $permissions, morphMap: $maps[$owner] ?? [],
+            $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner],
                 navigation: [$navigation],
-                workspaceDashboard: $owner === 'crm' ? CrmWorkspaceDashboardQuery::class : null,
-                adminSummary: $owner === 'crm' ? CrmAdminSummaryQuery::class : null,
                 userContext: $owner === 'dev' ? PendingDevelopmentTestsQuery::class : null,
                 extensions: ['audit.presenters' => $presenters, 'audit.admin-presenters' => $owner === 'dev' ? [] : $presenters],
             ));

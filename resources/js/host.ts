@@ -31,3 +31,6 @@ export type { UiTone } from "@/lib/uiTone";
 export { ConfirmActionButton } from "@/components/ConfirmActionButton";
 
 export { formatDate } from "@/lib/dateFormatters";
+
+export { FormTextarea } from "@/components/Ui/FormTextarea";
+export { Stat } from "@/components/Ui/Stat";
