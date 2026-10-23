@@ -24,7 +24,11 @@ export function useAccessibleKanban(columns: () => AdvancedKanbanColumn[], onMov
     void move(card, columnIndex, columnIndex + (event.key === "ArrowLeft" ? -1 : 1));
   }
 
-  function onDragStart(cardId: string, columnId: string): void {
+  function onDragStart(cardId: string, columnId: string, event: DragEvent): void {
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", cardId);
+    }
     dragging.value = { cardId, columnId };
   }
 
