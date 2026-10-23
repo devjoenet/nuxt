@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Actions\CreateLeadNote;
-use App\Data\LeadNoteData;
 use App\Models\BusinessSetting;
 use App\Models\DevelopmentTask;
 use App\Models\DevelopmentTaskLink;
@@ -11,7 +9,6 @@ use App\Models\DevelopmentTaskNote;
 use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use App\Models\UserTestingPage;
-use App\Queries\LeadHistoryQuery;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Database\ClassMorphViolationException;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +20,10 @@ use SoutheastCode\Audit\Queries\RecordHistoryQuery;
 use SoutheastCode\Audit\Support\AuditMorphs;
 use SoutheastCode\Crm\Contacts\Models\Contact;
 use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\Leads\Actions\CreateLeadNote;
+use SoutheastCode\Crm\Leads\Data\LeadNoteData;
 use SoutheastCode\Crm\Leads\Models\Lead;
+use SoutheastCode\Crm\Leads\Queries\LeadHistoryQuery;
 use SoutheastCode\Crm\Organizations\Models\Organization;
 use SoutheastCode\Crm\Shared\Database\Seeders\CrmDemoSeeder;
 use SoutheastCode\Crm\Shared\Models\CrmActivity;

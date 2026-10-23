@@ -55,7 +55,7 @@ test('history includes related deleted audits and excludes unrelated records and
     activity()->performedOn($user)->log('Unrelated actor record');
     $this->actingAs($user)->get(route('crm.leads.history', $lead))
         ->assertOk()->assertInertia(fn (Assert $page): Assert => $page
-        ->component('Crm/Leads/History')->where('lead.id', $lead->uuid)
+        ->component('crm::Leads/History', false)->where('lead.id', $lead->uuid)
         ->where('activities.total', count($expected))
         ->where('activities.data', fn ($rows): bool => array_column($rows->toArray(), 'id') === $expected));
     $note->forceDelete();

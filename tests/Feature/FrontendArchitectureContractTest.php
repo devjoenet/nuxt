@@ -212,7 +212,7 @@ test('legacy sections are retired into page-family component homes', function ()
     expect(File::isDirectory(resource_path('js/sections')))->toBeFalse()
         ->and(File::exists(resource_path('js/pages/Welcome/Components/LandingContactSection.vue')))->toBeTrue()
         ->and(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages/Admin/Users/Components/AdminUsersTableSection.vue'))->toBeTrue()
-        ->and(File::exists(resource_path('js/pages/Crm/Leads/Components/LeadOverviewSection.vue')))->toBeTrue()
+        ->and(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/pages/Leads/Components/LeadOverviewSection.vue'))->toBeTrue()
         ->and(File::exists(resource_path('js/pages/Development/Tasks/Components/DevelopmentTaskWorkflowSection.vue')))->toBeTrue()
         ->and($misnamedColocationDirectories)->toBe([]);
 });
@@ -240,10 +240,6 @@ test('all baseline application pages are covered by the migrated route families'
         'Auth/ResetPassword.vue',
         'Auth/TwoFactorChallenge.vue',
         'Auth/VerifyEmail.vue',
-        'Crm/Leads/Form.vue',
-        'Crm/Leads/History.vue',
-        'Crm/Leads/Index.vue',
-        'Crm/Leads/Show.vue',
         'Dashboard.vue',
         'Development/Overview.vue',
         'Development/Requests/Create.vue',
@@ -270,11 +266,11 @@ test('all baseline application routes remain registered', function (): void {
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR))
         ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\') || str_starts_with($route['action'], 'SoutheastCode\\Crm\\'));
 
-    expect($routes)->toHaveCount(61);
+    expect($routes)->toHaveCount(48);
     $crmRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\Crm\\'));
     expect($crmRoutes->map(fn (Illuminate\Routing\Route $route): ?string => $route->getName())->values()->all())
-        ->toEqualCanonicalizing(['crm.options.contacts', 'crm.options.organizations', 'crm.organizations.index', 'crm.organizations.create', 'crm.organizations.store', 'crm.organizations.show', 'crm.organizations.edit', 'crm.organizations.update', 'crm.organizations.archive', 'crm.organizations.restore', 'crm.organizations.destroy', 'crm.organizations.history', 'crm.contacts.index', 'crm.contacts.create', 'crm.contacts.store', 'crm.contacts.show', 'crm.contacts.edit', 'crm.contacts.update', 'crm.contacts.archive', 'crm.contacts.restore', 'crm.contacts.destroy', 'crm.contacts.history']);
+        ->toEqualCanonicalizing(['crm.leads.index', 'crm.leads.create', 'crm.leads.store', 'crm.leads.show', 'crm.leads.edit', 'crm.leads.update', 'crm.leads.archive', 'crm.leads.restore', 'crm.leads.convert', 'crm.leads.history', 'crm.leads.notes.store', 'crm.leads.tasks.store', 'crm.leads.tasks.complete', 'crm.options.contacts', 'crm.options.organizations', 'crm.organizations.index', 'crm.organizations.create', 'crm.organizations.store', 'crm.organizations.show', 'crm.organizations.edit', 'crm.organizations.update', 'crm.organizations.archive', 'crm.organizations.restore', 'crm.organizations.destroy', 'crm.organizations.history', 'crm.contacts.index', 'crm.contacts.create', 'crm.contacts.store', 'crm.contacts.show', 'crm.contacts.edit', 'crm.contacts.update', 'crm.contacts.archive', 'crm.contacts.restore', 'crm.contacts.destroy', 'crm.contacts.history']);
     $userRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\UserManagement\\'));
     expect($userRoutes)->toHaveCount(8)
@@ -497,7 +493,7 @@ test('index workflows share navigation and framing without hiding domain columns
         'Contacts' => 'contactIndexColumns.ts',
         'Organizations' => 'organizationIndexColumns.ts',
     ] as $domain => $columnFile) {
-        $root = $domain === 'Leads' ? resource_path("js/pages/Crm/{$domain}") : Composer\InstalledVersions::getInstallPath('southeastcode/crm')."/resources/js/pages/{$domain}";
+        $root = Composer\InstalledVersions::getInstallPath('southeastcode/crm')."/resources/js/pages/{$domain}";
         $page = File::get($root.'/Index.vue');
         $columns = File::get($root."/Components/{$columnFile}");
 
@@ -563,7 +559,6 @@ test('authenticated editors share form composition without replacing typed field
     }
 
     foreach ([
-        'pages/Crm/Leads/Form.vue',
         'pages/Development/Requests/Create.vue',
     ] as $formPage) {
         expect(File::get(resource_path("js/{$formPage}")))
@@ -571,7 +566,7 @@ test('authenticated editors share form composition without replacing typed field
             ->not->toContain('<Form ');
     }
 
-    foreach (['Contacts', 'Organizations'] as $domain) {
+    foreach (['Contacts', 'Organizations', 'Leads'] as $domain) {
         $root = Composer\InstalledVersions::getInstallPath('southeastcode/crm');
         expect(File::get($root."/resources/js/pages/{$domain}/Form.vue"))
             ->toContain('<WorkspaceFormPage')
@@ -607,13 +602,13 @@ test('crm details share typed lifecycle presentation and accessible confirmation
         ->toContain('<UButton color="neutral" label="Cancel"');
 
     foreach (['Contacts', 'Organizations', 'Leads'] as $domain) {
-        $root = $domain === 'Leads' ? resource_path("js/pages/Crm/{$domain}") : Composer\InstalledVersions::getInstallPath('southeastcode/crm')."/resources/js/pages/{$domain}";
+        $root = Composer\InstalledVersions::getInstallPath('southeastcode/crm')."/resources/js/pages/{$domain}";
         expect(File::get($root.'/Show.vue'))
             ->toContain('<CrmDetailLayout')
             ->not->toContain('window.confirm');
     }
 
-    expect(File::get(resource_path('js/pages/Crm/Leads/Components/LeadOverviewSection.vue')))
+    expect(File::get(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/pages/Leads/Components/LeadOverviewSection.vue'))
         ->toContain('<CrmDetailMetadata')
         ->toContain('<ConfirmActionButton')
         ->not->toContain('window.confirm');

@@ -3,11 +3,9 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
-use App\Jobs\SendFollowUpTaskReminder;
 use App\Listeners\SendFailedJobAlert;
 use App\Models\BusinessSetting;
 use App\Models\User;
-use App\Notifications\FollowUpTaskReminder;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Contracts\Mail\Factory as MailFactory;
 use Illuminate\Contracts\Mail\Mailer;
@@ -24,7 +22,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia as Assert;
+use SoutheastCode\Crm\FollowUps\Jobs\SendFollowUpTaskReminder;
 use SoutheastCode\Crm\FollowUps\Models\FollowUpTask;
+use SoutheastCode\Crm\FollowUps\Notifications\FollowUpTaskReminder;
 use Spatie\Activitylog\Models\Activity;
 
 beforeEach(function (): void {
@@ -231,7 +231,7 @@ test('follow-up reminder jobs skip ineligible, duplicate, locked, and unconfigur
     $lockedJob->handle();
     $lock->release();
 
-    $unconfigured = FollowUpTask::factory()->create();
+    $unconfigured = FollowUpTask::factory()->create(['due_at' => now()->subHour()]);
     BusinessSetting::current()->update(['notification_email' => null]);
     $unconfiguredJob = new SendFollowUpTaskReminder($unconfigured->uuid, now()->toDateString());
     $unconfiguredJob->handle();

@@ -122,8 +122,8 @@ test('invalid contribution contracts fail during registration', function (): voi
 test('composition rejects overlapping response navigation and activity ownership', function (): void {
     $admin = User::factory()->create()->assignRole('Admin');
     $registry = new ModuleRegistry;
-    $registry->register(new ModuleManifest('one', navigation: [App\Modules\Contributions\FoundationNavigation::class], workspaceDashboard: App\Queries\CrmWorkspaceDashboardQuery::class, extensions: ['audit.presenters' => [App\Audit\Presenters\FoundationActivityPresenter::class]]));
-    $registry->register(new ModuleManifest('two', navigation: [App\Modules\Contributions\FoundationNavigation::class], workspaceDashboard: App\Queries\CrmWorkspaceDashboardQuery::class, extensions: ['audit.presenters' => [App\Audit\Presenters\FoundationActivityPresenter::class]]));
+    $registry->register(new ModuleManifest('one', navigation: [App\Modules\Contributions\FoundationNavigation::class], workspaceDashboard: SoutheastCode\Crm\Shared\Queries\CrmWorkspaceDashboardQuery::class, extensions: ['audit.presenters' => [App\Audit\Presenters\FoundationActivityPresenter::class]]));
+    $registry->register(new ModuleManifest('two', navigation: [App\Modules\Contributions\FoundationNavigation::class], workspaceDashboard: SoutheastCode\Crm\Shared\Queries\CrmWorkspaceDashboardQuery::class, extensions: ['audit.presenters' => [App\Audit\Presenters\FoundationActivityPresenter::class]]));
     $composition = new WorkspaceComposition($registry);
     expect(fn () => $composition->dashboard($admin))->toThrow(LogicException::class, 'Conflicting module response property');
     expect(fn () => $composition->navigation($admin, request()))->toThrow(LogicException::class, 'Conflicting navigation key');

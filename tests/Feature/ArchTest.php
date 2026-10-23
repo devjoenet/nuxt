@@ -22,7 +22,7 @@ test('action handlers do not accept untyped structured payloads', function (): v
             $type = $parameter->getType();
             $typeNames = match (true) {
                 $type instanceof ReflectionNamedType => [$type->getName()],
-                $type instanceof ReflectionUnionType => array_map(
+                $type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType => array_map(
                     fn (ReflectionNamedType $type): string => $type->getName(),
                     $type->getTypes(),
                 ),
@@ -37,8 +37,12 @@ test('action handlers do not accept untyped structured payloads', function (): v
 });
 
 test('query builders do not accept untyped structured filters', function (): void {
-    foreach (glob(app_path('Queries/*.php')) ?: [] as $path) {
-        $class = 'App\\Queries\\'.pathinfo($path, PATHINFO_FILENAME);
+    $classes = array_map(
+        fn (string $path): string => 'App\\Queries\\'.pathinfo($path, PATHINFO_FILENAME),
+        glob(app_path('Queries/*.php')) ?: [],
+    );
+
+    foreach ([...$classes, SoutheastCode\Crm\Leads\Queries\LeadQuery::class] as $class) {
         $reflection = new ReflectionClass($class);
 
         if (! $reflection->hasMethod('build')) {
@@ -51,7 +55,7 @@ test('query builders do not accept untyped structured filters', function (): voi
             $type = $parameter->getType();
             $typeNames = match (true) {
                 $type instanceof ReflectionNamedType => [$type->getName()],
-                $type instanceof ReflectionUnionType => array_map(
+                $type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType => array_map(
                     fn (ReflectionNamedType $type): string => $type->getName(),
                     $type->getTypes(),
                 ),

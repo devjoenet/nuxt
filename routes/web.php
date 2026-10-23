@@ -6,13 +6,6 @@ use App\Enums\ServiceInterest;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\JobOperationsController;
-use App\Http\Controllers\Crm\FollowUpTaskCompletionController;
-use App\Http\Controllers\Crm\FollowUpTaskController;
-use App\Http\Controllers\Crm\LeadArchiveController;
-use App\Http\Controllers\Crm\LeadController;
-use App\Http\Controllers\Crm\LeadConversionController;
-use App\Http\Controllers\Crm\LeadHistoryController;
-use App\Http\Controllers\Crm\LeadNoteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Development\DevelopmentRoadmapController;
 use App\Http\Controllers\Development\DevelopmentTaskController;
@@ -45,17 +38,6 @@ Route::post('contact', PublicIntakeController::class)
 
 Route::middleware(['auth', EnsureUserIsActive::class, 'verified'])->group(function (): void {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-
-    Route::prefix('crm')->name('crm.')->middleware('can:crm.view')->group(function (): void {
-        Route::get('leads/{lead}/history', LeadHistoryController::class)->name('leads.history');
-        Route::resource('leads', LeadController::class)->except('destroy');
-        Route::post('leads/{lead}/archive', [LeadArchiveController::class, 'store'])->name('leads.archive');
-        Route::delete('leads/{lead}/archive', [LeadArchiveController::class, 'destroy'])->name('leads.restore');
-        Route::post('leads/{lead}/convert', LeadConversionController::class)->name('leads.convert');
-        Route::post('leads/{lead}/notes', [LeadNoteController::class, 'store'])->name('leads.notes.store');
-        Route::post('leads/{lead}/tasks', [FollowUpTaskController::class, 'store'])->name('leads.tasks.store');
-        Route::post('leads/{lead}/tasks/{task}/complete', FollowUpTaskCompletionController::class)->name('leads.tasks.complete');
-    });
 
     Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');

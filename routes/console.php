@@ -15,11 +15,6 @@ Schedule::command('horizon:snapshot')
     ->onOneServer()
     ->withoutOverlapping();
 
-Schedule::command('crm:dispatch-follow-up-reminders')
-    ->everyFifteenMinutes()
-    ->onOneServer()
-    ->withoutOverlapping();
-
 Schedule::command('activitylog:clean --force')
     ->dailyAt('02:15')
     ->onOneServer()
