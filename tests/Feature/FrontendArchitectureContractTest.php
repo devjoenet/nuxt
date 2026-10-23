@@ -240,16 +240,10 @@ test('all baseline application pages are covered by the migrated route families'
         'Auth/ResetPassword.vue',
         'Auth/TwoFactorChallenge.vue',
         'Auth/VerifyEmail.vue',
-        'Crm/Contacts/Form.vue',
-        'Crm/Contacts/Index.vue',
-        'Crm/Contacts/Show.vue',
         'Crm/Leads/Form.vue',
         'Crm/Leads/History.vue',
         'Crm/Leads/Index.vue',
         'Crm/Leads/Show.vue',
-        'Crm/Organizations/Form.vue',
-        'Crm/Organizations/Index.vue',
-        'Crm/Organizations/Show.vue',
         'Dashboard.vue',
         'Development/Overview.vue',
         'Development/Requests/Create.vue',
@@ -276,11 +270,11 @@ test('all baseline application routes remain registered', function (): void {
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR))
         ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\') || str_starts_with($route['action'], 'SoutheastCode\\Crm\\'));
 
-    expect($routes)->toHaveCount(81);
+    expect($routes)->toHaveCount(61);
     $crmRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\Crm\\'));
     expect($crmRoutes->map(fn (Illuminate\Routing\Route $route): ?string => $route->getName())->values()->all())
-        ->toEqualCanonicalizing(['crm.options.contacts', 'crm.options.organizations']);
+        ->toEqualCanonicalizing(['crm.options.contacts', 'crm.options.organizations', 'crm.organizations.index', 'crm.organizations.create', 'crm.organizations.store', 'crm.organizations.show', 'crm.organizations.edit', 'crm.organizations.update', 'crm.organizations.archive', 'crm.organizations.restore', 'crm.organizations.destroy', 'crm.organizations.history', 'crm.contacts.index', 'crm.contacts.create', 'crm.contacts.store', 'crm.contacts.show', 'crm.contacts.edit', 'crm.contacts.update', 'crm.contacts.archive', 'crm.contacts.restore', 'crm.contacts.destroy', 'crm.contacts.history']);
     $userRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\UserManagement\\'));
     expect($userRoutes)->toHaveCount(8)
@@ -503,8 +497,9 @@ test('index workflows share navigation and framing without hiding domain columns
         'Contacts' => 'contactIndexColumns.ts',
         'Organizations' => 'organizationIndexColumns.ts',
     ] as $domain => $columnFile) {
-        $page = File::get(resource_path("js/pages/Crm/{$domain}/Index.vue"));
-        $columns = File::get(resource_path("js/pages/Crm/{$domain}/Components/{$columnFile}"));
+        $root = $domain === 'Leads' ? resource_path("js/pages/Crm/{$domain}") : Composer\InstalledVersions::getInstallPath('southeastcode/crm')."/resources/js/pages/{$domain}";
+        $page = File::get($root.'/Index.vue');
+        $columns = File::get($root."/Components/{$columnFile}");
 
         expect($page)
             ->toContain('useInertiaFilters({')
@@ -568,12 +563,17 @@ test('authenticated editors share form composition without replacing typed field
     }
 
     foreach ([
-        'pages/Crm/Contacts/Form.vue',
         'pages/Crm/Leads/Form.vue',
-        'pages/Crm/Organizations/Form.vue',
         'pages/Development/Requests/Create.vue',
     ] as $formPage) {
         expect(File::get(resource_path("js/{$formPage}")))
+            ->toContain('<WorkspaceFormPage')
+            ->not->toContain('<Form ');
+    }
+
+    foreach (['Contacts', 'Organizations'] as $domain) {
+        $root = Composer\InstalledVersions::getInstallPath('southeastcode/crm');
+        expect(File::get($root."/resources/js/pages/{$domain}/Form.vue"))
             ->toContain('<WorkspaceFormPage')
             ->not->toContain('<Form ');
     }
@@ -607,7 +607,8 @@ test('crm details share typed lifecycle presentation and accessible confirmation
         ->toContain('<UButton color="neutral" label="Cancel"');
 
     foreach (['Contacts', 'Organizations', 'Leads'] as $domain) {
-        expect(File::get(resource_path("js/pages/Crm/{$domain}/Show.vue")))
+        $root = $domain === 'Leads' ? resource_path("js/pages/Crm/{$domain}") : Composer\InstalledVersions::getInstallPath('southeastcode/crm')."/resources/js/pages/{$domain}";
+        expect(File::get($root.'/Show.vue'))
             ->toContain('<CrmDetailLayout')
             ->not->toContain('window.confirm');
     }

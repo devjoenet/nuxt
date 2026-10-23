@@ -4618,12 +4618,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-crm.git",
-                "reference": "ae96801eb9c17d98b20380ecc8f8085e4df3b8dc"
+                "reference": "974ca0e574078b546fb85794211d0aae02b468c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/ae96801eb9c17d98b20380ecc8f8085e4df3b8dc",
-                "reference": "ae96801eb9c17d98b20380ecc8f8085e4df3b8dc",
+                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/974ca0e574078b546fb85794211d0aae02b468c2",
+                "reference": "974ca0e574078b546fb85794211d0aae02b468c2",
                 "shasum": ""
             },
             "require": {
@@ -4750,7 +4750,7 @@
                 "source": "https://github.com/devjoenet/laravel-crm/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-crm/issues"
             },
-            "time": "2026-10-22T22:51:57+00:00"
+            "time": "2026-10-22T23:34:24+00:00"
         },
         {
             "name": "southeastcode/inertia-modules",
