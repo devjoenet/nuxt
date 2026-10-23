@@ -66,7 +66,7 @@ const contentClass = computed(() =>
 
     <template #body>
       <div class="flex min-h-full flex-col">
-        <main :class="contentClass" :data-content-width="contentWidth" data-workspace-page-content>
+        <main tabindex="0" :class="contentClass" :data-content-width="contentWidth" data-workspace-page-content>
           <slot />
         </main>
         <WorkspaceFooter />

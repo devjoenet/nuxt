@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Models\DevelopmentTask;
 use App\Models\User;
 use SoutheastCode\Crm\Contacts\Models\Contact;
 use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
 use Spatie\Permission\Models\Permission;
 
 test('record history links and back navigation work across themes and screen sizes', function (): void {

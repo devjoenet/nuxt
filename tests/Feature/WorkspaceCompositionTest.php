@@ -82,7 +82,7 @@ test('server navigation preserves section and detail breadcrumbs without private
     $lead = Lead::factory()->create();
     $this->actingAs($viewer)->get(route('crm.leads.show', $lead))->assertInertia(fn (Assert $page): Assert => $page
         ->where('workspace.breadcrumbs', [['label' => 'CRM', 'href' => '/crm/leads'], ['label' => 'Leads', 'href' => '/crm/leads']]));
-    $task = App\Models\DevelopmentTask::factory()->create();
+    $task = SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask::factory()->create();
     $this->get(route('development.tasks.show', $task))->assertInertia(fn (Assert $page): Assert => $page
         ->where('workspace.breadcrumbs', [['label' => 'Development', 'href' => '/development']]));
     $this->get(route('admin.users.index'))->assertInertia(fn (Assert $page): Assert => $page
@@ -133,16 +133,16 @@ test('composition rejects overlapping response navigation and activity ownership
 test('Development activity visibility includes participants and reviewers without widening the Admin feed', function (): void {
     $participant = User::factory()->create();
     $other = User::factory()->create();
-    $owned = App\Models\DevelopmentTask::factory()->create(['submitter_id' => $participant->id]);
-    $assigned = App\Models\DevelopmentTask::factory()->create(['submitter_id' => $other->id, 'assignee_id' => $participant->id]);
-    $tested = App\Models\DevelopmentTask::factory()->create(['submitter_id' => $other->id]);
-    App\Models\DevelopmentTestRun::factory()->create(['development_task_id' => $tested->id, 'tester_id' => $participant->id]);
-    $hidden = App\Models\DevelopmentTask::factory()->create(['submitter_id' => $other->id]);
+    $owned = SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask::factory()->create(['submitter_id' => $participant->id]);
+    $assigned = SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask::factory()->create(['submitter_id' => $other->id, 'assignee_id' => $participant->id]);
+    $tested = SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask::factory()->create(['submitter_id' => $other->id]);
+    SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTestRun::factory()->create(['development_task_id' => $tested->id, 'tester_id' => $participant->id]);
+    $hidden = SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask::factory()->create(['submitter_id' => $other->id]);
     Activity::query()->delete();
     foreach ([$owned, $assigned, $tested, $hidden] as $task) {
         activity()->performedOn($task)->event('updated')->log('updated');
     }
-    $presenter = app(App\Audit\Presenters\DevelopmentActivityPresenter::class);
+    $presenter = app(SoutheastCode\DevelopmentWorkflow\Audit\Presenters\DevelopmentActivityPresenter::class);
     $query = Activity::query();
     $presenter->constrain($query, $participant);
     expect($query->pluck('subject_id')->all())->toEqualCanonicalizing([$owned->id, $assigned->id, $tested->id]);

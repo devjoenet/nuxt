@@ -34,3 +34,8 @@ export { formatDate } from "@/lib/dateFormatters";
 
 export { FormTextarea } from "@/components/Ui/FormTextarea";
 export { Stat } from "@/components/Ui/Stat";
+
+export { Card } from "@/components/Ui/Card";
+export { isWebUrl } from "@/lib/webUrl";
+export { AdvancedKanban } from "@/components/AdvancedKanban";
+export type { AdvancedKanbanColumn, AdvancedKanbanMove } from "@/components/AdvancedKanban";

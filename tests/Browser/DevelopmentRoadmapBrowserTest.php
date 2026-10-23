@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Enums\DevelopmentTaskStatus;
-use App\Enums\DevelopmentTestRunStatus;
 use App\Enums\RoleName;
-use App\Enums\TaskPriority;
-use App\Models\DevelopmentTask;
-use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTestRunStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\TaskPriority;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTestRun;
 
 test('roadmap managers can navigate the database-backed board and task workspace', function (): void {
     app(RolePermissionSeeder::class)->run();
@@ -40,8 +40,8 @@ test('roadmap managers can navigate the database-backed board and task workspace
         ->assertSee('Roadmap Developer')
         ->assertNoJavaScriptErrors()
         ->assertNoConsoleLogs()
-        ->assertPresent('a[href="'.route('development.tasks.show', $task, false).'"]')
-        ->navigate(route('development.tasks.show', $task, false))
+        ->assertPresent('[data-kanban-card="'.$task->uuid.'"]')
+        ->click('[data-kanban-card="'.$task->uuid.'"]')
         ->assertPathIs(route('development.tasks.show', $task, false))
         ->resize(1440, 1000)
         ->assertVisible('[data-testid="development-task-summary"]')

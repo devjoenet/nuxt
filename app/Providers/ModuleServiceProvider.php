@@ -4,19 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Audit\Presenters\DevelopmentActivityPresenter;
 use App\Audit\Presenters\FoundationActivityPresenter;
 use App\Enums\Permission;
 use App\Enums\RoleName;
 use App\Models\BusinessSetting;
-use App\Models\DevelopmentTask;
-use App\Models\DevelopmentTaskLink;
-use App\Models\DevelopmentTaskNote;
-use App\Models\DevelopmentTestRun;
-use App\Models\UserTestingPage;
-use App\Modules\Contributions\DevelopmentNavigation;
 use App\Modules\Contributions\FoundationNavigation;
-use App\Queries\PendingDevelopmentTestsQuery;
 use App\Support\WorkspaceUsers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
@@ -42,7 +34,7 @@ class ModuleServiceProvider extends ServiceProvider
                 Permission::DevelopmentRoadmapManage, Permission::DevelopmentUserTestingManage => 'dev',
                 default => 'foundation',
             };
-            if (in_array($owner, ['audit', 'users', 'crm'], true)) {
+            if (in_array($owner, ['audit', 'users', 'crm', 'dev'], true)) {
                 continue;
             }
 
@@ -65,13 +57,6 @@ class ModuleServiceProvider extends ServiceProvider
                 'permission' => $this->morphModel(app(PermissionRegistrar::class)->getPermissionClass()),
                 'audit-activity' => $this->morphModel(config('activitylog.activity_model', Activity::class)),
             ],
-            'dev' => [
-                'development-task' => DevelopmentTask::class,
-                'development-task-link' => DevelopmentTaskLink::class,
-                'development-task-note' => DevelopmentTaskNote::class,
-                'development-test-run' => DevelopmentTestRun::class,
-                'user-testing-page' => UserTestingPage::class,
-            ],
         ];
 
         foreach ($groups as $owner => $permissions) {
@@ -81,16 +66,13 @@ class ModuleServiceProvider extends ServiceProvider
 
             $navigation = match ($owner) {
                 'foundation' => FoundationNavigation::class,
-                'dev' => DevelopmentNavigation::class,
             };
             $presenters = match ($owner) {
                 'foundation' => [FoundationActivityPresenter::class],
-                'dev' => [DevelopmentActivityPresenter::class],
             };
             $registry->register(new ModuleManifest($owner, $permissions, morphMap: $maps[$owner],
                 navigation: [$navigation],
-                userContext: $owner === 'dev' ? PendingDevelopmentTestsQuery::class : null,
-                extensions: ['audit.presenters' => $presenters, 'audit.admin-presenters' => $owner === 'dev' ? [] : $presenters],
+                extensions: ['audit.presenters' => $presenters, 'audit.admin-presenters' => $presenters],
             ));
         }
     }

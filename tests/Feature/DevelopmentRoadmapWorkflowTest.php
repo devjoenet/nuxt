@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Enums\DevelopmentTaskLinkType;
-use App\Enums\DevelopmentTaskStatus;
 use App\Enums\Permission as DevelopmentPermission;
-use App\Enums\TaskPriority;
-use App\Models\DevelopmentTask;
-use App\Models\DevelopmentTaskLink;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskLinkType;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\TaskPriority;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTaskLink;
 use Spatie\Activitylog\Enums\ActivityEvent;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
@@ -45,7 +45,7 @@ test('roadmap managers see database-backed tasks grouped by active roadmap statu
         ->get(route('development.roadmap.index'))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/Roadmap/Index')
+            ->component('dev::Roadmap/Index', false)
             ->has('tasks.planned', 1)
             ->where('tasks.planned.0.id', $planned->uuid)
             ->has('tasks.in_progress', 1)
@@ -303,7 +303,7 @@ test('assignees attach validated task links that remain visible on the shared ta
         ->get(route('development.tasks.show', $task))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/Tasks/Show')
+            ->component('dev::Tasks/Show', false)
             ->has('task.links', 1)
             ->where('task.links.0.id', $link->uuid)
             ->where('task.links.0.label', 'Implementation PR')

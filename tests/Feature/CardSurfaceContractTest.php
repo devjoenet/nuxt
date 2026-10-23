@@ -70,7 +70,7 @@ test('application card surfaces use the product card contract', function (): voi
         ->values()
         ->all();
 
-    $developmentTaskComponents = collect(File::allFiles(resource_path('js/pages/Development/Tasks/Components')))
+    $developmentTaskComponents = collect(File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow').'/resources/js/pages/Tasks/Components'))
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
         ->implode("\n");
@@ -79,6 +79,6 @@ test('application card surfaces use the product card contract', function (): voi
         ->and($staticStyleFiles)->toBe([]);
 
     expect($developmentTaskComponents)
-        ->toContain('import { Card } from "@/components/Ui/Card";')
+        ->toContain('import { Card } from "@southeastcode/host";')
         ->not->toContain('<AppCard');
 });

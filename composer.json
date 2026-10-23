@@ -27,7 +27,8 @@
     "southeastcode/inertia-modules": "dev-main as 0.1.0",
     "southeastcode/audit": "dev-main as 0.1.0",
     "southeastcode/user-management": "dev-main as 0.1.0",
-    "southeastcode/crm": "dev-main as 0.1.0"
+    "southeastcode/crm": "dev-main as 0.1.0",
+    "southeastcode/development-workflow": "dev-main as 0.1.0"
   },
   "require-dev": {
     "fakerphp/faker": "^1.24.1",
@@ -156,6 +157,10 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/devjoenet/laravel-development-workflow"
+    },
     {
       "type": "vcs",
       "url": "https://github.com/devjoenet/laravel-crm"

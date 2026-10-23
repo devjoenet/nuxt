@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Actions\UpdateUserTestingPage;
-use App\Data\UserTestingPageData;
 use App\Models\User;
-use App\Models\UserTestingPage;
+use SoutheastCode\DevelopmentWorkflow\Actions\UpdateUserTestingPage;
+use SoutheastCode\DevelopmentWorkflow\Data\UserTestingPageData;
+use SoutheastCode\DevelopmentWorkflow\Models\UserTestingPage;
 
 test('first review records the actor and timestamp once', function (): void {
     $actor = User::factory()->create();

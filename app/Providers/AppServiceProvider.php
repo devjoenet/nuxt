@@ -5,16 +5,9 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\BusinessSetting;
-use App\Models\DevelopmentTask;
-use App\Models\DevelopmentTaskLink;
-use App\Models\DevelopmentTaskNote;
-use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use App\Policies\BusinessSettingPolicy;
-use App\Policies\DevelopmentTaskLinkPolicy;
-use App\Policies\DevelopmentTaskNotePolicy;
-use App\Policies\DevelopmentTaskPolicy;
-use App\Policies\DevelopmentTestRunPolicy;
+use App\Support\AgencyLegacyPageUrlResolver;
 use App\Support\AgencyReminderRecipient;
 use App\Support\WorkspaceUsers;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -27,6 +20,7 @@ use Inertia\ExceptionResponse;
 use Inertia\Inertia;
 use Override;
 use SoutheastCode\Crm\FollowUps\Contracts\ReminderRecipient;
+use SoutheastCode\DevelopmentWorkflow\Contracts\LegacyPageUrlResolver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ReminderRecipient::class, AgencyReminderRecipient::class);
+        $this->app->bind(LegacyPageUrlResolver::class, AgencyLegacyPageUrlResolver::class);
     }
 
     public function boot(): void
@@ -64,9 +59,5 @@ class AppServiceProvider extends ServiceProvider
             return $user instanceof User ? $user : abort(404);
         });
         Gate::policy(BusinessSetting::class, BusinessSettingPolicy::class);
-        Gate::policy(DevelopmentTask::class, DevelopmentTaskPolicy::class);
-        Gate::policy(DevelopmentTaskNote::class, DevelopmentTaskNotePolicy::class);
-        Gate::policy(DevelopmentTaskLink::class, DevelopmentTaskLinkPolicy::class);
-        Gate::policy(DevelopmentTestRun::class, DevelopmentTestRunPolicy::class);
     }
 }
