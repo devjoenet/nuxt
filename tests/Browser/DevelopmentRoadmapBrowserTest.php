@@ -204,3 +204,38 @@ test('assigned testers can accept a task-specific round from the user-testing qu
     expect($testRun->refresh()->status)->toBe(DevelopmentTestRunStatus::Accepted)
         ->and(DevelopmentTask::query()->withTrashed()->findOrFail($task->getKey())->status)->toBe(DevelopmentTaskStatus::Completed);
 });
+
+test('roadmap cards can be dragged to an empty column and persist after reload', function (): void {
+    app(RolePermissionSeeder::class)->run();
+    $manager = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $task = DevelopmentTask::factory()->planned()->for($manager, 'assignee')->create(['title' => 'Drag this roadmap task']);
+    $this->actingAs($manager);
+
+    $card = '[data-kanban-card="'.$task->uuid.'"]';
+    $destination = 'section:has(> h3:has-text("In progress"))';
+    $page = visit('/development/roadmap');
+    $page->assertPresent('[aria-label="Development roadmap"]');
+    $page->script('window.roadmapNode = document.querySelector(\'[aria-label="Development roadmap"]\'); null;');
+    $page->assertPresent($card)->assertPresent($destination)->drag($card, $destination)
+        ->assertScript('document.querySelector(\''.$card.'\')?.closest("section")?.querySelector("h3")?.textContent.includes("In progress")', true)
+        ->assertScript('window.roadmapNode === document.querySelector(\'[aria-label="Development roadmap"]\')', true)
+        ->assertNoJavaScriptErrors();
+    expect($task->refresh()->status)->toBe(DevelopmentTaskStatus::InProgress);
+    $page->navigate('/development/roadmap')
+        ->assertScript('document.querySelector(\''.$card.'\')?.closest("section")?.querySelector("h3")?.textContent.includes("In progress")', true);
+});
+
+test('rejected roadmap drops restore the card and explain the assignment requirement', function (): void {
+    app(RolePermissionSeeder::class)->run();
+    $manager = User::factory()->create()->assignRole(RoleName::Admin->value);
+    $task = DevelopmentTask::factory()->planned()->create(['title' => 'Assign before moving', 'assignee_id' => null]);
+    $this->actingAs($manager);
+    $card = '[data-kanban-card="'.$task->uuid.'"]';
+
+    visit('/development/roadmap')
+        ->drag($card, 'section:has(> h3:has-text("In progress"))')
+        ->assertSee('Assign this task before starting work.')
+        ->assertScript('document.querySelector(\''.$card.'\')?.closest("section")?.querySelector("h3")?.textContent.includes("Planned")', true)
+        ->assertNoJavaScriptErrors();
+    expect($task->refresh()->status)->toBe(DevelopmentTaskStatus::Planned);
+});

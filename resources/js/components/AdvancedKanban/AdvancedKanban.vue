@@ -14,7 +14,7 @@ const { announcement, dragging, onDragStart, onDrop, onKeydown, reducedMotion } 
 <template>
   <section :aria-label="ariaLabel" :class="cn('grid gap-4 overflow-x-auto md:auto-cols-[minmax(16rem,1fr)] md:grid-flow-col', props.class)">
     <p id="kanban-keyboard-help" class="sr-only">Focus a card and use Left or Right Arrow to move it between columns.</p>
-    <section v-for="(column, columnIndex) in columns" :key="column.id" class="bg-surface-subtle grid content-start gap-3 rounded-xl border border-content-border p-3" @dragover.prevent @drop="onDrop(column.id)">
+    <section v-for="(column, columnIndex) in columns" :key="column.id" class="bg-surface-subtle grid min-h-64 content-start gap-3 rounded-xl border border-content-border p-3" @dragover.prevent @drop.prevent.stop="onDrop(column.id)">
       <h3 class="font-semibold text-content-heading">
         {{ column.title }} <span class="text-sm font-normal text-content-subtle">{{ column.cards.length }}</span>
       </h3>
@@ -29,7 +29,7 @@ const { announcement, dragging, onDragStart, onDrop, onKeydown, reducedMotion } 
         type="button"
         @click="emit('open', card.id)"
         @dragend="dragging = null"
-        @dragstart="onDragStart(card.id, column.id)"
+        @dragstart="onDragStart(card.id, column.id, $event)"
         @keydown="onKeydown(card, columnIndex, $event)"
       >
         <span class="block font-medium text-content-heading">{{ card.title }}</span
