@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Actions\UpdateDevelopmentTaskDetails;
-use App\Enums\DevelopmentRequestType;
-use App\Enums\DevelopmentTaskArea;
-use App\Enums\DevelopmentTaskStatus;
-use App\Enums\TaskPriority;
-use App\Models\DevelopmentTask;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
+use SoutheastCode\DevelopmentWorkflow\Actions\UpdateDevelopmentTaskDetails;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentRequestType;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskArea;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\TaskPriority;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
 
 test('scope updates preserve task identity, ownership and roadmap lifecycle', function (): void {
     $actor = User::factory()->create();

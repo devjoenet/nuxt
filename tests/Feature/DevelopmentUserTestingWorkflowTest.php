@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Enums\DevelopmentTaskStatus;
-use App\Enums\DevelopmentTestRunStatus;
 use App\Enums\Permission as DevelopmentPermission;
-use App\Models\DevelopmentTask;
-use App\Models\DevelopmentTestRun;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Inertia\Testing\AssertableInertia;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTestRunStatus;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTestRun;
 
 beforeEach(function (): void {
     app(RolePermissionSeeder::class)->run();
@@ -49,7 +49,7 @@ test('roadmap managers request task-specific testing rounds', function (): void 
         ->get(route('development.userTesting.index'))
         ->assertSuccessful()
         ->assertInertia(fn (AssertableInertia $page): AssertableInertia => $page
-            ->component('Development/UserTesting/Index')
+            ->component('dev::UserTesting/Index', false)
             ->has('testRuns', 1)
             ->where('testRuns.0.id', $testRun->uuid)
             ->where('testRuns.0.task.id', $task->uuid)

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\DevelopmentTask;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 use SoutheastCode\Crm\Contacts\Models\Contact;
 use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 

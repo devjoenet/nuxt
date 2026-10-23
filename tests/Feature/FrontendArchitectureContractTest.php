@@ -63,7 +63,7 @@ test('retired frontend files and duplicated pure helpers cannot return', functio
 });
 
 test('route pages keep mutable state instance scoped', function (): void {
-    $pageFilesWithModuleScripts = collect([...File::allFiles(resource_path('js/pages')), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages')])
+    $pageFilesWithModuleScripts = collect([...File::allFiles(resource_path('js/pages')), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages'), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow').'/resources/js/pages')])
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->filter(fn (SplFileInfo $file): bool => preg_match(
             '/<script(?=[\s>])(?![^>]*\bsetup\b)[^>]*>/',
@@ -213,12 +213,12 @@ test('legacy sections are retired into page-family component homes', function ()
         ->and(File::exists(resource_path('js/pages/Welcome/Components/LandingContactSection.vue')))->toBeTrue()
         ->and(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages/Admin/Users/Components/AdminUsersTableSection.vue'))->toBeTrue()
         ->and(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/crm').'/resources/js/pages/Leads/Components/LeadOverviewSection.vue'))->toBeTrue()
-        ->and(File::exists(resource_path('js/pages/Development/Tasks/Components/DevelopmentTaskWorkflowSection.vue')))->toBeTrue()
+        ->and(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow').'/resources/js/pages/Tasks/Components/DevelopmentTaskWorkflowSection.vue'))->toBeTrue()
         ->and($misnamedColocationDirectories)->toBe([]);
 });
 
 test('all baseline application pages are covered by the migrated route families', function (): void {
-    $applicationPages = collect([...File::allFiles(resource_path('js/pages')), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages')])
+    $applicationPages = collect([...File::allFiles(resource_path('js/pages')), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/pages'), ...File::allFiles(Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow').'/resources/js/pages')])
         ->filter(fn (SplFileInfo $file): bool => $file->getExtension() === 'vue')
         ->reject(fn (SplFileInfo $file): bool => Str::contains($file->getRelativePathname(), [
             '/Components/',
@@ -241,18 +241,18 @@ test('all baseline application pages are covered by the migrated route families'
         'Auth/TwoFactorChallenge.vue',
         'Auth/VerifyEmail.vue',
         'Dashboard.vue',
-        'Development/Overview.vue',
-        'Development/Requests/Create.vue',
-        'Development/Requests/Index.vue',
-        'Development/Review/Index.vue',
-        'Development/Roadmap/Index.vue',
-        'Development/Tasks/Show.vue',
-        'Development/UserTesting/Index.vue',
-        'Development/UserTesting/Legacy.vue',
         'ErrorPage.vue',
+        'Overview.vue',
         'Privacy.vue',
+        'Requests/Create.vue',
+        'Requests/Index.vue',
+        'Review/Index.vue',
+        'Roadmap/Index.vue',
         'Settings/Profile.vue',
         'Settings/Security.vue',
+        'Tasks/Show.vue',
+        'UserTesting/Index.vue',
+        'UserTesting/Legacy.vue',
         'Welcome.vue',
     ]);
 });
@@ -266,7 +266,11 @@ test('all baseline application routes remain registered', function (): void {
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR))
         ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\') || str_starts_with($route['action'], 'SoutheastCode\\Crm\\'));
 
-    expect($routes)->toHaveCount(48);
+    expect($routes)->toHaveCount(26);
+    $developmentRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
+        ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\DevelopmentWorkflow\\'));
+    expect($developmentRoutes)->toHaveCount(22)
+        ->and($developmentRoutes->map(fn (Illuminate\Routing\Route $route): ?string => $route->getName())->unique())->toHaveCount(22);
     $crmRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
         ->filter(fn (Illuminate\Routing\Route $route): bool => str_starts_with($route->getActionName(), 'SoutheastCode\\Crm\\'));
     expect($crmRoutes->map(fn (Illuminate\Routing\Route $route): ?string => $route->getName())->values()->all())
@@ -520,7 +524,7 @@ test('index workflows share navigation and framing without hiding domain columns
         'pages/Development/Requests/Index.vue',
         'pages/Development/Review/Index.vue',
     ] as $indexSurface) {
-        expect(File::get(str_starts_with($indexSurface, 'pages/Admin/Users/') ? Composer\InstalledVersions::getInstallPath('southeastcode/user-management')."/resources/js/{$indexSurface}" : resource_path("js/{$indexSurface}")))
+        expect(File::get(str_starts_with($indexSurface, 'pages/Admin/Users/') ? Composer\InstalledVersions::getInstallPath('southeastcode/user-management').'/resources/js/'.str_replace('Development/', '', $indexSurface) : Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow').'/resources/js/'.str_replace('Development/', '', $indexSurface)))
             ->toContain('<IndexPagination');
     }
 });
@@ -561,7 +565,7 @@ test('authenticated editors share form composition without replacing typed field
     foreach ([
         'pages/Development/Requests/Create.vue',
     ] as $formPage) {
-        expect(File::get(resource_path("js/{$formPage}")))
+        expect(File::get(Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow').'/resources/js/'.str_replace('Development/', '', $formPage)))
             ->toContain('<WorkspaceFormPage')
             ->not->toContain('<Form ');
     }
@@ -657,7 +661,7 @@ test('complex workflows keep state inside focused page scoped boundaries', funct
         'DevelopmentTaskProgressAction.vue',
         'DevelopmentTaskTestingRequestForm.vue',
     ] as $taskSection) {
-        expect(File::exists(resource_path("js/pages/Development/Tasks/Components/{$taskSection}")))
+        expect(File::exists(Composer\InstalledVersions::getInstallPath('southeastcode/development-workflow')."/resources/js/pages/Tasks/Components/{$taskSection}"))
             ->toBeTrue("Missing Development task section: {$taskSection}");
     }
 });

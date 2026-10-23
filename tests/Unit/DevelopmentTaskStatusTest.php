@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Enums\DevelopmentRequestType;
-use App\Enums\DevelopmentTaskArea;
-use App\Enums\DevelopmentTaskLinkType;
-use App\Enums\DevelopmentTaskStatus;
-use App\Enums\DevelopmentTestRunStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentRequestType;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskArea;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskLinkType;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTaskStatus;
+use SoutheastCode\DevelopmentWorkflow\Enums\DevelopmentTestRunStatus;
 
 test('the lifecycle defines every allowed and forbidden status transition', function (): void {
     $allowedTransitions = [

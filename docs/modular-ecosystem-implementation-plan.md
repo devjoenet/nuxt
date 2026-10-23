@@ -75,7 +75,7 @@ All rows are private initially. The starter and skeleton are project templates, 
 | `devjoenet/laravel-audit` | `southeastcode/laravel-audit` | `southeastcode/audit` | Authorized audit browsing and reusable record-history UI/query primitives |
 | `devjoenet/laravel-user-management` | `southeastcode/laravel-user-management` | `southeastcode/user-management` | User invitations, user access, roles, and permission administration |
 | `devjoenet/laravel-crm` | `southeastcode/laravel-crm` | `southeastcode/crm` | Organizations, contacts, leads, activities, notes, follow-ups, reminders |
-| `devjoenet/laravel-development` | `southeastcode/laravel-development` | `southeastcode/development` | Requests, review, roadmap, implementation, user testing, legacy user-testing pages |
+| `devjoenet/laravel-development-workflow` | `southeastcode/laravel-development-workflow` | `southeastcode/development-workflow` | Requests, review, roadmap, implementation, user testing, legacy user-testing pages |
 
 Do not create `laravel-modules` or split mirrors. Each library has one authoritative source repository, its own tests, and its own tags. Shared releases can initially use the same version number without introducing a second source of truth.
 
@@ -401,7 +401,7 @@ Acceptance: lead conversion/history/notes, reminders, consent provenance, intake
 
 #### Task 13 — Extract Development including legacy user testing
 
-Repository: `devjoenet/laravel-development`. Branch: `feature/extract-development`. Dependency: Tasks 07–08; execute after CRM tasks to keep the extraction sequence simple.
+Repository: `devjoenet/laravel-development-workflow`. Branch: `feature/extract-development`. Dependency: Tasks 07–08; execute after CRM tasks to keep the extraction sequence simple.
 
 1. Move DevelopmentTask, DevelopmentTaskLink, DevelopmentTaskNote, DevelopmentTestRun, UserTestingPage, factories/seeders, policies/enums/config, and reviewed fresh-install schema migrations from the inventory.
 2. Move all Development controllers, requests, DTOs, resources, queries, notifications, and Actions, including submission/review/promote/reject/information requests, testing/result recording, roadmap reset/position/details/progress updates, notes, links, and legacy page updates. Use actual inventory counts rather than hardcoded totals.

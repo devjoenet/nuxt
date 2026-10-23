@@ -4,7 +4,7 @@ import type { AdvancedKanbanColumn, AdvancedKanbanMove } from "./types";
 import { useAccessibleKanban } from "./useAccessibleKanban";
 
 const props = defineProps<{ ariaLabel: string; class?: string; columns: AdvancedKanbanColumn[] }>();
-const emit = defineEmits<{ move: [move: AdvancedKanbanMove] }>();
+const emit = defineEmits<{ move: [move: AdvancedKanbanMove]; open: [cardId: string] }>();
 const { announcement, dragging, onDragStart, onDrop, onKeydown, reducedMotion } = useAccessibleKanban(
   () => props.columns,
   (move) => emit("move", move),
@@ -27,6 +27,7 @@ const { announcement, dragging, onDragStart, onDrop, onKeydown, reducedMotion } 
         :data-kanban-card="card.id"
         draggable="true"
         type="button"
+        @click="emit('open', card.id)"
         @dragend="dragging = null"
         @dragstart="onDragStart(card.id, column.id)"
         @keydown="onKeydown(card, columnIndex, $event)"

@@ -6464,7 +6464,7 @@ __metadata:
     vue: "npm:^3.5.43"
     vue-currency-input: "npm:^3.2.2"
     vue-tsc: "npm:3.3.11"
-    zod: "npm:^4.6.5"
+    zod: "npm:^4.6.6"
   dependenciesMeta:
     "@laravel/multiplex":
       optional: true
@@ -8675,7 +8675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^4.6.5":
+"zod@npm:^4.6.6":
   version: 4.6.7
   resolution: "zod@npm:4.6.7"
   checksum: 10c0/4ce2eb14034317b7254e347ca37b5ad591cf8333147030cf05b9b5d31692d45073f7f2747aa50cf8c6b29012194d2b22978cecc89969cf34a0d18e89d0ee7d7b

@@ -26,7 +26,7 @@ test('host composition cannot import optional domain persistence', function (): 
         SoutheastCode\Crm\FollowUps\Models\FollowUpTask::class,
         SoutheastCode\Crm\Shared\Models\CrmActivity::class,
         SoutheastCode\Crm\Shared\Models\Note::class,
-        App\Models\DevelopmentTask::class,
-        App\Models\DevelopmentTestRun::class,
+        SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask::class,
+        SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTestRun::class,
     ]);
 });

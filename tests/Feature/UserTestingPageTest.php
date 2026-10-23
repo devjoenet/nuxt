@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use App\Enums\RoleName;
-use App\Models\DevelopmentTask;
 use App\Models\User;
-use App\Models\UserTestingPage;
 use Database\Seeders\RolePermissionSeeder;
-use Database\Seeders\UserTestingPageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use SoutheastCode\Crm\Contacts\Models\Contact;
 use SoutheastCode\Crm\Leads\Models\Lead;
 use SoutheastCode\Crm\Organizations\Models\Organization;
+use SoutheastCode\DevelopmentWorkflow\Database\Seeders\UserTestingPageSeeder;
+use SoutheastCode\DevelopmentWorkflow\Models\DevelopmentTask;
+use SoutheastCode\DevelopmentWorkflow\Models\UserTestingPage;
 
 uses(RefreshDatabase::class);
 
@@ -26,7 +26,7 @@ it('keeps the legacy checklist available to authorized users until cleanup', fun
     $this->actingAs($user)
         ->get(route('development.userTesting.legacy'))
         ->assertSuccessful()
-        ->assertInertia(fn ($page) => $page->component('Development/UserTesting/Legacy')->has('pages', 30));
+        ->assertInertia(fn ($page) => $page->component('dev::UserTesting/Legacy', false)->has('pages', 30));
 });
 
 it('resolves database-backed checklist links to the first visible records', function (): void {
@@ -307,7 +307,7 @@ it('shows the development roadmap to authorized users', function (): void {
         ->get(route('development.roadmap.index'))
         ->assertSuccessful()
         ->assertInertia(fn ($page) => $page
-            ->component('Development/Roadmap/Index')
+            ->component('dev::Roadmap/Index', false)
             ->has('tasks.planned', 1)
             ->where('tasks.planned.0.id', $planned->uuid)
             ->has('tasks.in_progress', 1)
