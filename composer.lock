@@ -4470,12 +4470,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-audit.git",
-                "reference": "2fa2eb663541840bc97f328270c504363cffeda6"
+                "reference": "d3d5a8375c078a3a19ee7e1ce798a2195c8b0f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/2fa2eb663541840bc97f328270c504363cffeda6",
-                "reference": "2fa2eb663541840bc97f328270c504363cffeda6",
+                "url": "https://api.github.com/repos/devjoenet/laravel-audit/zipball/d3d5a8375c078a3a19ee7e1ce798a2195c8b0f7e",
+                "reference": "d3d5a8375c078a3a19ee7e1ce798a2195c8b0f7e",
                 "shasum": ""
             },
             "require": {
@@ -4610,7 +4610,7 @@
                 "source": "https://github.com/devjoenet/laravel-audit/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-audit/issues"
             },
-            "time": "2026-10-22T12:34:33+00:00"
+            "time": "2026-10-24T02:24:06+00:00"
         },
         {
             "name": "southeastcode/crm",
@@ -4618,12 +4618,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-crm.git",
-                "reference": "d0dd5536ec89e8b8c81c5d85327c5eec687299a3"
+                "reference": "a843979e50af3a8576b485d464d253d985cc329e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/d0dd5536ec89e8b8c81c5d85327c5eec687299a3",
-                "reference": "d0dd5536ec89e8b8c81c5d85327c5eec687299a3",
+                "url": "https://api.github.com/repos/devjoenet/laravel-crm/zipball/a843979e50af3a8576b485d464d253d985cc329e",
+                "reference": "a843979e50af3a8576b485d464d253d985cc329e",
                 "shasum": ""
             },
             "require": {
@@ -4750,7 +4750,7 @@
                 "source": "https://github.com/devjoenet/laravel-crm/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-crm/issues"
             },
-            "time": "2026-10-23T02:01:38+00:00"
+            "time": "2026-10-24T02:24:10+00:00"
         },
         {
             "name": "southeastcode/development-workflow",
@@ -4758,12 +4758,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-development-workflow.git",
-                "reference": "4604d9463a7b0029ed2edcbf6478695f52207b3b"
+                "reference": "5e6a310957447e6fba7c9f2522c40c82cbf9d422"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-development-workflow/zipball/4604d9463a7b0029ed2edcbf6478695f52207b3b",
-                "reference": "4604d9463a7b0029ed2edcbf6478695f52207b3b",
+                "url": "https://api.github.com/repos/devjoenet/laravel-development-workflow/zipball/5e6a310957447e6fba7c9f2522c40c82cbf9d422",
+                "reference": "5e6a310957447e6fba7c9f2522c40c82cbf9d422",
                 "shasum": ""
             },
             "require": {
@@ -4900,7 +4900,7 @@
                 "source": "https://github.com/devjoenet/laravel-development-workflow/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-development-workflow/issues"
             },
-            "time": "2026-10-23T23:12:34+00:00"
+            "time": "2026-10-24T02:24:15+00:00"
         },
         {
             "name": "southeastcode/inertia-modules",
@@ -4908,12 +4908,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-inertia-modules.git",
-                "reference": "44a2498f540a0f5c775fbceda92b98f7ac1d4752"
+                "reference": "673a746ff0368390ab53e3e50583403f21990efe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-inertia-modules/zipball/44a2498f540a0f5c775fbceda92b98f7ac1d4752",
-                "reference": "44a2498f540a0f5c775fbceda92b98f7ac1d4752",
+                "url": "https://api.github.com/repos/devjoenet/laravel-inertia-modules/zipball/673a746ff0368390ab53e3e50583403f21990efe",
+                "reference": "673a746ff0368390ab53e3e50583403f21990efe",
                 "shasum": ""
             },
             "require": {
@@ -5033,7 +5033,7 @@
                 "source": "https://github.com/devjoenet/laravel-inertia-modules/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-inertia-modules/issues"
             },
-            "time": "2026-10-22T03:05:17+00:00"
+            "time": "2026-10-24T02:24:20+00:00"
         },
         {
             "name": "southeastcode/user-management",
@@ -5041,12 +5041,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:devjoenet/laravel-user-management.git",
-                "reference": "7eeee615916d279339ae745df1c41f0bd58e01d7"
+                "reference": "df7c0656098ea0b735e93091432ac07d2dfd5a10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devjoenet/laravel-user-management/zipball/7eeee615916d279339ae745df1c41f0bd58e01d7",
-                "reference": "7eeee615916d279339ae745df1c41f0bd58e01d7",
+                "url": "https://api.github.com/repos/devjoenet/laravel-user-management/zipball/df7c0656098ea0b735e93091432ac07d2dfd5a10",
+                "reference": "df7c0656098ea0b735e93091432ac07d2dfd5a10",
                 "shasum": ""
             },
             "require": {
@@ -5188,7 +5188,7 @@
                 "source": "https://github.com/devjoenet/laravel-user-management/tree/main",
                 "issues": "https://github.com/devjoenet/laravel-user-management/issues"
             },
-            "time": "2026-10-22T18:57:41+00:00"
+            "time": "2026-10-24T02:24:31+00:00"
         },
         {
             "name": "spatie/laravel-activitylog",

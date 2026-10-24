@@ -9,7 +9,9 @@
     "packages": [
         "spatie/laravel-activitylog",
         "spatie/boost-spatie-guidelines",
-        "spatie/laravel-permission"
+        "spatie/laravel-permission",
+        "southeastcode/crm",
+        "southeastcode/user-management"
     ],
     "sail": false,
     "skills": [
@@ -21,6 +23,8 @@
         "wayfinder-development",
         "inertia-vue-development",
         "tailwindcss-development",
+        "crm-development",
+        "user-management-development",
         "activitylog-development",
         "laravel-permission-development",
         "spatie-laravel-php-standards",
