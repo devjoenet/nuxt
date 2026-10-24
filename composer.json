@@ -40,10 +40,11 @@
     "laravel/sail": "^1.69",
     "mockery/mockery": "^1.6.15",
     "nunomaduro/collision": "^8.9.5",
-    "pestphp/pest": "^4.7.8",
-    "pestphp/pest-plugin-browser": "^4.3.1",
-    "pestphp/pest-plugin-laravel": "^4.1",
-    "pestphp/pest-plugin-type-coverage": "^4.0.4",
+    "pestphp/pest": "^5.3.3",
+    "pestphp/pest-plugin-browser": "^5.1.2",
+    "pestphp/pest-plugin-laravel": "^5.0",
+    "pestphp/pest-plugin-rector": "^5.0.6",
+    "pestphp/pest-plugin-type-coverage": "^5.0.3",
     "rector/rector": "^2.7.0",
     "spatie/boost-spatie-guidelines": "^1.1"
   },
@@ -115,6 +116,7 @@
       "@modules:php",
       "pint --parallel --test",
       "rector --dry-run",
+      "@test:rector-tests",
       "yarn format:check"
     ],
     "test:browser": "pest --testsuite=Browser --parallel --processes=2 --compact",
@@ -138,7 +140,8 @@
     "modules:php": [
       "corepack yarn modules:prepare",
       "@php vendor/southeastcode/inertia-modules/tooling/php-check.php"
-    ]
+    ],
+    "test:rector-tests": "rector --config=rector-tests.php --dry-run"
   },
   "extra": {
     "laravel": {
