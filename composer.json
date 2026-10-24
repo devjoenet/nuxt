@@ -35,7 +35,7 @@
     "larastan/larastan": "^3.13.1",
     "laravel/boost": "^2.10.3",
     "laravel/pail": "^1.2.7",
-    "laravel/pao": "^1.1.5",
+    "laravel/pao": "^1.1",
     "laravel/pint": "^1.32.1",
     "laravel/sail": "^1.69",
     "mockery/mockery": "^1.6.15",

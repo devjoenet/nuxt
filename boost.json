@@ -30,10 +30,13 @@
         "canonicalize-tailwind",
         "componentize",
         "design",
+        "development-delivery",
         "ideas",
         "laravel-native-attributes",
         "markup-from-image",
         "nuxt-ui",
-        "review-laravel-pr"
+        "package-integration",
+        "review-laravel-pr",
+        "verification-and-delivery-checks"
     ]
 }

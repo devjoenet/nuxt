@@ -132,7 +132,7 @@ Do not demand 100% coverage or mock Eloquent merely to make tests appear isolate
 
 ## Verification
 
-Inspect project scripts and instructions first. Run the narrowest relevant checks already configured by the project, such as targeted tests, static analysis, TypeScript checks, linting, diff checks, and non-mutating Pint checks. Report commands not run and why. Never claim a check passed unless it actually ran successfully.
+Read the verification-and-delivery-checks skill for gate selection, evidence reuse, and readiness reporting. Read development-delivery only when implementing or delivering a live Development task; review alone does not authorize lifecycle changes.
 
 ## Reporting
 
