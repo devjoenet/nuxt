@@ -264,7 +264,7 @@ test('all baseline application routes remain registered', function (): void {
     ]);
 
     $routes = collect(json_decode(Artisan::output(), true, 512, JSON_THROW_ON_ERROR))
-        ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\') || str_starts_with($route['action'], 'SoutheastCode\\Crm\\'));
+        ->reject(fn (array $route): bool => str_starts_with($route['action'], 'SoutheastCode\\UserManagement\\') || str_starts_with($route['action'], 'SoutheastCode\\Crm\\') || str_starts_with($route['action'], 'SoutheastCode\\DevelopmentWorkflow\\'));
 
     expect($routes)->toHaveCount(26);
     $developmentRoutes = collect(Illuminate\Support\Facades\Route::getRoutes()->getRoutes())

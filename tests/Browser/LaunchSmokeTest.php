@@ -209,13 +209,15 @@ test('privacy consent link opens an accessible lazy modal without losing form st
 });
 
 test('privacy footer modal preserves its deep link to the canonical page', function (): void {
-    visit('/')
+    $page = visit('/')
         ->assertAttribute('#footer-privacy-notice', 'href', '/privacy')
         ->click('#footer-privacy-notice')
         ->wait(0.5)
-        ->assertSee('Retention and requests')
-        ->click('[data-slot="close"]')
-        ->wait(0.3)
+        ->assertSee('Retention and requests');
+
+    $page->page()->locator('[role="dialog"] [data-slot="close"]')->click();
+
+    $page->assertMissing('[role="dialog"]')
         ->click('#footer-privacy-notice')
         ->wait(0.5)
         ->click('Open full privacy page')

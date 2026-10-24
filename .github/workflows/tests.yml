@@ -10,9 +10,17 @@ on:
       - develop
       - main
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     env:
       XDEBUG_MODE: off
       COMPOSER_AUTH: ${{ secrets.MODULES_COMPOSER_AUTH }}
@@ -27,6 +35,7 @@ jobs:
           php-version: 8.5
           tools: composer:v2
           coverage: xdebug
+          ini-values: memory_limit=512M
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -59,12 +68,10 @@ jobs:
           YARN_HTTP_TIMEOUT: 180000
 
       - name: Audit full Node dependency tree
-        if: github.event_name == 'push'
         run: yarn audit:full
         env:
           YARN_NPM_AUDIT_REGISTRY: https://registry.npmjs.org
           YARN_HTTP_TIMEOUT: 180000
-        continue-on-error: true
 
       - name: Install Playwright Chromium
         run: yarn playwright install --with-deps --only-shell chromium

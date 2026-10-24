@@ -497,3 +497,32 @@ Development Workflow #1 merged at `3df7760960f7f841c4d75e6073352c99778085da`; st
 Final host evidence: 531 unit/feature tests / 4,597 assertions / 98.8% line coverage (Herd, 512 MiB); normal PHPStan, 100% type coverage, Rector dry-run, Pint, host frontend format/lint, 21 frontend architecture checks / 452 assertions, TypeScript, client/SSR builds, Composer validation/audit and production Node audit pass. Focused browser checks passed five cases / 87 assertions; the old roadmap anchor assertion was adapted to activate the new Kanban button, and that case passed / 43 assertions. Zod minimum is 4.6.6, with the patched lock retained. Earlier independent empty/removal/private-dist/no-dev and stable/lowest SQLite/MySQL package evidence remains valid for the matching merged runtime tree.
 
 Pending checks: maximum host PHPStan reports four errors in unchanged CRM CreateLead, UpdateLead, LeadIndexRequest and CrmAdminSummaryQuery; module frontend formatting reports unchanged CRM LeadStatusBadge.vue. Neither is suppressed or modified in vendor. Hosted CI, full remaining browser/OS lanes, owner testing and staging/production remain separate gates. Normal nuxt.test now maps to the regular application checkout; the compatible reference checkout is retained, and the original MySQL Development database and APP_URL scheme are preserved; no preview was activated and no environment overrides applied. Final Nuxt branch/PR and task-specific testing round are linked in the live task.
+
+## Task 14 — Consumer matrix integration after verified module merges
+
+Live task `01a15abd-3689-7328-8343-fc5456643776`, branch `feature/modular-consumer-ci`. The [Task 14 extraction ledger](https://github.com/devjoenet/laravel-starter/blob/51bf47afbf599d91a3d7ff1c5071dc5b43cfcc11/docs/development/extraction-ledger.md) records the six independent consumers, exact candidate revisions, reproduction, package suites, production/cache/schema checks and remaining release gates. This section records the final host integration delta.
+
+All seven upstream PRs were verified merged through GitHub and fetched `origin/main`: starter #12 (`51bf47a`), bridge #3, Audit #2, users #2, CRM #4, Development #3 and skeleton #2 (`7030c25`). Their merged trees match the reviewed branch trees. The owner reports upstream CI passed; the new Nuxt PR's hosted CI and task-specific user acceptance remain pending.
+
+| Installed module | Locked and installed main revision |
+| --- | --- |
+| Audit | `ad5592bd78bed10ca24437fc051511ac73d1fbaa` |
+| CRM | `ed0ab46dd72df24e5c55080b5fd99daf74815f51` |
+| Development | `d94175651512d3d95c3e8824fd92db6033827895` |
+| Module bridge | `79b0bcec7f0fada300378da4ae770f16ce7d2035` |
+| User management | `fce7441cae005498c12d4e3f86a376385f8ba8e0` |
+
+Every first-party constraint is `dev-main as 0.1.0`; installed copies are remote ZIPs without symlinks or alternate Composer inputs. Nuxt upgrades Pest/plugins together, adds the focused test-only Rector rules, pins Playwright 1.63, requires the full Node audit, corrects the package route inventory and uses one dialog-scoped privacy close interaction. Boost output was regenerated after final dependency resolution.
+
+Final host verification on PHP 8.5, using the lockfile above:
+
+| Scope | Result and evidence reuse |
+| --- | --- |
+| Final Composer install | Dry-run reports nothing to install/update/remove; strict validation and locked audit pass. |
+| Node install and security | Immutable Yarn install, production audit and full-tree audit pass. |
+| Installed-module integration | Complete `yarn lint:check`, `yarn typecheck`, client/SSR build, normal/max `composer test:types`, and complete `composer test:lint` pass against installed ZIP sources. |
+| HTTP and contracts | 206 tests / 1337 assertions pass: Development authorization, requests, lifecycle and user testing; module contracts; CRM ownership, organizations/contacts and leads. Uses synthetic in-memory SQLite. |
+| Full regression evidence retained | Prior host unit/feature run: 531 tests / 4597 assertions / 98.8% coverage; type coverage 100%; final full browser run: 72 passed / 919 assertions, 2 existing skips. No browser/runtime/test inputs changed after that run. Non-module Composer dependencies exactly match the tested candidate lock; bridge/Audit/users changes since that lock affect CI only, CRM runtime matches its tested candidate, and Development differs from its tested runtime candidate only in README. These full suites were not repeated solely for merge commits or archive installation. |
+| Normal workspace | Regular `nuxt.test` login returns HTTP 200 and this task remains readable in the working Development database. No local environment, database or Herd mapping overrides were introduced. |
+
+Hosted Nuxt CI, owner acceptance, merge and deployment remain separate gates. Future released-schema upgrades and the final agency/reproducibility matrix rows retain the release prerequisites recorded in the extraction ledger.
